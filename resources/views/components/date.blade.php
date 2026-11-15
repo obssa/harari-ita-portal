@@ -1,0 +1,1 @@
+<time {{ $attributes->merge(['datetime' => $iso]) }}>{{ $text }}</time>

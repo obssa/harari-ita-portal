@@ -1,0 +1,245 @@
+<?php
+
+use App\Domain\Access\Enums\SystemRole;
+use App\Domain\Content\Actions\LoadContentPack;
+use App\Domain\Content\Enums\ContentStatus;
+use App\Domain\Content\Models\ContentPackItem;
+use App\Domain\Content\Models\Post;
+use App\Domain\Events\Models\Event;
+use App\Domain\Homepage\Enums\SectionKey;
+use App\Domain\Homepage\Models\HeroSlide;
+use App\Domain\Homepage\Models\HomepageSection;
+use App\Domain\Import\Models\ContentImport;
+use App\Domain\Import\Models\ContentSource;
+use App\Domain\Media\Actions\UploadMedia;
+use App\Domain\Organisation\Actions\SaveLeader;
+use App\Domain\Organisation\Enums\LeaderBody;
+use App\Domain\Organisation\Models\Leader;
+use App\Domain\Organisation\Models\League;
+use App\Domain\Organisation\Models\Office;
+use App\Domain\Social\Enums\Platform;
+use App\Domain\Social\Models\SocialSource;
+use App\Settings\SiteSettings;
+use Illuminate\Support\Facades\File;
+use Illuminate\Validation\ValidationException;
+
+/**
+ * A pack file with the given records, in a folder of its own.
+ *
+ * @param  array<string, mixed>  $records
+ */
+function samplePack(array $records): string
+{
+    $folder = storage_path('framework/testing/pack-'.uniqid());
+    File::ensureDirectoryExists($folder);
+    file_put_contents("{$folder}/pack.json", json_encode(['version' => 1, ...$records]));
+
+    return "{$folder}/pack.json";
+}
+
+it('loads the real content pack, published, with portraits, heads, pages and the homepage', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+
+    $counts = app(LoadContentPack::class)->handle(database_path('content/pack.json'));
+
+    expect($counts)->toMatchArray(['leagues' => 2, 'offices' => 10, 'leaders' => 14, 'pages' => 4, 'events' => 1, 'homepage' => 2, 'settings' => 2, 'slides' => 3]);
+
+    $head = Leader::query()->whereHas('translations', fn ($q) => $q->where('name', 'H.E Getu Weyessa Tola'))->firstOrFail();
+    expect($head->translation('en')?->position)->toBe('Head of Harari Region Prosperity Party')
+        ->and($head->translation('am', fallback: false)?->name)->toBe('ክቡር አቶ ጌቱ ወዬሳ ቶላ')
+        ->and($head->body)->toBe(LeaderBody::Secretariat)
+        ->and($head->source_url)->toBe('https://t.me/hrprosperityparty/23920')
+        ->and($head->portrait?->alt)->toHaveKeys(['en', 'am', 'om'])
+        ->and($head->portrait?->credit)->toBe('t.me')
+        ->and($head->translation('am', fallback: false)?->status)->toBe(ContentStatus::Published)
+        ->and(Office::query()->where('type', 'branch')->value('head_leader_id'))->toBe($head->id)
+        ->and(Office::query()->where('type', 'woreda')->count())->toBe(9)
+        ->and(League::query()->whereNotNull('head_leader_id')->count())->toBe(1)
+        ->and(Leader::query()->where('body', LeaderBody::Government->value)->count())->toBe(7)
+        ->and(Event::query()->count())->toBe(1);
+
+    $leadership = HomepageSection::query()->where('key', SectionKey::Leadership->value)->firstOrFail();
+    expect($leadership->enabled)->toBeTrue()
+        ->and($leadership->setting('leader_id'))->toBe($head->id)
+        ->and(HomepageSection::query()->where('key', SectionKey::Counters->value)->firstOrFail()->setting('items'))->toHaveCount(4)
+        ->and(app(SiteSettings::class)->social_links['telegram'] ?? null)->toBe('https://t.me/hrprosperityparty')
+        ->and(app(SiteSettings::class)->social_links['facebook'] ?? null)->toBe('https://www.facebook.com/profile.php?id=100064354104698');
+
+    $this->get('/en/about')->assertOk()->assertSee('About the branch')->assertSee('It is headed by H.E Getu Weyessa Tola.')->assertSee('https://t.me/hrprosperityparty/23920', escape: false);
+    $this->get('/am/about/history')->assertOk()->assertSee('ሀረሪ ብሔራዊ ሊግ');
+    $this->get('/om/about/harar')->assertOk()->assertSee('Harar Jugol');
+    // ADR-0078: the structure as Directive No. 24/2017 sets it, and the About page in its terms.
+    $this->get('/en/about/organisation')->assertOk()->assertSee('How the party is organised')
+        ->assertSee('Prosperity Family: 11 to 35 full and candidate members', escape: false)->assertSee('Directive No. 24/2017');
+    $this->get('/am/about/organisation')->assertOk()->assertSee('የፓርቲው አደረጃጀት')->assertSee('ብልፅግና ቤተሰብ፦ ከ11 እስከ 35');
+    $this->get('/om/about/organisation')->assertOk()->assertSee('Maatii Badhaadhinaa');
+    $this->get('/en/about')->assertOk()->assertSee('the woredas, kebeles, Prosperity Unions and Prosperity Families')->assertDontSee('basic organisations');
+    $this->get('/am/about')->assertOk()->assertSee('ብልፅግና ህብረቶችና ብልፅግና ቤተሰቦች')->assertDontSee('መሰረታዊ ድርጅቶች');
+    $this->get('/am/about')->assertOk()->assertSee('ክቡር አቶ ጌቱ ወዬሳ ቶላ')->assertDontSee('ክቡር ክቡር');
+    $this->get('/en/leaders')->assertOk()->assertSee('H.E Getu Weyessa Tola')->assertSee(LeaderBody::Government->label('en'));
+    expect(HeroSlide::query()->orderBy('sort')->pluck('layout')->map(fn ($layout) => $layout->value)->all())->toBe(['photo', 'banner', 'portrait']);
+    $this->get('/en')->assertOk()
+        ->assertSeeInOrder(['id="hero-slide-1"', 'Harari Region Prosperity Party', 'id="hero-slide-2"', 'Prosperity Party ብልፅግና', 'id="hero-slide-3"', 'H.E Getu Weyessa Tola'], escape: false)
+        ->assertSee('href="'.url('/en/leaders/'.$head->translation('en')?->slug).'"', escape: false);
+    $this->get('/am')->assertSee('ለኢትዮጵያ እና ህዝቦቿ ብልፅግና እንተጋለን');
+    $this->get('/en/leaders/'.$head->translation('en')?->slug)->assertOk()
+        ->assertSee('href="https://t.me/hrprosperityparty/23920"', escape: false);
+});
+
+it('loads each record once and never brings back what an editor deleted', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    $path = samplePack(['leagues' => [
+        ['key' => 'league.sample', 'translations' => ['en' => ['name' => 'Sample Wing', 'summary' => 'Sample summary.']]],
+    ]]);
+
+    expect(app(LoadContentPack::class)->handle($path))->toBe(['leagues' => 1]);
+    League::query()->firstOrFail()->delete();
+
+    expect(app(LoadContentPack::class)->handle($path))->toBe([])
+        ->and(League::query()->count())->toBe(0)
+        ->and(ContentPackItem::query()->where('key', 'league.sample')->exists())->toBeTrue();
+});
+
+it('keeps the social links and homepage an editor already set', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    $settings = app(SiteSettings::class);
+    $settings->social_links = ['telegram' => 'https://t.me/sample_channel'];
+    $settings->save();
+
+    app(LoadContentPack::class)->handle(samplePack(['settings' => ['social_links' => ['telegram' => 'https://t.me/hrprosperityparty', 'facebook' => 'https://facebook.com/sample']]]));
+
+    expect(app(SiteSettings::class)->social_links)->toBe(['telegram' => 'https://t.me/sample_channel', 'facebook' => 'https://facebook.com/sample']);
+});
+
+it('adds the party\'s channel to the social hub once and never brings it back after an editor removed it', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    $path = samplePack(['social_sources' => [
+        ['key' => 'social.telegram.sample', 'platform' => 'telegram', 'handle' => 'sample_channel', 'name' => 'Sample channel', 'interval_minutes' => 5],
+        ['key' => 'social.sample.unknown', 'platform' => 'sample-network', 'handle' => 'sample'],
+    ]]);
+
+    expect(app(LoadContentPack::class)->handle($path))->toBe(['social_sources' => 1]);
+    $source = SocialSource::query()->sole();
+    expect($source->platform)->toBe(Platform::Telegram)
+        ->and($source->name)->toBe('Sample channel')
+        ->and($source->interval_minutes)->toBe(15)
+        ->and($source->enabled)->toBeTrue();
+
+    $source->delete();
+
+    expect(app(LoadContentPack::class)->handle($path))->toBe([])
+        ->and(SocialSource::query()->count())->toBe(0);
+});
+
+it('leaves a channel an editor already added to the social hub', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    SocialSource::query()->create(['platform' => Platform::Telegram, 'handle' => 'sample_channel', 'name' => 'Added by an editor']);
+
+    expect(app(LoadContentPack::class)->handle(samplePack(['social_sources' => [
+        ['key' => 'social.telegram.sample', 'platform' => 'telegram', 'handle' => 'sample_channel', 'name' => 'Sample channel'],
+    ]])))->toBe([])
+        ->and(SocialSource::query()->sole()->name)->toBe('Added by an editor');
+});
+
+it('corrects a name and a phrase once, as the branch office asked, and then leaves them to editors', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    $body = fn (string $text): array => ['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => $text]]]]];
+    app(LoadContentPack::class)->handle(samplePack([
+        'leaders' => [['key' => 'leader.sample', 'body' => 'secretariat', 'translations' => ['en' => ['name' => 'Sample Person', 'position' => 'Sample head']]]],
+        'pages' => [['key' => 'page.sample', 'translations' => ['en' => ['title' => 'Sample page', 'slug' => 'sample-page', 'body' => $body('It is headed by Sample Person.')]]]],
+    ]));
+    $corrections = samplePack(['updates' => [
+        ['key' => 'leader.sample#name', 'target' => 'leader.sample', 'rename' => ['en' => ['name' => 'H.E Sample Person Full', 'position' => 'Head of the sample party']]],
+        ['key' => 'page.sample#name', 'target' => 'page.sample', 'replace' => ['en' => [['Sample Person', 'H.E Sample Person Full']]]],
+    ]]);
+
+    expect(app(LoadContentPack::class)->handle($corrections))->toBe(['updates' => 2]);
+    $leader = Leader::query()->firstOrFail();
+    expect($leader->translation('en')?->name)->toBe('H.E Sample Person Full')
+        ->and($leader->translation('en')?->position)->toBe('Head of the sample party')
+        ->and($leader->translation('en')?->slug)->toBe('sample-person');
+    $this->get('/en/sample-page')->assertOk()->assertSee('It is headed by H.E Sample Person Full.');
+
+    $leader->translation('en')?->forceFill(['name' => 'Name an editor chose'])->save();
+    expect(app(LoadContentPack::class)->handle($corrections))->toBe([])
+        ->and($leader->fresh()?->translation('en')?->name)->toBe('Name an editor chose');
+});
+
+it('corrects a phrase once wherever the site shows it, then leaves it to editors', function () {
+    $admin = staff(SystemRole::SuperAdmin, mfa: false);
+    $body = fn (string $text): array => ['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => $text]]]]];
+    app(LoadContentPack::class)->handle(samplePack([
+        'leaders' => [['key' => 'leader.sample', 'body' => 'secretariat', 'translations' => ['en' => ['name' => 'H.E Sample Wayyesa', 'position' => 'Sample head']]]],
+        'pages' => [['key' => 'page.sample', 'translations' => ['en' => ['title' => 'Sample page', 'slug' => 'sample-page', 'body' => $body('Led by H.E Sample Wayyesa.')]]]],
+        'slides' => [['key' => 'slide.sample', 'name' => 'Message from H.E Sample Wayyesa', 'layout' => 'photo', 'content' => ['en' => ['title' => 'Sample heading', 'note' => "H.E Sample Wayyesa\nSample head"]]]],
+    ]));
+    $path = storage_path('framework/testing/pack-picture-'.uniqid().'.jpg');
+    @mkdir(dirname($path), 0777, true);
+    $image = imagecreatetruecolor(640, 480);
+    imagefill($image, 0, 0, imagecolorallocate($image, 5, 37, 59));
+    imagejpeg($image, $path, 80);
+    $picture = app(UploadMedia::class)->handle($path, 'sample-portrait.jpg', $admin);
+    $picture->forceFill(['alt' => ['en' => 'Portrait of H.E Sample Wayyesa', 'am' => 'Sample Amharic text']])->save();
+    $correction = samplePack(['corrections' => [
+        ['key' => 'correction.sample', 'replace' => [['H.E Sample Wayyesa', 'H.E Sample Weyessa']]],
+    ]]);
+
+    expect(app(LoadContentPack::class)->handle($correction))->toBe(['corrections' => 1]);
+    expect(Leader::query()->firstOrFail()->translation('en')?->name)->toBe('H.E Sample Weyessa')
+        ->and(HeroSlide::query()->firstOrFail()->name)->toBe('Message from H.E Sample Weyessa')
+        ->and(HeroSlide::query()->firstOrFail()->text('note', 'en')[0])->toBe("H.E Sample Weyessa\nSample head")
+        ->and($picture->fresh()?->alt)->toEqual(['en' => 'Portrait of H.E Sample Weyessa', 'am' => 'Sample Amharic text']);
+    $this->get('/en/sample-page')->assertOk()->assertSee('Led by H.E Sample Weyessa.');
+
+    Leader::query()->firstOrFail()->translation('en')?->forceFill(['name' => 'H.E Sample Wayyesa'])->save();
+    expect(app(LoadContentPack::class)->handle($correction))->toBe([])
+        ->and(Leader::query()->firstOrFail()->translation('en')?->name)->toBe('H.E Sample Wayyesa');
+});
+
+it('publishes the stories imported from the branch before it was trusted, once, with their dates', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    $source = ContentSource::query()->where('handle', 'hrprosperityparty')->firstOrFail();
+    $post = new Post(['type' => 'news', 'source_locale' => 'am']);
+    $post->forceFill(['source_url' => 'https://t.me/hrprosperityparty/1', 'source_name' => $source->name])->save();
+    $post->putTranslation('am', ['title' => 'የናሙና ዜና', 'status' => ContentStatus::Draft]);
+    ContentImport::query()->create(['content_source_id' => $source->id, 'external_id' => 'hrprosperityparty/1', 'message_at' => '2026-10-01 09:00:00', 'status' => ContentImport::IMPORTED, 'post_id' => $post->id]);
+
+    expect(app(LoadContentPack::class)->handle(samplePack([])))->toBe(['stories' => 1]);
+    $translation = $post->fresh()?->translation('am', fallback: false);
+    expect($translation?->status)->toBe(ContentStatus::Published)
+        ->and($translation?->published_at?->toDateTimeString())->toBe('2026-10-01 09:00:00');
+
+    $translation?->forceFill(['status' => ContentStatus::Draft])->save();
+    expect(app(LoadContentPack::class)->handle(samplePack([])))->toBe([])
+        ->and($post->fresh()?->translation('am', fallback: false)?->status)->toBe(ContentStatus::Draft);
+});
+
+it('waits for a Super Admin and a pack file without failing a deploy', function () {
+    $this->artisan('content:load-pack')->expectsOutputToContain('No Super Admin yet')->assertSuccessful();
+
+    staff(SystemRole::SuperAdmin, mfa: false);
+    $this->artisan('content:load-pack', ['--path' => storage_path('framework/testing/none.json')])->expectsOutputToContain('No content pack')->assertSuccessful();
+    $this->artisan('content:load-pack', ['--path' => samplePack([])])->expectsOutputToContain('nothing new')->assertSuccessful();
+});
+
+it('accepts only web addresses as a leader source', function () {
+    $publisher = staff(SystemRole::Publisher, mfa: false);
+    $data = ['body' => 'office_heads', 'source_url' => 'javascript:alert(1)', 'translations' => ['en' => ['name' => 'Sample Person']]];
+
+    expect(fn () => app(SaveLeader::class)->handle(new Leader, $data, $publisher))->toThrow(ValidationException::class);
+
+    $leader = app(SaveLeader::class)->handle(new Leader, [...$data, 'source_url' => 'https://example.org/sample', 'source_date' => '2026-10-15'], $publisher);
+    expect($leader->source_url)->toBe('https://example.org/sample')
+        ->and($leader->source_date?->toDateString())->toBe('2026-10-15');
+});
+
+it('lists the about page and its pages in the default menu once they are published', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    app(LoadContentPack::class)->handle(samplePack(['pages' => [
+        ['key' => 'page.about', 'translations' => ['en' => ['title' => 'About the sample branch', 'slug' => 'about', 'excerpt' => 'Sample excerpt.']]],
+        ['key' => 'page.history', 'parent' => 'page.about', 'translations' => ['en' => ['title' => 'Sample history', 'slug' => 'history']]],
+    ]]));
+
+    $html = (string) $this->get('/en/news')->getContent();
+    expect($html)->toContain('About the sample branch', 'Sample history', '/en/about/history');
+});

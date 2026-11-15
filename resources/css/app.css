@@ -1,0 +1,327 @@
+/* Public site styles only: the admin panel has Filament's own CSS. */
+@import 'tailwindcss' source(none);
+@import './fonts.css';
+@import './tokens.css';
+
+@source '../views';
+@source not '../views/filament';
+@source '../../app/View';
+
+@layer base {
+    html {
+        color-scheme: light dark;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        background-color: var(--color-canvas);
+        color: var(--color-ink);
+        line-height: 1.6;
+    }
+
+    /* Ethiopic script needs more room between lines (PLAN.md §12). Set where the language is
+       declared and inherited from there, so headings and the links inside them keep their own. */
+    [lang|='am'],
+    [lang|='har'] {
+        line-height: 1.7;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        line-height: 1.25;
+        text-wrap: balance;
+    }
+
+    /* Ethiopic headlines look heavier than Latin at the same size (PLAN.md §12). */
+    :root {
+        --heading-scale: 1;
+    }
+
+    :lang(am),
+    :lang(har) {
+        --heading-scale: 0.92;
+    }
+
+    :focus-visible {
+        outline: 3px solid var(--color-primary-500);
+        outline-offset: 2px;
+    }
+
+    a {
+        color: inherit;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            scroll-behavior: auto !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* Headline sizes that shrink slightly for Ethiopic (use instead of text-4xl etc. on headings). */
+/* ADR-0062: confident, tight headings; Ethiopic scripts slightly smaller (--heading-scale). */
+@utility heading-1 {
+    font-size: calc(clamp(var(--text-3xl), 1.6rem + 2.4vw, var(--text-5xl)) * var(--heading-scale, 1));
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+/* The largest headline, for full-bleed page openings (ADR-0065). */
+@utility heading-display {
+    font-size: calc(clamp(2.375rem, 1.4rem + 3.8vw, 4.5rem) * var(--heading-scale, 1));
+    line-height: 1.04;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+@utility heading-2 {
+    font-size: calc(var(--text-3xl) * var(--heading-scale, 1));
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+@utility heading-3 {
+    font-size: calc(var(--text-xl) * var(--heading-scale, 1));
+    font-weight: 700;
+}
+
+/* Small capitals above a heading, as on the canvas. */
+@utility kicker {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    /* accent-700: 6.5:1 on plaster and white (accent-600 fell just short on plaster). */
+    color: var(--color-accent-700);
+}
+
+/* Post and page bodies from the block editor (ADR-0012). */
+@layer components {
+    .prose-content {
+        font-size: 1.0625rem;
+    }
+
+    .prose-content > * + * {
+        margin-top: 1em;
+    }
+
+    .prose-content h2 {
+        margin-top: 2em;
+        font-size: calc(var(--text-2xl) * var(--heading-scale, 1));
+        font-weight: 650;
+    }
+
+    .prose-content h3 {
+        margin-top: 1.6em;
+        font-size: calc(var(--text-xl) * var(--heading-scale, 1));
+        font-weight: 600;
+    }
+
+    .prose-content a {
+        color: var(--color-link);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .prose-content ul {
+        list-style: disc;
+        padding-inline-start: 1.5em;
+    }
+
+    .prose-content ol {
+        list-style: decimal;
+        padding-inline-start: 1.5em;
+    }
+
+    .prose-content blockquote {
+        border-inline-start: 4px solid var(--color-accent-500);
+        padding-inline-start: 1em;
+        color: var(--color-ink-muted);
+        font-style: italic;
+    }
+
+    .prose-content table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9375rem;
+    }
+
+    .prose-content th,
+    .prose-content td {
+        border: 1px solid var(--color-line);
+        padding: 0.5em 0.75em;
+        text-align: start;
+        vertical-align: top;
+    }
+
+    .prose-content th {
+        background: var(--color-surface-muted);
+        font-weight: 600;
+    }
+}
+
+/*
+ * Motion (ADR-0066). Things slide up and come into focus but never fade: text stays fully opaque, so
+ * contrast holds at every frame and the headline counts as painted at once. Scroll-linked reveals use
+ * CSS scroll timelines where the browser has them and are skipped elsewhere; nothing moves for people
+ * who ask for reduced motion.
+ */
+@keyframes hpp-rise {
+    from {
+        transform: translateY(1.5rem);
+        filter: blur(6px);
+    }
+    to {
+        transform: none;
+        filter: none;
+    }
+}
+
+@keyframes hpp-reveal {
+    from {
+        transform: translateY(2.5rem) scale(0.98);
+    }
+    to {
+        transform: none;
+    }
+}
+
+@keyframes hpp-zoom {
+    from {
+        transform: scale(1.02);
+    }
+    to {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes hpp-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes hpp-float {
+    50% {
+        transform: translateY(-0.5rem);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .animate-rise {
+        animation: hpp-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+        animation-delay: var(--rise-delay, 0ms);
+    }
+
+    .animate-zoom {
+        animation: hpp-zoom 28s ease-in-out infinite alternate;
+    }
+
+    .animate-spin-slow {
+        animation: hpp-spin 120s linear infinite;
+    }
+
+    .animate-spin-slower {
+        animation: hpp-spin 180s linear infinite reverse;
+    }
+
+    .animate-float {
+        animation: hpp-float 6s ease-in-out infinite;
+    }
+
+    @supports (animation-timeline: view()) {
+        .reveal {
+            animation: hpp-reveal linear both;
+            animation-timeline: view();
+            animation-range: entry 0% entry 60%;
+        }
+    }
+}
+
+/*
+ * The homepage carousel (ADR-0070). Slides sit side by side in a scroll-snapping row, so they can be
+ * swiped before (or without) the script; "come into focus" stacks them and sharpens the new one in.
+ * Like all motion here (ADR-0066) it moves and blurs but never fades, and holds still for reduced motion.
+ */
+[data-carousel] [data-track] {
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+}
+
+[data-carousel] [data-track]::-webkit-scrollbar {
+    display: none;
+}
+
+[data-carousel]:not([data-ready]) [data-controls] {
+    visibility: hidden;
+}
+
+[data-carousel] [data-track] > :not(.is-current) .animate-rise {
+    animation: none;
+}
+
+[data-carousel][data-mode='focus'] [data-track] {
+    display: grid;
+    overflow: hidden;
+    scroll-snap-type: none;
+}
+
+[data-carousel][data-mode='focus'] [data-track] > * {
+    grid-area: 1 / 1;
+    visibility: hidden;
+}
+
+[data-carousel][data-mode='focus'] [data-track] > .is-current {
+    visibility: visible;
+    z-index: 2;
+}
+
+[data-carousel][data-mode='focus'] [data-track] > .is-leaving {
+    visibility: visible;
+    z-index: 1;
+}
+
+[data-carousel] [data-progress] {
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+@keyframes hpp-progress {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes hpp-focus {
+    from {
+        transform: scale(1.05);
+        filter: blur(12px);
+    }
+    to {
+        transform: none;
+        filter: none;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    [data-carousel][data-running] [data-progress] {
+        animation: hpp-progress var(--slide-duration, 7s) linear forwards;
+    }
+
+    [data-carousel][data-held] [data-progress] {
+        animation-play-state: paused;
+    }
+
+    [data-carousel][data-mode='focus'] [data-track] > .is-entering {
+        animation: hpp-focus 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+}

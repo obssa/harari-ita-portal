@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Runs ON THE SERVER after new code is copied (piped over SSH by deploy.yml).
+# Env: APP_DIR (site folder), PHP_BIN (php 8.3 CLI)
+set -euo pipefail
+: "${APP_DIR:?APP_DIR is required}"
+PHP_BIN="${PHP_BIN:-php}"
+cd "$APP_DIR"
+
+if [ ! -f .env ]; then
+    echo "ERROR: $APP_DIR/.env is missing."
+    exit 1
+fi
+if [ ! -f vendor/autoload.php ]; then
+    echo "ERROR: vendor/ is missing; the release was not copied."
+    exit 1
+fi
+
+# Laravel prefers .env.{APP_ENV} over .env when APP_ENV is in the process
+# environment; a stray copy would silently shadow the real configuration.
+for f in .env.production .env.staging .env.local .env.testing; do
+    if [ -e "$f" ]; then mv "$f" "$f.unused.$(date +%s)"; echo "moved aside $f"; fi
+done
+
+mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views \
+         storage/logs storage/app/public storage/app/media storage/app/media-work bootstrap/cache \
+         storage/backups
+# Backups hold personal data: only the account may read them.
+chmod 700 storage/backups
+# ADR-0038: logs and form attachments are for the account only (PHP runs as the account).
+mkdir -p storage/app/private
+chmod 750 storage/logs storage/app/private
+
+# Media library (ADR-0009): originals stay private; public uploads never run as code.
+chmod 750 storage/app/media storage/app/media-work
+cp scripts/deploy/uploads.htaccess storage/app/public/.htaccess
+chmod 644 storage/app/public/.htaccess
+printf 'ok\n' > storage/app/public/smoke.txt
+# Stale compiled caches can reference dev-only providers the --no-dev vendor lacks.
+rm -f bootstrap/cache/*.php
+
+# public/.htaccess is never copied by rsync: cPanel keeps its PHP version
+# handler there. Rebuild it as cPanel's own blocks followed by Laravel's rules.
+if [ -f scripts/deploy/public.htaccess ]; then
+    blocks="$(awk '/BEGIN cPanel-generated/{k=1} k{print} /END cPanel-generated/{k=0}' public/.htaccess 2>/dev/null || true)"
+    {
+        if [ -n "$blocks" ]; then printf '%s
+
+' "$blocks"; fi
+        cat scripts/deploy/public.htaccess
+    } > public/.htaccess.new
+    mv public/.htaccess.new public/.htaccess
+    echo "public/.htaccess rebuilt ($(printf '%s' "$blocks" | grep -c 'BEGIN cPanel-generated') cPanel block(s) kept)"
+fi
+
+"$PHP_BIN" artisan down --render="errors::503" --retry=15 || true
+trap '"$PHP_BIN" artisan up >/dev/null 2>&1 || true' EXIT
+
+# ADR-0037: a database backup first whenever migrations are waiting; a failed backup stops here.
+"$PHP_BIN" artisan portal:backup-before-migrate --no-interaction
+"$PHP_BIN" artisan migrate --force --no-interaction
+"$PHP_BIN" artisan portal:sync-permissions --no-interaction
+"$PHP_BIN" artisan optimize
+[ -e public/storage ] || "$PHP_BIN" artisan storage:link
+# ADR-0063: content pack records not loaded yet; a problem is reported but never stops the release.
+"$PHP_BIN" artisan content:load-pack --no-interaction || echo "content pack: not loaded, see storage/logs"
+"$PHP_BIN" artisan queue:restart || true
+
+# rsync mirrors the runner's modes; LiteSpeed needs a traversable site folder.
+chmod 711 "$APP_DIR"
+chmod 755 "$APP_DIR/public"
+
+echo "release OK: $(cat REVISION 2>/dev/null || echo 'unknown revision')"

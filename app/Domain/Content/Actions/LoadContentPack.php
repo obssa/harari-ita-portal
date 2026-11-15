@@ -1,0 +1,578 @@
+<?php
+
+namespace App\Domain\Content\Actions;
+
+use App\Domain\Access\Enums\SystemRole;
+use App\Domain\Content\Models\ContentPackItem;
+use App\Domain\Content\Models\Page;
+use App\Domain\Content\Models\Post;
+use App\Domain\Content\Models\PostTranslation;
+use App\Domain\Content\Support\BodyRenderer;
+use App\Domain\Content\Workflow\ContentWorkflow;
+use App\Domain\Events\Actions\SaveEvent;
+use App\Domain\Events\Models\Event;
+use App\Domain\Homepage\Actions\SaveHeroSlide;
+use App\Domain\Homepage\Actions\SaveHomepage;
+use App\Domain\Homepage\Models\HeroSlide;
+use App\Domain\Homepage\Models\HomepageSection;
+use App\Domain\Homepage\Support\HomepageLayout;
+use App\Domain\Import\Models\ContentImport;
+use App\Domain\Import\Models\ContentSource;
+use App\Domain\Media\Actions\SyncMediaUsage;
+use App\Domain\Media\Actions\UploadMedia;
+use App\Domain\Media\Models\Media;
+use App\Domain\Organisation\Actions\SaveLeader;
+use App\Domain\Organisation\Actions\SaveLeague;
+use App\Domain\Organisation\Actions\SaveOffice;
+use App\Domain\Organisation\Models\Leader;
+use App\Domain\Organisation\Models\League;
+use App\Domain\Organisation\Models\Office;
+use App\Domain\Social\Enums\Platform;
+use App\Domain\Social\Models\SocialSource;
+use App\Filament\Pages\ManageHomepage;
+use App\Models\User;
+use App\Settings\SiteSettings;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\DB;
+use RuntimeException;
+
+/**
+ * Loads the content pack (ADR-0063): real content gathered from public
+ * sources, each record with its source, published at once. Every record is
+ * loaded once, remembered by its key: what an editor later changes or
+ * deletes is never put back. Runs on each deploy after the migrations.
+ */
+final class LoadContentPack
+{
+    /** @var array<string, int> */
+    private array $counts = [];
+
+    public function __construct(
+        private readonly SaveLeague $leagues,
+        private readonly SaveOffice $offices,
+        private readonly SaveLeader $leaders,
+        private readonly SavePage $pages,
+        private readonly SaveEvent $events,
+        private readonly SaveHomepage $homepage,
+        private readonly SaveHeroSlide $slides,
+        private readonly UploadMedia $upload,
+        private readonly ContentWorkflow $workflow,
+        private readonly SyncMediaUsage $usage,
+    ) {}
+
+    /**
+     * @return array<string, int> records loaded, by kind
+     */
+    public function handle(string $path, ?User $actor = null): array
+    {
+        $pack = json_decode((string) @file_get_contents($path), true);
+        if (! is_array($pack)) {
+            throw new RuntimeException("The content pack at {$path} cannot be read.");
+        }
+
+        $actor ??= self::actor();
+        if ($actor === null) {
+            throw new RuntimeException('No Super Admin exists to load the content pack as.');
+        }
+
+        $this->counts = [];
+        $photos = dirname($path).'/photos';
+
+        foreach ((array) ($pack['leagues'] ?? []) as $item) {
+            $this->once($item, 'leagues', fn (array $data): Model => $this->leagues->handle(new League, $data, $actor));
+        }
+        foreach ((array) ($pack['offices'] ?? []) as $item) {
+            $this->once($item, 'offices', fn (array $data): Model => $this->offices->handle(new Office, [
+                ...$data, 'parent_id' => $this->id($item['parent'] ?? null),
+            ], $actor));
+        }
+        foreach ((array) ($pack['leaders'] ?? []) as $item) {
+            $this->once($item, 'leaders', fn (array $data): Model => $this->leaders->handle(new Leader, [
+                ...$data,
+                'office_id' => $this->id($item['office'] ?? null),
+                'league_id' => $this->id($item['league'] ?? null),
+                'portrait_id' => $this->photo($photos, $item, $actor),
+            ], $actor));
+        }
+        $this->heads($pack, $actor);
+        foreach ((array) ($pack['pages'] ?? []) as $item) {
+            $this->once($item, 'pages', fn (array $data): Model => $this->pages->handle(new Page, [
+                ...$data, 'parent_id' => $this->id($item['parent'] ?? null),
+            ], $actor));
+        }
+        foreach ((array) ($pack['events'] ?? []) as $item) {
+            $this->once($item, 'events', fn (array $data): Model => $this->events->handle(new Event, $data, $actor));
+        }
+
+        foreach ((array) ($pack['updates'] ?? []) as $update) {
+            $this->update((array) $update, $photos, $actor);
+        }
+        foreach ((array) ($pack['corrections'] ?? []) as $correction) {
+            $this->correction((array) $correction);
+        }
+
+        $this->homepageSections((array) ($pack['homepage'] ?? []), $actor);
+        foreach ((array) ($pack['slides'] ?? []) as $item) {
+            $this->slide((array) $item, $photos, $actor);
+        }
+        foreach ((array) ($pack['social_sources'] ?? []) as $item) {
+            $this->socialSource((array) $item);
+        }
+        $this->socialLinks((array) ($pack['settings']['social_links'] ?? []));
+        $this->importedBacklog();
+
+        return $this->counts;
+    }
+
+    /**
+     * The first Super Admin, who signs the loaded records.
+     */
+    public static function actor(): ?User
+    {
+        return User::role(SystemRole::SuperAdmin->value)->orderBy('created_at')->first();
+    }
+
+    /**
+     * @param  array<string, mixed>  $item
+     * @param  callable(array<string, mixed>): Model  $create
+     */
+    private function once(array $item, string $kind, callable $create): void
+    {
+        $key = (string) ($item['key'] ?? '');
+        if ($key === '' || ContentPackItem::query()->where('key', $key)->exists()) {
+            return;
+        }
+
+        DB::transaction(function () use ($item, $key, $kind, $create): void {
+            $data = $item;
+            $data['translations'] = array_map(
+                fn (array $values): array => ['published' => true, ...$values],
+                (array) ($item['translations'] ?? []),
+            );
+            $model = $create($data);
+            ContentPackItem::remember($key, $model);
+            $this->counts[$kind] = ($this->counts[$kind] ?? 0) + 1;
+        });
+    }
+
+    private function id(mixed $key): ?string
+    {
+        return is_string($key) && $key !== '' ? ContentPackItem::query()->where('key', $key)->value('model_id') : null;
+    }
+
+    /**
+     * Uploads a leader's portrait through the media pipeline, credited to
+     * where it was published.
+     *
+     * @param  array<string, mixed>  $item
+     */
+    private function photo(string $folder, array $item, User $actor, string $credit = ''): ?int
+    {
+        $file = basename((string) ($item['photo'] ?? ''));
+        if ($file === '' || ! is_file("{$folder}/{$file}")) {
+            return null;
+        }
+
+        $media = $this->upload->handle("{$folder}/{$file}", $file, $actor);
+        $alt = [];
+        foreach ((array) ($item['translations'] ?? []) as $locale => $values) {
+            $alt[$locale] = mb_substr((string) ($values['name'] ?? ''), 0, 250);
+        }
+        $media->forceFill([
+            'alt' => $alt,
+            'credit' => $credit !== '' ? $credit : (parse_url((string) ($item['source_url'] ?? ''), PHP_URL_HOST) ?: null),
+        ])->save();
+
+        return $media->id;
+    }
+
+    /**
+     * Later additions to records the pack loaded (ADR-0065): a photo, a page
+     * template, a league colour, a body. Each fills only what is still empty,
+     * once, so an editor's choice always stays. Corrections the branch office
+     * asked for (ADR-0069) are the exception: `rename` sets a person's name
+     * and title, `replace` swaps a phrase in the record's text, each once.
+     *
+     * @param  array<string, mixed>  $update
+     */
+    private function update(array $update, string $photos, User $actor): void
+    {
+        $key = (string) ($update['key'] ?? '');
+        if ($key === '' || ContentPackItem::query()->where('key', $key)->exists()) {
+            return;
+        }
+
+        $target = ContentPackItem::query()->where('key', (string) ($update['target'] ?? ''))->first();
+        $record = null;
+        if ($target !== null && $target->model_type !== null) {
+            $class = Relation::getMorphedModel($target->model_type) ?? $target->model_type;
+            $record = is_a($class, Model::class, true) ? $class::query()->find($target->model_id) : null;
+        }
+
+        DB::transaction(function () use ($update, $record, $photos, $actor, $key): void {
+            if ($record instanceof Page && $record->featured_image_id === null && filled($update['photo'] ?? null)) {
+                $record->featured_image_id = $this->photo($photos, [
+                    'photo' => $update['photo'],
+                    'source_url' => $update['photo_source'] ?? null,
+                    'translations' => array_map(fn (string $alt): array => ['name' => $alt], (array) ($update['photo_alt'] ?? [])),
+                ], $actor, (string) ($update['photo_credit'] ?? ''));
+                if ($record->template === 'default' && in_array($update['template'] ?? null, Page::TEMPLATES, true)) {
+                    $record->template = (string) $update['template'];
+                }
+                $record->updated_by = $actor->id;
+                $record->save();
+                $this->usage->handle($record, 'featured_image', [$record->featured_image_id]);
+            }
+
+            if ($record instanceof League && $record->accent === null && in_array($update['accent'] ?? null, League::ACCENTS, true)) {
+                $record->forceFill(['accent' => $update['accent'], 'updated_by' => $actor->id])->save();
+            }
+
+            if ($record instanceof League || $record instanceof Page) {
+                foreach ((array) ($update['body'] ?? []) as $locale => $body) {
+                    $translation = $record->translations()->where('locale', (string) $locale)->first();
+                    if ($translation !== null && BodyRenderer::isEmpty(is_array($translation->getAttribute('body')) ? $translation->getAttribute('body') : null) && is_array($body)) {
+                        $translation->setAttribute('body', $body);
+                        $translation->save();
+                    }
+                }
+            }
+
+            if ($record instanceof Leader && $record->photo_ids === null && ($update['photos'] ?? []) !== []) {
+                $ids = [];
+                foreach ((array) $update['photos'] as $photo) {
+                    $ids[] = $this->photo($photos, [
+                        'photo' => $photo['file'] ?? '',
+                        'translations' => array_map(fn (string $alt): array => ['name' => $alt], (array) ($photo['alt'] ?? [])),
+                    ], $actor, (string) ($photo['credit'] ?? ''));
+                }
+                $record->forceFill(['photo_ids' => array_values(array_filter($ids)) ?: null, 'updated_by' => $actor->id])->save();
+                $this->usage->handle($record, 'photos', $record->photo_ids ?? []);
+            }
+
+            if ($record instanceof Leader) {
+                foreach ((array) ($update['rename'] ?? []) as $locale => $values) {
+                    $translation = $record->translations()->where('locale', (string) $locale)->first();
+                    $values = array_intersect_key((array) $values, array_flip(['name', 'position']));
+                    if ($translation !== null && $values !== []) {
+                        $translation->fill($values)->save();
+                    }
+                }
+            }
+
+            if ($record instanceof Model && method_exists($record, 'translations')) {
+                foreach ((array) ($update['replace'] ?? []) as $locale => $pairs) {
+                    $translation = $record->translations()->where('locale', (string) $locale)->first();
+                    if ($translation instanceof Model) {
+                        $this->replaceText($translation, (array) $pairs);
+                    }
+                }
+            }
+
+            ContentPackItem::remember($key, $record);
+            $this->counts['updates'] = ($this->counts['updates'] ?? 0) + 1;
+        });
+    }
+
+    /**
+     * Swaps phrases in a translation's text fields and in the text of its
+     * body; a field that already has the new phrase is left alone, so the
+     * swap never applies twice.
+     *
+     * @param  array<int, mixed>  $pairs  [[from, to], ...]
+     */
+    private function replaceText(Model $translation, array $pairs): void
+    {
+        foreach (['title', 'name', 'position', 'summary', 'excerpt', 'kicker'] as $field) {
+            $value = $translation->getAttribute($field);
+            if (is_string($value) && $value !== '') {
+                $translation->setAttribute($field, self::swap($value, $pairs));
+            }
+        }
+        $body = $translation->getAttribute('body');
+        if (is_array($body)) {
+            $translation->setAttribute('body', self::swapAll($body, $pairs, 'text'));
+        }
+        if ($translation->isDirty()) {
+            $translation->save();
+        }
+    }
+
+    /**
+     * A phrase swapped in a text; a text that already has the new phrase is
+     * left alone, so a swap never applies twice.
+     *
+     * @param  array<int, mixed>  $pairs  [[from, to], ...]
+     */
+    public static function swap(string $text, array $pairs): string
+    {
+        foreach ($pairs as $pair) {
+            [$from, $to] = array_map('strval', array_values((array) $pair)) + ['', ''];
+            if ($from !== '' && str_contains($text, $from) && ! str_contains($text, $to)) {
+                $text = str_replace($from, $to, $text);
+            }
+        }
+
+        return $text;
+    }
+
+    /**
+     * The swap in every string of a nested array, or only under one key
+     * (the "text" of a body's nodes).
+     *
+     * @param  array<mixed>  $node
+     * @param  array<int, mixed>  $pairs
+     * @return array<mixed>
+     */
+    public static function swapAll(array $node, array $pairs, ?string $only = null): array
+    {
+        foreach ($node as $key => $value) {
+            if (is_array($value)) {
+                $node[$key] = self::swapAll($value, $pairs, $only);
+            } elseif (is_string($value) && ($only === null || $key === $only)) {
+                $node[$key] = self::swap($value, $pairs);
+            }
+        }
+
+        return $node;
+    }
+
+    /**
+     * A correction the branch office asked for after the pack was loaded
+     * (ADR-0075): phrases swapped, once by key, wherever the site shows them:
+     * people, pages, offices, leagues, stories, carousel slides and picture
+     * descriptions (or the kinds the correction names).
+     *
+     * @param  array<string, mixed>  $correction
+     */
+    private function correction(array $correction): void
+    {
+        $key = (string) ($correction['key'] ?? '');
+        $pairs = array_values((array) ($correction['replace'] ?? []));
+        if ($key === '' || $pairs === [] || ContentPackItem::query()->where('key', $key)->exists()) {
+            return;
+        }
+        $in = (array) ($correction['in'] ?? ['leaders', 'pages', 'offices', 'leagues', 'posts', 'slides', 'media']);
+
+        DB::transaction(function () use ($key, $pairs, $in): void {
+            $translated = ['leaders' => Leader::class, 'pages' => Page::class, 'offices' => Office::class, 'leagues' => League::class, 'posts' => Post::class];
+            foreach ($translated as $kind => $class) {
+                if (in_array($kind, $in, true)) {
+                    $class::query()->with('translations')->each(function (Model $record) use ($pairs): void {
+                        foreach ($record->getRelationValue('translations') ?? [] as $translation) {
+                            $this->replaceText($translation, $pairs);
+                        }
+                    });
+                }
+            }
+
+            if (in_array('slides', $in, true)) {
+                foreach (HeroSlide::query()->get() as $slide) {
+                    $slide->name = self::swap($slide->name, $pairs);
+                    $slide->content = self::swapAll($slide->content ?? [], $pairs);
+                    if ($slide->isDirty()) {
+                        $slide->save();
+                    }
+                }
+            }
+
+            if (in_array('media', $in, true)) {
+                foreach (Media::query()->whereNotNull('alt')->get() as $media) {
+                    $media->alt = self::swapAll((array) $media->alt, $pairs);
+                    if ($media->isDirty()) {
+                        $media->save();
+                    }
+                }
+            }
+
+            ContentPackItem::remember($key, null);
+            $this->counts['corrections'] = ($this->counts['corrections'] ?? 0) + 1;
+        });
+    }
+
+    /**
+     * Office and league heads, set once both records exist and only where
+     * no head has been chosen meanwhile.
+     *
+     * @param  array<string, mixed>  $pack
+     */
+    private function heads(array $pack, User $actor): void
+    {
+        foreach (['offices' => Office::class, 'leagues' => League::class] as $kind => $class) {
+            foreach ((array) ($pack[$kind] ?? []) as $item) {
+                $key = (string) ($item['key'] ?? '').'#head';
+                $record = $class::query()->find($this->id($item['key'] ?? null));
+                $head = $this->id($item['head'] ?? null);
+                if ($record === null || $head === null || $record->head_leader_id !== null || ContentPackItem::query()->where('key', $key)->exists()) {
+                    continue;
+                }
+
+                $record->forceFill(['head_leader_id' => $head, 'updated_by' => $actor->id])->save();
+                ContentPackItem::remember($key, $record);
+            }
+        }
+    }
+
+    /**
+     * The leader's message and the figures on the homepage, set once.
+     *
+     * @param  array<string, mixed>  $homepage
+     */
+    private function homepageSections(array $homepage, User $actor): void
+    {
+        $changes = [];
+        $leadership = (array) ($homepage['leadership'] ?? []);
+        $leaderId = $this->id($leadership['leader'] ?? null);
+        if ($leaderId !== null && ! ContentPackItem::query()->where('key', 'homepage.leadership')->exists()) {
+            $changes['leadership'] = ['enabled' => true, 'leader_id' => $leaderId, 'quote' => (array) ($leadership['quote'] ?? [])];
+        }
+        if (($homepage['counters'] ?? []) !== [] && ! ContentPackItem::query()->where('key', 'homepage.counters')->exists()) {
+            $changes['counters'] = ['enabled' => true, 'counter_items' => (array) $homepage['counters']];
+        }
+        if ($changes === []) {
+            return;
+        }
+
+        $states = HomepageLayout::all()->map(function (HomepageSection $section) use ($changes): array {
+            $state = ManageHomepage::state($section);
+
+            return [...$state, ...($changes[$section->key->value] ?? [])];
+        })->values()->all();
+        $this->homepage->handle($states, $actor);
+
+        foreach (array_keys($changes) as $section) {
+            ContentPackItem::remember("homepage.{$section}", null);
+        }
+        $this->counts['homepage'] = count($changes);
+    }
+
+    /**
+     * A homepage carousel slide (ADR-0070), once by its key. Its picture comes
+     * from the pack's photos; a button may point to a record the pack loaded
+     * ("leader:@leader.key").
+     *
+     * @param  array<string, mixed>  $item
+     */
+    private function slide(array $item, string $photos, User $actor): void
+    {
+        $key = (string) ($item['key'] ?? '');
+        if ($key === '' || ContentPackItem::query()->where('key', $key)->exists()) {
+            return;
+        }
+
+        DB::transaction(function () use ($item, $key, $photos, $actor): void {
+            $imageId = filled($item['photo'] ?? null) ? $this->photo($photos, [
+                'photo' => $item['photo'],
+                'translations' => array_map(fn (string $alt): array => ['name' => $alt], (array) ($item['photo_alt'] ?? [])),
+            ], $actor, (string) ($item['photo_credit'] ?? '')) : null;
+
+            $buttons = [];
+            foreach ((array) ($item['buttons'] ?? []) as $button) {
+                $link = (string) ($button['link'] ?? '');
+                if (preg_match('/^(leader|page|post):@(.+)$/', $link, $match) === 1) {
+                    $id = $this->id($match[2]);
+                    $link = $id !== null ? "{$match[1]}:{$id}" : '';
+                }
+                if ($link !== '') {
+                    $buttons[] = [...(array) $button, 'link' => $link];
+                }
+            }
+
+            $slide = $this->slides->handle(new HeroSlide, [...$item, 'image_id' => $imageId, 'buttons' => $buttons], $actor);
+            ContentPackItem::remember($key, $slide);
+            $this->counts['slides'] = ($this->counts['slides'] ?? 0) + 1;
+        });
+    }
+
+    /**
+     * A page of the party the social hub reads (ADR-0072), added once unless
+     * an editor already added it; the schedule fetches its posts.
+     *
+     * @param  array<string, mixed>  $item
+     */
+    private function socialSource(array $item): void
+    {
+        $key = (string) ($item['key'] ?? '');
+        $platform = Platform::tryFrom((string) ($item['platform'] ?? ''));
+        $handle = trim((string) ($item['handle'] ?? ''));
+        if ($key === '' || $platform === null || $handle === '' || ContentPackItem::query()->where('key', $key)->exists()) {
+            return;
+        }
+
+        $exists = SocialSource::query()->where('platform', $platform->value)->where('handle', $handle)->exists();
+        $source = $exists ? null : SocialSource::query()->create([
+            'platform' => $platform,
+            'handle' => $handle,
+            'name' => (string) ($item['name'] ?? $handle),
+            'interval_minutes' => max(15, (int) ($item['interval_minutes'] ?? 60)),
+        ]);
+        ContentPackItem::remember($key, $source);
+        if ($source !== null) {
+            $this->counts['social_sources'] = ($this->counts['social_sources'] ?? 0) + 1;
+        }
+    }
+
+    /**
+     * Social links the site does not have yet, each platform once; a link an
+     * editor set stays.
+     *
+     * @param  array<string, string>  $links
+     */
+    private function socialLinks(array $links): void
+    {
+        $settings = app(SiteSettings::class);
+        $current = array_filter($settings->social_links);
+        $added = [];
+        foreach ($links as $platform => $url) {
+            $key = "settings.social_links.{$platform}";
+            if (ContentPackItem::query()->where('key', $key)->exists()) {
+                continue;
+            }
+            if (blank($current[$platform] ?? null)) {
+                $added[$platform] = $url;
+            }
+            ContentPackItem::remember($key, null);
+        }
+        if ($added === []) {
+            return;
+        }
+
+        $settings->social_links = [...$current, ...$added];
+        $settings->save();
+        $this->counts['settings'] = count($added);
+    }
+
+    /**
+     * Stories imported as drafts from a channel before it was trusted to
+     * publish, published once with the date the channel posted them.
+     */
+    private function importedBacklog(): void
+    {
+        foreach (ContentSource::query()->where('auto_publish', true)->get() as $source) {
+            $key = "import.backlog.{$source->handle}";
+            if (ContentPackItem::query()->where('key', $key)->exists()) {
+                continue;
+            }
+
+            $imports = ContentImport::query()
+                ->where('content_source_id', $source->id)
+                ->where('status', ContentImport::IMPORTED)
+                ->whereNotNull('post_id')
+                ->with('post.translations')
+                ->get();
+            foreach ($imports as $import) {
+                $post = $import->post;
+                if ($post === null) {
+                    continue;
+                }
+                foreach ($post->translations as $translation) {
+                    if ($translation instanceof PostTranslation && $this->workflow->publishImported($post, $translation, $import->message_at)) {
+                        $this->counts['stories'] = ($this->counts['stories'] ?? 0) + 1;
+                    }
+                }
+            }
+            ContentPackItem::remember($key, null);
+        }
+    }
+}

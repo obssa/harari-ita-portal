@@ -1,0 +1,104 @@
+/*
+ * Design tokens (PLAN.md §12, ADR-0010). Every colour, font and radius used by
+ * the public site comes from here; components use the Tailwind utilities
+ * these tokens generate (bg-primary-600, text-accent-700, rounded-card ...).
+ */
+@theme {
+    /* Prosperity Blue from the logo (ADR-0062); 600 is the brand colour (#0B6CA8, 5.6:1 on white),
+       900 the night blue of heroes and figure bands. */
+    --color-primary-50: #eef6fb;
+    --color-primary-100: #dcedf7;
+    --color-primary-200: #badcef;
+    --color-primary-300: #86c2e4;
+    --color-primary-400: #4ca2d3;
+    --color-primary-500: #1f86c2;
+    --color-primary-600: #0b6ca8;
+    --color-primary-700: #095a8c;
+    --color-primary-800: #084a73;
+    --color-primary-900: #083a5c;
+    --color-primary-950: #05253b;
+
+    /* Prosperity Gold from the logo: calls to action and highlights, always with ink text. */
+    --color-gold-50: #fff6d6;
+    --color-gold-100: #ffedad;
+    --color-gold-200: #ffe07a;
+    --color-gold-300: #ffd447;
+    --color-gold-400: #ffc61f;
+    --color-gold-500: #f5b800;
+    --color-gold-600: #d69e00;
+    --color-gold-700: #a67a00;
+    --color-gold-800: #7a5a00;
+    --color-gold-900: #5c4300;
+
+    /* Basket magenta from the logo: the Women's League and speeches (600: 5.9:1 on white). */
+    --color-magenta-50: #fce8f0;
+    --color-magenta-100: #f9d0e1;
+    --color-magenta-600: #c2185b;
+    --color-magenta-700: #9e1349;
+
+    /* Sky blue from the logo: patterns only, never text. */
+    --color-sky-brand: #29a8e0;
+
+    /* Jugol plaster and ink (ADR-0062). */
+    --color-plaster: #f7f2e9;
+    --color-plaster-line: #e5dccb;
+    --color-ink-brand: #14161a;
+
+    /* Harar heritage ochre/terracotta, used sparingly for highlights (600: 5.0:1 on white). */
+    --color-accent-50: #fdf5ef;
+    --color-accent-100: #f9e6d8;
+    --color-accent-200: #f2cbb0;
+    --color-accent-300: #e9a87f;
+    --color-accent-400: #de7f4f;
+    --color-accent-500: #cd6234;
+    --color-accent-600: #b4532a;
+    --color-accent-700: #934225;
+    --color-accent-800: #773723;
+    --color-accent-900: #622f20;
+    --color-accent-950: #35160e;
+
+    /* Semantic colours. */
+    --color-success-50: var(--color-emerald-50);
+    --color-success-600: var(--color-emerald-600);
+    --color-success-800: var(--color-emerald-800);
+    --color-warning-50: var(--color-amber-50);
+    --color-warning-600: var(--color-amber-600);
+    --color-warning-800: var(--color-amber-800);
+    --color-danger-50: var(--color-red-50);
+    --color-danger-600: var(--color-red-600);
+    --color-danger-800: var(--color-red-800);
+
+    /* Surfaces and text; redefined for dark mode below. */
+    --color-canvas: var(--color-white);
+    --color-surface: var(--color-white);
+    --color-surface-muted: var(--color-plaster);
+    --color-line: #e5e1d8;
+    --color-ink: var(--color-ink-brand);
+    --color-ink-muted: #4b5563;
+    --color-link: var(--color-primary-700);
+
+    --font-sans: 'Inter Variable', 'Noto Sans Ethiopic Variable', 'Abyssinica SIL', ui-sans-serif, system-ui,
+        sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+
+    --radius-card: 1rem;
+    --radius-control: 0.5rem;
+
+    --container-page: 80rem;
+    --container-prose: 70ch;
+
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --duration-fast: 150ms;
+    --duration-base: 250ms;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-canvas: #0e1013;
+        --color-surface: #16191e;
+        --color-surface-muted: #1f232a;
+        --color-line: #30353d;
+        --color-ink: var(--color-slate-50);
+        --color-ink-muted: var(--color-slate-300);
+        --color-link: var(--color-primary-300);
+    }
+}
