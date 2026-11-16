@@ -5,7 +5,7 @@
         ->filter(fn (array $item): bool => $item['shown'] !== null)->values();
 @endphp
 {{-- ADR-0065: the newest story leads across two columns and two rows; the rest line up beside and below it. --}}
-<section aria-labelledby="home-news" class="mx-auto max-w-page px-4 py-16 sm:px-6">
+<section aria-labelledby="home-news" class="mx-auto max-w-page px-4 py-20 sm:px-6">
     <div class="flex flex-wrap items-end justify-between gap-4">
         <div>
             <p class="kicker">{{ __('homepage.news_kicker') }}</p>

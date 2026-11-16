@@ -24,11 +24,11 @@ it('ships every photo of Harar in each size and format, with its credit', functi
     }
 });
 
-it('opens the homepage on Harar Gate and shows Harar with credited photos', function () {
+it('frames Harar Gate in the hero and shows Harar with credited photos', function () {
     $html = (string) $this->get('/en')->assertOk()->getContent();
 
     expect($html)->toContain('/images/harar/gate-1600.avif', 'fetchpriority="high"', HararPhotos::get('gate')['source'])
-        ->toContain('/images/harar/interior-1024.avif', __('content.photo_credit', ['credit' => HararPhotos::credit('interior')]))
+        ->toContain('/images/harar/alley-748.avif', __('content.photo_credit', ['credit' => HararPhotos::credit('alley')]))
         ->toContain(__('homepage.heritage.fact_mosques'));
 });
 

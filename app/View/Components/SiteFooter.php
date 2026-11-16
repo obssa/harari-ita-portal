@@ -3,6 +3,8 @@
 namespace App\View\Components;
 
 use App\Domain\Content\Models\Menu;
+use App\Domain\Organisation\Models\Pillar;
+use App\Domain\Organisation\Queries\PublicDirectory;
 use App\Services\Calendar\EthiopianCalendar;
 use App\Settings\SiteSettings;
 use Illuminate\Contracts\View\View;
@@ -42,15 +44,36 @@ final class SiteFooter extends Component
     /** @var list<array<string, mixed>> links from Admin → Menus → footer */
     public array $links = [];
 
+    /** @var list<array{label: string, url: string, colour: int}> the published pillars, in their order */
+    public array $pillars = [];
+
+    /** @var list<array{label: string, url: string}> the main listings of the site */
+    public array $explore = [];
+
     public function __construct()
     {
         $this->years = app(EthiopianCalendar::class)->years(now());
-        $this->links = Menu::resolved('footer', app()->getLocale());
+        $locale = app()->getLocale();
+        $this->links = Menu::resolved('footer', $locale);
+        $this->explore = [
+            ['label' => __('nav.about'), 'url' => route('structure')],
+            ['label' => __('projects.title'), 'url' => route('projects.index')],
+            ['label' => __('nav.news'), 'url' => route('news.index')],
+            ['label' => __('events.title'), 'url' => route('events.index')],
+            ['label' => __('documents.title'), 'url' => route('documents.index')],
+            ['label' => __('nav.volunteer'), 'url' => route('volunteer.create')],
+            ['label' => __('nav.contact'), 'url' => route('contact')],
+        ];
 
         // Settings load lazily; a database problem must not take the footer down.
         try {
             $this->load(app(SiteSettings::class));
+            $this->pillars = PublicDirectory::visible(Pillar::query(), $locale)->with('translations')->orderBy('sort')->limit(5)->get()
+                ->map(fn (Pillar $pillar, int $i): ?array => ($shown = PublicDirectory::shown($pillar, $locale)) !== null
+                    ? ['label' => (string) $shown->getAttribute('name'), 'url' => route('pillars.show', ['slug' => (string) $shown->getAttribute('slug')]), 'colour' => $i + 1] : null)
+                ->filter()->values()->all();
         } catch (Throwable) {
+            $this->pillars = [];
             $this->contact = [];
             $this->email = $this->phone = $this->hotline = null;
             $this->social = [];

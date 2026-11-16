@@ -164,3 +164,26 @@ JavaScript the button stays hidden and the device's setting applies.
   `name`, so no script is needed and only one panel is open at a time.
 - The party's core values (inherited from the source project's homepage defaults) were removed, with a data
   migration for the copy staging held; the Agency's values come from INPUTS.
+
+## ADR-0010 — The footer (2026-11-16)
+
+**Decision.** The footer is a night band: a thin strip in the five pillar colours replaces the source project's
+woven basket band; the hexagon field fades in from the right; the horizontal lockup (dark twin) with the site's
+description sits beside the newsletter sign-up (a plain GET form, ADR-0051 of the source); then columns for the
+pillars (published ones, each with its colour node), the main listings, the footer menu (legal pages), contact
+and the Agency's social pages; a mono bottom bar with the copyright in both calendars, the test-site note and a
+link back to the top.
+
+## ADR-0011 — The homepage (2026-11-16)
+
+**Decision.**
+
+- Without slides, the hero is HinTA's own: night, the hexagon field, the logo's orange curve drawn once, a mono
+  eyebrow, the promise line ("Building a digital Harari Region", a working line until the Agency gives its own)
+  in the display face, the description, **Request support** and **Explore our pillars**, two structural facts
+  (four languages, five pillars) and a framed, credited photo of Harar Gate with the emblem. No figure is shown
+  that is not a fact of the site itself or entered by an editor with its source.
+- The pillars are "gates" in a bento grid (the first twice as wide), each with its colour node, number and arch.
+- The figures are a KPI strip: the display face in orange on night, mono labels, hairlines between them.
+- The heritage band ("Rooted in Harar") keeps the credited photographs and the verified facts (UNESCO 2006,
+  82 mosques, six gates today) as mono stat tiles; the source project's basket-plate sentence is gone.

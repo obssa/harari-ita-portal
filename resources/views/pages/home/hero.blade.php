@@ -9,42 +9,49 @@
     </section>
     <span id="home-after-hero"></span>
 @else
-    {{-- ADR-0065/0066: with no slides, Harar Gate behind the welcome, night blue over it, basket plates turning slowly. --}}
-    <section aria-label="{{ $section->heading() }}" class="bg-surface-muted">
-        <div class="relative isolate overflow-hidden bg-primary-950 text-white">
-            <x-harar-photo name="gate" sizes="100vw" loading="eager" fetchpriority="high" class="animate-zoom absolute inset-0 -z-20 size-full object-cover object-[70%_50%]" />
-            <div aria-hidden="true" class="absolute inset-0 -z-10 bg-linear-to-r from-primary-950 via-primary-950/85 to-primary-900/25"></div>
-            <div aria-hidden="true" class="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-linear-to-t from-primary-950/90 to-transparent"></div>
-            <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-[5] overflow-hidden">
-                <div class="absolute -end-56 top-1/2 size-[40rem] -translate-y-1/2 opacity-[0.18] lg:-end-48">
-                    @include('pages.home._plate', ['class' => 'animate-spin-slow size-full'])
-                </div>
-                <div class="absolute -start-24 -bottom-28 size-72 opacity-20">
-                    @include('pages.home._plate', ['class' => 'animate-spin-slower size-full'])
-                </div>
-                <div class="absolute end-[6%] top-10 hidden size-20 opacity-40 lg:block">
-                    @include('pages.home._plate', ['class' => 'animate-float size-full'])
-                </div>
+    {{-- ADR-0011: the night hero: the promise on the left over the hexagon field and the logo's orange curve,
+         a framed, credited Harar photo on the right with the five pillar nodes. Text first, so it paints at once. --}}
+    <section aria-label="{{ $section->heading() }}" class="relative isolate overflow-hidden bg-night-900 text-night-ink">
+        <x-hex-field id="hero-hex" class="absolute inset-0 -z-20 size-full text-cyan-500/20" />
+        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[radial-gradient(60rem_40rem_at_85%_10%,rgb(16_93_111/0.55),transparent_70%)]"></div>
+        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgb(29_74_88/0.35)_1px,transparent_1px)] bg-[size:6rem_100%] opacity-60 [mask-image:linear-gradient(to_bottom,#000,transparent_85%)]"></div>
+        <svg aria-hidden="true" class="draw-in pointer-events-none absolute -end-20 -top-24 -z-10 h-[130%] w-auto text-saffron-500 opacity-90 sm:-end-8 lg:end-[34%]" viewBox="0 0 120 400" fill="none">
+            <path d="M96 0C30 70 18 150 52 220c26 54 34 120-24 180" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+
+        <div class="mx-auto grid max-w-page gap-12 px-4 pt-16 pb-20 sm:px-6 sm:pt-24 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:pt-28 lg:pb-28">
+            <div class="max-w-2xl">
+                <p class="kicker animate-rise [--color-eyebrow:var(--color-cyan-300)]">
+                    <span aria-hidden="true" class="me-2 inline-block size-1.5 -translate-y-px rounded-full bg-cyan-400 align-middle"></span>{{ __('site.short') }} · {{ __('site.parent') }}
+                </p>
+                <p class="heading-display animate-rise mt-6 text-night-ink [--rise-delay:100ms]">{{ __('homepage.hero.title') }}</p>
+                <p class="animate-rise mt-6 max-w-xl text-lg text-night-muted [--rise-delay:200ms] sm:text-xl">{{ __('site.description') }}</p>
+                <p class="animate-rise mt-10 flex flex-wrap gap-3 [--rise-delay:300ms]">
+                    <x-ui.button :href="\Illuminate\Support\Facades\Route::has('support.create') ? route('support.create') : route('contact')" variant="action" size="lg">{{ __('nav.cta_support') }}</x-ui.button>
+                    <x-ui.button :href="route('pillars.index')" variant="light" size="lg">{{ __('homepage.hero.pillars') }}</x-ui.button>
+                </p>
+                <dl class="animate-rise mt-12 grid max-w-sm grid-cols-2 divide-x divide-night-line border-y border-night-line font-mono text-xs [--rise-delay:400ms] rtl:divide-x-reverse">
+                    <div class="flex flex-col py-3 pe-3"><dt class="text-night-muted uppercase">{{ __('homepage.hero.languages') }}</dt><dd class="order-first font-display text-2xl text-saffron-400">4</dd></div>
+                    <div class="flex flex-col py-3 ps-4"><dt class="text-night-muted uppercase">{{ __('homepage.hero.pillars_count') }}</dt><dd class="order-first font-display text-2xl text-saffron-400">5</dd></div>
+                </dl>
             </div>
-            <div class="mx-auto max-w-page px-4 py-20 sm:px-6 sm:py-28 lg:py-36">
-                <div class="max-w-3xl">
-                    <p class="animate-rise inline-flex items-center gap-3 rounded-full bg-white/10 py-1.5 ps-1.5 pe-4 text-xs font-bold tracking-wider text-saffron-300 uppercase ring-1 ring-white/20 backdrop-blur">
-                        <img src="/brand/emblem-128.png" alt="" width="32" height="32" class="size-8">
-                        {{ __('site.office') }}
-                    </p>
-                    <p class="heading-display animate-rise mt-6 text-white [--rise-delay:120ms]">{{ __('site.name') }}</p>
-                    <p class="animate-rise mt-5 max-w-prose text-lg text-white/85 [--rise-delay:240ms] sm:text-xl">{{ __('site.description') }}</p>
-                    <p class="animate-rise mt-9 flex flex-wrap gap-3 [--rise-delay:360ms]">
-                        <x-ui.button :href="route('news.index')" variant="action" size="lg" class="shadow-lg shadow-saffron-500/20">{{ __('nav.news') }}</x-ui.button>
-                        <x-ui.button :href="route('leaders.index')" variant="light" size="lg" class="backdrop-blur">{{ __('leaders.title') }}</x-ui.button>
-                    </p>
+
+            <figure class="animate-rise relative mx-auto w-full max-w-md [--rise-delay:200ms] lg:max-w-none">
+                <div class="relative overflow-hidden rounded-[1.75rem] border border-night-line bg-night-800 p-2 shadow-2xl shadow-night-950/60">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-[1.25rem]">
+                        <x-harar-photo name="gate" sizes="(min-width: 64rem) 28rem, 90vw" loading="eager" fetchpriority="high" class="size-full object-cover object-[60%_50%]" />
+                        <div aria-hidden="true" class="absolute inset-0 bg-linear-to-t from-night-950/85 via-night-950/10 to-transparent"></div>
+                        <div class="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3">
+                            <p class="font-mono text-[0.7rem] tracking-wider text-night-ink uppercase">{{ __('harar.photo.gate') }}</p>
+                            <img src="/brand/emblem-128.png" alt="" width="48" height="48" class="size-12 shrink-0">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <a href="#home-after-hero" class="animate-float absolute start-1/2 bottom-6 hidden -translate-x-1/2 rounded-full p-2 text-white/70 ring-1 ring-white/25 hover:bg-white/10 hover:text-white sm:inline-flex rtl:translate-x-1/2">
-                <span class="sr-only">{{ __('homepage.scroll_down') }}</span>
-                <svg aria-hidden="true" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
-            </a>
-            <p class="absolute end-4 bottom-3 text-[11px] text-white/60"><x-harar-credit name="gate" /></p>
+                <ul aria-hidden="true" class="absolute -start-4 top-10 hidden flex-col gap-2 sm:flex">
+                    <li class="size-3 rotate-45 bg-pillar-1"></li><li class="size-3 rotate-45 bg-pillar-2"></li><li class="size-3 rotate-45 bg-pillar-3"></li><li class="size-3 rotate-45 bg-pillar-4"></li><li class="size-3 rotate-45 bg-pillar-5"></li>
+                </ul>
+                <figcaption class="mt-3 text-end text-[11px] text-night-muted"><x-harar-credit name="gate" /></figcaption>
+            </figure>
         </div>
         <span id="home-after-hero"></span>
     </section>

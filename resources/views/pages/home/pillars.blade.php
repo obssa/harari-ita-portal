@@ -2,35 +2,49 @@
 @use('App\Domain\Organisation\Queries\PublicDirectory')
 @php
     $locale = app()->getLocale();
-    // ADR-0065: each pillar in the colour chosen for it (the women's wing magenta, the youth wing blue).
-    $grounds = ['primary' => 'bg-primary-700', 'ruby' => 'bg-ruby-700', 'cyan' => 'bg-cyan-700', 'night' => 'bg-primary-900'];
+    // DESIGN.md: each pillar keeps its place colour (pillar-1 … pillar-5) on the node, the arch and the edge.
+    $nodes = ['bg-pillar-1', 'bg-pillar-2', 'bg-pillar-3', 'bg-pillar-4', 'bg-pillar-5'];
+    $edges = ['hover:border-pillar-1', 'hover:border-pillar-2', 'hover:border-pillar-3', 'hover:border-pillar-4', 'hover:border-pillar-5'];
+    $texts = ['text-pillar-1', 'text-pillar-2', 'text-pillar-3', 'text-pillar-4', 'text-pillar-5'];
 @endphp
-<section aria-labelledby="home-pillars" class="mx-auto max-w-page px-4 py-16 sm:px-6">
-    <div class="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="home-pillars" class="heading-2">{{ $section->heading() }}</h2>
-        <a href="{{ route('pillars.index') }}" class="font-bold text-link underline-offset-4 hover:underline">{{ __('pillars.title') }}</a>
+{{-- ADR-0011: the pillar "gates": a bento grid, the first gate twice as wide, each with its arch, number and colour. --}}
+<section aria-labelledby="home-pillars" class="mx-auto max-w-page px-4 py-20 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <p class="kicker">{{ __('homepage.section_kicker.pillars') }}</p>
+            <h2 id="home-pillars" class="heading-2 mt-2">{{ $section->heading() }}</h2>
+        </div>
+        <a href="{{ route('pillars.index') }}" class="inline-flex items-center gap-1.5 font-semibold text-link">
+            {{ __('pillars.title') }}
+            <svg aria-hidden="true" class="size-4 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
     </div>
-    <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+    <ul class="mt-10 grid auto-rows-fr gap-4 sm:grid-cols-2 lg:grid-cols-3">
         @foreach ($data as $item)
             @php
                 $shown = PublicDirectory::shown($item['pillar'], $locale);
                 $post = $item['post'] !== null ? PublicPosts::shown($item['post'], $locale) : null;
+                $i = $loop->index % 5;
             @endphp
             @continue($shown === null)
-            <li lang="{{ $shown->locale }}">
-                <article class="reveal group relative flex h-full min-h-60 flex-col justify-between gap-6 overflow-hidden rounded-[1.25rem] p-8 text-white {{ $grounds[$item['pillar']->accentTone()] }}">
-                    @include('pages.home._plate', ['class' => 'pointer-events-none absolute -end-16 -top-16 size-56 opacity-30'])
-                    <div class="relative">
-                        <h3 class="text-xs font-bold tracking-wider text-saffron-300 uppercase">
+            <li lang="{{ $shown->locale }}" @class(['lg:col-span-2' => $loop->first])>
+                <article class="reveal group relative flex h-full min-h-56 flex-col gap-5 overflow-hidden rounded-card border border-line bg-surface p-7 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-night-950/5 {{ $edges[$i] }}">
+                    <svg aria-hidden="true" class="pointer-events-none absolute -end-6 -bottom-10 h-44 w-auto opacity-[0.07] {{ $texts[$i] }}" viewBox="0 0 80 100" fill="none" stroke="currentColor" stroke-width="6"><path d="M10 100V40Q10 12 40 4q30 8 30 36v60"/></svg>
+                    <div class="flex items-center gap-3">
+                        <span aria-hidden="true" class="size-3 rotate-45 {{ $nodes[$i] }}"></span>
+                        <span class="font-mono text-xs text-ink-muted">{{ sprintf('%02d', $loop->iteration) }}</span>
+                    </div>
+                    <div>
+                        <h3 class="font-display text-2xl font-semibold tracking-tight">
                             <a href="{{ route('pillars.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}" class="after:absolute after:inset-0">{{ $shown->getAttribute('name') }}</a>
                         </h3>
-                        @if ($post)
-                            <p class="mt-3 text-2xl leading-snug font-extrabold" lang="{{ $post->locale }}">{{ $post->title }}</p>
-                        @elseif (filled($shown->getAttribute('summary')))
-                            <p class="mt-3 text-lg leading-snug font-semibold">{{ $shown->getAttribute('summary') }}</p>
+                        @if (filled($shown->getAttribute('summary')))
+                            <p class="mt-2 text-ink-muted">{{ $shown->getAttribute('summary') }}</p>
                         @endif
                     </div>
-                    <p class="relative font-bold group-hover:underline">{{ __('homepage.visit', ['name' => $shown->getAttribute('name')]) }} →</p>
+                    @if ($post)
+                        <p class="mt-auto border-t border-line pt-4 text-sm" lang="{{ $post->locale }}"><span class="font-mono text-xs text-ink-muted uppercase">{{ __('homepage.latest') }}</span> {{ $post->title }}</p>
+                    @endif
                 </article>
             </li>
         @endforeach

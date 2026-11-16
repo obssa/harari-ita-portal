@@ -19,3 +19,4 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | open data | ክፍት መረጃ | daataa banaa | `access.module.datasets` | |
 | Service Desk Agent, Data Steward, Judge | የአገልግሎት ዴስክ ባለሙያ, የመረጃ ጠባቂ, ዳኛ | Ogeessa Deeskii Tajaajilaa, Eegduu Daataa, Abbaa Murtii Dorgommii | `access.role.*` | Role names in the admin |
 | online safety awareness | የኦንላይን ደህንነት ግንዛቤ | hubannoo nageenya toora interneetii | `volunteers.skill.cyber_awareness` | INSA's terms may differ |
+| Building a digital Harari Region | ዲጂታል ሐረሪ ክልልን እንገነባለን | Naannoo Hararii dijitaalaa ni ijaarra | `homepage.hero.title` | Working promise line for the hero until the Agency gives its own |
