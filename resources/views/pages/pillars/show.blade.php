@@ -8,34 +8,35 @@
     :json-ld="$jsonLd"
 >
     @php
-        $ground = match ($pillar->accentTone()) {
-            'ruby' => 'bg-ruby-700',
-            'cyan' => 'bg-cyan-700',
-            'night' => 'bg-primary-900',
-            default => 'bg-primary-700',
-        };
+        $tone = $pillar->accentTone();
+        $node = match ($tone) { 'cyan' => 'bg-cyan-500', 'saffron' => 'bg-saffron-500', 'ruby' => 'bg-ruby-600', 'night' => 'bg-night-ink', default => 'bg-primary-500' };
     @endphp
     <article>
-        {{-- ADR-0065: the pillar opens in its own colour, its chair beside the name. --}}
-        <section class="relative isolate overflow-hidden text-white {{ $ground }}">
-            @include('pages.home._plate', ['class' => 'pointer-events-none absolute -end-28 -top-24 -z-10 size-[30rem] opacity-30'])
-            <div aria-hidden="true" class="absolute inset-0 -z-10 bg-linear-to-br from-black/0 via-black/0 to-black/25"></div>
+        {{-- ADR-0012: the pillar opens on a night band with the hexagon field and its colour on the edge; the head of the
+             pillar sits beside the name. --}}
+        <section class="relative isolate overflow-hidden border-b border-night-line bg-night-900 text-night-ink">
+            <span aria-hidden="true" class="absolute inset-x-0 top-0 h-1 {{ $node }}"></span>
+            <x-hex-field id="pillar-hex" fade="right" class="absolute inset-y-0 end-0 -z-10 h-full w-3/5 text-cyan-500/20" />
             <div class="mx-auto max-w-page px-4 py-10 sm:px-6 sm:py-14">
-                <nav aria-label="{{ __('news.breadcrumb') }}" class="text-sm text-white/75">
-                    <ol class="flex flex-wrap items-center gap-2">
-                        <li><a href="{{ route('home') }}" class="hover:text-white hover:underline">{{ __('nav.home') }}</a></li>
-                        <li class="flex items-center gap-2"><span aria-hidden="true">/</span><a href="{{ route('pillars.index') }}" class="hover:text-white hover:underline">{{ __('pillars.title') }}</a></li>
-                        <li class="flex items-center gap-2"><span aria-hidden="true">/</span><span aria-current="page" class="font-semibold text-white">{{ $translation->name }}</span></li>
+                <nav aria-label="{{ __('news.breadcrumb') }}">
+                    <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs tracking-wide text-night-muted uppercase [&_a:hover]:text-night-ink">
+                        <li><a href="{{ route('home') }}">{{ __('nav.home') }}</a></li>
+                        <li class="flex items-center gap-2"><span aria-hidden="true" class="text-cyan-400">/</span><a href="{{ route('pillars.index') }}">{{ __('pillars.title') }}</a></li>
+                        <li class="flex min-w-0 items-center gap-2"><span aria-hidden="true" class="text-cyan-400">/</span><span aria-current="page" class="line-clamp-1 text-night-ink normal-case">{{ $translation->name }}</span></li>
                     </ol>
                 </nav>
                 <div class="mt-10 grid items-end gap-10 lg:grid-cols-[1fr_22rem]">
                     <header>
                         @if ($pillar->logo)
-                            <x-picture :media="$pillar->logo" preset="square" sizes="5rem" class="mb-6 size-20 rounded-full bg-white object-contain p-1" />
+                            <x-picture :media="$pillar->logo" preset="square" sizes="5rem" class="mb-6 size-20 rounded-card bg-white object-contain p-1" />
                         @endif
-                        <h1 class="heading-display text-white">{{ $translation->name }}</h1>
+                        <p class="flex items-center gap-3">
+                            <span aria-hidden="true" class="size-3 rotate-45 {{ $node }}"></span>
+                            <span class="kicker [--color-eyebrow:var(--color-cyan-300)]">{{ __('pillars.title') }}</span>
+                        </p>
+                        <h1 class="heading-display mt-4 text-night-ink">{{ $translation->name }}</h1>
                         @if ($translation->summary)
-                            <p class="mt-5 max-w-prose text-lg text-white/85 sm:text-xl">{{ $translation->summary }}</p>
+                            <p class="mt-5 max-w-prose text-lg text-night-muted sm:text-xl">{{ $translation->summary }}</p>
                         @endif
                         <p class="mt-8 flex flex-wrap gap-3">
                             <x-ui.button :href="route('volunteer.create')" variant="action" size="lg">{{ __('nav.volunteer') }}</x-ui.button>
@@ -43,17 +44,17 @@
                     </header>
                     @if ($head)
                         <a href="{{ route('leaders.show', ['locale' => $head->locale, 'slug' => $head->slug]) }}" lang="{{ $head->locale }}"
-                           class="group flex items-center gap-4 rounded-[1.25rem] bg-white/10 p-5 ring-1 ring-white/20 backdrop-blur transition hover:bg-white/15">
+                           class="group flex items-center gap-4 rounded-card border border-night-line bg-night-800/80 p-5 transition hover:border-cyan-400">
                             @if ($pillar->head?->portrait)
-                                <x-picture :media="$pillar->head->portrait" preset="square" sizes="5rem" class="size-18 shrink-0 rounded-full object-cover ring-4 ring-saffron-500" />
+                                <x-picture :media="$pillar->head->portrait" preset="square" sizes="5rem" class="size-18 shrink-0 rounded-full object-cover ring-2 ring-cyan-400 ring-offset-2 ring-offset-night-800" />
                             @else
-                                <span aria-hidden="true" class="flex size-18 shrink-0 items-center justify-center rounded-full bg-white text-2xl font-extrabold text-ink-brand ring-4 ring-saffron-500">{{ mb_substr($head->name, 0, 1) }}</span>
+                                <span aria-hidden="true" class="flex size-18 shrink-0 items-center justify-center rounded-full bg-night-950 font-display text-2xl font-bold text-night-ink ring-2 ring-cyan-400 ring-offset-2 ring-offset-night-800">{{ mb_substr($head->name, 0, 1) }}</span>
                             @endif
                             <span class="min-w-0">
-                                <span class="block text-[11px] font-bold tracking-wider text-saffron-300 uppercase">{{ __('pillars.head') }}</span>
-                                <span class="mt-1 block text-lg leading-snug font-bold group-hover:underline">{{ $head->name }}</span>
+                                <span class="block font-mono text-[11px] tracking-wider text-cyan-300 uppercase">{{ __('pillars.head') }}</span>
+                                <span class="mt-1 block font-display text-lg leading-snug font-semibold group-hover:underline">{{ $head->name }}</span>
                                 @if ($head->position)
-                                    <span class="mt-0.5 block text-sm text-white/80">{{ $head->position }}</span>
+                                    <span class="mt-0.5 block text-sm text-night-muted">{{ $head->position }}</span>
                                 @endif
                             </span>
                         </a>
@@ -67,7 +68,7 @@
                 <div class="min-w-0">
                     @if ($pillar->coverImage)
                         <figure class="mb-10">
-                            <x-picture :media="$pillar->coverImage" preset="landscape" sizes="(min-width: 64rem) 52rem, 100vw" class="w-full rounded-[1.25rem]" />
+                            <x-picture :media="$pillar->coverImage" preset="landscape" sizes="(min-width: 64rem) 52rem, 100vw" class="w-full rounded-card" />
                         </figure>
                     @endif
                     <h2 class="heading-2">{{ __('pillars.about') }}</h2>
@@ -81,7 +82,7 @@
                 <aside class="space-y-8" aria-label="{{ __('offices.details') }}">
                     @if ($people->isNotEmpty())
                         <section aria-labelledby="pillar-people">
-                            <h2 id="pillar-people" class="text-xs font-bold tracking-wider text-ink-muted uppercase">{{ __('pillars.people') }}</h2>
+                            <h2 id="pillar-people" class="kicker">{{ __('pillars.people') }}</h2>
                             <ul class="mt-4 space-y-3">
                                 @foreach ($people as $person)
                                     @php $shown = PublicDirectory::shown($person, $locale); @endphp
@@ -92,9 +93,9 @@
                         </section>
                     @endif
                     <x-directory.contacts :phone="$pillar->phone" :email="$pillar->email" :socials="$pillar->socialLinks()" />
-                    <section aria-labelledby="pillar-take-part" class="relative overflow-hidden rounded-[1.25rem] bg-surface-muted p-6">
-                        @include('pages.home._plate', ['class' => 'pointer-events-none absolute -end-10 -bottom-12 size-36 opacity-25'])
-                        <h2 id="pillar-take-part" class="relative text-lg font-extrabold">{{ __('pillars.take_part_title') }}</h2>
+                    <section aria-labelledby="pillar-take-part" class="relative isolate overflow-hidden rounded-card border border-line bg-surface-muted p-6">
+                        <x-hex-field id="pillar-take-part-hex" fade="right" class="absolute inset-0 -z-10 size-full text-primary-700/10 dark:text-cyan-500/15" />
+                        <h2 id="pillar-take-part" class="relative font-display text-lg font-semibold tracking-tight">{{ __('pillars.take_part_title') }}</h2>
                         <p class="relative mt-2 text-sm text-ink-muted">{{ __('pillars.take_part_text') }}</p>
                         <p class="relative mt-4 flex flex-wrap gap-2">
                             <x-ui.button :href="route('events.index')" variant="secondary" size="sm">{{ __('events.title') }}</x-ui.button>

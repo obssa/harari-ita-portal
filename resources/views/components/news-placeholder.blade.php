@@ -1,23 +1,15 @@
 @props(['type' => null, 'lead' => false])
 @php
-    // ADR-0065: a story without a photo still gets a picture, in its type's colour, with the Agency's mark.
-    $ground = match ($type?->tone()) {
-        'cyan' => 'from-cyan-700 to-cyan-900',
-        'ruby' => 'from-ruby-600 to-ruby-700',
-        'ink' => 'from-ink-brand to-primary-950',
-        'saffron' => 'from-saffron-500 to-cyan-600',
-        default => 'from-primary-800 to-primary-950',
+    // ADR-0012: a story without a photo gets a night tile with the hexagon field, the emblem and its type's tint.
+    $tint = match ($type?->tone()) {
+        'cyan' => 'from-cyan-700/70',
+        'ruby' => 'from-ruby-700/70',
+        'saffron' => 'from-saffron-600/60',
+        'ink' => 'from-night-950',
+        default => 'from-primary-700/70',
     };
 @endphp
-<div aria-hidden="true" {{ $attributes->class(['relative flex size-full items-center justify-center overflow-hidden bg-linear-135', $ground]) }}>
-    @include('pages.home._plate', ['class' => 'absolute -end-12 -bottom-16 size-56 opacity-40 transition-transform duration-700 group-hover:rotate-12'])
-    @include('pages.home._plate', ['class' => 'absolute -start-10 -top-12 size-32 opacity-20'])
-    <span class="relative flex flex-col items-center gap-4">
-        <span @class(['flex items-center justify-center rounded-full bg-white shadow-xl ring-4 ring-white/25', 'size-16' => ! $lead, 'size-28' => $lead])>
-            <img src="{{ $lead ? '/brand/emblem-256.png' : '/brand/emblem-128.png' }}" alt="" width="112" height="112" @class(['size-14' => ! $lead, 'size-24' => $lead])>
-        </span>
-        @if ($lead)
-            <span @class(['text-sm font-extrabold tracking-[0.18em] uppercase', 'text-ink-brand/80' => $type?->tone() === 'saffron', 'text-white/90' => $type?->tone() !== 'saffron'])>{{ __('site.name') }}</span>
-        @endif
-    </span>
+<div aria-hidden="true" {{ $attributes->class(['relative isolate flex size-full items-center justify-center overflow-hidden bg-night-900 bg-linear-to-br to-night-900', $tint]) }}>
+    <x-hex-field :id="'card-hex-'.($lead ? 'lead' : 'item')" fade="radial" class="absolute inset-0 -z-10 size-full text-cyan-400/25 transition-transform duration-700 group-hover:scale-110" />
+    <img src="{{ $lead ? '/brand/emblem-256.png' : '/brand/emblem-128.png' }}" alt="" width="112" height="112" @class(['drop-shadow-xl', 'size-16' => ! $lead, 'size-28' => $lead])>
 </div>

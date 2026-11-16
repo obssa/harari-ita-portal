@@ -187,3 +187,22 @@ link back to the top.
 - The figures are a KPI strip: the display face in orange on night, mono labels, hairlines between them.
 - The heritage band ("Rooted in Harar") keeps the credited photographs and the verified facts (UNESCO 2006,
   82 mosques, six gates today) as mono stat tiles; the source project's basket-plate sentence is gone.
+
+## ADR-0012 — Inner pages and the base components (2026-11-16)
+
+**Decision.**
+
+- Page heroes have two looks. Night (tones night, ink, primary, ruby, cyan) is a dark band with the hexagon field
+  fading in from the end. Light (plaster, saffron) is a calm band with the field faint; saffron adds a thin orange
+  bar on top. Breadcrumbs are mono uppercase with cyan slashes.
+- Story cards keep the same parts in the same places (picture or placeholder, labels, title, summary, date) with a
+  hairline border that turns cyan on hover, titles in the display face and a mono date. A story without a photo
+  gets a night tile with the hexagon field, the emblem and its type's tint.
+- The source project's basket plate is replaced by the logo's hexagon cluster: a honeycomb of outlined cyan cells
+  with a few filled in orange, ruby and teal. Decoration only (`aria-hidden`).
+- Buttons have squared corners (`radius-control`) and a semibold label: primary teal 700, the one orange action,
+  cyan accent, hairline secondary and light (for night bands). Badges are small mono uppercase labels with a dark
+  twin for each tone. The active filter chip is teal (cyan on dark).
+
+**Why.** HinTA must read as a technology agency, not a recoloured copy of the source project (its rounded pills,
+gold edges and woven patterns are gone).

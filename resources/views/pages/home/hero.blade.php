@@ -15,9 +15,6 @@
         <x-hex-field id="hero-hex" class="absolute inset-0 -z-20 size-full text-cyan-500/20" />
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[radial-gradient(60rem_40rem_at_85%_10%,rgb(16_93_111/0.55),transparent_70%)]"></div>
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgb(29_74_88/0.35)_1px,transparent_1px)] bg-[size:6rem_100%] opacity-60 [mask-image:linear-gradient(to_bottom,#000,transparent_85%)]"></div>
-        <svg aria-hidden="true" class="draw-in pointer-events-none absolute -end-20 -top-24 -z-10 h-[130%] w-auto text-saffron-500 opacity-90 sm:-end-8 lg:end-[34%]" viewBox="0 0 120 400" fill="none">
-            <path d="M96 0C30 70 18 150 52 220c26 54 34 120-24 180" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>
-        </svg>
 
         <div class="mx-auto grid max-w-page gap-12 px-4 pt-16 pb-20 sm:px-6 sm:pt-24 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:pt-28 lg:pb-28">
             <div class="max-w-2xl">
@@ -36,7 +33,11 @@
                 </dl>
             </div>
 
-            <figure class="animate-rise relative mx-auto w-full max-w-md [--rise-delay:200ms] lg:max-w-none">
+            <figure class="animate-rise relative isolate mx-auto w-full max-w-md [--rise-delay:200ms] lg:max-w-none">
+                {{-- The logo's orange curve sweeps behind the frame, never behind text (DESIGN.md). --}}
+                <svg aria-hidden="true" class="draw-in pointer-events-none absolute -start-14 -top-28 -z-10 h-[calc(100%+14rem)] w-auto text-saffron-500" viewBox="0 0 120 400" fill="none">
+                    <path d="M96 0C30 70 18 150 52 220c26 54 34 120-24 180" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+                </svg>
                 <div class="relative overflow-hidden rounded-[1.75rem] border border-night-line bg-night-800 p-2 shadow-2xl shadow-night-950/60">
                     <div class="relative aspect-[4/5] overflow-hidden rounded-[1.25rem]">
                         <x-harar-photo name="gate" sizes="(min-width: 64rem) 28rem, 90vw" loading="eager" fetchpriority="high" class="size-full object-cover object-[60%_50%]" />

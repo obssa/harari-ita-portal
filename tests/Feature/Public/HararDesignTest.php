@@ -32,14 +32,14 @@ it('frames Harar Gate in the hero and shows Harar with credited photos', functio
         ->toContain(__('homepage.heritage.fact_mosques'));
 });
 
-it('gives a story without a photo the placeholder and keeps every card the same shape', function () {
+it('gives a story without a photo the night placeholder and keeps every card the same shape', function () {
     $publisher = staff(SystemRole::CommunicationsEditor, mfa: false);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'speech', 'translations' => ['en' => ['title' => 'Sample speech without a photo']]], $publisher);
     app(ContentWorkflow::class)->apply($post, 'en', Transition::Publish, $publisher);
 
     $html = (string) $this->get('/en/news')->assertOk()->getContent();
 
-    expect($html)->toContain('Sample speech without a photo', 'from-ruby-600', 'line-clamp-3', 'aspect-[16/10]');
+    expect($html)->toContain('Sample speech without a photo', 'from-ruby-700/70', 'line-clamp-3', 'aspect-[16/10]');
 });
 
 it('keeps a colour an editor chose when the pack adds a wing profile later', function () {

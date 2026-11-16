@@ -28,11 +28,11 @@ it('hides the styleguide in production', function () {
 
 it('renders buttons as links or buttons with the chosen variant', function () {
     expect(Blade::render('<x-ui.button href="/en" variant="secondary">Go</x-ui.button>'))
-        ->toContain('<a href="/en"', 'border-ink', 'rounded-full', '>Go</a>')
+        ->toContain('<a href="/en"', 'border-line', 'rounded-control', '>Go</a>')
         ->and(Blade::render('<x-ui.button href="/en/volunteer" variant="action">Offer your skills</x-ui.button>'))
         ->toContain('bg-saffron-500', 'text-ink-brand')
         ->and(Blade::render('<x-ui.button type="submit">Send</x-ui.button>'))
-        ->toContain('<button type="submit"', 'bg-primary-600');
+        ->toContain('<button type="submit"', 'bg-primary-700');
 });
 
 it('renders badges in each tone', function (string $tone, string $class) {
@@ -46,7 +46,7 @@ it('renders badges in each tone', function (string $tone, string $class) {
     ['danger', 'bg-danger-50'],
     ['saffron', 'bg-saffron-50'],
     ['ruby', 'bg-ruby-50'],
-    ['ink', 'bg-ink-brand'],
+    ['ink', 'bg-night-900'],
 ]);
 
 it('renders cards with an optional link, badges and meta line', function () {

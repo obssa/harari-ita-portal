@@ -56,12 +56,12 @@
                                     @continue($shown === null)
                                     <li lang="{{ $shown->locale }}">
                                         <a href="{{ route('offices.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}"
-                                           class="reveal group flex h-full items-center gap-4 rounded-card border border-line bg-surface p-4 transition hover:-translate-y-0.5 hover:border-saffron-500 hover:shadow-lg">
-                                            <span aria-hidden="true" class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-900 text-saffron-400">
+                                           class="reveal group flex h-full items-center gap-4 rounded-card border border-line bg-surface p-4 transition hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5">
+                                            <span aria-hidden="true" class="flex size-11 shrink-0 items-center justify-center rounded-control bg-night-900 text-cyan-300">
                                                 <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
                                             </span>
                                             <span class="min-w-0">
-                                                <span class="block font-bold group-hover:underline">{{ $shown->getAttribute('name') }}</span>
+                                                <span class="block font-display font-semibold tracking-tight group-hover:underline">{{ $shown->getAttribute('name') }}</span>
                                                 <span class="mt-0.5 block text-sm text-ink-muted">{{ $shown->getAttribute('summary') ?: $child->type->label() }}</span>
                                             </span>
                                         </a>
@@ -82,13 +82,13 @@
                 <aside class="space-y-8" aria-label="{{ __('offices.details') }}">
                     @if ($head)
                         <section aria-labelledby="office-head">
-                            <h2 id="office-head" class="text-xs font-bold tracking-wider text-ink-muted uppercase">{{ __('offices.head') }}</h2>
+                            <h2 id="office-head" class="kicker">{{ __('offices.head') }}</h2>
                             <x-directory.person-row class="mt-4" :leader="$office->head" :translation="$head" />
                         </section>
                     @endif
                     @if ($people->isNotEmpty())
                         <section aria-labelledby="office-people">
-                            <h2 id="office-people" class="text-xs font-bold tracking-wider text-ink-muted uppercase">{{ __('offices.people') }}</h2>
+                            <h2 id="office-people" class="kicker">{{ __('offices.people') }}</h2>
                             <ul class="mt-4 space-y-3">
                                 @foreach ($people as $person)
                                     @php $shown = PublicDirectory::shown($person, $locale); @endphp

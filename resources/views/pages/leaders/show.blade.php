@@ -9,27 +9,28 @@
 >
     <article>
         {{-- ADR-0062: the person on the plaster band, portrait in a gold ring. --}}
-        <div class="bg-surface-muted">
+        <div class="relative isolate overflow-hidden border-b border-night-line bg-night-900 text-night-ink">
+            <x-hex-field id="leader-hex" fade="right" class="absolute inset-y-0 end-0 -z-10 h-full w-3/5 text-cyan-500/20" />
             <div class="mx-auto max-w-page px-4 pt-8 pb-10 sm:px-6">
-                <nav aria-label="{{ __('news.breadcrumb') }}" class="text-sm text-ink-muted">
-                    <ol class="flex flex-wrap gap-1">
-                        <li><a href="{{ route('home') }}" class="hover:underline">{{ __('nav.home') }}</a> /</li>
-                        <li><a href="{{ route('leaders.index') }}" class="hover:underline">{{ __('leaders.title') }}</a> /</li>
-                        <li>{{ $leader->body->label() }}</li>
+                <nav aria-label="{{ __('news.breadcrumb') }}">
+                    <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs tracking-wide text-night-muted uppercase [&_a:hover]:text-night-ink">
+                        <li><a href="{{ route('home') }}">{{ __('nav.home') }}</a></li>
+                        <li class="flex items-center gap-2"><span aria-hidden="true" class="text-cyan-400">/</span><a href="{{ route('leaders.index') }}">{{ __('leaders.title') }}</a></li>
+                        <li class="flex items-center gap-2"><span aria-hidden="true" class="text-cyan-400">/</span><span aria-current="page" class="text-night-ink">{{ $leader->body->label() }}</span></li>
                     </ol>
                 </nav>
 
                 <header class="mt-8 flex flex-wrap items-center gap-8">
                     @if ($leader->portrait)
-                        <x-picture :media="$leader->portrait" preset="square" sizes="12rem" loading="eager" fetchpriority="high" class="size-40 shrink-0 rounded-full object-cover ring-6 ring-saffron-500 sm:size-48" />
+                        <x-picture :media="$leader->portrait" preset="square" sizes="12rem" loading="eager" fetchpriority="high" class="size-40 shrink-0 rounded-full object-cover ring-4 ring-cyan-400 ring-offset-4 ring-offset-night-900 sm:size-48" />
                     @else
-                        <span aria-hidden="true" class="flex size-40 shrink-0 items-center justify-center rounded-full bg-primary-900 text-5xl font-extrabold text-white ring-6 ring-saffron-500 sm:size-48">{{ mb_substr($translation->name, 0, 1) }}</span>
+                        <span aria-hidden="true" class="flex size-40 shrink-0 items-center justify-center rounded-full bg-night-800 font-display text-5xl font-bold text-night-ink ring-4 ring-cyan-400 ring-offset-4 ring-offset-night-900 sm:size-48">{{ mb_substr($translation->name, 0, 1) }}</span>
                     @endif
                     <div class="min-w-0 flex-1 basis-80">
-                        <p class="kicker">{{ $leader->body->label() }}</p>
-                        <h1 class="heading-1 mt-2">{{ $translation->name }}</h1>
+                        <p class="kicker [--color-eyebrow:var(--color-cyan-300)]">{{ $leader->body->label() }}</p>
+                        <h1 class="heading-1 mt-2 text-night-ink">{{ $translation->name }}</h1>
                         @if ($translation->position)
-                            <p class="mt-3 max-w-prose text-lg text-ink-muted">{{ $translation->position }}</p>
+                            <p class="mt-3 max-w-prose text-lg text-night-muted">{{ $translation->position }}</p>
                         @endif
                         <ul class="mt-4 flex flex-wrap gap-2">
                             @if ($office)
@@ -83,7 +84,7 @@
                     <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                         @foreach ($photos as $number => $photo)
                             <li>
-                                <a href="#leader-photo-{{ $number + 1 }}" class="group block overflow-hidden rounded-card bg-surface-muted ring-1 ring-line focus-visible:outline-3 focus-visible:outline-saffron-500">
+                                <a href="#leader-photo-{{ $number + 1 }}" class="group block overflow-hidden rounded-card bg-surface-muted ring-1 ring-line focus-visible:outline-3">
                                     <x-picture :media="$photo" preset="square" sizes="(min-width: 64rem) 18rem, 50vw" class="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                                 </a>
                             </li>
@@ -91,15 +92,15 @@
                     </ul>
                     @foreach ($photos as $number => $photo)
                         <div id="leader-photo-{{ $number + 1 }}" role="dialog" aria-modal="true" aria-label="{{ $photo->altFor() ?: __('leaders.photos') }}"
-                             class="fixed inset-0 z-50 hidden place-items-center bg-primary-950/90 p-4 target:grid">
+                             class="fixed inset-0 z-50 hidden place-items-center bg-night-950/95 p-4 target:grid">
                             <figure class="max-h-full max-w-5xl">
                                 <img src="{{ $photo->getUrl() }}" alt="{{ $photo->altFor() }}" loading="lazy" decoding="async" class="max-h-[80vh] w-auto rounded-card object-contain shadow-2xl">
                                 <figcaption class="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-white/85">
                                     <span>{{ $photo->altFor() }}@if (filled($photo->credit)) · {{ __('content.photo_credit', ['credit' => $photo->credit]) }}@endif</span>
                                     <span class="flex gap-2">
-                                        @if ($number > 0)<a href="#leader-photo-{{ $number }}" class="rounded-full px-3 py-1.5 ring-1 ring-white/40 hover:bg-white/10">{{ __('leaders.photo_previous') }}</a>@endif
-                                        @if ($number < $photos->count() - 1)<a href="#leader-photo-{{ $number + 2 }}" class="rounded-full px-3 py-1.5 ring-1 ring-white/40 hover:bg-white/10">{{ __('leaders.photo_next') }}</a>@endif
-                                        <a href="#leader-photos" class="rounded-full bg-saffron-500 px-3 py-1.5 font-semibold text-ink-brand hover:bg-saffron-400">{{ __('leaders.photo_close') }}</a>
+                                        @if ($number > 0)<a href="#leader-photo-{{ $number }}" class="rounded-control border border-night-line px-3 py-1.5 hover:border-cyan-400 hover:bg-white/5">{{ __('leaders.photo_previous') }}</a>@endif
+                                        @if ($number < $photos->count() - 1)<a href="#leader-photo-{{ $number + 2 }}" class="rounded-control border border-night-line px-3 py-1.5 hover:border-cyan-400 hover:bg-white/5">{{ __('leaders.photo_next') }}</a>@endif
+                                        <a href="#leader-photos" class="rounded-control bg-saffron-500 px-3 py-1.5 font-semibold text-ink-brand hover:bg-saffron-400">{{ __('leaders.photo_close') }}</a>
                                     </span>
                                 </figcaption>
                             </figure>

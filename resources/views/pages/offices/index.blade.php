@@ -19,12 +19,12 @@
             <ul class="flex flex-wrap gap-2 text-sm">
                 <li>
                     <a href="{{ route('offices.index', array_filter(['q' => $search])) }}" @if (! $type) aria-current="page" @endif
-                       @class(['inline-block rounded-full border px-3 py-1', 'border-primary-600 bg-primary-50 text-primary-800 dark:bg-primary-950 dark:text-primary-200' => ! $type, 'border-line hover:bg-surface-muted' => (bool) $type])>{{ __('news.all') }}</a>
+                       @class(['inline-flex items-center rounded-control border px-3.5 py-2 font-medium transition-colors', 'border-primary-700 bg-primary-700 text-white dark:border-cyan-300 dark:bg-cyan-300 dark:text-ink-brand' => ! $type, 'border-line bg-surface hover:border-cyan-500' => (bool) $type])>{{ __('news.all') }}</a>
                 </li>
                 @foreach (OfficeType::cases() as $option)
                     <li>
                         <a href="{{ route('offices.index', array_filter(['type' => $option->value, 'q' => $search])) }}" @if ($type === $option) aria-current="page" @endif
-                           @class(['inline-block rounded-full border px-3 py-1', 'border-primary-600 bg-primary-50 text-primary-800 dark:bg-primary-950 dark:text-primary-200' => $type === $option, 'border-line hover:bg-surface-muted' => $type !== $option])>{{ $option->label() }}</a>
+                           @class(['inline-flex items-center rounded-control border px-3.5 py-2 font-medium transition-colors', 'border-primary-700 bg-primary-700 text-white dark:border-cyan-300 dark:bg-cyan-300 dark:text-ink-brand' => $type === $option, 'border-line bg-surface hover:border-cyan-500' => $type !== $option])>{{ $option->label() }}</a>
                     </li>
                 @endforeach
             </ul>
