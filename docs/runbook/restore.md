@@ -17,7 +17,7 @@ Not backed up: the code (it is in git and deployed by CI), `.env` (kept by the o
 - **When**: every night at 02:00 Addis Ababa time (23:00 UTC), from the scheduler; old backups are
   removed at 01:40. Before every deploy that brings new migrations, the database alone is backed up first
   (`before-migrate-….zip`); if that backup fails, the deploy stops before anything changes.
-- **Where**: `~/hararipp.orcamind.dev/storage/backups/harari-pp-portal/` (mode 700, outside the web root),
+- **Where**: `~/hita.orcamind.dev/storage/backups/harari-ita-portal/` (mode 700, outside the web root),
   plus an off-site disk once `BACKUP_OFFSITE_DISK` names one (open question 2 in the Phase 5 plan).
 - **Kept**: every backup for 7 days, then one a day for 30 days, one a week for 8 weeks, one a month for 6
   months and one a year; never more than 5 GB (`BACKUP_MAX_MEGABYTES`).
@@ -34,7 +34,7 @@ On the server, in the site folder:
 ```
 /opt/alt/php83/usr/bin/php artisan down
 /opt/alt/php83/usr/bin/php artisan portal:restore-database                     # the newest backup
-/opt/alt/php83/usr/bin/php artisan portal:restore-database harari-pp-portal/2026-10-20-23-00-01.zip
+/opt/alt/php83/usr/bin/php artisan portal:restore-database harari-ita-portal/<date>.zip
 /opt/alt/php83/usr/bin/php artisan migrate --force                             # if the backup is older than the code
 /opt/alt/php83/usr/bin/php artisan optimize:clear && /opt/alt/php83/usr/bin/php artisan optimize
 /opt/alt/php83/usr/bin/php artisan up
@@ -46,8 +46,8 @@ the backup does not hold are left as they are. The restore is written to the aud
 ## Restore the files
 
 ```
-cd ~/hararipp.orcamind.dev/storage/app
-unzip -P "<BACKUP_ARCHIVE_PASSWORD>" ../backups/harari-pp-portal/<backup>.zip 'media/*' 'public/*' 'private/*'
+cd ~/hita.orcamind.dev/storage/app
+unzip -P "<BACKUP_ARCHIVE_PASSWORD>" ../backups/harari-ita-portal/<backup>.zip 'media/*' 'public/*' 'private/*'
 ```
 
 Unzip into an empty folder first and move the folders into place if only some files are needed.
@@ -57,7 +57,7 @@ Unzip into an empty folder first and move the folders into place if only some fi
 1. Provision the server as in `server.md` and deploy the code (CI).
 2. Write the `.env` from the owner's copy, with the same `APP_KEY` (personal data in the database is
    encrypted with it) and the same `BACKUP_ARCHIVE_PASSWORD`.
-3. Copy the backup zip to `storage/backups/harari-pp-portal/`, then restore the database and the files as
+3. Copy the backup zip to `storage/backups/harari-ita-portal/`, then restore the database and the files as
    above.
 
 ## The restore drill
@@ -69,8 +69,8 @@ last drill. It runs on the first day of every month at 04:00 Addis Ababa time on
 set:
 
 ```
-DB_DRILL_DATABASE=<account>_hararipp_drill
-DB_DRILL_USERNAME=<account>_hararipp       # a user with all privileges on that database
+DB_DRILL_DATABASE=<account>_hita_drill
+DB_DRILL_USERNAME=<account>_hita       # a user with all privileges on that database
 DB_DRILL_PASSWORD=...
 ```
 
@@ -82,5 +82,4 @@ local tests against a test database (`tests/Feature/Health/BackupsTest.php`).
 
 | Date | Where | Backup | Result |
 |---|---|---|---|
-| 2026-10-20 | local test stack (MySQL 8) | test backup | passed: all tables and migrations restored, drill database emptied |
-| 2026-10-20 | staging | `2026-10-20-12-19-14.zip` (13.6 MB, database and files) | archive opened with the password and the dump read back; the full drill waits for the drill database |
+| — | — | — | No drill yet: the first one follows the first deploy to staging. |

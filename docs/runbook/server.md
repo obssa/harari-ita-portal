@@ -1,4 +1,4 @@
-# Server runbook — staging (hararipp.orcamind.dev)
+# Server runbook — staging (hita.orcamind.dev)
 
 Records how the staging server is set up and operated. No secrets or server names live here (the
 repository is public); they are in the server `.env`, GitHub secrets, and the owner's records.
@@ -7,42 +7,42 @@ repository is public); they are in the server `.env`, GitHub secrets, and the ow
 
 | Item | Value |
 |---|---|
-| URL | https://hararipp.orcamind.dev (Cloudflare DNS + proxy, LiteSpeed origin) |
+| URL | https://hita.orcamind.dev (Cloudflare DNS + proxy, LiteSpeed origin) |
 | Host | shared cPanel account with CloudLinux (host name only in the GitHub secret `DEPLOY_HOST`) |
-| Site folder | `~/hararipp.orcamind.dev` (outside `public_html`; `.env` lives here, mode 600) |
-| Document root | `~/hararipp.orcamind.dev/public` (changed from cPanel's default `public_html/hararipp.orcamind.dev` with `uapi SubDomain changedocroot`) |
-| PHP (web) | CloudLinux `alt-php83` (8.3.35) for this domain only, set with MultiPHP; every other site on the account stays on its own version |
+| Site folder | `~/hita.orcamind.dev` (outside `public_html`; `.env` lives here, mode 600) |
+| Document root | `~/hita.orcamind.dev/public` (changed from cPanel's default `public_html/hita.orcamind.dev` with `uapi SubDomain changedocroot`) |
+| PHP (web) | CloudLinux `alt-php83` for this domain only, set with MultiPHP; every other site on the account stays on its own version |
 | PHP (CLI, cron, deploy) | `/opt/alt/php83/usr/bin/php` (GitHub variable `DEPLOY_PHP_BIN`) |
-| Database | MySQL database and user `<account>_hararipp`, all privileges; password only in the server `.env` |
+| Database | MySQL database and user `<account>_hita`, all privileges; password only in the server `.env` |
 | Drivers | database cache, sessions and queue; Scout database driver; mail to the log until SMTP is set up (ADR-0002) |
 | Deploy key | ed25519 key used only by this repository's GitHub Actions, authorised with the `restrict` option (commands and rsync only; no forwarding, no terminal) |
 | Host key | pinned in the GitHub secret `DEPLOY_KNOWN_HOSTS`; fingerprints checked against the keys the owner's PC already trusted |
-| Rollback snapshot | `~/releases/hararipp/prev.tar.gz` (code only, written before every deploy) |
-| Backups | `storage/backups/harari-pp-portal/` (mode 700): nightly database and uploads, encrypted with `BACKUP_ARCHIVE_PASSWORD` (set in `.env` on 2026-10-20; the `.env` before that change is in `~/backups/`); see `restore.md` |
-| Leftover | `~/public_html/hararipp.orcamind.dev` (cPanel's original folder) is no longer served and can be removed |
+| Rollback snapshot | `~/releases/hita/prev.tar.gz` (code only, written before every deploy) |
+| Backups | `storage/backups/harari-ita-portal/` (mode 700): nightly database and uploads, encrypted with `BACKUP_ARCHIVE_PASSWORD`; see `restore.md` |
 
-Status: **provisioned 2026-10-18**; first release `502124372d0f` deployed by GitHub Actions.
+Status: **not yet provisioned.** This is phase 0 step 0.7 and needs the owner's go-ahead for every step on the
+server (docs/phases/00-fork.md). The same cPanel account and pattern as the Harari PP staging site are planned.
 
 ## One-time provisioning checklist
 
-| # | Step | How it was done | Done |
+| # | Step | How | Done |
 |---|---|---|---|
-| 1 | Subdomain document root | `uapi SubDomain changedocroot domain=hararipp.orcamind.dev docroot=hararipp.orcamind.dev/public` | 2026-10-18 |
-| 2 | PHP 8.3 for this domain only | `uapi LangPHP php_set_vhost_versions vhost=hararipp.orcamind.dev version=alt-php83`; cPanel writes the handler into `public/.htaccess` | 2026-10-18 |
-| 3 | PHP extensions | web and CLI checked: pdo_mysql, intl, mbstring, gd (WebP/AVIF), zip, bcmath, exif, sodium, fileinfo, dom, curl, openssl all present; `calendar` (CLI) checked 2026-10-19 | 2026-10-18 |
-| 4 | Database + user | `uapi Mysql create_database / create_user / set_privileges_on_database`, random 40-character password generated on the server | 2026-10-18 |
-| 5 | Server `.env` | written on the server from the `.env.example` template, own `APP_KEY`, mode 600; login to the database verified | 2026-10-18 |
-| 6 | Deploy key | generated on the owner's PC, public half appended to `~/.ssh/authorized_keys` with `restrict` (file backed up first), private half in the GitHub secret `DEPLOY_SSH_KEY` | 2026-10-18 |
-| 7 | Pinned host key | `ssh-keyscan` output compared with the owner's known_hosts, stored as `DEPLOY_KNOWN_HOSTS` | 2026-10-18 |
-| 8 | GitHub secrets and variables | secrets `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PORT`, `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS`; variables `DEPLOY_PATH`, `DEPLOY_PHP_BIN`, `DEPLOY_URL`, `DEPLOY_ENABLED=true` | 2026-10-18 |
-| 9 | Cron | two lines appended (crontab backed up to `~/backups/` first; other sites' lines untouched); queue line switched to `portal:work-queues` on 2026-10-19 | 2026-10-18 |
-| 10 | Cloudflare | DNS record for `hararipp` proxied; site answers over HTTPS | 2026-10-18 |
+| 1 | Subdomain document root | `uapi SubDomain changedocroot domain=hita.orcamind.dev docroot=hita.orcamind.dev/public` | — |
+| 2 | PHP 8.3 for this domain only | `uapi LangPHP php_set_vhost_versions vhost=hita.orcamind.dev version=alt-php83`; cPanel writes the handler into `public/.htaccess` | — |
+| 3 | PHP extensions | web and CLI checked: pdo_mysql, intl, mbstring, gd (WebP/AVIF), zip, bcmath, exif, sodium, fileinfo, dom, curl, openssl all present, calendar | — |
+| 4 | Database + user | `uapi Mysql create_database / create_user / set_privileges_on_database`, random 40-character password generated on the server | — |
+| 5 | Server `.env` | written on the server from the `.env.example` template, own `APP_KEY`, mode 600; login to the database verified | — |
+| 6 | Deploy key | generated on the owner's PC, public half appended to `~/.ssh/authorized_keys` with `restrict` (file backed up first), private half in the GitHub secret `DEPLOY_SSH_KEY` | — |
+| 7 | Pinned host key | `ssh-keyscan` output compared with the owner's known_hosts, stored as `DEPLOY_KNOWN_HOSTS` | — |
+| 8 | GitHub secrets and variables | secrets `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PORT`, `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS`; variables `DEPLOY_PATH`, `DEPLOY_PHP_BIN`, `DEPLOY_URL`, `DEPLOY_ENABLED=true` | — |
+| 9 | Cron | two lines appended (crontab backed up to `~/backups/` first; other sites' lines untouched) | — |
+| 10 | Cloudflare | DNS record for `hita` proxied; site answers over HTTPS | — |
 
 ### Cron entries
 
 ```
-* * * * * sleep $((RANDOM \% 60)) && cd $HOME/hararipp.orcamind.dev && /opt/alt/php83/usr/bin/php artisan schedule:run >> /dev/null 2>&1
-* * * * * cd $HOME/hararipp.orcamind.dev && /opt/alt/php83/usr/bin/php artisan portal:work-queues >> /dev/null 2>&1
+* * * * * sleep $((RANDOM \% 60)) && cd $HOME/hita.orcamind.dev && /opt/alt/php83/usr/bin/php artisan schedule:run >> /dev/null 2>&1
+* * * * * cd $HOME/hita.orcamind.dev && /opt/alt/php83/usr/bin/php artisan portal:work-queues >> /dev/null 2>&1
 ```
 
 `portal:work-queues` drains every queue in `config('portal.queues')` (default, media) and stops when
@@ -65,16 +65,16 @@ allows it. In the Cloudflare dashboard of the zone:
 
 ## First Super Admin (one time)
 
-Done on 2026-10-19. For another Super Admin, run this in the cPanel terminal (or over SSH), replacing
+After the first deploy (step 0.7), and for every further Super Admin, run this in the cPanel terminal (or over SSH), replacing
 both values in angle brackets with the real email address and full name, and keep the printed
 password private; it is not stored anywhere:
 
 ```
-cd ~/hararipp.orcamind.dev
+cd ~/hita.orcamind.dev
 /opt/alt/php83/usr/bin/php artisan portal:create-super-admin <email> --name="<full name>"
 ```
 
-Then sign in at https://hararipp.orcamind.dev/admin, change the password under Profile (the email and
+Then sign in at https://hita.orcamind.dev/admin, change the password under Profile (the email and
 name can also be corrected there) and set up the authenticator app (save the recovery codes).
 Two-step sign-in is optional until a Super Admin turns on **Administration → Security → Make two-step
 sign-in compulsory for senior roles** (ADR-0018); turn it on once the senior staff have set up the app.
@@ -113,20 +113,20 @@ Roll back by hand (code only; migrations are not reversed, so they must be backw
 
 ```
 ssh <account>@<host>
-APP_DIR=$HOME/hararipp.orcamind.dev PHP_BIN=/opt/alt/php83/usr/bin/php \
-  bash $HOME/hararipp.orcamind.dev/scripts/deploy/rollback.sh
+APP_DIR=$HOME/hita.orcamind.dev PHP_BIN=/opt/alt/php83/usr/bin/php \
+  bash $HOME/hita.orcamind.dev/scripts/deploy/rollback.sh
 ```
 
-Logs: `~/hararipp.orcamind.dev/storage/logs/laravel-*.log` (daily, 14 days).
+Logs: `~/hita.orcamind.dev/storage/logs/laravel-*.log` (daily, 14 days).
 
 ## Known behaviour
 
 - The cron line waits a random 0–59 seconds before `schedule:run`, so two runs can fall in the same
   minute. Every scheduled task is locked per due minute in the cache (`onOneServer`), so it still starts
-  only once (fixed 2026-10-21 after the nightly backup ran twice).
+  only once.
 
 - Many SSH logins from one address in a few minutes can make the host's firewall drop that address for
-  a while (seen from the owner's PC on 2026-10-18). Deploys come from GitHub's runners and are not
+  a while. Deploys come from GitHub's runners and are not
   affected; wait or ask the host to lift the block.
 - Changing the domain's PHP version in cPanel rewrites the handler block in `public/.htaccess`; the next
   deploy keeps whatever cPanel wrote.
@@ -137,7 +137,7 @@ Logs: `~/hararipp.orcamind.dev/storage/logs/laravel-*.log` (daily, 14 days).
 
 ## Media library (ADR-0009)
 
-- Originals: `~/hararipp.orcamind.dev/storage/app/media/library/<uuid>/` (private, mode 750).
+- Originals: `~/hita.orcamind.dev/storage/app/media/library/<uuid>/` (private, mode 750).
   Copies: `storage/app/public/library/<uuid>/conversions/`, served at `/storage/...`.
 - Every deploy rewrites `storage/app/public/.htaccess` (no script files in public uploads) and
   `storage/app/public/smoke.txt` (checked by the smoke test).
@@ -151,7 +151,7 @@ Logs: `~/hararipp.orcamind.dev/storage/logs/laravel-*.log` (daily, 14 days).
 
 - Public pages send `Cache-Control: public, max-age=0, s-maxage=600` when they set no cookie. Cloudflare
   caches HTML only with a Cache Rule: in the Cloudflare dashboard for orcamind.dev, add a rule for
-  hostname `hararipp.orcamind.dev` and paths starting with `/en`, `/am`, `/om`, `/har`, set "Eligible for
+  hostname `hita.orcamind.dev` and paths starting with `/en`, `/am`, `/om`, `/har`, set "Eligible for
   cache" and "Respect origin" for Edge TTL. Never include `/admin` or `/livewire`. After publishing urgent
   changes, purge the cache for the host.
 - Security headers come from the application on every PHP response; static files are served by
@@ -196,7 +196,7 @@ Logs: `~/hararipp.orcamind.dev/storage/logs/laravel-*.log` (daily, 14 days).
 
 ## Telegram bot for staff notices (ADR-0055)
 
-Once the branch office has created the bot with BotFather and saved its token in Settings → Integrations, run
+Once the Agency has created the bot with BotFather and saved its token in Settings → Integrations, run
 once on the server, in the site folder:
 
 ```
@@ -206,19 +206,10 @@ php artisan telegram:webhook
 It tells Telegram to deliver the bot's messages to `/telegram/webhook` with the secret header. Staff then link
 their accounts from Notifications → "Connect Telegram".
 
-## Fayda sign-in (ADR-0058)
+## Fayda sign-in
 
-Off until the branch office is registered with the National ID Program as an eSignet relying party.
-
-1. In **Settings → Integrations**, a Super Admin chooses **Create the Fayda signing key**. The page then shows
-   the portal's public key (JWK) and the return address `https://<site>/member/fayda/callback`.
-2. The branch office registers the portal with the National ID Program with that public key and return
-   address, asking for the scopes `openid profile phone` and the claims `name` and `phone_number`.
-3. Enter the eSignet address and the client id received, check the authentication methods (`acr_values`),
-   switch **Offer sign-in with Fayda** on and save. The member sign-in page then shows **Sign in with Fayda**.
-
-Replacing the key stops Fayda sign-in until the new public key is registered. Errors from eSignet go to the log
-(and Sentry once it is set up); members are told to sign in with an SMS code instead.
+Not in this project yet: it was removed with Membership and returns for programme applicants in
+phase 3 (ADR-0002).
 
 ## Slow requests (ADR-0061)
 

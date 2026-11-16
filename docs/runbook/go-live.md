@@ -1,10 +1,10 @@
 # Go-live runbook — from staging to the production site
 
-For the person who puts the portal live once the branch office has chosen the production host and domain
+For the person who puts the portal live once the Agency has chosen the production host and domain
 (open question 1). Staging (`docs/runbook/server.md`) stays as it is; production is a second, separate
 installation with its own database, `.env`, keys and backups. Nothing here deletes staging.
 
-Tick each line and note the date. Steps marked **owner** need the branch office's accounts or decisions.
+Tick each line and note the date. Steps marked **owner** need the Agency's accounts or decisions.
 
 ## 1. Before the day
 
@@ -30,7 +30,7 @@ Tick each line and note the date. Steps marked **owner** need the branch office'
      (`php artisan key:generate --show`, kept in the owner's password manager);
    - database, mail (`MAIL_MAILER=smtp`), `BACKUP_ARCHIVE_PASSWORD` (new, kept in the password manager),
      `DB_DRILL_*`, `SENTRY_LARAVEL_DSN` if chosen, `SESSION_SECURE_COOKIE=true`;
-   - `PORTAL_DEMO_ACCOUNTS=false`; `PORTAL_ADMIN_ALLOWED_IPS` if the branch office wants it.
+   - `PORTAL_DEMO_ACCOUNTS=false`; `PORTAL_ADMIN_ALLOWED_IPS` if the Agency wants it.
 4. Add the two cron lines from `server.md` (scheduler and queue worker) for the production folder.
 5. Deploy the release tag. The deploy runs the migrations, the permission sync and the caches.
 6. `php artisan portal:create-super-admin` for the first Super Admin; sign in, set up two-step sign-in, and

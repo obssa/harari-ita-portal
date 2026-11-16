@@ -1,6 +1,8 @@
-# Accessibility audit (Phase 5, step 5.7)
+# Accessibility audit
 
-Target: WCAG 2.2 level AA (PLAN.md §11). Checked 2026-10-20 on the code at step 5.7.
+Target: WCAG 2.2 level AA (PLAN.md §11). The checks and measures below come with the code from the source
+project (ADR-0001), where the audit found no serious or critical violations; they run on every change here too.
+The Agency's own audit follows the new design in phase 1 and is repeated before launch (phase 8).
 
 ## Automated checks in CI
 
@@ -13,9 +15,9 @@ Target: WCAG 2.2 level AA (PLAN.md §11). Checked 2026-10-20 on the code at step
 
 Pages covered by axe: homepage (English and Amharic), news list, a story (English and Amharic), events,
 an event, event registration, offices, an office, documents, search results, contact, social media hub,
-press, structure. Result on 2026-10-20: **no serious or critical violations** on any of them.
+press, structure.
 
-## Built-in measures (from Phases 1–4)
+## Built-in measures
 
 - Landmarks (`header`, `nav`, `main`, `footer`), one `h1` per page, headings in order; skip link first in
   the tab order; visible focus outline on every control.

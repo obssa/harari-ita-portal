@@ -1,10 +1,10 @@
 # Communication: newsletter, campaigns, media and Telegram
 
-For staff of the Harari Regional Branch Office who send news by email and SMS, keep the media list and
+For the Agency's staff who send news by email and SMS, keep the media list and
 receive notices on Telegram. Each section says who may do it. Amharic version:
 [06-communication.am.md](06-communication.am.md).
 
-Until the branch office's mail and SMS accounts are set up, emails go to the mail log and text messages to the
+Until the Agency's mail and SMS accounts are set up, emails go to the mail log and text messages to the
 SMS log of the server, so nothing reaches real people from the test site.
 
 ## 1. Subscribers
@@ -31,8 +31,8 @@ Who: communications staff write campaigns; those allowed to send campaigns send 
 
 1. **New campaign**: a name for staff, the channel (email or SMS) and who receives it:
    - **Newsletter subscribers**, optionally only some topics or languages;
-   - **Members**, by woreda and status (only for staff who may see members, over their woredas);
-   - **Active volunteers**, by woreda (only for staff who may see volunteers).
+   - **Active mentors and volunteers**, by directorate or office (only for staff who may see them, over the
+     units they look after).
 2. Write the text in each language you can. People get their own language, or the closest one you wrote
    (Harari readers get Amharic, then English). An email has a subject and a message (bold, links, lists);
    an SMS shows its length and number of parts, with the stop link counted, at most four parts.
@@ -42,8 +42,8 @@ Who: communications staff write campaigns; those allowed to send campaigns send 
    being sent can be stopped. Once sent, a campaign cannot be changed.
 
 Messages go out a minute's worth at a time. Every email says why it was received and has a link to stop
-these messages; every SMS ends with "Stop: <link>". A member or volunteer who stops them still receives
-messages about their own membership.
+these messages; every SMS ends with "Stop: <link>". A mentor or volunteer who stops them can still be
+called by their coordinator.
 
 ### Delivery report
 
@@ -71,7 +71,7 @@ Every press email has a link to stop receiving them; the contact then shows as "
 
 ## 4. Notices on Telegram
 
-Once the branch office has created the portal's Telegram bot and saved its token in **Settings →
+Once the Agency has created the portal's Telegram bot and saved its token in **Settings →
 Integrations** (and the webhook is registered, see the server runbook):
 
 1. Open **Notifications** and choose **Connect Telegram**.
@@ -87,14 +87,4 @@ copy and deletes them on request.
 
 ## Screens
 
-Screenshots of the admin with sample content (English admin language).
-
-![Subscribers](images/en-subscribers.png)
-
-![Writing an SMS campaign](images/en-campaign-edit.png)
-
-![A campaign with its delivery report](images/en-campaign-report.png)
-
-![Media contacts](images/en-media-contacts.png)
-
-![The newsletter sign-up page](images/en-newsletter-form.png)
+Screenshots follow once the Agency's staging site is set up (phase 1).

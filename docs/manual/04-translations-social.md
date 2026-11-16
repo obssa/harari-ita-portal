@@ -1,6 +1,6 @@
 # Translations and the social hub
 
-For translators, communications staff and media managers of the Harari Regional Branch Office. Amharic
+For translators, communications staff and media managers of the Agency. Amharic
 version: [04-translations-social.am.md](04-translations-social.am.md).
 
 ## 1. The words of the site
@@ -40,7 +40,7 @@ completely. CSV files must be saved as "CSV UTF-8" so Ethiopic letters survive; 
 
 ## 3. The glossary
 
-**Administration → Languages → Glossary** holds the approved words for the party's names, bodies and ideas
+**Administration → Languages → Glossary** holds the approved words for the Agency's names, units and ideas
 in every language, with notes. The translation editor shows the terms in each English text and whether
 your translation uses them. The glossary warns; it never stops you saving.
 
@@ -55,15 +55,15 @@ Machine translation is off unless a Super Admin switched it on under **Administr
 - Everything a machine wrote is marked until a person checks it: in the grid choose **Mark as checked**
   (or correct the text); in a post tick **Checked by a person** and save.
 
-Read every machine translation before it goes public: names, numbers and the party's terms need a
+Read every machine translation before it goes public: names, numbers and the Agency's terms need a
 person's eye.
 
 ## 5. The social media hub
 
 Who: media managers (**Social media** in the admin).
 
-- **Accounts**: the Telegram channels, YouTube channels and Facebook pages of the branch, its offices and
-  leagues. Telegram and YouTube are read on their own; a Facebook page needs its page access token
+- **Accounts**: the Telegram channels, YouTube channels and Facebook pages of the Agency, its directorates and
+  pillars. Telegram and YouTube are read on their own; a Facebook page needs its page access token
   (**Page access token** on the account). TikTok, Instagram and X posts are added with **Add a post by
   its address**.
 - **Read now** reads an account at once; otherwise they are read every hour. Errors show next to the
@@ -74,14 +74,9 @@ Who: media managers (**Social media** in the admin).
   keeps one first.
 
 The public hub is at `/{language}/social`; the homepage section "On social media" and the office and
-league pages show the latest posts. Pictures are copies kept on the portal, and every post links to the
+pillar pages show the latest posts. Pictures are copies kept on the portal, and every post links to the
 original.
 
 ## Screens
 
-Screenshots of the admin with sample content (English admin language).
-
-![Interface translations](images/en-translations.png)
-
-![Social media accounts](images/en-social.png)
-
+Screenshots follow once the Agency's staging site is set up (phase 1).

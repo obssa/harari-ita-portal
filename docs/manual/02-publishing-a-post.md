@@ -1,6 +1,6 @@
 # Publishing a post
 
-For authors, editors, translators and publishers of the Harari Regional Branch Office. A post is a news
+For authors, editors, translators and publishers of the Agency. A post is a news
 item, press release, statement, speech or announcement. This chapter takes one post from the first draft
 to the public site in four languages. Amharic version: [02-publishing-a-post.am.md](02-publishing-a-post.am.md).
 
@@ -18,8 +18,8 @@ Who does what:
 1. In the admin, open **Content → Posts → New post**.
 2. Under **Details** (right side): choose the **Type** (news, press release, statement, speech or
    announcement) and **Written first in** (the language you write in).
-3. Optionally link the post to **Categories**, **Tags**, **Offices**, **Leagues and forums** and
-   **People** (the leaders who gave the speech or whom the story is about). Office, league and leader
+3. Optionally link the post to **Categories**, **Tags**, **Offices**, **Pillars** and
+   **People** (the leaders who gave the speech or whom the story is about). Office, pillar and leader
    pages then list the post.
 
 ## 2. Write it in the first language
@@ -94,7 +94,7 @@ Changing the address of a published post later keeps the old address working (it
 
 ## 9. Stories imported from the channels
 
-New stories from the branch's Telegram channel and the regional communication office's channel arrive
+New stories from the Telegram channels set up under **Import sources** (the Agency's own, and any other office whose material it may republish) arrive
 every half hour as drafts. Find them with the **Imported from channels** filter in **Posts**. Before
 publishing an imported story:
 
@@ -103,8 +103,8 @@ publishing an imported story:
    tab), add the missing languages and alt text.
 3. Then follow steps 4–8 as for any post. Published imported stories show "Source:" with the link.
 
-Stories from the communication office's channel are published only once the office has agreed that the
-branch may republish its material; until then keep them as drafts or use them as background.
+Stories from another office's channel are published only once that office has agreed that the Agency may
+republish its material; until then keep them as drafts or use them as background.
 
 ## Homepage
 
@@ -113,9 +113,4 @@ or off, and hand-pick the stories for the hero and the breaking-news ticker.
 
 ## Screens
 
-Screenshots of the admin with sample content (English admin language).
-
-![Posts](images/en-posts.png)
-
-![Editing a post: language tabs and workflow buttons](images/en-post-edit.png)
-
+Screenshots follow once the Agency's staging site is set up (phase 1).

@@ -1,6 +1,6 @@
 # Getting started with the portal admin
 
-For staff of the Harari Regional Branch Office who manage the portal. The admin works the same on a
+For the Agency's staff who manage the portal. The admin works the same on a
 computer and a phone. Amharic version: [01-getting-started.am.md](01-getting-started.am.md).
 
 Admin address (test site): **https://hararipp.orcamind.dev/admin**
@@ -66,7 +66,7 @@ date next to it.
 - **New user**: enter the name and email, choose the roles, and either set a temporary password or
   let the portal email a sign-in link.
 - **Roles** decide what a person may do (Editor, Author, Translator, Media Manager, Publisher and
-  others). Some roles can be limited to one office, league or language with **scopes**.
+  others). Some roles can be limited to one directorate or office, pillar or language with **scopes**.
 - **Suspend** signs the person out everywhere and blocks sign-in until **Reactivate**.
 - **Send sign-in link** lets someone choose a new password.
 - Changing someone's roles signs them out, so the new rights apply at once.
@@ -101,7 +101,7 @@ Filters on the list help with the work left: **Missing alt text**, **Not used an
 
 **Administration → Site settings** (Admins can read; only a Super Admin changes them): default
 language, which calendar comes first, contact email, phone and hotline, address and office hours in
-each language, and the links to the branch's social media pages. The public footer shows these.
+each language, and the links to the Agency's social media pages. The public footer shows these.
 
 **Administration → Integrations** (Super Admin only): keys for SMS, translation and
 social media services. A saved key is never shown again; leave the field empty to keep it.
@@ -146,22 +146,11 @@ record is kept.
 - Never share your password, your 6-digit codes or your recovery codes, and never sign in on a shared
   computer without signing out afterwards.
 - Use alt text that describes the photo, not the file name.
-- Only publish photos and texts the branch has the right to use; credit the source.
+- Only publish photos and texts the Agency has the right to use; credit the source.
 - Report anything unexpected in the audit log to the Super Admin.
 
 Next chapter: [Publishing a post](02-publishing-a-post.md).
 
 ## Screens
 
-Screenshots of the admin with sample content (English admin language).
-
-![Dashboard](images/en-dashboard.png)
-
-![Notifications](images/en-notifications.png)
-
-![System health](images/en-health.png)
-
-![Traffic reports](images/en-traffic.png)
-
-![Privacy](images/en-privacy.png)
-
+Screenshots follow once the Agency's staging site is set up (phase 1).
