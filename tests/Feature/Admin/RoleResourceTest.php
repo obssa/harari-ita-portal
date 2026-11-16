@@ -14,7 +14,7 @@ beforeEach(fn () => $this->actingAs(staff(SystemRole::SuperAdmin)));
 it('lists all roles with their labels', function () {
     livewire(ListRoles::class)
         ->assertCanSeeTableRecords(Role::all())
-        ->assertSee(SystemRole::MembershipOfficer->label());
+        ->assertSee(SystemRole::InnovationOfficer->label());
 });
 
 it('shows the role × permission matrix with current grants', function () {
@@ -77,5 +77,5 @@ it('keeps system role keys fixed', function () {
 });
 
 it('lets only roles.* holders in', function () {
-    $this->actingAs(staff(SystemRole::Publisher))->get('/admin/roles')->assertForbidden();
+    $this->actingAs(staff(SystemRole::CommunicationsEditor))->get('/admin/roles')->assertForbidden();
 });

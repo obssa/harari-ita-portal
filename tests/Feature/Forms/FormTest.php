@@ -48,12 +48,12 @@ function makeForm(array $data = [], string $title = 'Sample feedback form'): For
             ['key' => 'agreefield', 'type' => FormField::CONSENT, 'required' => true, 'label' => ['en' => 'I agree']],
         ],
         ...$data,
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 function sampleOffice(string $name, ?string $email = null): Office
 {
-    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'email' => $email, 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
+    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'email' => $email, 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::CommunicationsEditor));
 }
 
 /**
@@ -216,10 +216,10 @@ it('hides forms that are drafts or not taking answers', function () {
 
 it('lets staff assign, answer, note and resolve tickets, timing the first answer', function () {
     $submission = submitSample(makeForm());
-    $agent = staff(SystemRole::SupportAgent);
+    $agent = staff(SystemRole::ServiceDeskAgent);
     $handle = app(HandleSubmission::class);
 
-    $handle->assign($submission, $agent, staff(SystemRole::Publisher));
+    $handle->assign($submission, $agent, staff(SystemRole::CommunicationsEditor));
     expect($submission->refresh()->status)->toBe(SubmissionStatus::Assigned)->and($submission->assignee_id)->toBe($agent->id);
 
     $handle->note($submission, 'Sample internal note', $agent);
@@ -248,8 +248,8 @@ it('shows each office only its own tickets', function () {
     $southTicket = submitSample(makeForm(['office_id' => $south->id], 'Sample south form'));
     $branchTicket = submitSample(makeForm([], 'Sample branch form'));
 
-    $agent = staff(SystemRole::SupportAgent);
-    $agent->assignScopedRole(SystemRole::SupportAgent, ScopeType::Office, $north->id);
+    $agent = staff(SystemRole::ServiceDeskAgent);
+    $agent->assignScopedRole(SystemRole::ServiceDeskAgent, ScopeType::Office, $north->id);
     $this->actingAs($agent->refresh());
 
     expect(SubmissionResource::getEloquentQuery()->pluck('id')->all())->toBe([$northTicket->id]);
@@ -257,7 +257,7 @@ it('shows each office only its own tickets', function () {
     $this->get(SubmissionResource::getUrl('view', ['record' => $southTicket]))->assertNotFound();
     expect(fn () => app(HandleSubmission::class)->reply($southTicket->refresh(), 'x', $agent))->toThrow(HttpException::class);
 
-    $everywhere = staff(SystemRole::SupportAgent);
+    $everywhere = staff(SystemRole::ServiceDeskAgent);
     $this->actingAs($everywhere);
     expect(SubmissionResource::getEloquentQuery()->count())->toBe(3);
     $this->get(SubmissionResource::getUrl('view', ['record' => $branchTicket]))->assertOk();
@@ -267,7 +267,7 @@ it('lets those who manage forms build them, and answers tickets from the inbox p
     $this->actingAs(staff(SystemRole::Author))->get('/admin/forms')->assertForbidden();
     $this->actingAs(staff(SystemRole::Author))->get('/admin/submissions')->assertForbidden();
 
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     livewire(CreateForm::class)
         ->fillForm([
             'type' => 'petition',

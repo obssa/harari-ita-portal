@@ -17,7 +17,7 @@ function adminPost(string $title = 'Sample post', array $more = []): Post
 {
     return app(SavePost::class)->handle(new Post, [
         'translations' => ['en' => ['title' => $title, ...$more]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 it('opens the posts screens for roles that work on posts', function (SystemRole $role, int $status) {
@@ -26,8 +26,8 @@ it('opens the posts screens for roles that work on posts', function (SystemRole 
     'author' => [SystemRole::Author, 200],
     'editor' => [SystemRole::Editor, 200],
     'translator' => [SystemRole::Translator, 200],
-    'publisher' => [SystemRole::Publisher, 200],
-    'membership officer' => [SystemRole::MembershipOfficer, 403],
+    'publisher' => [SystemRole::CommunicationsEditor, 200],
+    'membership officer' => [SystemRole::InnovationOfficer, 403],
 ]);
 
 it('creates a post from the admin form and opens it for editing', function () {
@@ -66,7 +66,7 @@ it('shows each person only the workflow buttons they may use', function () {
         ->assertSee(__('content.transition.submit'))
         ->assertDontSee(__('content.transition.publish'));
 
-    $this->actingAs(staff(SystemRole::Publisher))->get(PostResource::getUrl('edit', ['record' => $post]))
+    $this->actingAs(staff(SystemRole::CommunicationsEditor))->get(PostResource::getUrl('edit', ['record' => $post]))
         ->assertOk()
         ->assertSee(__('content.transition.publish'))
         ->assertSee(__('content.transition.schedule'));
@@ -74,7 +74,7 @@ it('shows each person only the workflow buttons they may use', function () {
 
 it('edits a post, keeps its status, and fills the form from all languages', function () {
     $post = adminPost('Draft title');
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(EditPost::class, ['record' => $post->getRouteKey()])
         ->assertFormSet(['translations.en.title' => 'Draft title'])
@@ -129,7 +129,7 @@ it('duplicates a post from the edit page', function () {
 });
 
 it('compares and restores versions from the edit page', function () {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $this->actingAs($publisher);
     $post = adminPost('Version one');
     app(SavePost::class)->handle($post, ['translations' => ['en' => ['title' => 'Version two']]], $publisher);

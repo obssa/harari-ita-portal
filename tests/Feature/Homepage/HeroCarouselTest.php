@@ -24,7 +24,7 @@ use function Pest\Livewire\livewire;
  */
 function heroSlide(array $data): HeroSlide
 {
-    return app(SaveHeroSlide::class)->handle(new HeroSlide, ['layout' => 'photo', ...$data], staff(SystemRole::Publisher, mfa: false));
+    return app(SaveHeroSlide::class)->handle(new HeroSlide, ['layout' => 'photo', ...$data], staff(SystemRole::CommunicationsEditor, mfa: false));
 }
 
 function slidePicture(): Media
@@ -35,7 +35,7 @@ function slidePicture(): Media
     imagefill($image, 0, 0, imagecolorallocate($image, 11, 108, 168));
     imagejpeg($image, $path, 80);
 
-    $media = app(UploadMedia::class)->handle($path, 'sample-slide.jpg', staff(SystemRole::Publisher, mfa: false));
+    $media = app(UploadMedia::class)->handle($path, 'sample-slide.jpg', staff(SystemRole::CommunicationsEditor, mfa: false));
     $media->forceFill(['alt' => ['en' => 'Sample slide picture'], 'credit' => 'Sample photographer'])->save();
 
     return $media;
@@ -89,7 +89,7 @@ it('checks a slide before saving it', function (array $data, string $field) {
 ]);
 
 it('sends buttons only to site pages, profiles and safe addresses', function () {
-    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Slide Leader', 'published' => true]]], staff(SystemRole::Publisher, mfa: false));
+    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Slide Leader', 'published' => true]]], staff(SystemRole::CommunicationsEditor, mfa: false));
 
     expect(SlideLink::isValid('route:volunteer.create'))->toBeTrue()
         ->and(SlideLink::isValid('route:admin.dashboard'))->toBeFalse()
@@ -171,7 +171,7 @@ it('gives the carousel manager to those who arrange the homepage', function () {
     $this->actingAs(staff(SystemRole::Author, mfa: false));
     $this->get(HeroSlideResource::getUrl('index'))->assertForbidden();
 
-    $this->actingAs(staff(SystemRole::Publisher, mfa: false));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor, mfa: false));
     $this->get(HeroSlideResource::getUrl('index'))->assertOk()
         ->assertSee('Sample managed slide')
         ->assertSee(__('admin.carousel.settings'))
@@ -179,7 +179,7 @@ it('gives the carousel manager to those who arrange the homepage', function () {
 });
 
 it('creates, edits, duplicates and reorders slides in the admin, and saves the settings', function () {
-    $this->actingAs(staff(SystemRole::Publisher, mfa: false));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor, mfa: false));
 
     livewire(CreateHeroSlide::class)
         ->fillForm([

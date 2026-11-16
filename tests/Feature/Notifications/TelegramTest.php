@@ -38,7 +38,7 @@ function telegramUpdate(string $text, string $chat = '987654', ?string $secret =
 }
 
 it('offers nothing about Telegram until the bot is set up', function () {
-    $user = staff(SystemRole::MembershipOfficer);
+    $user = staff(SystemRole::InnovationOfficer);
     $user->forceFill(['telegram_chat_id' => '987654'])->save();
     NoticePreferences::save($user, [NoticeKind::Volunteers->value => ['in_app', 'telegram']]);
 
@@ -49,7 +49,7 @@ it('offers nothing about Telegram until the bot is set up', function () {
 
 it('links a staff account with a one-time code through the bot', function () {
     telegramOn();
-    $user = staff(SystemRole::MembershipOfficer, attributes: ['name' => 'Sample Officer']);
+    $user = staff(SystemRole::InnovationOfficer, attributes: ['name' => 'Sample Officer']);
     $this->actingAs($user);
 
     livewire(NotificationCentre::class)->assertActionVisible('telegram')->mountAction('telegram');
@@ -73,7 +73,7 @@ it('links a staff account with a one-time code through the bot', function () {
 
 it('sends notices to Telegram for the kinds a person chose there', function () {
     telegramOn();
-    $user = staff(SystemRole::MembershipOfficer);
+    $user = staff(SystemRole::InnovationOfficer);
     $user->forceFill(['telegram_chat_id' => '555'])->save();
     NoticePreferences::save($user, [NoticeKind::Volunteers->value => ['telegram']]);
     expect(NoticePreferences::via($user->refresh(), NoticeKind::Volunteers))->toBe([TelegramChannel::class]);

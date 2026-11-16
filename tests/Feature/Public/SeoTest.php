@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 function livePost(string $title, string $locale = 'en'): Post
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['translations' => [$locale => ['title' => $title, 'excerpt' => 'Summary of '.$title]]], $publisher);
     app(ContentWorkflow::class)->apply($post, $locale, Transition::Publish, $publisher);
 
@@ -101,7 +101,7 @@ it('does not leave redirects for drafts', function () {
 });
 
 it('lets publishers manage redirects by hand', function () {
-    $this->actingAs(staff(SystemRole::Publisher))->get('/admin/redirects')->assertOk();
+    $this->actingAs(staff(SystemRole::CommunicationsEditor))->get('/admin/redirects')->assertOk();
     $this->actingAs(staff(SystemRole::Author))->get('/admin/redirects')->assertForbidden();
 
     Redirect::query()->create(['from_path' => '/old-page', 'to_path' => '/en/news', 'status' => 302]);

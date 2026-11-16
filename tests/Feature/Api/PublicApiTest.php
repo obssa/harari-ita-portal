@@ -50,7 +50,7 @@ function apiKey(array $scopes = [], array $data = []): string
  */
 function apiPost(array $translations, array $publish = [], string $type = 'news'): Post
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['type' => $type, 'translations' => $translations], $publisher);
     foreach ($publish as $locale) {
         app(ContentWorkflow::class)->apply($post, $locale, Transition::Publish, $publisher);
@@ -64,7 +64,7 @@ function apiPost(array $translations, array $publish = [], string $type = 'news'
  */
 function apiRecord(string $action, object $model, array $data): mixed
 {
-    return app($action)->handle($model, $data, staff(SystemRole::Publisher));
+    return app($action)->handle($model, $data, staff(SystemRole::Admin));
 }
 
 beforeEach(function () {

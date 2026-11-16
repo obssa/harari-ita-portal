@@ -21,7 +21,7 @@ function makePage(array $translations, ?Page $parent = null, string $template = 
         'template' => $template,
         'parent_id' => $parent?->id,
         'translations' => $translations,
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 it('serves published pages at their nested address in each language', function () {
@@ -100,13 +100,13 @@ it('refuses loops and too-deep nesting', function () {
     $b = makePage(['en' => ['title' => 'B']], $a);
     $c = makePage(['en' => ['title' => 'C']], $b);
 
-    expect(fn () => app(SavePage::class)->handle($a, ['parent_id' => $c->id, 'translations' => ['en' => ['title' => 'A']]], staff(SystemRole::Publisher)))
+    expect(fn () => app(SavePage::class)->handle($a, ['parent_id' => $c->id, 'translations' => ['en' => ['title' => 'A']]], staff(SystemRole::CommunicationsEditor)))
         ->toThrow(ValidationException::class)
         ->and(fn () => makePage(['en' => ['title' => 'D']], $c))->toThrow(ValidationException::class);
 });
 
 it('creates a page from the admin', function () {
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(CreatePage::class)
         ->fillForm(['template' => 'wide', 'translations' => ['om' => ['title' => "Waa'ee keenya", 'published' => true]]])
@@ -145,7 +145,7 @@ it('shows the sections of the design until a main menu exists', function () {
 it('lets publishers edit menus and keeps them from authors', function () {
     $this->actingAs(staff(SystemRole::Author))->get('/admin/menus')->assertForbidden();
 
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     livewire(ManageMenus::class)
         ->callAction('create', data: ['location' => 'footer', 'items' => [['type' => 'news', 'labels' => ['en' => 'All news']]]])
         ->assertHasNoActionErrors();

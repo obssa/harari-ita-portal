@@ -40,7 +40,7 @@ function registrationEvent(array $data = [], string $title = 'Sample registratio
         'registration_enabled' => true,
         'translations' => ['en' => ['title' => $title, 'venue' => 'Sample hall', 'published' => true]],
         ...$data,
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 /**
@@ -149,7 +149,7 @@ it('moves the waiting list up when a place is given back or places are added', f
         'registration_enabled' => true,
         'capacity' => 5,
         'translations' => ['en' => ['title' => 'Sample registration forum', 'published' => true]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 
     expect($later->refresh()->status)->toBe(RegistrationStatus::Registered);
 });
@@ -301,7 +301,7 @@ it('lets registration staff check people in by QR code, and keeps others away fr
     $this->actingAs(staff(SystemRole::Editor))->get('/admin/check-in')->assertForbidden();
     expect(RegistrationsRelationManager::canViewForRecord($event, EditEvent::class))->toBeFalse();
 
-    $officer = staff(SystemRole::MembershipOfficer);
+    $officer = staff(SystemRole::InnovationOfficer);
     $this->actingAs($officer);
     $this->get('/admin/events/'.$event->getRouteKey())->assertOk();
 

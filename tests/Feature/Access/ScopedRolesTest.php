@@ -36,7 +36,7 @@ it('lets a Harari translator edit Harari strings only', function () {
 it('combines a scoped role with a global one', function () {
     $user = User::factory()->create();
     $user->assignScopedRole(SystemRole::Editor, ScopeType::Pillar, 'youth');
-    $user->assignRole(SystemRole::Publisher->value);
+    $user->assignRole(SystemRole::CommunicationsEditor->value);
     $user = $user->fresh();
 
     expect($user->hasPermissionInScope('posts.update', ScopeType::Pillar, 'women'))->toBeTrue();

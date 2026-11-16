@@ -13,7 +13,7 @@ use App\Http\Controllers\Public\PreviewController;
  */
 function newsPost(array $translations, array $publish = [], string $type = 'news'): Post
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['type' => $type, 'translations' => $translations], $publisher);
     foreach ($publish as $locale) {
         app(ContentWorkflow::class)->apply($post, $locale, Transition::Publish, $publisher);

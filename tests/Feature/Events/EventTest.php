@@ -23,11 +23,11 @@ function makeEvent(array $translations, string $starts = '+3 days 09:00', array 
         'starts_at' => CarbonImmutable::parse($starts)->toDateTimeString(),
         'translations' => $translations,
         ...$data,
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 it('saves events with agenda, speakers and a map pin, and checks the times', function () {
-    $speaker = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Speaker', 'published' => true]]], staff(SystemRole::Publisher));
+    $speaker = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Speaker', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
 
     $event = makeEvent([
         'en' => ['title' => 'Sample town hall', 'venue' => 'Sample hall', 'published' => true, 'agenda' => [
@@ -42,7 +42,7 @@ it('saves events with agenda, speakers and a map pin, and checks the times', fun
 
     expect(fn () => makeEvent(['en' => ['title' => 'Sample']], '+1 day', ['ends_at' => CarbonImmutable::parse('-1 day')->toDateTimeString()]))->toThrow(ValidationException::class)
         ->and(fn () => makeEvent(['en' => ['title' => 'Sample']], '+1 day', ['online_url' => 'http://insecure.example']))->toThrow(ValidationException::class)
-        ->and(fn () => app(SaveEvent::class)->handle(new Event, ['translations' => ['en' => ['title' => 'Sample']]], staff(SystemRole::Publisher)))->toThrow(ValidationException::class);
+        ->and(fn () => app(SaveEvent::class)->handle(new Event, ['translations' => ['en' => ['title' => 'Sample']]], staff(SystemRole::CommunicationsEditor)))->toThrow(ValidationException::class);
 });
 
 it('lists upcoming and past events and shows each event with its details', function () {
@@ -111,7 +111,7 @@ it('shows upcoming events on the homepage, in search and in the sitemaps, and Am
 
 it('lets those who manage events create them in the admin and keeps others out', function () {
     $this->actingAs(staff(SystemRole::Author))->get('/admin/events')->assertForbidden();
-    $this->actingAs(staff(SystemRole::OfficeHead))->get('/admin/events')->assertOk();
+    $this->actingAs(staff(SystemRole::DirectorateHead))->get('/admin/events')->assertOk();
 
     $this->actingAs(staff(SystemRole::Editor));
     livewire(CreateEvent::class)

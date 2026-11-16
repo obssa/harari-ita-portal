@@ -23,9 +23,9 @@ it('shows the press kit with the boilerplate, contact, logos, colours, portraits
     $logo = app(UploadMedia::class)->handle(TestFiles::svg('<rect width="10" height="10" fill="#3151ed"/>'), 'logo.svg');
     $portrait = app(UploadMedia::class)->handle(TestFiles::image(300, 300), 'leader.jpg');
     app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'portrait_id' => $portrait->id,
-        'translations' => ['en' => ['name' => 'Sample Chairperson', 'published' => true]]], staff(SystemRole::Publisher));
-    $press = app(SaveForm::class)->handle(new Form, ['type' => 'press', 'translations' => ['en' => ['title' => 'Sample press enquiry', 'published' => true]]], staff(SystemRole::Publisher));
-    $publisher = staff(SystemRole::Publisher);
+        'translations' => ['en' => ['name' => 'Sample Chairperson', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
+    $press = app(SaveForm::class)->handle(new Form, ['type' => 'press', 'translations' => ['en' => ['title' => 'Sample press enquiry', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $release = app(SavePost::class)->handle(new Post, ['type' => 'press_release', 'translations' => ['en' => ['title' => 'Sample press release']]], $publisher);
     app(ContentWorkflow::class)->apply($release, 'en', Transition::Publish, $publisher);
 
@@ -54,7 +54,7 @@ it('shows the press kit with the boilerplate, contact, logos, colours, portraits
 it('lets communications staff fill in the press kit and keeps others out', function () {
     $this->actingAs(staff(SystemRole::Author))->get('/admin/press-kit')->assertForbidden();
 
-    $this->actingAs(staff(SystemRole::CommunicationsOfficer));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     livewire(ManagePressKit::class)
         ->fillForm(['boilerplate' => ['om' => 'Ibsa fakkeenyaa', 'en' => ''], 'contact_phone' => '+251 25 666 0000'])
         ->call('save')
@@ -69,8 +69,8 @@ it('shows ways to get involved, with what is coming later marked as such', funct
     app(SaveEvent::class)->handle(new Event, [
         'starts_at' => CarbonImmutable::now()->addDays(4)->toDateTimeString(),
         'translations' => ['en' => ['title' => 'Sample community meeting', 'published' => true]],
-    ], staff(SystemRole::Publisher));
-    app(SaveForm::class)->handle(new Form, ['type' => 'feedback', 'translations' => ['en' => ['title' => 'Sample suggestions', 'published' => true]]], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
+    app(SaveForm::class)->handle(new Form, ['type' => 'feedback', 'translations' => ['en' => ['title' => 'Sample suggestions', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
 
     $this->get('/en/get-involved')->assertOk()
         ->assertSee('Sample community meeting')

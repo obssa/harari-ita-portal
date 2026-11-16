@@ -34,7 +34,7 @@ it('lets everyone in without two-factor login while it is optional', function (S
     expect(app(SecuritySettings::class)->require_mfa)->toBeFalse();
 
     $this->actingAs(staff($role, mfa: false))->get('/admin')->assertOk();
-})->with([SystemRole::SuperAdmin, SystemRole::Admin, SystemRole::Publisher]);
+})->with([SystemRole::SuperAdmin, SystemRole::Admin, SystemRole::CommunicationsEditor]);
 
 it('makes Super Admins, Admins and Publishers set up two-factor login first once it is compulsory', function (SystemRole $role) {
     requireMfa();
@@ -42,7 +42,7 @@ it('makes Super Admins, Admins and Publishers set up two-factor login first once
     $this->actingAs(staff($role, mfa: false))
         ->get('/admin')
         ->assertRedirect(Filament::getPanel('admin')->getSetUpRequiredMultiFactorAuthenticationUrl());
-})->with([SystemRole::SuperAdmin, SystemRole::Admin, SystemRole::Publisher]);
+})->with([SystemRole::SuperAdmin, SystemRole::Admin, SystemRole::CommunicationsEditor]);
 
 it('lets other staff in without two-factor login even when it is compulsory', function (SystemRole $role) {
     requireMfa();
@@ -64,7 +64,7 @@ it('shows each screen only to roles allowed to see it', function (SystemRole $ro
     'admin sees audit log' => [SystemRole::Admin, '/admin/audit-log', 200],
     'editor blocked from users' => [SystemRole::Editor, '/admin/users', 403],
     'editor blocked from roles' => [SystemRole::Editor, '/admin/roles', 403],
-    'publisher blocked from audit log' => [SystemRole::Publisher, '/admin/audit-log', 403],
+    'publisher blocked from audit log' => [SystemRole::CommunicationsEditor, '/admin/audit-log', 403],
     'analyst blocked from users' => [SystemRole::Analyst, '/admin/users', 403],
     'super admin sees users' => [SystemRole::SuperAdmin, '/admin/users', 200],
 ]);

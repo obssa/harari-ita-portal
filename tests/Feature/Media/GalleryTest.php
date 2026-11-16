@@ -40,7 +40,7 @@ function makeGallery(array $translations, array $photos = [], array $data = []):
         'translations' => $translations,
         'items' => array_map(fn (Media $m): array => ['media_id' => $m->id, 'caption' => ['en' => "Caption {$m->id}"]], $photos),
         ...$data,
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 it('saves albums with ordered photos, captions and the first photo as cover', function () {
@@ -115,7 +115,7 @@ it('lists albums in the sitemaps', function () {
 it('lets those who manage galleries build albums in the admin', function () {
     $this->actingAs(staff(SystemRole::Author))->get('/admin/galleries')->assertForbidden();
 
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $photo = galleryPhoto();
 
     livewire(CreateGallery::class)

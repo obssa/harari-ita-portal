@@ -12,7 +12,7 @@ use Tests\Support\TestFiles;
 
 use function Pest\Livewire\livewire;
 
-beforeEach(fn () => $this->actingAs(staff(SystemRole::MediaManager)));
+beforeEach(fn () => $this->actingAs(staff(SystemRole::CommunicationsEditor)));
 
 it('creates nested folders for the current site', function () {
     livewire(ManageMediaFolders::class)

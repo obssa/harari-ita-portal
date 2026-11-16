@@ -29,7 +29,7 @@ function makeVideo(array $translations, string $url = 'https://www.youtube.com/w
 {
     Http::fake(['i.ytimg.com/*' => Http::response(videoThumbnailJpeg(), 200, ['Content-Type' => 'image/jpeg'])]);
 
-    return app(SaveVideo::class)->handle(new Video, ['url' => $url, 'translations' => $translations, ...$data], staff(SystemRole::Publisher));
+    return app(SaveVideo::class)->handle(new Video, ['url' => $url, 'translations' => $translations, ...$data], staff(SystemRole::CommunicationsEditor));
 }
 
 it('understands YouTube, Facebook and Telegram addresses', function (string $url, ?string $provider, ?string $youtube) {
@@ -55,7 +55,7 @@ it('saves videos, copying the YouTube picture into the library once', function (
         ->and($video->thumbnail?->credit)->toBe('YouTube')
         ->and($video->thumbnail?->isUsed())->toBeTrue();
 
-    $again = app(SaveVideo::class)->handle($video, ['url' => $video->url, 'translations' => ['en' => ['title' => 'Sample speech video', 'published' => true]]], staff(SystemRole::Publisher));
+    $again = app(SaveVideo::class)->handle($video, ['url' => $video->url, 'translations' => ['en' => ['title' => 'Sample speech video', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
     expect($again->thumbnail_id)->toBe($video->thumbnail_id);
     Http::assertSentCount(1);
 
@@ -127,7 +127,7 @@ it('puts the video of the week on the homepage and the videos in the sitemaps', 
 it('lets those who manage videos add them in the admin', function () {
     $this->actingAs(staff(SystemRole::Author))->get('/admin/videos')->assertForbidden();
 
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     Http::fake(['i.ytimg.com/*' => Http::response(videoThumbnailJpeg(), 200, ['Content-Type' => 'image/jpeg'])]);
 
     livewire(CreateVideo::class)

@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Notification;
 
 function noticeOffice(string $name): Office
 {
-    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
+    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::CommunicationsEditor));
 }
 
 function noticeForm(?Office $office = null): Form
@@ -51,7 +51,7 @@ function noticeForm(?Office $office = null): Form
         'office_id' => $office?->id,
         'translations' => ['en' => ['title' => 'Sample notice form', 'success_message' => 'Sample thanks', 'published' => true]],
         'fields' => [['key' => 'msgfield', 'type' => FormField::TEXTAREA, 'required' => true, 'label' => ['en' => 'Your message']]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 function noticeTicket(Form $form): FormSubmission
@@ -63,8 +63,8 @@ function noticeTicket(Form $form): FormSubmission
 
 function officeAgent(Office $office): User
 {
-    $agent = staff(SystemRole::SupportAgent);
-    $agent->assignScopedRole(SystemRole::SupportAgent, ScopeType::Office, $office->id);
+    $agent = staff(SystemRole::ServiceDeskAgent);
+    $agent->assignScopedRole(SystemRole::ServiceDeskAgent, ScopeType::Office, $office->id);
 
     return $agent->refresh();
 }
@@ -77,7 +77,7 @@ function noticeEvent(int $capacity): Event
         'capacity' => $capacity,
         'waitlist' => true,
         'translations' => ['en' => ['title' => 'Sample notice forum', 'venue' => 'Sample hall', 'published' => true]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 /** @return array<string, mixed> */
@@ -92,7 +92,7 @@ beforeEach(function () {
 });
 
 it('keeps the defaults until a person chooses, and offers only the kinds of their work', function () {
-    $agent = staff(SystemRole::SupportAgent);
+    $agent = staff(SystemRole::ServiceDeskAgent);
 
     expect(NoticeKind::for($agent))->toContain(NoticeKind::Tickets)->not->toContain(NoticeKind::Registrations)
         ->and(NoticePreferences::channels($agent, NoticeKind::Tickets))->toBe([NoticePreferences::IN_APP, NoticePreferences::EMAIL])
@@ -127,8 +127,8 @@ it('tells the staff of the office about a new ticket, and nobody outside it', fu
     $south = noticeOffice('Sample South office');
     $northAgent = officeAgent($north);
     $southAgent = officeAgent($south);
-    $everyOffice = staff(SystemRole::SupportAgent);
-    $suspended = staff(SystemRole::SupportAgent, attributes: ['status' => UserStatus::Suspended]);
+    $everyOffice = staff(SystemRole::ServiceDeskAgent);
+    $suspended = staff(SystemRole::ServiceDeskAgent, attributes: ['status' => UserStatus::Suspended]);
 
     $ticket = noticeTicket(noticeForm($north));
 
@@ -144,8 +144,8 @@ it('tells the staff of the office about a new ticket, and nobody outside it', fu
 it('tells a person when a colleague gives them a ticket, not when they take it themselves', function () {
     Notification::fake();
     $ticket = noticeTicket(noticeForm());
-    $lead = staff(SystemRole::SupportAgent, attributes: ['name' => 'Sample Lead']);
-    $colleague = staff(SystemRole::SupportAgent);
+    $lead = staff(SystemRole::ServiceDeskAgent, attributes: ['name' => 'Sample Lead']);
+    $colleague = staff(SystemRole::ServiceDeskAgent);
 
     app(HandleSubmission::class)->assign($ticket, $colleague, $lead);
     app(HandleSubmission::class)->assign($ticket->refresh(), $lead, $lead);
@@ -155,7 +155,7 @@ it('tells a person when a colleague gives them a ticket, not when they take it t
 });
 
 it('keeps one up-to-date notice per event until it is read', function () {
-    $officer = staff(SystemRole::MembershipOfficer);
+    $officer = staff(SystemRole::InnovationOfficer);
     $event = noticeEvent(capacity: 2);
     $register = fn (string $email) => app(RegisterForEvent::class)->handle($event, ['name' => 'Sample Person', 'email' => $email, 'consent' => true], 'en');
 
@@ -177,7 +177,7 @@ it('keeps one up-to-date notice per event until it is read', function () {
 
 it('reports a failing social account once, not on every attempt', function () {
     Notification::fake();
-    $manager = staff(SystemRole::MediaManager);
+    $manager = staff(SystemRole::CommunicationsEditor);
     $author = staff(SystemRole::Author);
     $source = SocialSource::query()->create(['platform' => Platform::Telegram, 'handle' => 'samplenotices', 'name' => 'Sample notices channel']);
     Http::fake(['t.me/*' => Http::response('down', 502)]);
@@ -238,7 +238,7 @@ it('tells the translator when the machine translation is done', function () {
 });
 
 it('writes the notice in the person\'s admin language', function () {
-    $agent = staff(SystemRole::SupportAgent, attributes: ['locale' => 'am']);
+    $agent = staff(SystemRole::ServiceDeskAgent, attributes: ['locale' => 'am']);
     $agent->notify(new StoriesImportedNotice(3));
 
     expect(storedNotice($agent)['title'])->toBe(__('notifications.import.title', [], 'am'))

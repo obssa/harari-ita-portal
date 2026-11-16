@@ -18,7 +18,7 @@ use App\Domain\Organisation\Models\Pillar;
  */
 function directoryOffice(array $translations, string $type = 'regional_office', array $data = []): Office
 {
-    return app(SaveOffice::class)->handle(new Office, ['type' => $type, 'translations' => $translations, ...$data], staff(SystemRole::Publisher));
+    return app(SaveOffice::class)->handle(new Office, ['type' => $type, 'translations' => $translations, ...$data], staff(SystemRole::CommunicationsEditor));
 }
 
 /**
@@ -27,7 +27,7 @@ function directoryOffice(array $translations, string $type = 'regional_office', 
  */
 function directoryLeader(array $translations, string $body = 'management', array $data = []): Leader
 {
-    return app(SaveLeader::class)->handle(new Leader, ['body' => $body, 'translations' => $translations, ...$data], staff(SystemRole::Publisher));
+    return app(SaveLeader::class)->handle(new Leader, ['body' => $body, 'translations' => $translations, ...$data], staff(SystemRole::CommunicationsEditor));
 }
 
 it('lists published leaders by body and hides drafts', function () {
@@ -51,7 +51,7 @@ it('shows a leader profile with office, term, socials, posts and person data', f
         'socials' => ['telegram' => 'https://t.me/sample'],
         'email' => 'speaker@example.org',
     ]);
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $speech = app(SavePost::class)->handle(new Post, [
         'type' => 'speech',
         'leaders' => [$leader->id],
@@ -108,7 +108,7 @@ it('shows pillars with their chair and leadership', function () {
     $pillar = app(SavePillar::class)->handle(new Pillar, [
         'head_leader_id' => $chair->id,
         'translations' => ['en' => ['name' => 'Sample Youth Pillar', 'summary' => 'Sample summary', 'published' => true]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
     directoryLeader(['en' => ['name' => 'Sample Pillar Secretary', 'published' => true]], 'pillars', ['pillar_id' => $pillar->id]);
 
     $this->get('/en/pillars')->assertOk()->assertSee('Sample Youth Pillar')->assertSee('Sample summary')

@@ -33,7 +33,7 @@ function move(Post $post, Transition $transition, User $actor, ?string $comment 
 it('takes a post from draft through review to published', function () {
     $author = staff(SystemRole::Author);
     $editor = staff(SystemRole::Editor);
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = draftBy($author);
 
     expect(move($post, Transition::Submit, $author))->toBe(ContentStatus::InReview)
@@ -65,17 +65,17 @@ it('only offers moves the person may make from the current status', function () 
     $workflow = app(ContentWorkflow::class);
 
     expect($workflow->available($post, 'en', $author))->toBe([Transition::Submit])
-        ->and($workflow->available($post, 'en', staff(SystemRole::Publisher)))
+        ->and($workflow->available($post, 'en', staff(SystemRole::CommunicationsEditor)))
         ->toContain(Transition::Submit, Transition::Publish, Transition::Schedule)
         ->and($workflow->available($post, 'am', $author))->toBe([])
         ->and($workflow->available($post, 'en', staff(SystemRole::Author)))->toBe([]);
 
     expect(fn () => move($post, Transition::Publish, $author))->toThrow(ValidationException::class)
-        ->and(fn () => move($post, Transition::Archive, staff(SystemRole::Publisher)))->toThrow(ValidationException::class);
+        ->and(fn () => move($post, Transition::Archive, staff(SystemRole::CommunicationsEditor)))->toThrow(ValidationException::class);
 });
 
 it('schedules a post and publishes it when the time comes', function () {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = draftBy($publisher);
 
     expect(fn () => move($post, Transition::Schedule, $publisher, null, now()->subHour()))->toThrow(ValidationException::class);
@@ -90,7 +90,7 @@ it('schedules a post and publishes it when the time comes', function () {
 });
 
 it('unpublishes, archives and reopens', function () {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = draftBy($publisher);
     move($post, Transition::Publish, $publisher);
 
@@ -104,7 +104,7 @@ it('notifies reviewers, publishers and the author, never the person who acted', 
     Notification::fake();
     $author = staff(SystemRole::Author);
     $editor = staff(SystemRole::Editor);
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = draftBy($author);
 
     move($post, Transition::Submit, $author);
@@ -132,7 +132,7 @@ it('writes notifications in the database for the admin bell', function () {
 
 it('announces every move as an event', function () {
     Event::fake([ContentTransitioned::class]);
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = draftBy($publisher);
 
     move($post, Transition::Publish, $publisher);
@@ -142,7 +142,7 @@ it('announces every move as an event', function () {
 
 it('queues signed webhook deliveries for subscribed events only', function () {
     Queue::fake();
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $hook = Webhook::query()->create(['name' => 'Archive', 'url' => 'https://example.org/hook', 'secret' => 's3cret', 'events' => ['post.published']]);
     Webhook::query()->create(['name' => 'Off', 'url' => 'https://example.org/off', 'secret' => 'x', 'events' => ['post.published'], 'is_active' => false]);
     $post = draftBy($publisher);

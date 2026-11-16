@@ -208,7 +208,7 @@ it('offers the sign-up in the footer of every page', function () {
 
 it('lists subscribers masked for communications staff', function () {
     $this->post('/en/newsletter', subscription());
-    $this->actingAs(staff(SystemRole::CommunicationsOfficer));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $this->get(SubscriberResource::getUrl('index'))->assertOk()->assertSee('r•••@example.org')->assertDontSee('reader@example.org');
     livewire(ListSubscribers::class)->assertActionHidden('export');
 

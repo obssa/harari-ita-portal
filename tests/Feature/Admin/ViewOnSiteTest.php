@@ -16,7 +16,7 @@ use App\Support\PublicLinks;
 
 function viewOnSitePost(array $publishIn): Post
 {
-    $publisher = staff(SystemRole::Publisher, mfa: false);
+    $publisher = staff(SystemRole::CommunicationsEditor, mfa: false);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => [
         'en' => ['title' => 'Sample story to view'],
         'am' => ['title' => 'የናሙና ዜና ለማየት'],
@@ -36,7 +36,7 @@ it('knows the public address of each published language, and none for drafts', f
         ->and(PublicLinks::for($draft))->toBe([])
         ->and(PublicLinks::preferred($post, 'am'))->toBe(url('/en/news/sample-story-to-view'));
 
-    $publisher = staff(SystemRole::Publisher, mfa: false);
+    $publisher = staff(SystemRole::CommunicationsEditor, mfa: false);
     $parent = app(SavePage::class)->handle(new Page, ['translations' => ['en' => ['title' => 'Sample about', 'slug' => 'sample-about', 'published' => true]]], $publisher);
     $child = app(SavePage::class)->handle(new Page, ['parent_id' => $parent->id, 'translations' => ['en' => ['title' => 'Sample history', 'slug' => 'history', 'published' => true]]], $publisher);
     expect(PublicLinks::for($child))->toBe(['en' => url('/en/sample-about/history')]);
@@ -49,7 +49,7 @@ it('knows the public address of each published language, and none for drafts', f
 });
 
 it('puts View on site on the edit page, with the published languages, or says the item is not on the site yet', function () {
-    $this->actingAs(staff(SystemRole::Publisher, mfa: false));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor, mfa: false));
     $post = viewOnSitePost(['en']);
     $draft = viewOnSitePost([]);
 
@@ -64,8 +64,8 @@ it('puts View on site on the edit page, with the published languages, or says th
 });
 
 it('offers View on site on list rows and View the site on pages that change the whole site', function () {
-    $this->actingAs(staff(SystemRole::Publisher, mfa: false));
-    $publisher = staff(SystemRole::Publisher, mfa: false);
+    $this->actingAs(staff(SystemRole::CommunicationsEditor, mfa: false));
+    $publisher = staff(SystemRole::CommunicationsEditor, mfa: false);
     app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Listed Leader', 'published' => true]]], $publisher);
 
     $this->get(LeaderResource::getUrl('index'))->assertOk()

@@ -33,7 +33,7 @@ function makeOffice(string $name, OfficeType $type = OfficeType::RegionalOffice,
         'parent_id' => $parent?->id,
         'translations' => ['en' => ['name' => $name, 'published' => true]],
         ...$data,
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 /**
@@ -45,7 +45,7 @@ function makeLeader(string $name, LeaderBody $body = LeaderBody::Management, arr
         'body' => $body->value,
         'translations' => ['en' => ['name' => $name, 'position' => 'Sample position', 'published' => true]],
         ...$data,
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 it('keeps the office tree free of loops and within four levels', function () {
@@ -60,7 +60,7 @@ it('keeps the office tree free of loops and within four levels', function () {
             'type' => 'directorate',
             'parent_id' => $kebele->id,
             'translations' => ['en' => ['name' => 'Sample branch office']],
-        ], staff(SystemRole::Publisher)))->toThrow(ValidationException::class);
+        ], staff(SystemRole::CommunicationsEditor)))->toThrow(ValidationException::class);
 });
 
 it('validates office details', function (array $data) {
@@ -90,7 +90,7 @@ it('stores contacts, the map pin and the head of office', function () {
 });
 
 it('saves leaders with terms, socials and per-language publishing', function () {
-    $pillar = app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample youth pillar', 'published' => true]]], staff(SystemRole::Publisher));
+    $pillar = app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample youth pillar', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
     $leader = makeLeader('Sample chair', LeaderBody::Pillars, [
         'pillar_id' => $pillar->id,
         'term_start' => '2024-07-01',
@@ -120,14 +120,14 @@ it('lets editors and publishers manage the directory and keeps it from others', 
     $this->actingAs(staff(SystemRole::Author))->get('/admin/offices')->assertForbidden();
     $this->actingAs(staff(SystemRole::Translator))->get('/admin/leaders')->assertForbidden();
     $this->actingAs(staff(SystemRole::Editor))->get('/admin/pillars')->assertOk();
-    $this->actingAs(staff(SystemRole::Publisher))->get('/admin/offices/'.$office->id.'/edit')->assertOk()->assertSee('Sample office');
+    $this->actingAs(staff(SystemRole::CommunicationsEditor))->get('/admin/offices/'.$office->id.'/edit')->assertOk()->assertSee('Sample office');
 
     makeOffice('Sample kebele', OfficeType::Team, $office);
-    expect(staff(SystemRole::Publisher)->can('delete', $office))->toBeFalse();
+    expect(staff(SystemRole::CommunicationsEditor)->can('delete', $office))->toBeFalse();
 });
 
 it('creates and edits offices, leaders and pillars from the admin', function () {
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(CreateOffice::class)
         ->fillForm(['type' => 'team', 'translations' => ['am' => ['name' => 'ናሙና የዘርፍ ጽሕፈት ቤት', 'hours' => 'ከሰኞ እስከ ዓርብ', 'published' => true]]])
@@ -166,7 +166,7 @@ it('creates and edits offices, leaders and pillars from the admin', function () 
 
 it('links posts to offices, pillars and leaders and keeps the links on copies', function () {
     $office = makeOffice('Sample office');
-    $pillar = app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample pillar']]], staff(SystemRole::Publisher));
+    $pillar = app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample pillar']]], staff(SystemRole::CommunicationsEditor));
     $leader = makeLeader('Sample speaker');
 
     $post = app(SavePost::class)->handle(new Post, [
@@ -175,7 +175,7 @@ it('links posts to offices, pillars and leaders and keeps the links on copies', 
         'pillars' => [$pillar->id],
         'leaders' => [$leader->id],
         'translations' => ['en' => ['title' => 'Sample speech']],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 
     expect($post->offices->modelKeys())->toBe([$office->id])
         ->and($leader->posts()->pluck('posts.id')->all())->toBe([$post->id])
@@ -184,7 +184,7 @@ it('links posts to offices, pillars and leaders and keeps the links on copies', 
     $copy = app(DuplicatePost::class)->handle($post);
     expect($copy->leaders()->pluck('leaders.id')->all())->toBe([$leader->id]);
 
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     livewire(EditPost::class, ['record' => $post->getRouteKey()])
         ->assertFormSet(['offices' => [$office->id], 'leaders' => [$leader->id]]);
 });

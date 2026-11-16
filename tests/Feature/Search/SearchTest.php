@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
  */
 function searchPost(array $translations, array $publish = ['en']): Post
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => $translations], $publisher);
     foreach ($publish as $locale) {
         app(ContentWorkflow::class)->apply($post, $locale, Transition::Publish, $publisher);
@@ -72,7 +72,7 @@ it('only finds what is published, Amharic included for the other languages', fun
 });
 
 it('finds pages, people and offices with links to them', function () {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     app(SavePage::class)->handle(new Page, ['translations' => ['en' => ['title' => 'Sample history of the branch', 'published' => true]]], $publisher);
     app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Branch Secretary', 'position' => 'Sample role', 'published' => true]]], $publisher);
     app(SaveOffice::class)->handle(new Office, ['type' => 'team', 'translations' => ['en' => ['name' => 'Sample branch sector office', 'published' => true]]], $publisher);

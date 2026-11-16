@@ -55,10 +55,13 @@ return [
 
     /*
     | Staff with these roles must turn on an authenticator app before they can
-    | use the admin panel, while Settings → Security makes it compulsory
-    | (PLAN.md §7, §8, ADR-0018).
+    | use the admin panel, while Settings → Security makes it compulsory: the
+    | Super Admin, the Admin and every role that sees personal data (PLAN.md §7).
     */
-    'mfa_required_roles' => ['super_admin', 'admin', 'publisher'],
+    'mfa_required_roles' => [
+        'super_admin', 'admin', 'communications_editor', 'service_owner', 'service_desk_agent',
+        'innovation_officer', 'academy_coordinator', 'instructor', 'directorate_head',
+    ],
 
     /*
     | Queues drained by `php artisan portal:work-queues` (cron, ADR-0002), in

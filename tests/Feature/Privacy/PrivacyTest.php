@@ -33,7 +33,7 @@ function privacyEvent(): Event
         'starts_at' => CarbonImmutable::now()->addDays(5)->setTime(9, 0)->toDateTimeString(),
         'registration_enabled' => true,
         'translations' => ['en' => ['title' => 'Sample privacy forum', 'venue' => 'Sample hall', 'published' => true]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 function privacyForm(): Form
@@ -43,7 +43,7 @@ function privacyForm(): Form
         'response_days' => 3,
         'translations' => ['en' => ['title' => 'Sample privacy form', 'success_message' => 'Sample thanks', 'published' => true]],
         'fields' => [['key' => 'msgfield', 'type' => FormField::TEXTAREA, 'required' => true, 'label' => ['en' => 'Your message']]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 }
 
 /** One person who registered and wrote, and someone else who did too. */
@@ -86,7 +86,7 @@ it('finds a person\'s registrations and tickets by email or phone', function () 
 
 it('gives the person a copy of everything found and logs the request without their details', function () {
     $people = privacyPeople();
-    app(HandleSubmission::class)->reply($people['ticket'], 'Sample reply to the person', staff(SystemRole::SupportAgent));
+    app(HandleSubmission::class)->reply($people['ticket'], 'Sample reply to the person', staff(SystemRole::ServiceDeskAgent));
     $admin = staff(SystemRole::Admin);
 
     $export = app(ExportPersonalData::class)->handle(new PersonalDataSearch('person@example.org', '0911234567'), $admin);
@@ -108,7 +108,7 @@ it('erases a person\'s data but keeps anonymous records that still add up', func
     $people = privacyPeople();
     Storage::disk(SubmitForm::FILE_DISK)->put("form-submissions/{$people['ticket']->id}/sample.pdf", 'sample');
     $people['ticket']->forceFill(['files' => [['field' => 'msgfield', 'path' => "form-submissions/{$people['ticket']->id}/sample.pdf", 'name' => 'sample.pdf', 'size' => 6, 'mime' => 'application/pdf']]])->save();
-    app(HandleSubmission::class)->note($people['ticket'], 'Sample note naming the person', staff(SystemRole::SupportAgent));
+    app(HandleSubmission::class)->note($people['ticket'], 'Sample note naming the person', staff(SystemRole::ServiceDeskAgent));
     activity('auth')->event('login_failed')->withProperties(['email' => 'person@example.org'])->log('login_failed');
     $oldTicketUrl = route('events.ticket', ['token' => $people['registration']->token, 'locale' => 'en']);
 

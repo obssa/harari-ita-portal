@@ -108,7 +108,7 @@ it('adds TikTok and X posts by their address with what the network tells', funct
 });
 
 it('lets managers save a Facebook page token and add posts from the accounts list', function () {
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $page = platformSource(Platform::Facebook, 'samplepage');
     $instagram = platformSource(Platform::Instagram, 'sampleaccount');
 

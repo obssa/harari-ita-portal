@@ -5,26 +5,34 @@ namespace App\Domain\Access\Enums;
 use App\Domain\Access\Support\PermissionRegistry;
 
 /**
- * The roles PLAN.md §8 defines. Their default permissions are seeded by
- * `portal:sync-permissions`; Super Admins may change grants afterwards
- * (except for the Super Admin role, which always has everything).
+ * The roles PLAN.md §7 defines, plus the Editor and Author the editorial
+ * workflow needs (draft, review, publish) and a read-only Analyst. Their
+ * default permissions are seeded by `portal:sync-permissions`; Super Admins
+ * may change grants afterwards (except for the Super Admin role, which
+ * always has everything). Permissions of modules still to come are granted
+ * now, so each role is complete when its screens arrive.
  */
 enum SystemRole: string
 {
     case SuperAdmin = 'super_admin';
     case Admin = 'admin';
-    case Publisher = 'publisher';
+    case CommunicationsEditor = 'communications_editor';
     case Editor = 'editor';
     case Author = 'author';
     case Translator = 'translator';
-    case MediaManager = 'media_manager';
-    case CommunicationsOfficer = 'communications_officer';
-    case MembershipOfficer = 'membership_officer';
-    case SupportAgent = 'support_agent';
+    case ServiceOwner = 'service_owner';
+    case ServiceDeskAgent = 'service_desk_agent';
+    case InnovationOfficer = 'innovation_officer';
+    case Judge = 'judge';
+    case ProjectManager = 'project_manager';
+    case DataSteward = 'data_steward';
+    case AcademyCoordinator = 'academy_coordinator';
+    case Instructor = 'instructor';
+    case ProcurementOfficer = 'procurement_officer';
+    case DirectorateHead = 'directorate_head';
     case Analyst = 'analyst';
-    case OfficeHead = 'office_head';
 
-    /** Permissions only a Super Admin holds (PLAN.md §8: Admin "cannot"). */
+    /** Permissions only a Super Admin holds (PLAN.md §7: the Admin has everything else). */
     public const SUPER_ADMIN_ONLY = [
         'settings.manage',
         'integrations.manage',
@@ -49,9 +57,9 @@ enum SystemRole: string
     public function allowedScopes(): array
     {
         return match ($this) {
-            self::Publisher, self::Editor, self::Author => [ScopeType::Office, ScopeType::Pillar],
+            self::CommunicationsEditor, self::Editor, self::Author => [ScopeType::Office, ScopeType::Pillar],
             self::Translator => [ScopeType::Language],
-            self::MembershipOfficer, self::SupportAgent, self::OfficeHead => [ScopeType::Office],
+            self::ServiceOwner, self::ServiceDeskAgent, self::InnovationOfficer, self::ProjectManager, self::DirectorateHead => [ScopeType::Office],
             default => [],
         };
     }
@@ -68,19 +76,22 @@ enum SystemRole: string
 
             self::Admin => array_values(array_diff(PermissionRegistry::all(), self::SUPER_ADMIN_ONLY)),
 
-            self::Publisher => [
+            // News, pages, events, media, social, newsletter and advisories (PLAN.md §7).
+            self::CommunicationsEditor => [
                 ...$staff,
                 'posts.view', 'posts.create', 'posts.update', 'posts.translate', 'posts.review',
-                'posts.publish', 'posts.feature', 'posts.delete', 'social.share',
+                'posts.publish', 'posts.feature', 'posts.delete', 'social.view', 'social.manage', 'social.share',
                 'pages.view', 'pages.create', 'pages.update', 'pages.translate', 'pages.publish', 'pages.delete',
                 'homepage.manage', 'menus.manage', 'taxonomies.manage', 'redirects.manage', 'forms.manage',
                 'inbox.view', 'inbox.reply', 'inbox.assign',
-                'media.view', 'media.upload', 'media.update',
+                'media.view', 'media.upload', 'media.update', 'media.delete',
                 'galleries.manage', 'videos.manage',
                 'leaders.view', 'leaders.manage', 'offices.view', 'offices.manage',
                 'pillars.view', 'pillars.manage', 'events.view', 'events.manage', 'events.registrations',
-                'documents.view', 'documents.manage', 'projects.view', 'projects.manage',
-                'translations.view', 'analytics.view',
+                'documents.view', 'documents.manage', 'projects.view',
+                'press_kit.manage', 'media_contacts.manage',
+                'campaigns.view', 'campaigns.manage', 'campaigns.send', 'subscribers.view', 'subscribers.manage',
+                'advisories.manage', 'translations.view', 'analytics.view',
             ],
 
             self::Editor => [
@@ -111,32 +122,55 @@ enum SystemRole: string
                 ),
             ],
 
-            self::MediaManager => [
+            // Their services' catalogue entries and status components.
+            self::ServiceOwner => [
                 ...$staff,
-                'media.view', 'media.upload', 'media.update', 'media.delete',
-                'galleries.manage', 'videos.manage', 'social.view', 'social.manage',
+                'services.view', 'services.manage', 'status.view', 'status.manage', 'tickets.view', 'documents.view',
             ],
 
-            self::CommunicationsOfficer => [
+            // Tickets and messages: view, reply, assign within their scope.
+            self::ServiceDeskAgent => [
                 ...$staff,
-                'posts.view', 'posts.create', 'posts.update', 'social.share',
-                'press_kit.manage', 'media_contacts.manage', 'forms.manage', 'inbox.view', 'inbox.reply',
-                'campaigns.view', 'campaigns.manage', 'campaigns.send',
-                'subscribers.view', 'subscribers.manage',
-                'media.view', 'media.upload', 'analytics.view',
+                'tickets.view', 'tickets.reply', 'tickets.assign', 'inbox.view', 'inbox.reply', 'inbox.assign',
+                'services.view', 'status.view',
             ],
 
-            self::MembershipOfficer => [
+            // Startups, programmes, applications and challenges; mentors and tech volunteers.
+            self::InnovationOfficer => [
                 ...$staff,
-                'volunteers.view', 'volunteers.manage', 'campaigns.send', 'events.view', 'events.registrations',
+                'startups.view', 'startups.manage', 'programmes.view', 'programmes.manage',
+                'applications.view', 'applications.review', 'applications.decide',
+                'challenges.view', 'challenges.manage', 'volunteers.view', 'volunteers.manage',
+                'events.view', 'events.registrations', 'campaigns.send',
             ],
 
-            self::SupportAgent => [...$staff, 'inbox.view', 'inbox.reply', 'inbox.assign'],
+            // Only their assigned submissions and scores.
+            self::Judge => [...$staff, 'judging.score'],
+
+            self::ProjectManager => [...$staff, 'projects.view', 'projects.manage', 'documents.view'],
+
+            self::DataSteward => [...$staff, 'datasets.view', 'datasets.manage', 'datasets.publish', 'projects.view'],
+
+            self::AcademyCoordinator => [
+                ...$staff,
+                'courses.view', 'courses.manage', 'cohorts.view', 'cohorts.manage', 'cohorts.attendance',
+                'certificates.issue', 'certificates.revoke', 'events.view', 'events.registrations',
+            ],
+
+            // Attendance for their cohorts.
+            self::Instructor => [...$staff, 'courses.view', 'cohorts.view', 'cohorts.attendance'],
+
+            self::ProcurementOfficer => [...$staff, 'opportunities.view', 'opportunities.manage', 'documents.view', 'documents.manage'],
+
+            // Reads everything in their directorate and approves its publications.
+            self::DirectorateHead => [
+                ...$staff,
+                'posts.view', 'posts.review', 'posts.publish', 'pages.view', 'events.view', 'documents.view',
+                'projects.view', 'services.view', 'status.view', 'tickets.view', 'inbox.view', 'volunteers.view',
+                'analytics.view',
+            ],
 
             self::Analyst => [...$staff, 'analytics.view', 'analytics.export'],
-
-            self::OfficeHead => [...$staff, 'posts.view', 'events.view', 'documents.view', 'inbox.view'],
-
         };
 
         return array_values(array_unique($permissions));

@@ -179,7 +179,7 @@ it('runs from the command line and on a schedule', function () {
 
 it('lets admins manage sources and import now, and keeps sources from publishers', function () {
     fakeChannels();
-    $this->actingAs(staff(SystemRole::Publisher))->get('/admin/content-sources')->assertForbidden();
+    $this->actingAs(staff(SystemRole::CommunicationsEditor))->get('/admin/content-sources')->assertForbidden();
 
     $this->actingAs(staff(SystemRole::Admin));
     $this->get('/admin/content-sources')->assertOk()->assertSee('Harari Government Communication Affairs Office');

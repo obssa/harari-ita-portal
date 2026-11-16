@@ -24,7 +24,7 @@ use function Pest\Livewire\livewire;
  */
 function shareablePost(array $publish = ['en', 'am']): Post
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => [
         'en' => ['title' => 'Sample council session', 'excerpt' => 'Sample summary of the session.'],
         'am' => ['title' => 'የናሙና የምክር ቤት ጉባኤ', 'excerpt' => 'የናሙና ማጠቃለያ።'],
@@ -62,7 +62,7 @@ it('shares a published post to the Facebook page and the Telegram channel with i
         'api.telegram.org/*' => Http::response(['ok' => true, 'result' => ['message_id' => 77]]),
     ]);
 
-    $count = app(SharePost::class)->share($post, [$page->id, $channel->id], 'am', null, staff(SystemRole::Publisher));
+    $count = app(SharePost::class)->share($post, [$page->id, $channel->id], 'am', null, staff(SystemRole::CommunicationsEditor));
 
     $link = route('news.show', ['locale' => 'am', 'slug' => (string) $post->translation('am')?->slug]);
     expect($count)->toBe(2);
@@ -86,7 +86,7 @@ it('keeps each account\'s outcome, so a refused page does not stop the channel',
         'api.telegram.org/*' => Http::response(['ok' => true, 'result' => ['message_id' => 78]]),
     ]);
 
-    app(SharePost::class)->share(shareablePost(), [$page->id, $channel->id], 'en', 'Sample own words', staff(SystemRole::Publisher));
+    app(SharePost::class)->share(shareablePost(), [$page->id, $channel->id], 'en', 'Sample own words', staff(SystemRole::CommunicationsEditor));
 
     $failed = SocialShare::query()->where('platform', 'facebook')->sole();
     expect($failed->status)->toBe(SocialShare::FAILED)
@@ -100,9 +100,9 @@ it('shares only live languages, to chosen accounts, by staff allowed to share', 
     $post = shareablePost(['en']);
     Http::fake();
 
-    expect(fn () => app(SharePost::class)->share($post, [$page->id], 'om', null, staff(SystemRole::Publisher)))
+    expect(fn () => app(SharePost::class)->share($post, [$page->id], 'om', null, staff(SystemRole::CommunicationsEditor)))
         ->toThrow(ValidationException::class)
-        ->and(fn () => app(SharePost::class)->share($post, [], 'en', null, staff(SystemRole::Publisher)))
+        ->and(fn () => app(SharePost::class)->share($post, [], 'en', null, staff(SystemRole::CommunicationsEditor)))
         ->toThrow(ValidationException::class)
         ->and(fn () => app(SharePost::class)->share($post, [$page->id], 'en', null, staff(SystemRole::Editor)))
         ->toThrow(HttpException::class);
@@ -118,7 +118,7 @@ it('offers "Share" on the post page and lists the shares there', function () {
         'graph.facebook.com/*' => Http::response(['id' => '1234567890_556']),
         'api.telegram.org/*' => Http::response(['ok' => true, 'result' => ['message_id' => 79]]),
     ]);
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(EditPost::class, ['record' => $post->getRouteKey()])
         ->assertActionVisible('share')

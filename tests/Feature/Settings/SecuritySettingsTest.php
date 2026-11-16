@@ -19,12 +19,12 @@ it('shows the security page to Super Admins only', function (SystemRole $role, i
 })->with([
     'super admin' => [SystemRole::SuperAdmin, 200],
     'admin' => [SystemRole::Admin, 403],
-    'publisher' => [SystemRole::Publisher, 403],
+    'publisher' => [SystemRole::CommunicationsEditor, 403],
     'editor' => [SystemRole::Editor, 403],
 ]);
 
 it('lets a Super Admin make two-step sign-in compulsory and optional again, with an audit entry', function () {
-    $publisher = staff(SystemRole::Publisher, mfa: false);
+    $publisher = staff(SystemRole::CommunicationsEditor, mfa: false);
     $this->actingAs(staff(SystemRole::SuperAdmin));
 
     livewire(ManageSecurity::class)
@@ -50,7 +50,7 @@ it('lets a Super Admin make two-step sign-in compulsory and optional again, with
 
 it('counts people in the covered roles who have not set up the app', function () {
     staff(SystemRole::Admin, mfa: false);
-    staff(SystemRole::Publisher, mfa: true);
+    staff(SystemRole::CommunicationsEditor, mfa: true);
     staff(SystemRole::Editor, mfa: false);
 
     expect(ManageSecurity::coveredWithoutApp())->toBe(1);

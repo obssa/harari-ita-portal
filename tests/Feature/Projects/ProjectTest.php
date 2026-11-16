@@ -34,7 +34,7 @@ function projectSector(string $name): Category
  */
 function makeProject(array $translations, array $data = []): Project
 {
-    return app(SaveProject::class)->handle(new Project, ['translations' => $translations, ...$data], staff(SystemRole::Publisher));
+    return app(SaveProject::class)->handle(new Project, ['translations' => $translations, ...$data], staff(SystemRole::ProjectManager));
 }
 
 /**
@@ -43,7 +43,7 @@ function makeProject(array $translations, array $data = []): Project
  */
 function makeStatistic(array $translations, float|int|string $value, array $data = []): Statistic
 {
-    return app(SaveStatistic::class)->handle(new Statistic, ['translations' => $translations, 'value' => $value, ...$data], staff(SystemRole::Publisher));
+    return app(SaveStatistic::class)->handle(new Statistic, ['translations' => $translations, 'value' => $value, ...$data], staff(SystemRole::ProjectManager));
 }
 
 it('saves projects with status, progress, dates, budget and a map pin, and checks them', function () {
@@ -77,7 +77,7 @@ it('saves statistics with a label, unit and source per language and shows the nu
         ->and(makeStatistic(['en' => ['label' => 'Sample share']], 12.5)->formatted())->toBe('12.5')
         ->and($statistic->translations()->count())->toBe(2);
 
-    app(SaveStatistic::class)->handle($statistic, ['value' => 3, 'translations' => ['en' => ['label' => 'Sample trees planted'], 'am' => ['label' => '']]], staff(SystemRole::Publisher));
+    app(SaveStatistic::class)->handle($statistic, ['value' => 3, 'translations' => ['en' => ['label' => 'Sample trees planted'], 'am' => ['label' => '']]], staff(SystemRole::ProjectManager));
     expect($statistic->refresh()->translations()->count())->toBe(1);
 
     expect(fn () => makeStatistic(['en' => ['label' => 'Sample']], 'many'))->toThrow(ValidationException::class)
@@ -106,7 +106,7 @@ it('shows a project with its progress, numbers, photos, map and the budget only 
     $album = app(SaveGallery::class)->handle(new Gallery, [
         'translations' => ['en' => ['title' => 'Sample site visit', 'published' => true]],
         'items' => [['media_id' => $photo->id]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
     $project = makeProject(['en' => ['title' => 'Sample school building', 'summary' => 'Sample summary', 'published' => true]], [
         'status' => 'ongoing', 'progress' => 75, 'budget' => 2500000, 'budget_public' => true, 'gallery_id' => $album->id,
         'latitude' => '9.31', 'longitude' => '42.12', 'starts_on' => '2026-01-15',
@@ -124,7 +124,7 @@ it('shows a project with its progress, numbers, photos, map and the budget only 
         ->assertSee('srcdoc=', escape: false)->assertDontSee('src="https://www.openstreetmap.org', escape: false)
         ->assertSee('"@type":"Project"', escape: false);
 
-    app(SaveProject::class)->handle($project, ['status' => 'ongoing', 'budget' => 2500000, 'budget_public' => false, 'translations' => ['en' => ['title' => 'Sample school building', 'published' => true]]], staff(SystemRole::Publisher));
+    app(SaveProject::class)->handle($project, ['status' => 'ongoing', 'budget' => 2500000, 'budget_public' => false, 'translations' => ['en' => ['title' => 'Sample school building', 'published' => true]]], staff(SystemRole::ProjectManager));
     $this->get('/en/projects/sample-school-building')->assertDontSee('2,500,000');
 });
 

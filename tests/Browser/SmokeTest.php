@@ -47,7 +47,7 @@ it('sends a message through the contact form', function () {
 });
 
 it('publishes a post from the admin and shows it on the site', function () {
-    $publisher = staff(SystemRole::Publisher, mfa: false, attributes: ['locale' => 'en']);
+    $publisher = staff(SystemRole::CommunicationsEditor, mfa: false, attributes: ['locale' => 'en']);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => [
         'en' => ['title' => 'Sample story to publish', 'summary' => 'Published by the browser test.'],
     ]], $publisher);

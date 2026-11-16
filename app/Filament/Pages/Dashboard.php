@@ -18,7 +18,7 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\View\View;
 
 /**
- * The staff dashboard (PLAN.md §7, ADR-0021): range, language and office
+ * The staff dashboard (PLAN.md §6, ADR-0021): range, language and directorate
  * filters on top, then the person's own widget layout, which they can
  * change (add, remove, reorder, resize) or reset to their role's default.
  */

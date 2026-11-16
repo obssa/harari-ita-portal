@@ -35,13 +35,13 @@ use function Pest\Livewire\livewire;
 
 function volunteerWoreda(string $name): Office
 {
-    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
+    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::CommunicationsEditor));
 }
 
 function coordinatorFor(Office $office): User
 {
-    $officer = staff(SystemRole::MembershipOfficer);
-    $officer->assignScopedRole(SystemRole::MembershipOfficer, ScopeType::Office, $office->id);
+    $officer = staff(SystemRole::InnovationOfficer);
+    $officer->assignScopedRole(SystemRole::InnovationOfficer, ScopeType::Office, $office->id);
 
     return $officer->refresh();
 }
@@ -122,7 +122,7 @@ it('plans tasks at events and on their own, counts the hours given, and makes a 
     $event = app(SaveEvent::class)->handle(new Event, [
         'starts_at' => CarbonImmutable::now()->addDays(4)->setTime(9, 0)->toDateTimeString(),
         'translations' => ['en' => ['title' => 'Sample volunteer forum', 'venue' => 'Sample hall', 'published' => true]],
-    ], staff(SystemRole::Publisher));
+    ], staff(SystemRole::CommunicationsEditor));
 
     $atEvent = app(ManageVolunteer::class)->saveAssignment($volunteer, null, ['event_id' => $event->id, 'status' => 'planned'], $coordinator);
     expect($atEvent->task)->toBe('Sample volunteer forum')

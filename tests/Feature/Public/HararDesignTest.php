@@ -33,7 +33,7 @@ it('opens the homepage on Harar Gate and shows Harar with credited photos', func
 });
 
 it('gives a story without a photo the party placeholder and keeps every card the same shape', function () {
-    $publisher = staff(SystemRole::Publisher, mfa: false);
+    $publisher = staff(SystemRole::CommunicationsEditor, mfa: false);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'speech', 'translations' => ['en' => ['title' => 'Sample speech without a photo']]], $publisher);
     app(ContentWorkflow::class)->apply($post, 'en', Transition::Publish, $publisher);
 

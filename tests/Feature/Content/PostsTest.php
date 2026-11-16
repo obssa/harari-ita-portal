@@ -99,7 +99,7 @@ it('lets only publishers publish, and stamps the publication time', function () 
     expect(fn () => savePost($author, ['translations' => ['en' => ['title' => 'Draft news', 'status' => 'published']]]))
         ->toThrow(ValidationException::class);
 
-    $post = savePost(staff(SystemRole::Publisher), ['translations' => ['en' => ['title' => 'Live news', 'status' => 'published']]]);
+    $post = savePost(staff(SystemRole::CommunicationsEditor), ['translations' => ['en' => ['title' => 'Live news', 'status' => 'published']]]);
     $translation = $post->translation('en');
 
     expect($translation?->status)->toBe(ContentStatus::Published)
@@ -110,7 +110,7 @@ it('lets only publishers publish, and stamps the publication time', function () 
 });
 
 it('keeps a published language as it is when a non-publisher edits the text', function () {
-    $post = savePost(staff(SystemRole::Publisher), ['translations' => ['en' => ['title' => 'Live news', 'status' => 'published']]]);
+    $post = savePost(staff(SystemRole::CommunicationsEditor), ['translations' => ['en' => ['title' => 'Live news', 'status' => 'published']]]);
 
     $post = savePost(staff(SystemRole::Editor), ['translations' => ['en' => ['title' => 'Live news, corrected', 'status' => 'published']]], $post);
 
@@ -136,7 +136,7 @@ it('lets translators change the text but not the post itself', function () {
 });
 
 it('needs alt text on the featured image for every live language', function () {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $media = photo(['en' => 'Council members']);
 
     expect(fn () => savePost($publisher, [
@@ -205,7 +205,7 @@ it('counts Ethiopic and Latin words', function () {
 });
 
 it('keeps versions only when the text changed, and restores one without touching status or address', function () {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $this->actingAs($publisher);
     $post = savePost($publisher, ['translations' => ['en' => ['title' => 'First title', 'body' => body('Old text'), 'status' => 'published']]]);
     $post = savePost($publisher, ['translations' => ['en' => ['title' => 'First title', 'body' => body('Old text'), 'status' => 'published']]], $post);
@@ -239,7 +239,7 @@ it('compares texts paragraph by paragraph', function () {
 });
 
 it('duplicates a post as a draft in every language', function () {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $this->actingAs($publisher);
     $post = savePost($publisher, ['translations' => [
         'en' => ['title' => 'Harvest festival', 'status' => 'published'],
@@ -266,6 +266,6 @@ it('applies the post permissions of each role', function () {
         ->and(staff(SystemRole::Translator)->can('update', $other))->toBeTrue()
         ->and(staff(SystemRole::Translator)->can('updateStructure', $other))->toBeFalse()
         ->and(staff(SystemRole::Editor)->can('delete', $other))->toBeFalse()
-        ->and(staff(SystemRole::Publisher)->can('delete', $other))->toBeTrue()
-        ->and(staff(SystemRole::MembershipOfficer)->can('viewAny', Post::class))->toBeFalse();
+        ->and(staff(SystemRole::CommunicationsEditor)->can('delete', $other))->toBeTrue()
+        ->and(staff(SystemRole::InnovationOfficer)->can('viewAny', Post::class))->toBeFalse();
 });

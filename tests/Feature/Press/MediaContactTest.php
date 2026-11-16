@@ -28,12 +28,12 @@ function mediaContact(array $data = [], ?User $actor = null): MediaContact
     return app(SaveMediaContact::class)->handle(new MediaContact, [
         'name' => 'Sample Journalist', 'outlet' => 'Sample Radio', 'position' => 'Editor', 'email' => 'desk@example.org', 'languages' => ['am', 'en'],
         ...$data,
-    ], $actor ?? staff(SystemRole::CommunicationsOfficer));
+    ], $actor ?? staff(SystemRole::CommunicationsEditor));
 }
 
 function pressRelease(array $publish = ['en', 'am'], string $type = 'press_release'): Post
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['type' => $type, 'translations' => [
         'en' => ['title' => 'Sample press release', 'excerpt' => 'Sample summary of the release.'],
         'am' => ['title' => 'የናሙና የፕሬስ መግለጫ', 'excerpt' => 'የናሙና ማጠቃለያ።'],
@@ -57,7 +57,7 @@ it('keeps media contacts with their languages, one per email address', function 
         ->and(fn () => mediaContact(['email' => 'other@example.org', 'languages' => []]))->toThrow(ValidationException::class)
         ->and(fn () => mediaContact(['email' => 'third@example.org'], staff(SystemRole::Editor)))->toThrow(HttpException::class);
 
-    $this->actingAs(staff(SystemRole::CommunicationsOfficer));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $this->get(MediaContactResource::getUrl('index'))->assertOk()->assertSee('Sample Radio')->assertSee('desk@example.org');
     livewire(EditMediaContact::class, ['record' => $contact->getRouteKey()])->assertSet('data.email', 'desk@example.org')
         ->fillForm(['outlet' => 'Sample Television'])->call('save')->assertHasNoFormErrors();
@@ -72,7 +72,7 @@ it('sends a published press release to each contact in the first of their langua
     $gone->forceFill(['opted_out_at' => now()])->save();
     $post = pressRelease();
 
-    $count = app(DistributePressRelease::class)->send($post, null, staff(SystemRole::CommunicationsOfficer));
+    $count = app(DistributePressRelease::class)->send($post, null, staff(SystemRole::CommunicationsEditor));
 
     expect($count)->toBe(2)
         ->and(PressDistribution::query()->pluck('locale', 'media_contact_id')->all())->toEqual([$amharic->id => 'am', $oromo->id => 'en'])
@@ -84,7 +84,7 @@ it('sends a published press release to each contact in the first of their langua
     $mail = new PressReleaseMail($post->translations->firstWhere('locale', 'en'), $oromo);
     $mail->assertSeeInHtml('Sample summary of the release.')->assertSeeInHtml(route('news.show', ['locale' => 'en', 'slug' => 'sample-press-release']), false);
 
-    expect(fn () => app(DistributePressRelease::class)->send(pressRelease([], 'press_release'), null, staff(SystemRole::CommunicationsOfficer)))->toThrow(ValidationException::class)
+    expect(fn () => app(DistributePressRelease::class)->send(pressRelease([], 'press_release'), null, staff(SystemRole::CommunicationsEditor)))->toThrow(ValidationException::class)
         ->and(DistributePressRelease::canSend(pressRelease(['en'], 'news')))->toBeFalse();
 });
 
@@ -99,14 +99,14 @@ it('lets a journalist opt out by the link in the email', function () {
 it('sends from the post page and shows where the release went', function () {
     mediaContact();
     $post = pressRelease();
-    $this->actingAs(staff(SystemRole::CommunicationsOfficer));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(EditPost::class, ['record' => $post->getRouteKey()])
         ->assertActionVisible('sendToMedia')
         ->callAction('sendToMedia', ['contacts' => []])->assertHasNoActionErrors();
     expect(PressDistribution::query()->count())->toBe(1);
 
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::Editor));
     livewire(EditPost::class, ['record' => $post->getRouteKey()])->assertActionHidden('sendToMedia');
 });
 

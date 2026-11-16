@@ -146,7 +146,7 @@ it('emails a scheduled report on its day, a copy to each recipient', function ()
 });
 
 it('keeps exports and scheduled reports to staff who may export', function () {
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(TrafficReports::class)
         ->assertOk()

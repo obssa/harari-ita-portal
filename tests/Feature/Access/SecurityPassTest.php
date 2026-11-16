@@ -82,7 +82,7 @@ it('names browsers and systems roughly', function (?string $agent, string $name)
 
 it('warns social media managers as a page token nears its end, once per stage', function () {
     Notification::fake();
-    $manager = staff(SystemRole::MediaManager);
+    $manager = staff(SystemRole::CommunicationsEditor);
     $source = facebookPage();
     $expires = now()->addDays(10)->getTimestamp();
     Http::fake(['graph.facebook.com/*' => function () use (&$expires) {
@@ -102,7 +102,7 @@ it('warns social media managers as a page token nears its end, once per stage', 
 
 it('warns when Meta no longer accepts a token, and stays quiet for one that never expires', function () {
     Notification::fake();
-    $manager = staff(SystemRole::MediaManager);
+    $manager = staff(SystemRole::CommunicationsEditor);
     $source = facebookPage();
     $answer = ['error' => ['message' => 'Invalid OAuth access token.']];
     $status = 400;
@@ -129,7 +129,7 @@ it('warns when Meta no longer accepts a token, and stays quiet for one that neve
 it('checks a new page token as soon as it is saved', function () {
     Http::fake(['graph.facebook.com/*' => Http::response(['data' => ['is_valid' => true, 'expires_at' => now()->addDays(60)->getTimestamp()]])]);
     $source = facebookPage(['token_warned' => 0]);
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(ManageSocialSources::class)
         ->callAction(TestAction::make('token')->table($source), data: ['token' => 'new-sample-token'])

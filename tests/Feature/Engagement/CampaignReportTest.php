@@ -88,7 +88,7 @@ it('reports what happened, by language, without any address', function () {
     $csv = (string) stream_get_contents($out);
     expect($csv)->toContain(__('campaigns.report.type.subscriber'))->not->toContain('one@example.org')->not->toContain($first->token);
 
-    $this->actingAs(staff(SystemRole::CommunicationsOfficer));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $this->get(CampaignResource::getUrl('view', ['record' => $campaign]))->assertOk()->assertSee(__('campaigns.report.title'))->assertSee('1 (50%)');
     livewire(ViewCampaign::class, ['record' => $campaign->getRouteKey()])->callAction('report')->assertFileDownloaded("campaign-{$campaign->id}-report.csv");
 });
@@ -96,7 +96,7 @@ it('reports what happened, by language, without any address', function () {
 it('shows campaign results and subscribers on the dashboard', function () {
     reportSubscriber('one@example.org');
     sentCampaign(staff(SystemRole::Admin));
-    $this->actingAs(staff(SystemRole::CommunicationsOfficer));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(CampaignResults::class, ['pageFilters' => ['range' => '30']])->assertSee('Sample report campaign');
     livewire(SubscriberGrowth::class, ['pageFilters' => ['range' => '30']])

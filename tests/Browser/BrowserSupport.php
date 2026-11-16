@@ -21,7 +21,7 @@ use Carbon\CarbonImmutable;
 
 function browserContent(): void
 {
-    $publisher = staff(SystemRole::Publisher, mfa: false);
+    $publisher = staff(SystemRole::CommunicationsEditor, mfa: false);
 
     $post = app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => [
         'en' => ['title' => 'Sample browser story', 'summary' => 'A sample story for the browser tests.'],

@@ -4,7 +4,7 @@ namespace App\Domain\Access\Support;
 
 /**
  * The single list of permissions in the portal, named `module.action`
- * (PLAN.md §8). Modules for later phases are listed now so the default
+ * (PLAN.md §7). Modules for later phases are listed now so the default
  * roles are complete from day one; their screens arrive with their phase.
  */
 final class PermissionRegistry
@@ -46,6 +46,21 @@ final class PermissionRegistry
         'volunteers' => ['view', 'manage'],
         'analytics' => ['view', 'export'],
         'privacy' => ['manage'],
+        // The Agency's modules (PLAN.md §5); their screens arrive with their phase.
+        'services' => ['view', 'manage'],
+        'tickets' => ['view', 'reply', 'assign', 'manage'],
+        'status' => ['view', 'manage'],
+        'startups' => ['view', 'manage'],
+        'programmes' => ['view', 'manage'],
+        'applications' => ['view', 'review', 'decide'],
+        'challenges' => ['view', 'manage'],
+        'judging' => ['score'],
+        'datasets' => ['view', 'manage', 'publish'],
+        'courses' => ['view', 'manage'],
+        'cohorts' => ['view', 'manage', 'attendance'],
+        'certificates' => ['issue', 'revoke'],
+        'opportunities' => ['view', 'manage'],
+        'advisories' => ['manage'],
     ];
 
     /**

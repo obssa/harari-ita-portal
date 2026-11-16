@@ -24,7 +24,7 @@ use function Pest\Livewire\livewire;
  */
 function homePost(array $translations, array $data = []): Post
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'news', ...$data, 'translations' => $translations], $publisher);
     foreach (array_keys($translations) as $locale) {
         app(ContentWorkflow::class)->apply($post, $locale, Transition::Publish, $publisher);
@@ -53,7 +53,7 @@ function arrangeHomepage(array $changes, ?array $order = null): void
         $states = [...$first, ...array_diff_key($states, $first)];
     }
 
-    app(SaveHomepage::class)->handle(array_values($states), staff(SystemRole::Publisher));
+    app(SaveHomepage::class)->handle(array_values($states), staff(SystemRole::CommunicationsEditor));
 }
 
 it('creates every section once with sensible defaults', function () {
@@ -125,8 +125,8 @@ it('reorders, switches off and limits sections, and hides them per language', fu
 it('shows the ticker, leadership message, counters, pillars and partner links once set up', function () {
     $news = homePost(['en' => ['title' => 'Sample breaking item']]);
     $message = homePost(['en' => ['title' => 'Sample full message']], ['type' => 'speech']);
-    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Chair', 'position' => 'Sample head', 'published' => true]]], staff(SystemRole::Publisher));
-    app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample Youth Pillar', 'published' => true]]], staff(SystemRole::Publisher));
+    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Chair', 'position' => 'Sample head', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
+    app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample Youth Pillar', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
 
     arrangeHomepage([
         'ticker' => ['enabled' => true, 'curated_ids' => [$news->id]],
@@ -154,7 +154,7 @@ it('shows the ticker, leadership message, counters, pillars and partner links on
 it('lets publishers arrange the homepage from the admin and keeps it from editors', function () {
     $this->actingAs(staff(SystemRole::Editor))->get('/admin/homepage')->assertForbidden();
 
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $this->get('/admin/homepage')->assertOk()->assertSee(__('homepage.section.hero', [], 'en'));
 
     $component = livewire(ManageHomepage::class);

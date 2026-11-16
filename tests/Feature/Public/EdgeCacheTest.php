@@ -29,7 +29,7 @@ function useCloudflare(): void
 it('asks Cloudflare to drop the cached pages once for a burst of public changes', function () {
     useCloudflare();
     Queue::fake();
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
 
     app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => ['en' => ['title' => 'Sample cached story', 'published' => true]]], $publisher);
     $site = app(SiteSettings::class);
@@ -41,7 +41,7 @@ it('asks Cloudflare to drop the cached pages once for a burst of public changes'
 
 it('asks for nothing without Cloudflare, or when only private records change', function () {
     Queue::fake();
-    app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => ['en' => ['title' => 'Sample uncached story']]], staff(SystemRole::Publisher));
+    app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => ['en' => ['title' => 'Sample uncached story']]], staff(SystemRole::CommunicationsEditor));
     Queue::assertNotPushed(PurgeEdgeCache::class);
 
     useCloudflare();

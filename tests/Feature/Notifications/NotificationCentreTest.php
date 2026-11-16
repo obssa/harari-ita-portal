@@ -92,7 +92,7 @@ it('does not act on another person\'s notice', function () {
 });
 
 it('saves how the person wants each kind of notice', function () {
-    $agent = staff(SystemRole::SupportAgent);
+    $agent = staff(SystemRole::ServiceDeskAgent);
     $this->actingAs($agent);
 
     livewire(NotificationCentre::class)

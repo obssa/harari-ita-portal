@@ -90,7 +90,7 @@ it('lets those who manage social media add accounts and moderate posts, and keep
     $this->actingAs(staff(SystemRole::Author))->get('/admin/social-sources')->assertForbidden();
     $this->actingAs(staff(SystemRole::Author))->get('/admin/social-posts')->assertForbidden();
 
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     livewire(ManageSocialSources::class)
         ->callAction('create', data: ['platform' => 'telegram', 'handle' => 'not valid!', 'name' => 'Sample'])
         ->assertHasActionErrors(['handle']);

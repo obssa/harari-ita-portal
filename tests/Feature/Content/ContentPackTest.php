@@ -233,7 +233,7 @@ it('waits for a Super Admin and a pack file without failing a deploy', function 
 });
 
 it('accepts only web addresses as a leader source', function () {
-    $publisher = staff(SystemRole::Publisher, mfa: false);
+    $publisher = staff(SystemRole::CommunicationsEditor, mfa: false);
     $data = ['body' => 'directors', 'source_url' => 'javascript:alert(1)', 'translations' => ['en' => ['name' => 'Sample Person']]];
 
     expect(fn () => app(SaveLeader::class)->handle(new Leader, $data, $publisher))->toThrow(ValidationException::class);

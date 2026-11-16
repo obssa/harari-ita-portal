@@ -27,7 +27,7 @@ function galleryPicture(string $name): Media
     $image = imagecreatetruecolor(900, 600);
     imagefill($image, 0, 0, imagecolorallocate($image, 5, 37, 59));
     imagejpeg($image, $path, 80);
-    $media = app(UploadMedia::class)->handle($path, "{$name}.jpg", staff(SystemRole::Publisher, mfa: false));
+    $media = app(UploadMedia::class)->handle($path, "{$name}.jpg", staff(SystemRole::CommunicationsEditor, mfa: false));
     $media->forceFill(['alt' => ['en' => "Sample {$name} photo"]])->save();
 
     return $media;
@@ -104,7 +104,7 @@ it('shows a gallery of photos on a leader\'s profile, in the chosen order, each 
         'body' => 'management',
         'photo_ids' => [$second->id, $first->id, $second->id, 999999],
         'translations' => ['en' => ['name' => 'Sample Gallery Leader', 'published' => true]],
-    ], staff(SystemRole::Publisher, mfa: false));
+    ], staff(SystemRole::CommunicationsEditor, mfa: false));
 
     expect($leader->photo_ids)->toBe([$second->id, $first->id])
         ->and($leader->photos()->pluck('id')->all())->toBe([$second->id, $first->id]);

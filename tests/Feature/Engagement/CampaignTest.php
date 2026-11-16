@@ -82,7 +82,7 @@ function capturingGateway(): object
 beforeEach(fn () => Mail::fake());
 
 it('writes drafts and checks the channel, the audience and the SMS length', function () {
-    $officer = staff(SystemRole::CommunicationsOfficer);
+    $officer = staff(SystemRole::CommunicationsEditor);
     $campaign = emailCampaign($officer);
     expect($campaign->status)->toBe(CampaignStatus::Draft)->and($campaign->languages())->toBe(['en', 'am']);
 
@@ -112,8 +112,8 @@ it('reaches confirmed subscribers by topic and language, each address once', fun
 });
 
 it('reaches volunteers only for staff who may see them, over their woredas, without those who opted out', function () {
-    $north = app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample North', 'published' => true]]], staff(SystemRole::Publisher));
-    $south = app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample South', 'published' => true]]], staff(SystemRole::Publisher));
+    $north = app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample North', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
+    $south = app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample South', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
     $volunteer = function (Office $w, string $phone): Volunteer {
         $volunteer = app(SaveVolunteer::class)->signUp(['name' => 'Sample Volunteer', 'phone' => $phone, 'office_id' => $w->id, 'skills' => ['mentoring'],
             'availability' => ['weekends'], 'languages' => ['en'], 'consent' => '1', SpamGuard::STARTED => Crypt::encryptString((string) (time() - 10))], 'en');
@@ -126,15 +126,15 @@ it('reaches volunteers only for staff who may see them, over their woredas, with
     $out = $volunteer($north, '0911000013');
     $out->forceFill(['campaigns_opt_out_at' => now()])->save();
 
-    $officer = staff(SystemRole::MembershipOfficer);
-    $officer->assignScopedRole(SystemRole::MembershipOfficer, ScopeType::Office, $north->id);
+    $officer = staff(SystemRole::InnovationOfficer);
+    $officer->assignScopedRole(SystemRole::InnovationOfficer, ScopeType::Office, $north->id);
     $officer->givePermissionTo('campaigns.manage', 'campaigns.send');
     $sms = fn (User $actor, array $audience): Campaign => app(SaveCampaign::class)->handle(new Campaign, ['name' => 'x', 'channel' => 'sms', 'audience' => $audience,
         'content' => ['en' => ['text' => 'Sample meeting on Saturday']]], $actor);
 
     expect((new Audience($officer->refresh()))->count($sms($officer, ['type' => 'volunteers'])))->toBe(1)
         ->and((new Audience(staff(SystemRole::Admin)))->count($sms(staff(SystemRole::Admin), ['type' => 'volunteers', 'offices' => [$south->id]])))->toBe(1)
-        ->and((new Audience(staff(SystemRole::CommunicationsOfficer)))->allowed('volunteers'))->toBeFalse();
+        ->and((new Audience(staff(SystemRole::CommunicationsEditor)))->allowed('volunteers'))->toBeFalse();
 });
 
 it('sends an email campaign in each person\'s language with an unsubscribe link, skipping anyone who left meanwhile', function () {
@@ -206,7 +206,7 @@ it('schedules, starts on time, goes back to draft and stops', function () {
 });
 
 it('sends a test to the sender only and runs from the admin screens', function () {
-    $officer = staff(SystemRole::CommunicationsOfficer, attributes: ['email' => 'officer@example.org']);
+    $officer = staff(SystemRole::CommunicationsEditor, attributes: ['email' => 'officer@example.org']);
     campaignSubscriber('en', ['news'], 'one@example.org');
     $campaign = emailCampaign($officer);
     $this->actingAs($officer);

@@ -28,7 +28,7 @@ use function Pest\Livewire\livewire;
  */
 function dashboardPost(string $title, array $publish = ['en'], ?string $submit = null): Post
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => ['en' => ['title' => $title], 'am' => ['title' => $title.' (am)']]], $publisher);
     foreach ($publish as $locale) {
         app(ContentWorkflow::class)->apply($post, $locale, Transition::Publish, $publisher);
@@ -49,15 +49,15 @@ function layoutKeys(SystemRole $role): array
 }
 
 it('starts each role with the widgets it may see', function () {
-    expect(layoutKeys(SystemRole::Publisher))->toBe(['announcements', 'kpis', 'attention', 'quick', 'pipeline', 'coverage', 'translation_queue', 'search', 'traffic', 'top_pages', 'media'])
+    expect(layoutKeys(SystemRole::CommunicationsEditor))->toBe(['announcements', 'kpis', 'attention', 'quick', 'subscribers', 'campaigns', 'pipeline', 'coverage', 'translation_queue', 'search', 'traffic', 'top_pages', 'media'])
         ->and(layoutKeys(SystemRole::Admin))->toContain('queues', 'activity', 'media')
         ->and(layoutKeys(SystemRole::Author))->not->toContain('coverage', 'translation_queue', 'search', 'queues', 'activity')
-        ->and(layoutKeys(SystemRole::MediaManager))->toContain('media')->not->toContain('kpis');
+        ->and(layoutKeys(SystemRole::Editor))->toContain('media')->not->toContain('kpis', 'subscribers');
 });
 
 it('shows every staff role its dashboard', function (SystemRole $role) {
     $this->actingAs(staff($role))->get('/admin')->assertOk();
-})->with([SystemRole::SuperAdmin, SystemRole::Admin, SystemRole::Publisher, SystemRole::Editor, SystemRole::Author, SystemRole::Translator, SystemRole::Analyst, SystemRole::SupportAgent]);
+})->with([SystemRole::SuperAdmin, SystemRole::Admin, SystemRole::CommunicationsEditor, SystemRole::Editor, SystemRole::Author, SystemRole::Translator, SystemRole::Analyst, SystemRole::ServiceDeskAgent]);
 
 it('lets people save their own layout and keeps out widgets they may not see', function () {
     $author = staff(SystemRole::Author);
@@ -96,7 +96,7 @@ it('reads the range, language and office filters', function () {
 });
 
 it('counts published posts, reviews and missing translations', function () {
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     dashboardPost('Sample one');
     dashboardPost('Sample two', ['en', 'am']);
     dashboardPost('Sample three', [], submit: 'en');
@@ -106,7 +106,7 @@ it('counts published posts, reviews and missing translations', function () {
 });
 
 it('shows the editorial pipeline per language', function () {
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     dashboardPost('Sample pipeline', ['en']);
 
     $pipeline = livewire(EditorialPipeline::class, ['pageFilters' => []])->instance()->pipeline();
@@ -121,7 +121,7 @@ it('lists what needs attention only to those who can act on it', function () {
     $post = dashboardPost('Sample waiting', [], submit: 'en');
     PostTranslation::query()->where('post_id', $post->id)->where('locale', 'en')->update(['updated_at' => now()->subDays(2)]);
 
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     livewire(AttentionNeeded::class, ['pageFilters' => []])->assertSee(__('dashboard.attention.review_waiting'));
 
     $this->actingAs(staff(SystemRole::Author));

@@ -110,6 +110,6 @@ it('lets user managers restore deleted accounts but not other roles', function (
 
     expect($admin->can('restore', $deleted))->toBeTrue()
         ->and($admin->can('restoreAny', User::class))->toBeTrue()
-        ->and(staff(SystemRole::Publisher)->can('restore', $deleted))->toBeFalse()
+        ->and(staff(SystemRole::CommunicationsEditor)->can('restore', $deleted))->toBeFalse()
         ->and($admin->can('view', $deleted))->toBeTrue();
 });

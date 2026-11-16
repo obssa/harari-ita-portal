@@ -134,7 +134,7 @@ it('does not let anyone suspend themselves', function () {
 });
 
 it('resets two-factor login for a user who lost their phone', function () {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
 
     livewire(ListUsers::class)
         ->callAction(TestAction::make('resetMfa')->table($publisher));

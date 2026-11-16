@@ -17,9 +17,9 @@ it('lets editors open categories and tags, and keeps them from other staff', fun
     $this->get('/admin/tags')->assertStatus($status);
 })->with([
     'editor' => [SystemRole::Editor, 200],
-    'publisher' => [SystemRole::Publisher, 200],
+    'publisher' => [SystemRole::CommunicationsEditor, 200],
     'author (read only)' => [SystemRole::Author, 200],
-    'membership officer' => [SystemRole::MembershipOfficer, 403],
+    'membership officer' => [SystemRole::InnovationOfficer, 403],
 ]);
 
 it('creates a category in several languages with Latin slugs', function () {
@@ -65,7 +65,7 @@ it('refuses a slug already used in the same language', function () {
 });
 
 it('edits names, removes an emptied language, and nests categories', function () {
-    $this->actingAs(staff(SystemRole::Publisher));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $parent = new Category;
     $parent->save();
     $parent->putTranslation('en', ['name' => 'News']);

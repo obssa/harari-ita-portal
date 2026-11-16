@@ -10,7 +10,7 @@ function samplePerson(string $body, string $name, string $position, int $rank = 
 {
     return app(SaveLeader::class)->handle(new Leader, ['body' => $body, 'rank' => $rank, 'translations' => [
         'en' => ['name' => $name, 'position' => $position, 'summary' => 'Sample summary.', 'published' => true],
-    ]], staff(SystemRole::Publisher, mfa: false));
+    ]], staff(SystemRole::CommunicationsEditor, mfa: false));
 }
 
 it('lists management first, then the directors and the pillar leads, with the head of the Agency featured', function () {

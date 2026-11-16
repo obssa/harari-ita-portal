@@ -127,7 +127,7 @@ it('translates a post body word by word and keeps the review mark until it is ti
     expect($translated['content'][0]['content'][1])->toBe(['type' => 'text', 'text' => 'OM bold words', 'marks' => [['type' => 'bold']]])
         ->and($translated['content'][1])->toBe($body['content'][1]);
 
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $post = app(SavePost::class)->handle(new Post, ['type' => 'news', 'translations' => [
         'en' => ['title' => 'Sample source'],
         'om' => ['title' => 'OM Sample source', 'body' => $translated, 'machine_translated' => true],

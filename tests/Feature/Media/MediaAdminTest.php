@@ -32,19 +32,19 @@ function libraryFile(string $name = 'flag.jpg', ?User $uploader = null): Media
 it('opens the media library for roles that may see media, and refuses the others', function (SystemRole $role, int $status) {
     $this->actingAs(staff($role))->get('/admin/media')->assertStatus($status);
 })->with([
-    'media manager' => [SystemRole::MediaManager, 200],
+    'media manager' => [SystemRole::CommunicationsEditor, 200],
     'editor' => [SystemRole::Editor, 200],
     'author' => [SystemRole::Author, 200],
-    'communications officer' => [SystemRole::CommunicationsOfficer, 200],
+    'communications officer' => [SystemRole::CommunicationsEditor, 200],
     'translator' => [SystemRole::Translator, 403],
-    'membership officer' => [SystemRole::MembershipOfficer, 403],
+    'membership officer' => [SystemRole::InnovationOfficer, 403],
     'analyst' => [SystemRole::Analyst, 403],
 ]);
 
 it('follows the media permissions of each role', function () {
     $author = staff(SystemRole::Author);
     $editor = staff(SystemRole::Editor);
-    $manager = staff(SystemRole::MediaManager);
+    $manager = staff(SystemRole::CommunicationsEditor);
     $own = libraryFile('own.jpg', $author);
     $other = libraryFile('other.jpg', $manager);
 
@@ -60,7 +60,7 @@ it('follows the media permissions of each role', function () {
 });
 
 it('lists the library with filters for missing alt text and unused files', function () {
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $described = libraryFile('described.jpg');
     $described->update(['alt' => ['en' => 'A', 'am' => 'ሀ', 'om' => 'A']]);
     $bare = libraryFile('bare.jpg');
@@ -112,10 +112,10 @@ it('shows the upload button to roles that may upload', function (SystemRole $rol
     $this->actingAs(staff($role));
 
     livewire(ListMedia::class)->assertActionVisible('upload');
-})->with([SystemRole::Author, SystemRole::CommunicationsOfficer, SystemRole::Admin]);
+})->with([SystemRole::Author, SystemRole::CommunicationsEditor, SystemRole::Admin]);
 
 it('saves alt text per language, credit, tags and focal point, and audits the change', function () {
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $media = libraryFile();
 
     livewire(EditMedia::class, ['record' => $media->getRouteKey()])
@@ -141,7 +141,7 @@ it('saves alt text per language, credit, tags and focal point, and audits the ch
 });
 
 it('validates the focal point range', function () {
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
 
     livewire(EditMedia::class, ['record' => libraryFile()->getRouteKey()])
         ->fillForm(['focal_x' => 120, 'focal_y' => -1])
@@ -159,7 +159,7 @@ it('lets authors edit their own uploads only', function () {
 });
 
 it('records where files are used and keeps used files from being deleted', function () {
-    $manager = staff(SystemRole::MediaManager);
+    $manager = staff(SystemRole::CommunicationsEditor);
     $this->actingAs($manager);
     $media = libraryFile();
     $page = User::factory()->create();
@@ -196,7 +196,7 @@ it('syncs usage idempotently per place and forgets it for a removed model', func
 });
 
 it('deletes in bulk but keeps files that are in use', function () {
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $used = libraryFile('used.jpg');
     $free = libraryFile('free.jpg');
     app(SyncMediaUsage::class)->handle(User::factory()->create(), 'avatar', [$used->id]);
@@ -209,7 +209,7 @@ it('deletes in bulk but keeps files that are in use', function () {
 });
 
 it('moves and tags files in bulk', function () {
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     $folder = MediaFolder::query()->create(['name' => 'Archive']);
     $files = [libraryFile('a.jpg'), libraryFile('b.jpg')];
 
@@ -224,7 +224,7 @@ it('moves and tags files in bulk', function () {
 });
 
 it('shows storage against the quota and the work left', function () {
-    $this->actingAs(staff(SystemRole::MediaManager));
+    $this->actingAs(staff(SystemRole::CommunicationsEditor));
     libraryFile('a.jpg');
     libraryFile('b.jpg');
 

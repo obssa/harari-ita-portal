@@ -29,7 +29,7 @@ function documentFile(string $name = 'sample.pdf'): Media
  */
 function makeDocument(array $translations, DocumentType $type = DocumentType::Report, array $data = []): Document
 {
-    return app(SaveDocument::class)->handle(new Document, ['type' => $type->value, 'translations' => $translations, ...$data], staff(SystemRole::Publisher));
+    return app(SaveDocument::class)->handle(new Document, ['type' => $type->value, 'translations' => $translations, ...$data], staff(SystemRole::CommunicationsEditor));
 }
 
 it('keeps a file per language and the replaced files as earlier versions', function () {
@@ -42,7 +42,7 @@ it('keeps a file per language and the replaced files as earlier versions', funct
 
     app(SaveDocument::class)->handle($document, ['type' => 'report', 'year' => 2025, 'translations' => ['en' => [
         'title' => 'Sample annual report', 'file_id' => $second->id, 'version_note' => 'Corrected figures', 'published' => true,
-    ]]], staff(SystemRole::Publisher));
+    ]]], staff(SystemRole::CommunicationsEditor));
 
     $document->refresh();
     expect($document->translation('en')?->getAttribute('version'))->toBe(2)
@@ -51,7 +51,7 @@ it('keeps a file per language and the replaced files as earlier versions', funct
         ->and($document->versions()->first()?->media_id)->toBe($first->id)
         ->and($first->refresh()->isUsed())->toBeTrue();
 
-    app(SaveDocument::class)->restore($document, (int) $document->versions()->first()?->id, staff(SystemRole::Publisher));
+    app(SaveDocument::class)->restore($document, (int) $document->versions()->first()?->id, staff(SystemRole::CommunicationsEditor));
     $document->refresh();
     expect($document->translation('en')?->getAttribute('file_id'))->toBe($first->id)
         ->and($document->translation('en')?->getAttribute('version'))->toBe(3)
@@ -59,7 +59,7 @@ it('keeps a file per language and the replaced files as earlier versions', funct
 });
 
 it('checks the type, the year and that files are documents', function (array $data) {
-    expect(fn () => app(SaveDocument::class)->handle(new Document, $data, staff(SystemRole::Publisher)))->toThrow(ValidationException::class);
+    expect(fn () => app(SaveDocument::class)->handle(new Document, $data, staff(SystemRole::CommunicationsEditor)))->toThrow(ValidationException::class);
 })->with([
     'no type' => [['translations' => ['en' => ['title' => 'Sample']]]],
     'odd year' => [['type' => 'report', 'year' => 1800, 'translations' => ['en' => ['title' => 'Sample']]]],
@@ -75,7 +75,7 @@ it('keeps deadlines only for vacancies, tenders and notices', function () {
 });
 
 it('lists library documents with filters and keeps notices on their own page', function () {
-    $office = app(SaveOffice::class)->handle(new Office, ['type' => 'team', 'translations' => ['en' => ['name' => 'Sample sector office', 'published' => true]]], staff(SystemRole::Publisher));
+    $office = app(SaveOffice::class)->handle(new Office, ['type' => 'team', 'translations' => ['en' => ['name' => 'Sample sector office', 'published' => true]]], staff(SystemRole::CommunicationsEditor));
     makeDocument(['en' => ['title' => 'Sample budget report', 'published' => true]], data: ['year' => 2025, 'office_id' => $office->id]);
     makeDocument(['en' => ['title' => 'Sample land policy', 'published' => true]], DocumentType::Policy, ['year' => 2024]);
     makeDocument(['en' => ['title' => 'Sample draft bylaw']], DocumentType::Bylaw);
@@ -118,7 +118,7 @@ it('shows a document with its viewer, version, related documents and the file of
     app(SaveDocument::class)->handle($document, ['type' => 'programme', 'related' => [$related->id], 'translations' => [
         'am' => ['title' => 'የናሙና ፕሮግራም', 'file_id' => $amharic->id, 'version_note' => 'የተሻሻለ', 'published' => true],
         'en' => ['title' => 'Sample party programme', 'summary' => 'Sample summary', 'published' => true],
-    ]], staff(SystemRole::Publisher));
+    ]], staff(SystemRole::CommunicationsEditor));
 
     $this->get('/en/documents/sample-party-programme')->assertOk()
         ->assertSee('Sample summary')
@@ -137,7 +137,7 @@ it('counts downloads once an hour per visitor and leaves robots out', function (
     $current = documentFile('form-v2.pdf');
     $old = documentFile('form-v1.pdf');
     $document = makeDocument(['en' => ['title' => 'Sample membership form', 'file_id' => $old->id, 'published' => true]], DocumentType::Form);
-    app(SaveDocument::class)->handle($document, ['type' => 'form', 'translations' => ['en' => ['title' => 'Sample membership form', 'file_id' => $current->id, 'published' => true]]], staff(SystemRole::Publisher));
+    app(SaveDocument::class)->handle($document, ['type' => 'form', 'translations' => ['en' => ['title' => 'Sample membership form', 'file_id' => $current->id, 'published' => true]]], staff(SystemRole::CommunicationsEditor));
 
     $person = ['User-Agent' => 'Mozilla/5.0 (Linux; Android 14) Sample'];
     $response = $this->get('/en/documents/sample-membership-form/download', $person)
@@ -186,7 +186,7 @@ it('finds documents in search and lists them in the sitemaps', function () {
 
 it('lets those who manage documents add them and bring back earlier versions in the admin', function () {
     $this->actingAs(staff(SystemRole::Author))->get('/admin/documents')->assertForbidden();
-    $this->actingAs(staff(SystemRole::OfficeHead))->get('/admin/documents')->assertOk();
+    $this->actingAs(staff(SystemRole::DirectorateHead))->get('/admin/documents')->assertOk();
 
     $first = documentFile('bylaw-v1.pdf');
     $second = documentFile('bylaw-v2.pdf');

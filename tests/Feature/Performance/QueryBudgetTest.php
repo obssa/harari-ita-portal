@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\DB;
  */
 function budgetRecords(string $kind, int $count, int $from = 0): void
 {
-    $publisher = staff(SystemRole::Publisher);
+    $publisher = staff(SystemRole::CommunicationsEditor);
     $office = Office::query()->first() ?? app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample budget office', 'published' => true]]], $publisher);
 
     for ($i = $from; $i < $from + $count; $i++) {

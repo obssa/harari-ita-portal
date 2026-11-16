@@ -69,14 +69,14 @@ it('lets an Admin read but not change site settings', function () {
 
 it('keeps settings away from other staff', function (SystemRole $role) {
     $this->actingAs(staff($role))->get('/admin/settings/site')->assertForbidden();
-})->with([SystemRole::Publisher, SystemRole::Editor, SystemRole::Analyst]);
+})->with([SystemRole::CommunicationsEditor, SystemRole::Editor, SystemRole::Analyst]);
 
 it('keeps API keys for Super Admins only', function (SystemRole $role, int $status) {
     $this->actingAs(staff($role))->get('/admin/settings/integrations')->assertStatus($status);
 })->with([
     [SystemRole::SuperAdmin, 200],
     [SystemRole::Admin, 403],
-    [SystemRole::Publisher, 403],
+    [SystemRole::CommunicationsEditor, 403],
 ]);
 
 it('encrypts API keys at rest and never shows them again', function () {

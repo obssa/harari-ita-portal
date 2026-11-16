@@ -15,7 +15,7 @@ it('names every permission module.action (or translations.<locale>.edit) without
     }
 });
 
-it('creates every permission and all thirteen system roles', function () {
+it('creates every permission and every system role', function () {
     expect(Permission::count())->toBe(count(PermissionRegistry::all()))
         ->and(Role::query()->pluck('name')->sort()->values()->all())
         ->toEqual(collect(SystemRole::cases())->map->value->sort()->values()->all());
@@ -54,7 +54,7 @@ it('removes permissions that are no longer in the registry', function () {
         ->and(Permission::query()->where('name', 'obsolete.thing')->exists())->toBeFalse();
 });
 
-it('follows PLAN.md §8 for what each role may and may not do', function (SystemRole $role, array $may, array $mayNot) {
+it('follows PLAN.md §7 for what each role may and may not do', function (SystemRole $role, array $may, array $mayNot) {
     $grants = Role::findByName($role->value)->permissions->pluck('name')->all();
 
     foreach ($may as $permission) {
@@ -64,24 +64,36 @@ it('follows PLAN.md §8 for what each role may and may not do', function (System
         expect($grants)->not->toContain($permission);
     }
 })->with([
-    'admin' => [SystemRole::Admin, ['users.create', 'roles.update', 'posts.publish', 'volunteers.manage'],
+    'admin' => [SystemRole::Admin, ['users.create', 'roles.update', 'posts.publish', 'volunteers.manage', 'datasets.publish'],
         ['settings.manage', 'integrations.manage', 'audit.purge', 'backups.manage', 'users.impersonate']],
-    'publisher' => [SystemRole::Publisher, ['posts.publish', 'posts.feature', 'menus.manage', 'homepage.manage'],
-        ['users.view', 'settings.view', 'roles.view']],
+    'communications editor' => [SystemRole::CommunicationsEditor, ['posts.publish', 'pages.publish', 'events.manage', 'media.delete', 'social.manage', 'campaigns.send', 'advisories.manage'],
+        ['users.view', 'settings.view', 'roles.view', 'tickets.view', 'datasets.manage']],
     'editor' => [SystemRole::Editor, ['posts.create', 'posts.update', 'posts.review', 'media.upload'],
         ['posts.publish', 'posts.delete', 'users.view']],
     'author' => [SystemRole::Author, ['posts.create', 'posts.update_own', 'media.upload'],
         ['posts.update', 'posts.publish', 'posts.delete']],
     'translator' => [SystemRole::Translator, ['translations.har.edit', 'translations.import', 'translations.export'],
         ['posts.update', 'posts.publish', 'pages.publish']],
-    'media manager' => [SystemRole::MediaManager, ['media.delete', 'galleries.manage', 'social.manage'],
-        ['posts.view', 'volunteers.manage']],
-    'communications officer' => [SystemRole::CommunicationsOfficer, ['press_kit.manage', 'media_contacts.manage', 'campaigns.send'],
-        ['volunteers.manage', 'settings.view']],
-    'membership officer' => [SystemRole::MembershipOfficer, ['volunteers.view', 'volunteers.manage', 'campaigns.send'],
+    'service owner' => [SystemRole::ServiceOwner, ['services.manage', 'status.manage', 'tickets.view'],
+        ['tickets.reply', 'posts.view', 'users.view']],
+    'service desk agent' => [SystemRole::ServiceDeskAgent, ['tickets.view', 'tickets.reply', 'tickets.assign', 'inbox.reply'],
+        ['tickets.manage', 'services.manage', 'posts.view']],
+    'innovation officer' => [SystemRole::InnovationOfficer, ['startups.manage', 'programmes.manage', 'applications.decide', 'challenges.manage', 'volunteers.manage'],
+        ['judging.score', 'posts.view', 'settings.view']],
+    'judge' => [SystemRole::Judge, ['judging.score'],
+        ['applications.view', 'startups.view', 'volunteers.view', 'posts.view']],
+    'project manager' => [SystemRole::ProjectManager, ['projects.view', 'projects.manage'],
+        ['datasets.manage', 'posts.view']],
+    'data steward' => [SystemRole::DataSteward, ['datasets.view', 'datasets.manage', 'datasets.publish'],
+        ['integrations.manage', 'posts.view']],
+    'academy coordinator' => [SystemRole::AcademyCoordinator, ['courses.manage', 'cohorts.manage', 'cohorts.attendance', 'certificates.issue', 'certificates.revoke'],
         ['posts.view', 'settings.view']],
-    'support agent' => [SystemRole::SupportAgent, ['inbox.view', 'inbox.reply'], ['posts.view', 'volunteers.manage']],
-    'office head' => [SystemRole::OfficeHead, ['inbox.view', 'posts.view'], ['posts.create', 'inbox.reply']],
+    'instructor' => [SystemRole::Instructor, ['cohorts.view', 'cohorts.attendance'],
+        ['cohorts.manage', 'certificates.issue', 'courses.manage']],
+    'procurement officer' => [SystemRole::ProcurementOfficer, ['opportunities.manage', 'documents.manage'],
+        ['posts.view', 'settings.view']],
+    'directorate head' => [SystemRole::DirectorateHead, ['posts.view', 'posts.review', 'posts.publish', 'projects.view', 'tickets.view', 'inbox.view'],
+        ['posts.create', 'inbox.reply', 'tickets.reply', 'projects.manage']],
 ]);
 
 it('keeps the analyst strictly read-only', function () {
@@ -102,10 +114,21 @@ it('lets every staff role into the admin panel', function (SystemRole $role) {
     expect(Role::findByName($role->value)->hasPermissionTo('admin.access'))->toBeTrue();
 })->with(SystemRole::cases());
 
-it('requires two-factor login exactly for Super Admin, Admin and Publisher', function () {
+it('requires two-factor login for the Super Admin, the Admin and every role that sees personal data', function () {
     $required = array_values(array_filter(SystemRole::cases(), fn (SystemRole $r) => $r->requiresMfa()));
 
-    expect($required)->toBe([SystemRole::SuperAdmin, SystemRole::Admin, SystemRole::Publisher]);
+    expect($required)->toBe([
+        SystemRole::SuperAdmin, SystemRole::Admin, SystemRole::CommunicationsEditor, SystemRole::ServiceOwner,
+        SystemRole::ServiceDeskAgent, SystemRole::InnovationOfficer, SystemRole::AcademyCoordinator,
+        SystemRole::Instructor, SystemRole::DirectorateHead,
+    ]);
+    foreach (['inbox.view', 'tickets.view', 'subscribers.view', 'volunteers.view', 'applications.view', 'cohorts.attendance'] as $personal) {
+        foreach (SystemRole::cases() as $role) {
+            if (in_array($personal, $role->defaultPermissions(), true)) {
+                expect($role->requiresMfa())->toBeTrue("{$role->value} sees personal data through {$personal}");
+            }
+        }
+    }
 });
 
 it('gives every permission, module and role a label in every shipped language', function () {
