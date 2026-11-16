@@ -35,16 +35,16 @@
 
             <figure class="animate-rise relative isolate mx-auto w-full max-w-md [--rise-delay:200ms] lg:max-w-none">
                 {{-- The logo's orange curve sweeps behind the frame, never behind text (DESIGN.md). --}}
-                <svg aria-hidden="true" class="draw-in pointer-events-none absolute -start-14 -top-28 -z-10 h-[calc(100%+14rem)] w-auto text-saffron-500" viewBox="0 0 120 400" fill="none">
+                <svg aria-hidden="true" class="draw-in pointer-events-none absolute -start-14 hidden sm:block -top-28 -z-10 h-[calc(100%+14rem)] w-auto text-saffron-500" viewBox="0 0 120 400" fill="none">
                     <path d="M96 0C30 70 18 150 52 220c26 54 34 120-24 180" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
                 </svg>
                 <div class="relative overflow-hidden rounded-[1.75rem] border border-night-line bg-night-800 p-2 shadow-2xl shadow-night-950/60">
                     <div class="relative aspect-[4/5] overflow-hidden rounded-[1.25rem]">
-                        <x-harar-photo name="gate" sizes="(min-width: 64rem) 28rem, 90vw" loading="eager" fetchpriority="high" class="size-full object-cover object-[60%_50%]" />
+                        <x-harar-photo name="gate" sizes="(min-width: 64rem) 28rem, (min-width: 40rem) 70vw, 80vw" loading="eager" fetchpriority="high" class="size-full object-cover object-[60%_50%]" />
                         <div aria-hidden="true" class="absolute inset-0 bg-linear-to-t from-night-950/85 via-night-950/10 to-transparent"></div>
                         <div class="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3">
                             <p class="font-mono text-[0.7rem] tracking-wider text-night-ink uppercase">{{ __('harar.photo.gate') }}</p>
-                            <img src="/brand/emblem-128.png" alt="" width="48" height="48" class="size-12 shrink-0">
+                            <img src="/brand/emblem-128.webp" alt="" width="48" height="48" class="size-12 shrink-0">
                         </div>
                     </div>
                 </div>

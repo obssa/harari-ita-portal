@@ -667,3 +667,12 @@
 .hinta-brand-logo {
     background: transparent;
 }
+
+/* The full name wraps on the sign-in card instead of running out of it. */
+.fi-simple-layout .hinta-brand {
+    max-width: 100%;
+}
+.fi-simple-layout .hinta-brand-name {
+    white-space: normal;
+    text-wrap: balance;
+}

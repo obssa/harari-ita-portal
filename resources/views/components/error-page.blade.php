@@ -22,15 +22,15 @@
 <body class="flex min-h-screen flex-col bg-night-900 text-night-ink antialiased" style="color-scheme: dark">
     <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
         <x-hex-field id="error-hex" fade="right" class="absolute inset-y-0 end-0 h-full w-2/3 text-cyan-500/15" />
-        <x-circuit :draw="true" class="absolute inset-x-0 bottom-0 h-48 w-full text-cyan-500/40 sm:h-64" />
+        <x-circuit :draw="true" class="absolute inset-x-0 bottom-14 h-40 w-full text-cyan-500/40 sm:h-56" />
     </div>
     <main class="relative mx-auto flex w-full max-w-page flex-1 flex-col justify-center px-4 py-16 sm:px-6">
         <a href="{{ url('/'.$locale) }}" class="mb-10 inline-flex w-fit items-center gap-3">
-            <img src="/brand/emblem-128.png" alt="" width="40" height="40" class="size-10">
-            <img src="/brand/wordmark-dark.png" alt="{{ __('site.name') }}" height="28" class="h-7 w-auto">
+            <img src="/brand/emblem-128.webp" alt="" width="40" height="40" class="size-10">
+            <img src="/brand/wordmark-dark.webp" alt="{{ __('site.name') }}" height="28" class="h-7 w-auto">
         </a>
         <p class="kicker [--color-eyebrow:var(--color-cyan-300)]">{{ __('errors.code', ['code' => $code]) }}</p>
-        <p aria-hidden="true" class="mt-2 bg-linear-to-r from-cyan-300 to-saffron-400 bg-clip-text font-display text-8xl leading-none font-bold tracking-tighter text-transparent sm:text-9xl">{{ $code }}</p>
+        <p aria-hidden="true" class="mt-2 w-fit bg-linear-to-r from-cyan-300 to-saffron-400 bg-clip-text font-display text-8xl leading-none font-bold tracking-tighter text-transparent sm:text-9xl">{{ $code }}</p>
         @foreach ($languages as $language)
             <section lang="{{ $language }}" @class(['max-w-prose', 'mt-8' => $loop->first, 'mt-8 border-t border-night-line pt-8' => ! $loop->first])>
                 <h1 class="heading-1 text-night-ink">{{ __("errors.{$code}.title", [], $language) }}</h1>
@@ -41,6 +41,6 @@
             <x-ui.button :href="url('/'.$locale)" variant="action">{{ __('errors.home') }}</x-ui.button>
         </p>
     </main>
-    <p class="relative px-4 pb-6 text-center font-mono text-xs text-night-muted sm:px-6">{{ __('site.name') }} · {{ __('site.office') }}</p>
+    <p class="relative border-t border-night-line bg-night-950 px-4 py-4 text-center font-mono text-xs text-night-muted sm:px-6">{{ __('site.name') }}</p>
 </body>
 </html>

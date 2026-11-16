@@ -69,9 +69,9 @@
     <header class="sticky top-0 z-30 border-b border-line bg-surface/85 backdrop-blur-xl supports-[backdrop-filter]:bg-surface/75">
         <div class="mx-auto flex h-16 max-w-page items-center gap-4 px-4 sm:px-6 lg:h-[4.5rem]">
             <a href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif class="flex shrink-0 items-center gap-2.5 rounded-control no-underline">
-                <img src="/brand/emblem-128.png" alt="" width="44" height="44" class="size-10 shrink-0 lg:size-11">
-                <img src="/brand/wordmark.png" alt="" width="387" height="112" class="h-6 w-auto dark:hidden lg:h-7">
-                <img src="/brand/wordmark-dark.png" alt="" width="387" height="112" class="hidden h-6 w-auto dark:block lg:h-7">
+                <img src="/brand/emblem-128.webp" alt="" width="44" height="44" class="size-10 shrink-0 lg:size-11">
+                <img src="/brand/wordmark.webp" alt="" width="387" height="112" class="h-6 w-auto dark:hidden lg:h-7">
+                <img src="/brand/wordmark-dark.webp" alt="" width="387" height="112" class="hidden h-6 w-auto dark:block lg:h-7">
                 <span class="sr-only">{{ __('site.name') }}</span>
                 <span aria-hidden="true" class="hidden max-w-[11rem] border-s border-line ps-3 text-xs leading-tight text-ink-muted 2xl:block">{{ __('site.office') }}</span>
             </a>

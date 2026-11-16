@@ -39,7 +39,7 @@
                 </div>
                 <div class="relative col-span-2 overflow-hidden rounded-card bg-night-900">
                     <x-hex-field id="heritage-hex" fade="none" class="absolute inset-0 size-full text-cyan-500/30" />
-                    <img src="/brand/emblem-256.png" alt="" width="256" height="256" class="absolute inset-0 m-auto size-24 sm:size-28" loading="lazy">
+                    <img src="/brand/emblem-256.webp" alt="" width="256" height="256" class="absolute inset-0 m-auto size-24 sm:size-28" loading="lazy">
                 </div>
             </div>
             <figcaption class="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-ink-muted">

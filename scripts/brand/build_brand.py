@@ -11,6 +11,7 @@ Outputs, all with a transparent background unless noted:
     public/brand/lockup-stacked.png         the stacked version (press kit, sign-in)
     public/brand/wordmark.png               "HinTA" alone
     public/brand/*-dark.png                 the lockups and wordmark with light lettering, for dark surfaces
+    public/brand/*.webp                     WebP twins of the emblems, lockups and wordmarks, used by the pages
     public/favicon.ico (16/32/48), public/favicon-32.png, public/favicon-96.png
     public/apple-touch-icon.png             180 px on white (iOS ignores transparency)
 
@@ -122,6 +123,11 @@ def save(img: Image.Image, path: Path, size: int | None = None) -> None:
     out = img.resize((size, size), Image.LANCZOS) if size else img
     out.save(path, optimize=True)
     print(f'{path.relative_to(ROOT).as_posix():40} {out.size[0]}x{out.size[1]}')
+    if path.parent == BRAND and not path.name.startswith('icon-'):
+        # A WebP twin for the pages: two to three times smaller than the PNG (Lighthouse, phase 1 gate).
+        twin = path.with_suffix('.webp')
+        out.save(twin, 'WEBP', quality=88, method=6)
+        print(f'{twin.relative_to(ROOT).as_posix():40} {out.size[0]}x{out.size[1]}')
 
 
 def main() -> None:

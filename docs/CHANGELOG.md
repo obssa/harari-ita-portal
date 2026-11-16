@@ -2,6 +2,21 @@
 
 All notable changes to the Agency's portal. Newest first.
 
+## Unreleased — phase 1: design system and public shell ("Jugol Circuit")
+
+- The Agency's official logo (stacked and horizontal) builds every brand file: emblem, lockups, wordmark, dark
+  twins, favicons, app icons and WebP copies for the pages (ADR-0006). Short name **HinTA**.
+- A palette taken from the logo (teal, orange action, cyan, ruby, night), Space Grotesk for headings and JetBrains
+  Mono for labels, every text colour pair checked for contrast in CI (ADR-0007).
+- Light, dark or the device's theme, remembered, with no flash on load (ADR-0008).
+- A new header and mega-menu (ADR-0009), footer (ADR-0010) and homepage (ADR-0011): night bands, the logo's
+  hexagon field, mono eyebrows and the pillars as "gates".
+- Inner pages, cards, people, pillars, offices, events, search, forms and contact in the same look; the basket
+  plate of the source project is now the logo's hexagon cluster (ADR-0012).
+- New components on `/styleguide`: empty state, alert, status pill, KPI tile, stepper, skeleton and code block
+  (ADR-0013); the "Jugol circuit" motif and night error pages (ADR-0014); the admin in HinTA's look (ADR-0015).
+- The core values inherited from the source project were removed from the homepage, with a data migration.
+
 ## Unreleased — phase 0: fork and rebrand
 
 - Staging is live at https://hita.orcamind.dev (noindex), deployed from `main` on every green CI run.

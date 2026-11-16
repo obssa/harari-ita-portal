@@ -11,5 +11,5 @@
 @endphp
 <div aria-hidden="true" {{ $attributes->class(['relative isolate flex size-full items-center justify-center overflow-hidden bg-night-900 bg-linear-to-br to-night-900', $tint]) }}>
     <x-hex-field :id="'card-hex-'.($lead ? 'lead' : 'item')" fade="radial" class="absolute inset-0 -z-10 size-full text-cyan-400/25 transition-transform duration-700 group-hover:scale-110" />
-    <img src="{{ $lead ? '/brand/emblem-256.png' : '/brand/emblem-128.png' }}" alt="" width="112" height="112" @class(['drop-shadow-xl', 'size-16' => ! $lead, 'size-28' => $lead])>
+    <img src="{{ $lead ? '/brand/emblem-256.webp' : '/brand/emblem-128.webp' }}" alt="" width="112" height="112" @class(['drop-shadow-xl', 'size-16' => ! $lead, 'size-28' => $lead])>
 </div>

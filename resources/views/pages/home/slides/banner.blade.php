@@ -36,7 +36,7 @@
 
     <div class="mx-auto grid w-full max-w-page content-center items-center gap-x-10 gap-y-5 px-4 pt-6 pb-24 sm:px-6 sm:gap-y-6 lg:grid-cols-[1fr_1.3fr] lg:pt-10">
         <div class="animate-rise">
-            <img src="/brand/emblem-128.png" alt="" width="128" height="128" class="size-10 sm:size-16" @if (! $first) loading="lazy" @endif>
+            <img src="/brand/emblem-128.webp" alt="" width="128" height="128" class="size-10 sm:size-16" @if (! $first) loading="lazy" @endif>
             @if ($kicker !== '')
                 <p lang="{{ $kickerLang }}" class="mt-3 text-xs font-bold tracking-wider text-[#c92f22] uppercase">{{ $kicker }}</p>
             @endif

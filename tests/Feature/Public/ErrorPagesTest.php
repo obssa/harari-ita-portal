@@ -64,5 +64,5 @@ it('draws error pages in the night look with the circuit and the large code', fu
         ->assertNotFound()
         ->assertSee('bg-night-900', escape: false)
         ->assertSee('draw-in', escape: false)
-        ->assertSee('/brand/wordmark-dark.png', escape: false);
+        ->assertSee('/brand/wordmark-dark.webp', escape: false);
 });

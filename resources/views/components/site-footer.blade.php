@@ -9,7 +9,7 @@
     <div class="mx-auto max-w-page px-4 sm:px-6">
         <div class="grid gap-10 border-b border-night-line py-12 lg:grid-cols-[1.2fr_1fr] lg:items-end">
             <div>
-                <img src="/brand/lockup-horizontal-dark.png" alt="{{ __('site.name') }}" width="920" height="370" class="h-20 w-auto sm:h-24" loading="lazy">
+                <img src="/brand/lockup-horizontal-dark.webp" alt="{{ __('site.name') }}" width="920" height="370" class="h-20 w-auto sm:h-24" loading="lazy">
                 <p class="mt-5 max-w-xl text-base text-night-muted">{{ __('site.description') }}</p>
             </div>
             {{-- ADR-0051: a plain GET form, so cached pages need no session; the newsletter page completes it. --}}
