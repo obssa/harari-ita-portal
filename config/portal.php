@@ -111,6 +111,14 @@ return [
     ],
 
     /*
+    | Innovation (ADR-0020, ADR-0021): days after a decision that applications and declined listing requests are
+    | kept before they are deleted.
+    */
+    'innovation' => [
+        'retention_days' => (int) env('PORTAL_INNOVATION_RETENTION_DAYS', 730),
+    ],
+
+    /*
     | Campaign sending limits per minute (ADR-0052), to stay within what the mail
     | and SMS accounts accept.
     */

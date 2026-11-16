@@ -40,6 +40,8 @@ Schedule::command('events:purge-registrations')->dailyAt('03:30');
 Schedule::command('forms:purge-submissions')->dailyAt('03:40');
 // ADR-0017: support tickets closed longer ago than their retention period.
 Schedule::command('support:purge-tickets')->dailyAt('03:41');
+// ADR-0020, ADR-0021: decided applications and declined listing requests after their retention period.
+Schedule::command('innovation:purge')->dailyAt('03:43');
 Schedule::command('portal:purge-sign-ups')->dailyAt('03:42');
 Schedule::command('notifications:prune')->dailyAt('03:45');
 Schedule::command('queue:prune-failed', ['--hours' => 720])->dailyAt('03:50');

@@ -7,6 +7,7 @@ use App\Domain\Content\Models\Post;
 use App\Domain\Documents\Models\Document;
 use App\Domain\Events\Models\Event;
 use App\Domain\Forms\Models\Form;
+use App\Domain\Innovation\Models\Programme;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\Video;
@@ -38,6 +39,7 @@ final class PublicLinks
         Office::class => 'offices.show',
         ServiceItem::class => 'services.show',
         Startup::class => 'startups.show',
+        Programme::class => 'programmes.show',
         Pillar::class => 'pillars.show',
         Form::class => 'forms.show',
     ];

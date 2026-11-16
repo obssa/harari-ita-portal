@@ -6,6 +6,8 @@ use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Models\SubmissionNote;
+use App\Domain\Innovation\Models\Application;
+use App\Domain\Innovation\Models\Startup;
 use App\Domain\People\Models\PersonNote;
 use App\Domain\Press\Models\MediaContact;
 use App\Domain\Privacy\Models\PrivacyRequest;
@@ -33,6 +35,8 @@ final class ExportPersonalData
         $registrations = $search->registrations();
         $submissions = $search->submissions();
         $tickets = $search->tickets();
+        $applications = $search->applications();
+        $startups = $search->startups();
         $failed = $search->failedSignIns();
         $volunteers = $search->volunteers();
         $subscribers = $search->subscribers();
@@ -86,6 +90,27 @@ final class ExportPersonalData
                     ->values()->all(),
                 'rating' => $t->satisfaction,
                 'rating_note' => $t->satisfaction_note,
+            ])->values()->all(),
+            'programme_applications' => $applications->map(fn (Application $a): array => [
+                'reference' => $a->reference,
+                'programme' => $a->programme->title(),
+                'sent_at' => $a->created_at->toIso8601String(),
+                'stage' => $a->stage->value,
+                'name' => $a->applicant_name,
+                'email' => $a->applicant_email,
+                'phone' => $a->applicant_phone,
+                'team' => $a->team_name,
+                'answers' => $a->answers,
+                'decision_note' => $a->decision_note,
+            ])->values()->all(),
+            'startup_listings' => $startups->map(fn (Startup $s): array => [
+                'reference' => $s->reference,
+                'startup' => $s->name(),
+                'sent_at' => $s->created_at->toIso8601String(),
+                'listing' => $s->listing_status->value,
+                'founder_name' => $s->founder_name,
+                'founder_email' => $s->founder_email,
+                'founder_phone' => $s->founder_phone,
             ])->values()->all(),
             'volunteering' => $volunteers->map(fn (Volunteer $v): array => [
                 'signed_up_at' => $v->created_at->toIso8601String(),

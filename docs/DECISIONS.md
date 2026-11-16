@@ -345,3 +345,23 @@ encrypted contact with keyed hashes) and `StartupTranslation` (name, pitch, prod
 - Public `/innovation/startups` filters by sector, stage and label; a profile page with `Organization` JSON-LD;
   site search, sitemap and the edge-cache purge include listed startups; the founders' contact is never public.
 - The "Innovation" menu section appears with the directory.
+
+## ADR-0021 — Programmes, cohorts and applications (2026-11-18)
+
+**Decision.**
+
+- `Programme` (incubation, acceleration, training; an optional partner; the questions applicants answer, with a
+  stable key and a label per language) with `ProgrammeTranslation` (title, summary, who can apply, what you get one
+  per line, timeline one stage per line, details) and `Cohort`s (application window in Addis Ababa time, start and
+  end, places). A cohort that already has applications is kept when it is removed from the form.
+- `Application` to the cohort open now, with a random reference `APP-XXXX-XXXX`; the applicant's name, email,
+  phone and answers are encrypted, with keyed hashes of the email and phone. One application per email and cohort.
+  The form is one page in three parts (about you, your answers, send) under the stepper, so nothing is lost when a
+  part needs correcting; Turnstile, the spam guard and consent with the retention period.
+- Stages: received, screening, interview, then a decision (accepted, waiting list, not accepted), or withdrawn by
+  the applicant while it is open. Reviewers (`applications.review`) move and score; deciding needs
+  `applications.decide` and a note the applicant reads. Scores are 1 to 5 on five criteria (problem, solution,
+  team, impact, feasibility); the score is their average. Applicants are told of the receipt and each decision by
+  email and follow the application with the reference plus their contact (ADR-0003).
+- Public `/innovation/programmes` and a page per programme with `EducationalOccupationalProgram` JSON-LD; site
+  search, sitemap and the edge-cache purge include programmes.

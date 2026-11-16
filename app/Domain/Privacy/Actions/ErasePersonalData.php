@@ -7,6 +7,8 @@ use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Actions\SubmitForm;
 use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Models\SubmissionNote;
+use App\Domain\Innovation\Models\Application;
+use App\Domain\Innovation\Models\Startup;
 use App\Domain\People\Models\PersonNote;
 use App\Domain\Privacy\Models\PrivacyRequest;
 use App\Domain\Privacy\Support\PersonalDataSearch;
@@ -35,7 +37,7 @@ final class ErasePersonalData
     public const ERASED = '—';
 
     /**
-     * @return array{registrations: int, submissions: int, tickets: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
+     * @return array{registrations: int, submissions: int, tickets: int, applications: int, startups: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
      */
     public function handle(PersonalDataSearch $search, User $actor): array
     {
@@ -43,12 +45,14 @@ final class ErasePersonalData
         $registrations = $search->registrations();
         $submissions = $search->submissions();
         $tickets = $search->tickets();
+        $applications = $search->applications();
+        $startups = $search->startups();
         $failed = $search->failedSignIns();
         $volunteers = $search->volunteers();
         $subscribers = $search->subscribers();
         $mediaContacts = $search->mediaContacts();
 
-        DB::transaction(function () use ($registrations, $submissions, $tickets, $failed, $volunteers, $subscribers, $mediaContacts): void {
+        DB::transaction(function () use ($registrations, $submissions, $tickets, $applications, $startups, $failed, $volunteers, $subscribers, $mediaContacts): void {
             foreach ($registrations as $registration) {
                 $this->registration($registration);
             }
@@ -58,6 +62,15 @@ final class ErasePersonalData
             foreach ($tickets as $ticket) {
                 $this->ticket($ticket);
             }
+            // ADR-0021: the applicant's details and answers go; the stage and score stay for the programme's records.
+            $applications->each(fn (Application $application) => $application->forceFill([
+                'applicant_name' => null, 'applicant_email' => null, 'applicant_phone' => null, 'email_hash' => null,
+                'phone_hash' => null, 'answers' => null, 'decision_note' => null, 'erased_at' => now(),
+            ])->saveQuietly());
+            // ADR-0020: the founder's contact goes; a listed startup's public description stays (it is the company's).
+            $startups->each(fn (Startup $startup) => $startup->forceFill([
+                'founder_name' => null, 'founder_email' => null, 'founder_phone' => null, 'email_hash' => null, 'phone_hash' => null,
+            ])->saveQuietly());
             foreach ($volunteers as $volunteer) {
                 $this->volunteer($volunteer);
             }

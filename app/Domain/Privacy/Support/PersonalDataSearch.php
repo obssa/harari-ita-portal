@@ -5,6 +5,8 @@ namespace App\Domain\Privacy\Support;
 use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Models\FormSubmission;
+use App\Domain\Innovation\Models\Application;
+use App\Domain\Innovation\Models\Startup;
 use App\Domain\Press\Models\MediaContact;
 use App\Domain\Support\Models\Ticket;
 use App\Domain\Volunteers\Models\Volunteer;
@@ -100,6 +102,34 @@ final class PersonalDataSearch
     }
 
     /**
+     * Applications to programmes (ADR-0021).
+     *
+     * @return Collection<int, Application>
+     */
+    public function applications(): Collection
+    {
+        if (! $this->isValid()) {
+            return new Collection;
+        }
+
+        return Application::query()->whereNull('erased_at')->where(fn (Builder $q) => $this->byHashes($q))->with('programme.translations')->orderBy('created_at')->get();
+    }
+
+    /**
+     * Startup listings this person asked for, as founder (ADR-0020).
+     *
+     * @return Collection<int, Startup>
+     */
+    public function startups(): Collection
+    {
+        if (! $this->isValid()) {
+            return new Collection;
+        }
+
+        return Startup::query()->withTrashed()->where(fn (Builder $q) => $this->byHashes($q))->with('translations')->orderBy('created_at')->get();
+    }
+
+    /**
      * @return Collection<int, Volunteer>
      */
     public function volunteers(): Collection
@@ -159,7 +189,7 @@ final class PersonalDataSearch
     }
 
     /**
-     * @return array{registrations: int, submissions: int, tickets: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
+     * @return array{registrations: int, submissions: int, tickets: int, applications: int, startups: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
      */
     public function counts(): array
     {
@@ -167,6 +197,8 @@ final class PersonalDataSearch
             'registrations' => $this->registrations()->count(),
             'submissions' => $this->submissions()->count(),
             'tickets' => $this->tickets()->count(),
+            'applications' => $this->applications()->count(),
+            'startups' => $this->startups()->count(),
             'volunteers' => $this->volunteers()->count(),
             'subscribers' => $this->subscribers()->count(),
             'media_contacts' => $this->mediaContacts()->count(),
@@ -180,7 +212,7 @@ final class PersonalDataSearch
     {
         $counts = $this->counts();
 
-        return $counts['registrations'] + $counts['submissions'] + $counts['tickets'] + $counts['volunteers'] + $counts['subscribers'] + $counts['media_contacts'] + $counts['failed_sign_ins'];
+        return $counts['registrations'] + $counts['submissions'] + $counts['tickets'] + $counts['applications'] + $counts['startups'] + $counts['volunteers'] + $counts['subscribers'] + $counts['media_contacts'] + $counts['failed_sign_ins'];
     }
 
     /**
