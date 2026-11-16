@@ -4,7 +4,7 @@
     $card = 'flex flex-col rounded-card border border-line bg-surface p-5';
 @endphp
 <x-layouts.public :title="__('involved.title')" :description="__('involved.description')">
-    <x-page-hero :title="__('involved.title')" :lead="__('involved.description')" tone="gold" :crumbs="[]" />
+    <x-page-hero :title="__('involved.title')" :lead="__('involved.description')" tone="saffron" :crumbs="[]" />
     <div class="mx-auto max-w-page px-4 pt-2 pb-12 sm:px-6">
 
         <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

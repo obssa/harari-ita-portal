@@ -114,3 +114,26 @@ names "የሐረሪ ክልል ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ" a
 
 **Consequences.** ADR-0005's placeholder mark is retired. When the Agency sends an SVG or a larger original,
 replace the sources and run the script; nothing else changes.
+
+## ADR-0007 — The palette and type, taken from the logo (2026-11-16)
+
+**Context.** The forked tokens were the party's (blue, gold, magenta, terracotta) and HinTA must have its own
+look as a technology agency (phase 1 plan, "Design direction").
+
+**Decision.**
+
+- Colour ramps (50–950) are built in OKLCH from the logo's colours: **primary** teal (700 = `#105D6F`,
+  800 = `#0B4A5C`), **saffron** orange (500 = `#E8912D`), **cyan** (600 = `#1296AB`) and **ruby** red
+  (600 = `#B8323E`); a **night** family (`#04121A` … `#143C49`) for heroes, the footer and dark mode; plaster
+  `#F6F3EC`, ink `#0B1A22`, slate `#3E5F69` for muted text; five pillar colours in a fixed order; a semantic set.
+- Saffron is the colour of the one action on a view (`<x-ui.button variant="action">`), always with ink text.
+  Ruby is for alerts. Cyan marks signals, nodes and data.
+- The party's names go: `gold` → `saffron`, `magenta` → `ruby`, `accent` → `cyan`, `sky-brand` → `cyan-500`;
+  the same for post-type tones and pillar accents (`primary`, `cyan`, `saffron`, `ruby`, `night`).
+- Type: **Space Grotesk** for Latin headings (preloaded on Latin-script pages), **Inter** for text,
+  **JetBrains Mono** for eyebrows, figures and codes (subset, never preloaded), **Noto Sans Ethiopic** for
+  Ethiopic, where headings fall back to it. All self-hosted (`scripts/fonts/build_fonts.py`), all OFL.
+- `scripts/design/contrast.py` checks every text/surface pair in light and dark against AA and runs in CI.
+
+**Consequences.** Templates still have the forked layout until steps 1.4–1.7 rebuild them; the new tokens
+apply from now on. The admin's primary colour is the logo teal.

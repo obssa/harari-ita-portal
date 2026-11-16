@@ -9,8 +9,8 @@
 >
     @php
         $ground = match ($pillar->accentTone()) {
-            'magenta' => 'bg-magenta-700',
-            'accent' => 'bg-accent-700',
+            'ruby' => 'bg-ruby-700',
+            'cyan' => 'bg-cyan-700',
             'night' => 'bg-primary-900',
             default => 'bg-primary-700',
         };
@@ -38,19 +38,19 @@
                             <p class="mt-5 max-w-prose text-lg text-white/85 sm:text-xl">{{ $translation->summary }}</p>
                         @endif
                         <p class="mt-8 flex flex-wrap gap-3">
-                            <x-ui.button :href="route('volunteer.create')" variant="gold" size="lg">{{ __('nav.volunteer') }}</x-ui.button>
+                            <x-ui.button :href="route('volunteer.create')" variant="action" size="lg">{{ __('nav.volunteer') }}</x-ui.button>
                         </p>
                     </header>
                     @if ($head)
                         <a href="{{ route('leaders.show', ['locale' => $head->locale, 'slug' => $head->slug]) }}" lang="{{ $head->locale }}"
                            class="group flex items-center gap-4 rounded-[1.25rem] bg-white/10 p-5 ring-1 ring-white/20 backdrop-blur transition hover:bg-white/15">
                             @if ($pillar->head?->portrait)
-                                <x-picture :media="$pillar->head->portrait" preset="square" sizes="5rem" class="size-18 shrink-0 rounded-full object-cover ring-4 ring-gold-500" />
+                                <x-picture :media="$pillar->head->portrait" preset="square" sizes="5rem" class="size-18 shrink-0 rounded-full object-cover ring-4 ring-saffron-500" />
                             @else
-                                <span aria-hidden="true" class="flex size-18 shrink-0 items-center justify-center rounded-full bg-white text-2xl font-extrabold text-ink-brand ring-4 ring-gold-500">{{ mb_substr($head->name, 0, 1) }}</span>
+                                <span aria-hidden="true" class="flex size-18 shrink-0 items-center justify-center rounded-full bg-white text-2xl font-extrabold text-ink-brand ring-4 ring-saffron-500">{{ mb_substr($head->name, 0, 1) }}</span>
                             @endif
                             <span class="min-w-0">
-                                <span class="block text-[11px] font-bold tracking-wider text-gold-300 uppercase">{{ __('pillars.head') }}</span>
+                                <span class="block text-[11px] font-bold tracking-wider text-saffron-300 uppercase">{{ __('pillars.head') }}</span>
                                 <span class="mt-1 block text-lg leading-snug font-bold group-hover:underline">{{ $head->name }}</span>
                                 @if ($head->position)
                                     <span class="mt-0.5 block text-sm text-white/80">{{ $head->position }}</span>

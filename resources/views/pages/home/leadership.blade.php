@@ -1,7 +1,7 @@
 <section aria-labelledby="home-leadership" class="mx-auto max-w-page px-4 py-16 sm:px-6">
     <figure class="flex flex-wrap items-center gap-10">
         @if ($data['leader']->portrait)
-            <div class="shrink-0 rounded-full bg-gold-500 p-2">
+            <div class="shrink-0 rounded-full bg-saffron-500 p-2">
                 <x-picture :media="$data['leader']->portrait" preset="square" sizes="13rem" class="size-52 rounded-full object-cover" />
             </div>
         @endif

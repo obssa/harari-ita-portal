@@ -3,7 +3,7 @@
 @php
     $locale = app()->getLocale();
     // ADR-0065: each pillar in the colour chosen for it (the women's wing magenta, the youth wing blue).
-    $grounds = ['primary' => 'bg-primary-700', 'magenta' => 'bg-magenta-700', 'accent' => 'bg-accent-700', 'night' => 'bg-primary-900'];
+    $grounds = ['primary' => 'bg-primary-700', 'ruby' => 'bg-ruby-700', 'cyan' => 'bg-cyan-700', 'night' => 'bg-primary-900'];
 @endphp
 <section aria-labelledby="home-pillars" class="mx-auto max-w-page px-4 py-16 sm:px-6">
     <div class="flex flex-wrap items-baseline justify-between gap-2">
@@ -21,7 +21,7 @@
                 <article class="reveal group relative flex h-full min-h-60 flex-col justify-between gap-6 overflow-hidden rounded-[1.25rem] p-8 text-white {{ $grounds[$item['pillar']->accentTone()] }}">
                     @include('pages.home._plate', ['class' => 'pointer-events-none absolute -end-16 -top-16 size-56 opacity-30'])
                     <div class="relative">
-                        <h3 class="text-xs font-bold tracking-wider text-gold-300 uppercase">
+                        <h3 class="text-xs font-bold tracking-wider text-saffron-300 uppercase">
                             <a href="{{ route('pillars.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}" class="after:absolute after:inset-0">{{ $shown->getAttribute('name') }}</a>
                         </h3>
                         @if ($post)

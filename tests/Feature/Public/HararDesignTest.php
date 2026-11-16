@@ -39,7 +39,7 @@ it('gives a story without a photo the placeholder and keeps every card the same 
 
     $html = (string) $this->get('/en/news')->assertOk()->getContent();
 
-    expect($html)->toContain('Sample speech without a photo', 'from-magenta-600', 'line-clamp-3', 'aspect-[16/10]');
+    expect($html)->toContain('Sample speech without a photo', 'from-ruby-600', 'line-clamp-3', 'aspect-[16/10]');
 });
 
 it('keeps a colour an editor chose when the pack adds a wing profile later', function () {
@@ -53,7 +53,7 @@ it('keeps a colour an editor chose when the pack adds a wing profile later', fun
     Pillar::query()->firstOrFail()->forceFill(['accent' => 'night'])->save();
     $body = ['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => 'Sample work of the wing.']]]]];
     file_put_contents("{$folder}/pack.json", json_encode(['pillars' => [$pillar], 'updates' => [
-        ['key' => 'pillar.sample#profile', 'target' => 'pillar.sample', 'accent' => 'magenta', 'body' => ['en' => $body]],
+        ['key' => 'pillar.sample#profile', 'target' => 'pillar.sample', 'accent' => 'ruby', 'body' => ['en' => $body]],
     ]]));
 
     expect(app(LoadContentPack::class)->handle("{$folder}/pack.json"))->toBe(['updates' => 1]);

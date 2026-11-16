@@ -17,7 +17,7 @@
                         <li>
                             <a href="#body-{{ $group['body']->value }}" class="inline-flex items-center gap-2 rounded-full bg-white/10 py-2 ps-4 pe-2 text-sm font-bold text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20">
                                 {{ $group['body']->label() }}
-                                <span class="rounded-full bg-gold-500 px-2 py-0.5 text-xs text-ink-brand">{{ $group['leaders']->count() }}</span>
+                                <span class="rounded-full bg-saffron-500 px-2 py-0.5 text-xs text-ink-brand">{{ $group['leaders']->count() }}</span>
                             </a>
                         </li>
                     @endforeach
@@ -36,12 +36,12 @@
                     </div>
                     <div aria-hidden="true" class="absolute inset-0 -z-20 bg-linear-to-br from-primary-800 via-primary-900 to-primary-950"></div>
                     @if ($featured->portrait)
-                        <x-picture :media="$featured->portrait" preset="square" sizes="13rem" loading="eager" class="size-44 shrink-0 rounded-full object-cover ring-6 ring-gold-500 sm:size-52" />
+                        <x-picture :media="$featured->portrait" preset="square" sizes="13rem" loading="eager" class="size-44 shrink-0 rounded-full object-cover ring-6 ring-saffron-500 sm:size-52" />
                     @else
-                        <span aria-hidden="true" class="flex size-44 shrink-0 items-center justify-center rounded-full bg-white text-5xl font-extrabold text-ink-brand ring-6 ring-gold-500 sm:size-52">{{ Initials::of($featuredShown->name) }}</span>
+                        <span aria-hidden="true" class="flex size-44 shrink-0 items-center justify-center rounded-full bg-white text-5xl font-extrabold text-ink-brand ring-6 ring-saffron-500 sm:size-52">{{ Initials::of($featuredShown->name) }}</span>
                     @endif
                     <span class="flex min-w-0 flex-1 basis-80 flex-col gap-3">
-                        <span class="text-xs font-bold tracking-wider text-gold-400 uppercase">{{ __('leaders.featured') }}</span>
+                        <span class="text-xs font-bold tracking-wider text-saffron-400 uppercase">{{ __('leaders.featured') }}</span>
                         <span class="text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl">{{ $featuredShown->name }}</span>
                         @if ($featuredShown->position)
                             <span class="text-lg text-white/85">{{ $featuredShown->position }}</span>
@@ -49,7 +49,7 @@
                         @if ($featuredShown->summary)
                             <span class="max-w-prose text-white/75">{{ $featuredShown->summary }}</span>
                         @endif
-                        <span class="mt-2 inline-flex items-center gap-2 font-bold text-gold-300">
+                        <span class="mt-2 inline-flex items-center gap-2 font-bold text-saffron-300">
                             {{ __('leaders.view_profile') }}
                             <svg aria-hidden="true" class="size-4 transition-transform group-hover:translate-x-1 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                         </span>

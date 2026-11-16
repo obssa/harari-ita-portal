@@ -35,12 +35,12 @@
     <div class="mx-auto w-full max-w-page px-4 pt-14 pb-28 sm:px-6 sm:pt-20">
         <div @class(['max-w-3xl', 'mx-auto text-center' => $center])>
             @if ($kicker !== '')
-                <p lang="{{ $kickerLang }}" class="animate-rise inline-flex items-center gap-3 rounded-full bg-white/10 py-1.5 ps-1.5 pe-4 text-xs font-bold tracking-wider text-gold-300 uppercase ring-1 ring-white/20 backdrop-blur">
+                <p lang="{{ $kickerLang }}" class="animate-rise inline-flex items-center gap-3 rounded-full bg-white/10 py-1.5 ps-1.5 pe-4 text-xs font-bold tracking-wider text-saffron-300 uppercase ring-1 ring-white/20 backdrop-blur">
                     <img src="/brand/logo-128.png" alt="" width="32" height="32" class="size-8">
                     {{ $kicker }}
                 </p>
             @endif
-            <h2 lang="{{ $titleLang }}" class="heading-display animate-rise mt-6 text-white [--rise-delay:120ms]">{{ $before }}@if ($accent !== '')<span class="text-gold-400">{{ $accent }}</span>@endif{{ $after }}</h2>
+            <h2 lang="{{ $titleLang }}" class="heading-display animate-rise mt-6 text-white [--rise-delay:120ms]">{{ $before }}@if ($accent !== '')<span class="text-saffron-400">{{ $accent }}</span>@endif{{ $after }}</h2>
             @if ($text !== '')
                 <p lang="{{ $textLang }}" @class(['animate-rise mt-5 max-w-prose text-lg text-white/85 [--rise-delay:240ms] sm:text-xl', 'mx-auto' => $center])>{{ $text }}</p>
             @endif

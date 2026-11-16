@@ -22,20 +22,22 @@ Rules:
 
 ## 1. Tokens (Tailwind 4 `@theme` in `resources/css/tokens.css`)
 
-The final hex values are fixed in phase 1 with a contrast script (`scripts/design/contrast.py`) that checks every
-text/surface pair in both themes (AA: 4.5:1 for body, 3:1 for large text and UI). These are the starting points:
+The values are taken from the official logo (ADR-0006, ADR-0007) and checked by `scripts/design/contrast.py`
+(AA: 4.5:1 for body text, 3:1 for large text and UI) in both themes; `resources/css/tokens.css` is the source.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `ink-950` | #0B1220 | n/a | dark base, headings on light |
-| `plaster-50` | #F7F2E9 | n/a | page background (light) |
-| `surface` | #FFFFFF | #111A2B | cards |
-| `surface-muted` | #F1ECE2 | #0E1626 | bands |
-| `primary-600/700` | Gate Teal ≈ #0E7C86 / #0A616A | #3CC6CF / #66D6DD | links, primary buttons, focus ring |
-| `accent-500` | Harar Saffron ≈ #F2A900 | #FFC23D | highlights, KPI numbers, the active nav underline (never text on white) |
-| `pillar-1…5` | the five basket colours (terracotta, saffron, teal, indigo, leaf) | lighter twins | pillar tags, chart series 1–5 |
-| `success/warning/danger/info` | AA-checked semantic set | twins | status pills, alerts |
-| `line` | #E3DCCF | #22304A | borders, circuit lines |
+| `ink` | #0B1A22 | #E8EEF0 | text |
+| `ink-muted` | #3E5F69 (the logo's slate) | #A9BEC5 | secondary text |
+| `canvas` / `surface` / `surface-muted` | #FBFAF7 / #FFFFFF / plaster #F6F3EC | night-900 / -800 / -950 | page, cards, bands |
+| `night-950…600` | #04121A … #143C49 | same | heroes, footer, code blocks |
+| `primary-700/800` | #105D6F / #0B4A5C (emblem and wordmark teal) | links become cyan-300 | links, primary buttons, focus |
+| `saffron-500` | #E8912D (the orange curve) | same | the one action per view, KPI highlights; ink text on it |
+| `cyan-600` | #1296AB (the hexagons) | cyan-300 | signals, nodes, data |
+| `ruby-600` | #B8323E (the red hexagon) | ruby-400 | alerts only |
+| `pillar-1…5` | cyan, saffron, leaf #4C8C4A, indigo #4B5BA6, ruby | same | pillar tags, chart series 1–5 |
+| `success/warning/danger` | AA-checked set | same | status pills, alerts |
+| `line` | #DDE4E6 | #1D4A58 | borders, circuit lines |
 
 Other tokens:
 - **Radius:** `control` 10 px and `card` 18 px; pills are full.
@@ -47,7 +49,8 @@ Other tokens:
 ## 2. Typography
 - **UI and body:** Inter Variable, self-hosted and subset (Latin, Latin-Ext).
 - **Ethiopic** (am/har): Noto Sans Ethiopic Variable, subset to the used glyph ranges and preloaded only on am/har, with Abyssinica SIL as the fallback. Line-height is 1.75 for Ethiopic body text.
-- **Display** (Latin headings only, optional): a variable geometric grotesk, self-hosted. It must pass the size budget, and Inter is the fallback. Ethiopic headings always use Noto Sans Ethiopic.
+- **Display** (Latin headings): Space Grotesk Variable, self-hosted (22 KB), preloaded on Latin-script pages. Ethiopic headings always use Noto Sans Ethiopic.
+- **Mono** (eyebrows, figures, codes and references): JetBrains Mono Variable, subset, never preloaded.
 - **Numbers:** tabular figures (`font-variant-numeric: tabular-nums`) in KPIs, tables and countdowns.
 - **Scale:** a fluid `clamp()` scale. Display 56→36 px, h1 44→30, h2 32→24, h3 22→19, body 18→16, small 14.
 

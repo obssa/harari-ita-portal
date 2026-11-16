@@ -21,9 +21,9 @@
 
                 <header class="mt-8 flex flex-wrap items-center gap-8">
                     @if ($leader->portrait)
-                        <x-picture :media="$leader->portrait" preset="square" sizes="12rem" loading="eager" fetchpriority="high" class="size-40 shrink-0 rounded-full object-cover ring-6 ring-gold-500 sm:size-48" />
+                        <x-picture :media="$leader->portrait" preset="square" sizes="12rem" loading="eager" fetchpriority="high" class="size-40 shrink-0 rounded-full object-cover ring-6 ring-saffron-500 sm:size-48" />
                     @else
-                        <span aria-hidden="true" class="flex size-40 shrink-0 items-center justify-center rounded-full bg-primary-900 text-5xl font-extrabold text-white ring-6 ring-gold-500 sm:size-48">{{ mb_substr($translation->name, 0, 1) }}</span>
+                        <span aria-hidden="true" class="flex size-40 shrink-0 items-center justify-center rounded-full bg-primary-900 text-5xl font-extrabold text-white ring-6 ring-saffron-500 sm:size-48">{{ mb_substr($translation->name, 0, 1) }}</span>
                     @endif
                     <div class="min-w-0 flex-1 basis-80">
                         <p class="kicker">{{ $leader->body->label() }}</p>
@@ -36,7 +36,7 @@
                                 <li><a href="{{ route('offices.show', ['locale' => $office->locale, 'slug' => $office->slug]) }}"><x-ui.badge tone="primary">{{ $office->getAttribute('name') }}</x-ui.badge></a></li>
                             @endif
                             @if ($pillar)
-                                <li><a href="{{ route('pillars.show', ['locale' => $pillar->locale, 'slug' => $pillar->slug]) }}"><x-ui.badge tone="magenta">{{ $pillar->getAttribute('name') }}</x-ui.badge></a></li>
+                                <li><a href="{{ route('pillars.show', ['locale' => $pillar->locale, 'slug' => $pillar->slug]) }}"><x-ui.badge tone="ruby">{{ $pillar->getAttribute('name') }}</x-ui.badge></a></li>
                             @endif
                         </ul>
                     </div>
@@ -83,7 +83,7 @@
                     <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                         @foreach ($photos as $number => $photo)
                             <li>
-                                <a href="#leader-photo-{{ $number + 1 }}" class="group block overflow-hidden rounded-card bg-surface-muted ring-1 ring-line focus-visible:outline-3 focus-visible:outline-gold-500">
+                                <a href="#leader-photo-{{ $number + 1 }}" class="group block overflow-hidden rounded-card bg-surface-muted ring-1 ring-line focus-visible:outline-3 focus-visible:outline-saffron-500">
                                     <x-picture :media="$photo" preset="square" sizes="(min-width: 64rem) 18rem, 50vw" class="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                                 </a>
                             </li>
@@ -99,7 +99,7 @@
                                     <span class="flex gap-2">
                                         @if ($number > 0)<a href="#leader-photo-{{ $number }}" class="rounded-full px-3 py-1.5 ring-1 ring-white/40 hover:bg-white/10">{{ __('leaders.photo_previous') }}</a>@endif
                                         @if ($number < $photos->count() - 1)<a href="#leader-photo-{{ $number + 2 }}" class="rounded-full px-3 py-1.5 ring-1 ring-white/40 hover:bg-white/10">{{ __('leaders.photo_next') }}</a>@endif
-                                        <a href="#leader-photos" class="rounded-full bg-gold-500 px-3 py-1.5 font-semibold text-ink-brand hover:bg-gold-400">{{ __('leaders.photo_close') }}</a>
+                                        <a href="#leader-photos" class="rounded-full bg-saffron-500 px-3 py-1.5 font-semibold text-ink-brand hover:bg-saffron-400">{{ __('leaders.photo_close') }}</a>
                                     </span>
                                 </figcaption>
                             </figure>

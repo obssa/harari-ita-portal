@@ -5,7 +5,7 @@
     @foreach ($links as $platform => $link)
         <li>
             <a href="{{ $link['url'] }}" rel="noopener me"
-               class="group flex h-full items-center gap-4 rounded-card border border-line bg-surface p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold-500">
+               class="group flex h-full items-center gap-4 rounded-card border border-line bg-surface p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-saffron-500">
                 <span class="inline-flex size-12 shrink-0 items-center justify-center rounded-full text-white shadow-sm" style="background-color: {{ $link['color'] }}">
                     <x-social-icon :platform="$platform" class="size-6" />
                 </span>

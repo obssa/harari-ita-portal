@@ -66,42 +66,49 @@
 }
 
 /* Headline sizes that shrink slightly for Ethiopic (use instead of text-4xl etc. on headings). */
-/* ADR-0062: confident, tight headings; Ethiopic scripts slightly smaller (--heading-scale). */
+/* ADR-0007: Space Grotesk for Latin headings, tight and technical; Ethiopic falls through to Noto Sans
+   Ethiopic and is set slightly smaller (--heading-scale). */
 @utility heading-1 {
+    font-family: var(--font-display);
     font-size: calc(clamp(var(--text-3xl), 1.6rem + 2.4vw, var(--text-5xl)) * var(--heading-scale, 1));
-    line-height: 1.1;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.025em;
 }
 
-/* The largest headline, for full-bleed page openings (ADR-0065). */
+/* The largest headline, for full-bleed page openings. */
 @utility heading-display {
-    font-size: calc(clamp(2.375rem, 1.4rem + 3.8vw, 4.5rem) * var(--heading-scale, 1));
-    line-height: 1.04;
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: calc(clamp(2.375rem, 1.4rem + 3.8vw, 4.75rem) * var(--heading-scale, 1));
+    line-height: 1.02;
+    font-weight: 700;
     letter-spacing: -0.035em;
 }
 
 @utility heading-2 {
+    font-family: var(--font-display);
     font-size: calc(var(--text-3xl) * var(--heading-scale, 1));
-    line-height: 1.2;
-    font-weight: 800;
+    line-height: 1.15;
+    font-weight: 700;
     letter-spacing: -0.02em;
 }
 
 @utility heading-3 {
+    font-family: var(--font-display);
     font-size: calc(var(--text-xl) * var(--heading-scale, 1));
-    font-weight: 700;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
-/* Small capitals above a heading, as on the canvas. */
+/* The mono eyebrow above a heading (ADR-0007): primary-700 on light (7.5:1 on white, 6.7:1 on plaster),
+   cyan-300 on night surfaces. */
 @utility kicker {
+    font-family: var(--font-mono);
     font-size: var(--text-xs);
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-weight: 600;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    /* accent-700: 6.5:1 on plaster and white (accent-600 fell just short on plaster). */
-    color: var(--color-accent-700);
+    color: var(--color-eyebrow);
 }
 
 /* Post and page bodies from the block editor (ADR-0012). */
@@ -143,7 +150,7 @@
     }
 
     .prose-content blockquote {
-        border-inline-start: 4px solid var(--color-accent-500);
+        border-inline-start: 4px solid var(--color-cyan-500);
         padding-inline-start: 1em;
         color: var(--color-ink-muted);
         font-style: italic;

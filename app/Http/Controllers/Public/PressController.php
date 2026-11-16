@@ -22,13 +22,13 @@ use Illuminate\Contracts\View\View;
  */
 final class PressController extends Controller
 {
-    /** The colours of the identity (ADR-0062), as journalists need them. */
+    /** The colours of the logo (ADR-0006), as journalists need them. */
     public const PALETTE = [
-        'primary' => '#0B6CA8',
-        'primary_dark' => '#083A5C',
-        'gold' => '#F5B800',
-        'accent' => '#B4532A',
-        'ink' => '#14161A',
+        'primary' => '#105D6F',
+        'primary_dark' => '#0B4A5C',
+        'saffron' => '#E8912D',
+        'cyan' => '#1296AB',
+        'ink' => '#0B1A22',
     ];
 
     public function press(PressKitSettings $settings): View

@@ -24,9 +24,9 @@ enum PostType: string
         return match ($this) {
             self::News => 'primary',
             self::PressRelease => 'ink',
-            self::Statement => 'accent',
-            self::Speech => 'magenta',
-            self::Announcement => 'gold',
+            self::Statement => 'cyan',
+            self::Speech => 'ruby',
+            self::Announcement => 'saffron',
         };
     }
 

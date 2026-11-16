@@ -13,8 +13,8 @@
                     @php
                         $shown = PublicDirectory::shown($pillar, $locale);
                         $ground = match ($pillar->accentTone()) {
-                            'magenta' => 'bg-magenta-700',
-                            'accent' => 'bg-accent-700',
+                            'ruby' => 'bg-ruby-700',
+                            'cyan' => 'bg-cyan-700',
                             'night' => 'bg-primary-900',
                             default => 'bg-primary-700',
                         };
@@ -31,7 +31,7 @@
                                     <p class="mt-3 max-w-prose text-lg text-white/85">{{ $shown->getAttribute('summary') }}</p>
                                 @endif
                             </div>
-                            <p class="relative mt-8 inline-flex items-center gap-2 font-bold text-gold-300">
+                            <p class="relative mt-8 inline-flex items-center gap-2 font-bold text-saffron-300">
                                 {{ __('homepage.visit') }}
                                 <svg aria-hidden="true" class="size-4 transition-transform group-hover:translate-x-1 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                             </p>

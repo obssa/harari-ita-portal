@@ -2,9 +2,9 @@
 <span {{ $attributes->class([
     'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold ring-1 ring-inset',
     'bg-primary-50 text-primary-800 ring-primary-200 dark:bg-primary-950 dark:text-primary-200 dark:ring-primary-800' => $tone === 'primary',
-    'bg-accent-50 text-accent-800 ring-accent-200 dark:bg-accent-950 dark:text-accent-200 dark:ring-accent-800' => $tone === 'accent',
-    'bg-gold-50 text-gold-800 ring-gold-200' => $tone === 'gold',
-    'bg-magenta-50 text-magenta-700 ring-magenta-100' => $tone === 'magenta',
+    'bg-cyan-50 text-cyan-800 ring-cyan-200 dark:bg-cyan-950 dark:text-cyan-200 dark:ring-cyan-800' => $tone === 'cyan',
+    'bg-saffron-50 text-saffron-800 ring-saffron-200' => $tone === 'saffron',
+    'bg-ruby-50 text-ruby-700 ring-ruby-100' => $tone === 'ruby',
     'bg-ink-brand text-white ring-ink-brand' => $tone === 'ink',
     'bg-surface-muted text-ink-muted ring-line' => $tone === 'neutral',
     'bg-success-50 text-success-800 ring-success-600/30' => $tone === 'success',

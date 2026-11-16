@@ -2,10 +2,10 @@
 @php
     // ADR-0065: a story without a photo still gets a picture, in its type's colour, with the Agency's mark.
     $ground = match ($type?->tone()) {
-        'accent' => 'from-accent-700 to-accent-900',
-        'magenta' => 'from-magenta-600 to-magenta-700',
+        'cyan' => 'from-cyan-700 to-cyan-900',
+        'ruby' => 'from-ruby-600 to-ruby-700',
         'ink' => 'from-ink-brand to-primary-950',
-        'gold' => 'from-gold-500 to-accent-600',
+        'saffron' => 'from-saffron-500 to-cyan-600',
         default => 'from-primary-800 to-primary-950',
     };
 @endphp
@@ -17,7 +17,7 @@
             <img src="{{ $lead ? '/brand/logo-256.png' : '/brand/logo-128.png' }}" alt="" width="112" height="112" @class(['size-14' => ! $lead, 'size-24' => $lead])>
         </span>
         @if ($lead)
-            <span @class(['text-sm font-extrabold tracking-[0.18em] uppercase', 'text-ink-brand/80' => $type?->tone() === 'gold', 'text-white/90' => $type?->tone() !== 'gold'])>{{ __('site.name') }}</span>
+            <span @class(['text-sm font-extrabold tracking-[0.18em] uppercase', 'text-ink-brand/80' => $type?->tone() === 'saffron', 'text-white/90' => $type?->tone() !== 'saffron'])>{{ __('site.name') }}</span>
         @endif
     </span>
 </div>

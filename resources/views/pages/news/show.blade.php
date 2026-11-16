@@ -25,7 +25,7 @@
 
                 <header class="mt-6 max-w-3xl">
                     @if ($translation->kicker)
-                        <p class="text-sm font-semibold uppercase tracking-wide text-accent-700 dark:text-accent-300">{{ $translation->kicker }}</p>
+                        <p class="text-sm font-semibold uppercase tracking-wide text-cyan-700 dark:text-cyan-300">{{ $translation->kicker }}</p>
                     @endif
                     <h1 class="heading-1 mt-2">{{ $translation->title }}</h1>
                     @if ($translation->excerpt)

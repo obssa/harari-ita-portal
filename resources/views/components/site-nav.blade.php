@@ -2,7 +2,7 @@
     {{-- ADR-0074: phones and tablets: one round button opens a sheet under the header with search, the sections
          (each opens in place), and the Agency's pages. No script needed. --}}
     <details name="site-nav" class="group/menu">
-        <summary class="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-full bg-ink-brand text-white transition-colors hover:bg-primary-900 dark:bg-white/10 dark:ring-1 dark:ring-white/25 dark:hover:bg-white/20 group-open/menu:bg-gold-500 group-open/menu:text-ink-brand group-open/menu:ring-0 [&::-webkit-details-marker]:hidden">
+        <summary class="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-full bg-ink-brand text-white transition-colors hover:bg-primary-900 dark:bg-white/10 dark:ring-1 dark:ring-white/25 dark:hover:bg-white/20 group-open/menu:bg-saffron-500 group-open/menu:text-ink-brand group-open/menu:ring-0 [&::-webkit-details-marker]:hidden">
             <svg aria-hidden="true" class="size-5 group-open/menu:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h16"/></svg>
             <svg aria-hidden="true" class="hidden size-5 group-open/menu:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
             <span class="sr-only">{{ __('nav.menu') }}</span>
@@ -92,13 +92,13 @@
                         <details name="site-nav" class="group">
                             <summary @class([
                                 'inline-flex cursor-pointer list-none items-center gap-1.5 border-b-3 px-3 pt-3 pb-2.5 transition-colors duration-150 [&::-webkit-details-marker]:hidden',
-                                'border-gold-500 text-primary-700 dark:text-primary-300' => $item['active'],
-                                'border-transparent text-ink hover:text-primary-700 group-open:border-gold-500 group-open:bg-surface-muted group-open:text-primary-700' => ! $item['active'],
+                                'border-saffron-500 text-primary-700 dark:text-primary-300' => $item['active'],
+                                'border-transparent text-ink hover:text-primary-700 group-open:border-saffron-500 group-open:bg-surface-muted group-open:text-primary-700' => ! $item['active'],
                             ])>
                                 {{ $item['label'] }}
                                 <svg aria-hidden="true" class="size-3 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
                             </summary>
-                            <div class="absolute inset-x-0 top-full z-40 border-t-3 border-gold-500 bg-surface shadow-2xl">
+                            <div class="absolute inset-x-0 top-full z-40 border-t-3 border-saffron-500 bg-surface shadow-2xl">
                                 <div class="mx-auto grid max-w-page gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[18rem_1fr]">
                                     <div class="flex flex-col gap-3">
                                         <p class="text-2xl font-extrabold tracking-tight">{{ $item['label'] }}</p>
@@ -130,7 +130,7 @@
                         <a href="{{ $item['url'] }}" @if ($item['active']) aria-current="page" @endif @if ($item['external']) rel="noopener" @endif
                            @class([
                                'inline-block border-b-3 px-3 pt-3 pb-2.5 transition-colors duration-150',
-                               'border-gold-500 text-primary-700 dark:text-primary-300' => $item['active'],
+                               'border-saffron-500 text-primary-700 dark:text-primary-300' => $item['active'],
                                'border-transparent text-ink hover:text-primary-700' => ! $item['active'],
                            ])>{{ $item['label'] }}</a>
                     @endif

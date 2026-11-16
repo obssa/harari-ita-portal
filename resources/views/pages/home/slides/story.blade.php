@@ -26,7 +26,7 @@
                 @endif
             </p>
             @if ($translation->kicker)
-                <p class="animate-rise mt-5 text-xs font-bold tracking-wider text-gold-400 uppercase">{{ $translation->kicker }}</p>
+                <p class="animate-rise mt-5 text-xs font-bold tracking-wider text-saffron-400 uppercase">{{ $translation->kicker }}</p>
             @endif
             <h2 class="heading-1 animate-rise mt-3 text-white [--rise-delay:120ms]">
                 <a href="{{ $url }}" class="underline-offset-4 hover:underline">{{ $translation->title }}</a>
@@ -34,7 +34,7 @@
             @if ($translation->excerpt)
                 <p class="animate-rise mt-4 max-w-prose text-lg text-primary-100 [--rise-delay:240ms]">{{ $translation->excerpt }}</p>
             @endif
-            <p class="animate-rise mt-8 [--rise-delay:360ms]"><x-ui.button :href="$url" variant="gold" size="lg">{{ __('homepage.read_more') }}</x-ui.button></p>
+            <p class="animate-rise mt-8 [--rise-delay:360ms]"><x-ui.button :href="$url" variant="action" size="lg">{{ __('homepage.read_more') }}</x-ui.button></p>
         </article>
     </div>
 </div>

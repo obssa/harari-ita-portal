@@ -1,13 +1,13 @@
 @props(['title', 'lead' => null, 'kicker' => null, 'tone' => 'plaster', 'crumbs' => [], 'headingLang' => null])
 @php
-    $dark = in_array($tone, ['night', 'ink', 'magenta', 'primary', 'accent'], true);
+    $dark = in_array($tone, ['night', 'ink', 'ruby', 'primary', 'cyan'], true);
     $ground = match ($tone) {
         'night' => 'bg-primary-900 text-white',
         'ink' => 'bg-ink-brand text-white',
-        'magenta' => 'bg-magenta-700 text-white',
+        'ruby' => 'bg-ruby-700 text-white',
         'primary' => 'bg-primary-700 text-white',
-        'accent' => 'bg-accent-700 text-white',
-        'gold' => 'bg-gold-500 text-ink-brand',
+        'cyan' => 'bg-cyan-700 text-white',
+        'saffron' => 'bg-saffron-500 text-ink-brand',
         default => 'bg-surface-muted',
     };
 @endphp
@@ -21,8 +21,8 @@
             <ol @class([
                 'flex flex-wrap items-center gap-x-2 gap-y-1 text-sm',
                 'text-white/75 [&_a:hover]:text-white' => $dark,
-                'text-ink-brand/75' => $tone === 'gold',
-                'text-ink-muted [&_a:hover]:text-ink' => ! $dark && $tone !== 'gold',
+                'text-ink-brand/75' => $tone === 'saffron',
+                'text-ink-muted [&_a:hover]:text-ink' => ! $dark && $tone !== 'saffron',
             ])>
                 <li><a href="{{ route('home') }}" class="underline-offset-4 hover:underline">{{ __('nav.home') }}</a></li>
                 @foreach ($crumbs as $crumb)
@@ -40,11 +40,11 @@
         <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
             <div class="max-w-3xl">
                 @if ($kicker)
-                    <p @class(['kicker', 'text-gold-400!' => $dark, 'text-ink-brand!' => $tone === 'gold'])>{{ $kicker }}</p>
+                    <p @class(['kicker', 'text-saffron-400!' => $dark, 'text-ink-brand!' => $tone === 'saffron'])>{{ $kicker }}</p>
                 @endif
                 <h1 @if ($headingLang) lang="{{ $headingLang }}" @endif @class(['heading-1', 'mt-2' => $kicker, 'text-white' => $dark])>{{ $title }}</h1>
                 @if ($lead)
-                    <p @class(['mt-3 max-w-prose text-lg', 'text-white/85' => $dark, 'text-ink-brand/80' => $tone === 'gold', 'text-ink-muted' => ! $dark && $tone !== 'gold'])>{{ $lead }}</p>
+                    <p @class(['mt-3 max-w-prose text-lg', 'text-white/85' => $dark, 'text-ink-brand/80' => $tone === 'saffron', 'text-ink-muted' => ! $dark && $tone !== 'saffron'])>{{ $lead }}</p>
                 @endif
             </div>
             @isset($actions)

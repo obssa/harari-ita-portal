@@ -15,7 +15,7 @@
         $alternates[$l] = url('/styleguide?lang='.$l);
     }
 
-    $scales = ['primary', 'accent'];
+    $scales = ['primary', 'saffron', 'cyan', 'ruby'];
     $steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 @endphp
 <x-layouts.public title="Styleguide" :alternates="$alternates">
@@ -73,7 +73,7 @@
                 <x-ui.button disabled>Disabled</x-ui.button>
             </div>
             <div class="mt-4 flex flex-wrap gap-2">
-                @foreach (['primary', 'accent', 'neutral', 'success', 'warning', 'danger'] as $tone)
+                @foreach (['primary', 'cyan', 'saffron', 'ruby', 'neutral', 'success', 'warning', 'danger'] as $tone)
                     <x-ui.badge :tone="$tone">{{ ucfirst($tone) }}</x-ui.badge>
                 @endforeach
             </div>

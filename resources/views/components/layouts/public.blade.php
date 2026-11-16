@@ -23,6 +23,8 @@
     <link rel="preload" href="/fonts/portal/inter-latin-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
     @if ($ethiopic)
         <link rel="preload" href="/fonts/portal/noto-sans-ethiopic-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
+    @else
+        <link rel="preload" href="/fonts/portal/space-grotesk-latin-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
     @endif
     <x-locale-meta :alternates="$alternates" />
     <x-seo :title="$title ?? __('site.name')" :description="$description ?? __('site.description')" :image="$image ?? app(\App\Domain\Content\Support\OgImage::class)->url('site-'.app()->getLocale(), __('site.name'), __('site.office'))" :type="$type" :json-ld="$jsonLd" />
@@ -39,12 +41,12 @@
         <div class="mx-auto flex max-w-page items-center justify-between gap-x-6 px-4 py-1 sm:px-6 sm:py-1.5">
             <div class="hidden items-center gap-x-5 md:flex">
                 <p class="flex items-center gap-2">
-                    <svg aria-hidden="true" class="size-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                    <svg aria-hidden="true" class="size-4 text-saffron-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
                     <span class="sr-only">{{ __('calendar.today') }}: </span><x-date :date="now()" />
                 </p>
                 @if ($hotline)
                     <p class="flex items-center gap-2">
-                        <svg aria-hidden="true" class="size-4 text-gold-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+                        <svg aria-hidden="true" class="size-4 text-saffron-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
                         <span>{{ __('footer.hotline') }}</span>
                         <a href="tel:{{ preg_replace('/[^0-9+]/', '', $hotline) }}" class="font-semibold text-white">{{ $hotline }}</a>
                     </p>
@@ -75,7 +77,7 @@
                         <svg aria-hidden="true" class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
                         <span class="sr-only lg:not-sr-only lg:truncate lg:text-sm">{{ __('search.short') }}</span>
                     </summary>
-                    <div class="absolute inset-x-0 top-full z-40 border-t-3 border-gold-500 bg-surface shadow-2xl">
+                    <div class="absolute inset-x-0 top-full z-40 border-t-3 border-saffron-500 bg-surface shadow-2xl">
                         <form method="get" action="{{ route('search') }}" role="search" class="mx-auto flex max-w-page gap-2 px-4 py-5 sm:px-6 sm:py-6">
                             <label for="site-search" class="sr-only">{{ __('search.label') }}</label>
                             <input id="site-search" type="search" name="q" maxlength="100" minlength="2" required placeholder="{{ __('search.placeholder') }}"

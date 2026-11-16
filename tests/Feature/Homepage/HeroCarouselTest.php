@@ -50,7 +50,7 @@ it('opens the homepage with the welcome until a slide exists, then with the caro
     $this->get('/en')->assertOk()
         ->assertSee('data-carousel', escape: false)
         ->assertSee('aria-roledescription="'.__('homepage.carousel.roledescription', [], 'en').'"', escape: false)
-        ->assertSeeInOrder(['id="hero-slide-1"', 'Sample <span class="text-gold-400">first</span> slide', 'id="hero-slide-2"', 'Sample second slide'], escape: false)
+        ->assertSeeInOrder(['id="hero-slide-1"', 'Sample <span class="text-saffron-400">first</span> slide', 'id="hero-slide-2"', 'Sample second slide'], escape: false)
         ->assertSee(__('homepage.carousel.go_to', ['number' => 2, 'title' => 'Sample second slide'], 'en'))
         ->assertSee('data-controls', escape: false)
         ->assertSee(__('homepage.carousel.pause', [], 'en'));
@@ -130,7 +130,7 @@ it('draws the banner and the portrait layouts', function () {
         ->assertSee('<span class="sr-only">Sample slogan ahead</span>', escape: false)
         ->assertSee('>ahead</span>', escape: false)
         ->assertSee('clip-path:polygon(0_0,81%_0,100%_100%,19%_100%)', escape: false)
-        ->assertSee('Sample message <span class="text-gold-400">on a firm foundation</span>', escape: false)
+        ->assertSee('Sample message <span class="text-saffron-400">on a firm foundation</span>', escape: false)
         ->assertSeeInOrder(['H.E Sample Person', 'Head of the sample agency'])
         ->assertSee('Sample slide picture');
 });

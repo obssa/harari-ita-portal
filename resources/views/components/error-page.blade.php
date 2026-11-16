@@ -19,7 +19,7 @@
 </head>
 <body class="flex min-h-screen flex-col bg-canvas text-ink antialiased">
     <main class="mx-auto flex w-full max-w-page flex-1 flex-col justify-center px-4 py-16 sm:px-6">
-        <p class="text-sm font-semibold text-accent-700 dark:text-accent-300">{{ __('errors.code', ['code' => $code]) }}</p>
+        <p class="text-sm font-semibold text-cyan-700 dark:text-cyan-300">{{ __('errors.code', ['code' => $code]) }}</p>
         @foreach ($languages as $language)
             <section lang="{{ $language }}" @class(['max-w-prose', 'mt-10 border-t border-line pt-8' => ! $loop->first])>
                 <h1 class="heading-1 mt-2">{{ __("errors.{$code}.title", [], $language) }}</h1>

@@ -1,104 +1,134 @@
 /*
- * Design tokens (PLAN.md §12, ADR-0010). Every colour, font and radius used by
- * the public site comes from here; components use the Tailwind utilities
- * these tokens generate (bg-primary-600, text-accent-700, rounded-card ...).
+ * Design tokens (DESIGN.md §1, ADR-0007). Every colour, font and radius used by the public site comes
+ * from here; components use the Tailwind utilities these tokens generate (bg-primary-700, text-saffron-700 ...).
+ * The colours are taken from the Agency's logo (ADR-0006) and checked by scripts/design/contrast.py.
  */
 @theme {
-    /* The brand blue until the phase 1 tokens (DESIGN.md §1); 600 is the brand colour (#0B6CA8, 5.6:1 on white),
-       900 the night blue of heroes and figure bands. */
-    --color-primary-50: #eef6fb;
-    --color-primary-100: #dcedf7;
-    --color-primary-200: #badcef;
-    --color-primary-300: #86c2e4;
-    --color-primary-400: #4ca2d3;
-    --color-primary-500: #1f86c2;
-    --color-primary-600: #0b6ca8;
-    --color-primary-700: #095a8c;
-    --color-primary-800: #084a73;
-    --color-primary-900: #083a5c;
-    --color-primary-950: #05253b;
+    /* Primary: the emblem's teal; 700 is the logo's #105D6F (7.5:1 on white), 800 the wordmark's #0B4A5C. */
+    --color-primary-50: #e9f6f9;
+    --color-primary-100: #d5eff8;
+    --color-primary-200: #b7dfeb;
+    --color-primary-300: #91c7d7;
+    --color-primary-400: #68a8ba;
+    --color-primary-500: #488c9f;
+    --color-primary-600: #2d7386;
+    --color-primary-700: #105d6f;
+    --color-primary-800: #0b4a5c;
+    --color-primary-900: #003541;
+    --color-primary-950: #00202a;
 
-    /* Gold accent: calls to action and highlights, always with ink text. */
-    --color-gold-50: #fff6d6;
-    --color-gold-100: #ffedad;
-    --color-gold-200: #ffe07a;
-    --color-gold-300: #ffd447;
-    --color-gold-400: #ffc61f;
-    --color-gold-500: #f5b800;
-    --color-gold-600: #d69e00;
-    --color-gold-700: #a67a00;
-    --color-gold-800: #7a5a00;
-    --color-gold-900: #5c4300;
+    /* Saffron: the logo's orange curve (#E8912D). The one action per view; text on it is always ink. */
+    --color-saffron-50: #fef6ec;
+    --color-saffron-100: #fde9d0;
+    --color-saffron-200: #fad3a4;
+    --color-saffron-300: #ffcd87;
+    --color-saffron-400: #ffac54;
+    --color-saffron-500: #e8912d;
+    --color-saffron-600: #c97500;
+    --color-saffron-700: #aa5c00;
+    --color-saffron-800: #8b4800;
+    --color-saffron-900: #6c3300;
+    --color-saffron-950: #4a1f00;
 
-    /* Basket magenta from the logo: the Women's Pillar and speeches (600: 5.9:1 on white). */
-    --color-magenta-50: #fce8f0;
-    --color-magenta-100: #f9d0e1;
-    --color-magenta-600: #c2185b;
-    --color-magenta-700: #9e1349;
+    /* Cyan: the hexagon outlines (#1296AB). Signals, nodes, data highlights. */
+    --color-cyan-50: #ecfafc;
+    --color-cyan-100: #d6f4f8;
+    --color-cyan-200: #baf6ff;
+    --color-cyan-300: #8fe2f3;
+    --color-cyan-400: #5fc6db;
+    --color-cyan-500: #38adc2;
+    --color-cyan-600: #1296ab;
+    --color-cyan-700: #007c90;
+    --color-cyan-800: #006475;
+    --color-cyan-900: #004b5a;
+    --color-cyan-950: #00323d;
 
-    /* Sky blue from the logo: patterns only, never text. */
-    --color-sky-brand: #29a8e0;
+    /* Ruby: the single red hexagon (#B8323E). Alerts and the rare emphasis, never decoration. */
+    --color-ruby-50: #ffeae9;
+    --color-ruby-100: #ffd9d7;
+    --color-ruby-200: #ffbdbb;
+    --color-ruby-300: #ff9898;
+    --color-ruby-400: #f16f72;
+    --color-ruby-500: #d54e55;
+    --color-ruby-600: #b8323e;
+    --color-ruby-700: #9c1c2c;
+    --color-ruby-800: #7f0d1f;
+    --color-ruby-900: #610012;
+    --color-ruby-950: #410006;
 
-    /* Jugol plaster and ink (ADR-0062). */
-    --color-plaster: #f7f2e9;
-    --color-plaster-line: #e5dccb;
-    --color-ink-brand: #14161a;
+    /* Night: the dark base of heroes, the footer and dark mode, from ink-teal to the wordmark teal. */
+    --color-night-950: #04121a;
+    --color-night-900: #06171e;
+    --color-night-800: #0a222b;
+    --color-night-700: #0e2e39;
+    --color-night-600: #143c49;
+    --color-night-line: #1d4a58;
+    --color-night-ink: #e8eef0;
+    --color-night-muted: #a9bec5;
 
-    /* Harar heritage ochre/terracotta, used sparingly for highlights (600: 5.0:1 on white). */
-    --color-accent-50: #fdf5ef;
-    --color-accent-100: #f9e6d8;
-    --color-accent-200: #f2cbb0;
-    --color-accent-300: #e9a87f;
-    --color-accent-400: #de7f4f;
-    --color-accent-500: #cd6234;
-    --color-accent-600: #b4532a;
-    --color-accent-700: #934225;
-    --color-accent-800: #773723;
-    --color-accent-900: #622f20;
-    --color-accent-950: #35160e;
+    /* Plaster: the gate in the emblem (#F6F3EC); calm light surfaces. */
+    --color-plaster: #f6f3ec;
+    --color-plaster-line: #e4ddd0;
+    --color-ink-brand: #0b1a22;
+    --color-slate-brand: #3e5f69;
+
+    /* The five pillars, in order (PLAN §1); chart series follow the same order (DESIGN.md §5). */
+    --color-pillar-1: #1296ab;
+    --color-pillar-2: #e8912d;
+    --color-pillar-3: #4c8c4a;
+    --color-pillar-4: #4b5ba6;
+    --color-pillar-5: #b8323e;
 
     /* Semantic colours. */
-    --color-success-50: var(--color-emerald-50);
-    --color-success-600: var(--color-emerald-600);
-    --color-success-800: var(--color-emerald-800);
-    --color-warning-50: var(--color-amber-50);
-    --color-warning-600: var(--color-amber-600);
-    --color-warning-800: var(--color-amber-800);
-    --color-danger-50: var(--color-red-50);
-    --color-danger-600: var(--color-red-600);
-    --color-danger-800: var(--color-red-800);
+    --color-success-50: #ecf7ef;
+    --color-success-600: #2e7d46;
+    --color-success-800: #1d5430;
+    --color-warning-50: var(--color-saffron-50);
+    --color-warning-600: var(--color-saffron-700);
+    --color-warning-800: var(--color-saffron-900);
+    --color-danger-50: var(--color-ruby-50);
+    --color-danger-600: var(--color-ruby-600);
+    --color-danger-800: var(--color-ruby-800);
 
     /* Surfaces and text; redefined for dark mode below. */
-    --color-canvas: var(--color-white);
+    --color-canvas: #fbfaf7;
     --color-surface: var(--color-white);
     --color-surface-muted: var(--color-plaster);
-    --color-line: #e5e1d8;
+    --color-line: #dde4e6;
     --color-ink: var(--color-ink-brand);
-    --color-ink-muted: #4b5563;
+    --color-ink-muted: var(--color-slate-brand);
     --color-link: var(--color-primary-700);
+    --color-eyebrow: var(--color-primary-700);
 
     --font-sans: 'Inter Variable', 'Noto Sans Ethiopic Variable', 'Abyssinica SIL', ui-sans-serif, system-ui,
         sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    /* Latin headings; Ethiopic characters fall through to Noto Sans Ethiopic. */
+    --font-display: 'Space Grotesk Variable', 'Inter Variable', 'Noto Sans Ethiopic Variable', ui-sans-serif,
+        system-ui, sans-serif;
+    /* Eyebrows, figures, codes and references. */
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', Menlo, monospace;
 
-    --radius-card: 1rem;
-    --radius-control: 0.5rem;
+    --radius-card: 0.875rem;
+    --radius-control: 0.625rem;
 
     --container-page: 80rem;
-    --container-prose: 70ch;
+    --container-prose: 68ch;
 
-    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
     --duration-fast: 150ms;
     --duration-base: 250ms;
+    --duration-slow: 400ms;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --color-canvas: #0e1013;
-        --color-surface: #16191e;
-        --color-surface-muted: #1f232a;
-        --color-line: #30353d;
-        --color-ink: var(--color-slate-50);
-        --color-ink-muted: var(--color-slate-300);
-        --color-link: var(--color-primary-300);
+        --color-canvas: var(--color-night-900);
+        --color-surface: var(--color-night-800);
+        --color-surface-muted: var(--color-night-950);
+        --color-line: var(--color-night-line);
+        --color-ink: var(--color-night-ink);
+        --color-ink-muted: var(--color-night-muted);
+        --color-link: var(--color-cyan-300);
+        --color-eyebrow: var(--color-cyan-300);
     }
 }

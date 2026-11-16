@@ -43,13 +43,13 @@
             <div class="mx-auto flex max-w-page items-end px-4 pb-4 sm:px-6 sm:pb-6">
                 <div class="pointer-events-auto inline-flex items-center gap-1 rounded-full bg-primary-950/80 p-1 text-white shadow-lg ring-1 ring-white/15 backdrop-blur">
                     <button type="button" data-toggle aria-controls="hero-track" aria-label="{{ __('homepage.carousel.pause') }}"
-                            class="inline-flex size-9 items-center justify-center rounded-full hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-gold-400">
+                            class="inline-flex size-9 items-center justify-center rounded-full hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-saffron-400">
                         <svg data-icon="pause" aria-hidden="true" class="size-4" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
                         <svg data-icon="play" aria-hidden="true" class="hidden size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
                     </button>
                     @if ($settings['show_arrows'] ?? true)
                         <button type="button" data-prev aria-controls="hero-track" aria-label="{{ __('homepage.carousel.previous') }}"
-                                class="inline-flex size-9 items-center justify-center rounded-full hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-gold-400">
+                                class="inline-flex size-9 items-center justify-center rounded-full hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-saffron-400">
                             <svg aria-hidden="true" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                         </button>
                     @endif
@@ -59,8 +59,8 @@
                                 <li>
                                     <button type="button" data-dot="{{ $index }}" aria-controls="hero-track" aria-current="{{ $index === 0 ? 'true' : 'false' }}"
                                             aria-label="{{ __('homepage.carousel.go_to', ['number' => $index + 1, 'title' => $title]) }}"
-                                            class="group flex h-9 items-center px-1 focus-visible:outline-2 focus-visible:outline-gold-400">
-                                        <span aria-hidden="true" class="block h-2 w-2 rounded-full bg-white/50 transition-[width,background-color] duration-300 group-hover:bg-white group-aria-[current=true]:w-6 group-aria-[current=true]:bg-gold-400"></span>
+                                            class="group flex h-9 items-center px-1 focus-visible:outline-2 focus-visible:outline-saffron-400">
+                                        <span aria-hidden="true" class="block h-2 w-2 rounded-full bg-white/50 transition-[width,background-color] duration-300 group-hover:bg-white group-aria-[current=true]:w-6 group-aria-[current=true]:bg-saffron-400"></span>
                                     </button>
                                 </li>
                             @endforeach
@@ -68,14 +68,14 @@
                     @endif
                     @if ($settings['show_arrows'] ?? true)
                         <button type="button" data-next aria-controls="hero-track" aria-label="{{ __('homepage.carousel.next') }}"
-                                class="inline-flex size-9 items-center justify-center rounded-full hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-gold-400">
+                                class="inline-flex size-9 items-center justify-center rounded-full hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-saffron-400">
                             <svg aria-hidden="true" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                         </button>
                     @endif
                 </div>
             </div>
             @if ($settings['show_progress'] ?? true)
-                <span aria-hidden="true" class="absolute inset-x-0 bottom-0 block h-1 bg-white/10"><span data-progress class="block h-full bg-gold-500"></span></span>
+                <span aria-hidden="true" class="absolute inset-x-0 bottom-0 block h-1 bg-white/10"><span data-progress class="block h-full bg-saffron-500"></span></span>
             @endif
         </div>
         @vite('resources/js/carousel.js')

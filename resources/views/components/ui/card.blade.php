@@ -1,6 +1,6 @@
 @props(['href' => null, 'title', 'media' => null, 'preset' => 'landscape', 'kicker' => null, 'headingLevel' => 3])
 {{-- ADR-0062: cards lift to a gold edge on hover. --}}
-<article {{ $attributes->class('group relative flex flex-col overflow-hidden rounded-[1.125rem] border border-line bg-surface transition-[border-color,box-shadow] duration-150 hover:border-gold-500 hover:shadow-lg') }}>
+<article {{ $attributes->class('group relative flex flex-col overflow-hidden rounded-[1.125rem] border border-line bg-surface transition-[border-color,box-shadow] duration-150 hover:border-saffron-500 hover:shadow-lg') }}>
     @if ($media)
         <x-picture :media="$media" :preset="$preset" sizes="(min-width: 64rem) 25vw, (min-width: 40rem) 50vw, 100vw" class="aspect-video w-full object-cover" />
     @endif

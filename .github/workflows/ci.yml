@@ -31,6 +31,8 @@ jobs:
         run: |
           python3 scripts/check-hardcoded-strings.py --self-test
           python3 scripts/check-hardcoded-strings.py
+      - name: Colour contrast of the design tokens (WCAG AA)
+        run: python3 scripts/design/contrast.py
       - name: Composer security audit
         run: composer audit --no-interaction
       - name: Composer manifest is valid and the lock file matches

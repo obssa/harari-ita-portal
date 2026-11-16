@@ -1,4 +1,4 @@
-@php $accents = ['border-gold-500', 'border-sky-brand', 'border-accent-500', 'border-emerald-500']; @endphp
+@php $accents = ['border-saffron-500', 'border-cyan-500', 'border-cyan-500', 'border-emerald-500']; @endphp
 <section aria-labelledby="home-counters" class="relative overflow-hidden bg-primary-900 text-white">
     @include('pages.home._plate', ['class' => 'animate-spin-slower pointer-events-none absolute -end-24 -bottom-24 size-80 opacity-30'])
     <div class="relative mx-auto max-w-page px-4 py-16 sm:px-6">

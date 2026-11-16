@@ -49,7 +49,7 @@ class Pillar extends Model implements TranslatableModel
     protected $fillable = ['head_leader_id', 'logo_id', 'cover_image_id', 'phone', 'email', 'socials', 'sort', 'accent'];
 
     /** Brand colours a pillar can wear (ADR-0065). */
-    public const ACCENTS = ['primary', 'magenta', 'accent', 'night'];
+    public const ACCENTS = ['primary', 'cyan', 'saffron', 'ruby', 'night'];
 
     protected $attributes = ['sort' => 0];
 

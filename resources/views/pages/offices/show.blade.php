@@ -56,8 +56,8 @@
                                     @continue($shown === null)
                                     <li lang="{{ $shown->locale }}">
                                         <a href="{{ route('offices.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}"
-                                           class="reveal group flex h-full items-center gap-4 rounded-card border border-line bg-surface p-4 transition hover:-translate-y-0.5 hover:border-gold-500 hover:shadow-lg">
-                                            <span aria-hidden="true" class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-900 text-gold-400">
+                                           class="reveal group flex h-full items-center gap-4 rounded-card border border-line bg-surface p-4 transition hover:-translate-y-0.5 hover:border-saffron-500 hover:shadow-lg">
+                                            <span aria-hidden="true" class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-900 text-saffron-400">
                                                 <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
                                             </span>
                                             <span class="min-w-0">
