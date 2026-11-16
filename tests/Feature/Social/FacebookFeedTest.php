@@ -101,7 +101,7 @@ it('shows a gallery of photos on a leader\'s profile, in the chosen order, each 
     $first = galleryPicture('office');
     $second = galleryPicture('emblem');
     $leader = app(SaveLeader::class)->handle(new Leader, [
-        'body' => 'secretariat',
+        'body' => 'management',
         'photo_ids' => [$second->id, $first->id, $second->id, 999999],
         'translations' => ['en' => ['name' => 'Sample Gallery Leader', 'published' => true]],
     ], staff(SystemRole::Publisher, mfa: false));
@@ -109,7 +109,7 @@ it('shows a gallery of photos on a leader\'s profile, in the chosen order, each 
     expect($leader->photo_ids)->toBe([$second->id, $first->id])
         ->and($leader->photos()->pluck('id')->all())->toBe([$second->id, $first->id]);
 
-    $this->get('/en/leaders/sample-gallery-leader')->assertOk()
+    $this->get('/en/about/leadership/sample-gallery-leader')->assertOk()
         ->assertSee(__('leaders.photos', [], 'en'))
         ->assertSeeInOrder(['Sample emblem photo', 'Sample office photo'])
         ->assertSee('id="leader-photo-2"', escape: false)

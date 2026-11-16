@@ -3,29 +3,25 @@
 namespace App\Domain\Organisation\Enums;
 
 /**
- * The bodies the leadership directory is grouped by (PLAN.md §4 About:
- * Executive Committee, Central Committee, Secretariat, office heads), plus
- * pillar and forum leaders, and the region's government and councils
- * (ADR-0063).
+ * The groups the leadership page is arranged in (PLAN.md §3 About:
+ * leadership): the Agency's management, the directors of its directorates
+ * and the leads of its five pillars.
  */
 enum LeaderBody: string
 {
-    case ExecutiveCommittee = 'executive_committee';
-    case CentralCommittee = 'central_committee';
-    case Secretariat = 'secretariat';
-    case OfficeHeads = 'office_heads';
+    case Management = 'management';
+    case Directors = 'directors';
     case Pillars = 'pillars';
-    case Government = 'government';
 
     /**
-     * The order of the leadership page (ADR-0066): the region's government
-     * and councils first, then the party's bodies.
+     * The order of the leadership page: management first; its first person
+     * by rank opens the page as the head of the Agency.
      *
      * @return list<self>
      */
     public static function displayOrder(): array
     {
-        return [self::Government, self::ExecutiveCommittee, self::CentralCommittee, self::Secretariat, self::OfficeHeads, self::Pillars];
+        return [self::Management, self::Directors, self::Pillars];
     }
 
     public function description(?string $locale = null): string

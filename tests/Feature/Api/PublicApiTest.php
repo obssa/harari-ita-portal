@@ -304,9 +304,9 @@ it('gives public documents only, never internal ones', function () {
 
 it('lists offices and leaders and gives a leader page the public contacts', function () {
     $key = apiKey([ApiScope::Directory]);
-    $office = apiRecord(SaveOffice::class, new Office, ['type' => 'woreda', 'phone' => '+251900000000', 'translations' => ['en' => ['name' => 'Sample woreda office', 'published' => true]]]);
+    $office = apiRecord(SaveOffice::class, new Office, ['type' => 'regional_office', 'phone' => '+251900000000', 'translations' => ['en' => ['name' => 'Sample woreda office', 'published' => true]]]);
     $leader = apiRecord(SaveLeader::class, new Leader, [
-        'body' => 'executive_committee', 'office_id' => $office->id, 'email' => 'sample.leader@example.org',
+        'body' => 'management', 'office_id' => $office->id, 'email' => 'sample.leader@example.org',
         'translations' => ['en' => ['name' => 'Sample Chair', 'position' => 'Sample position', 'published' => true]],
     ]);
 

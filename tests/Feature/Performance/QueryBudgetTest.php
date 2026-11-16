@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\DB;
 function budgetRecords(string $kind, int $count, int $from = 0): void
 {
     $publisher = staff(SystemRole::Publisher);
-    $office = Office::query()->first() ?? app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'translations' => ['en' => ['name' => 'Sample budget office', 'published' => true]]], $publisher);
+    $office = Office::query()->first() ?? app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample budget office', 'published' => true]]], $publisher);
 
     for ($i = $from; $i < $from + $count; $i++) {
         match ($kind) {
@@ -45,10 +45,10 @@ function budgetRecords(string $kind, int $count, int $from = 0): void
                 'translations' => ['en' => ['title' => "Sample budget report {$i}", 'published' => true]],
             ], $publisher),
             'leaders' => app(SaveLeader::class)->handle(new Leader, [
-                'body' => 'executive_committee', 'office_id' => $office->id, 'rank' => $i,
+                'body' => 'management', 'office_id' => $office->id, 'rank' => $i,
                 'translations' => ['en' => ['name' => "Sample Budget Leader {$i}", 'published' => true]],
             ], $publisher),
-            'offices' => app(SaveOffice::class)->handle(new Office, ['type' => 'kebele', 'parent_id' => $office->id, 'translations' => ['en' => ['name' => "Sample budget kebele {$i}", 'published' => true]]], $publisher),
+            'offices' => app(SaveOffice::class)->handle(new Office, ['type' => 'team', 'parent_id' => $office->id, 'translations' => ['en' => ['name' => "Sample budget kebele {$i}", 'published' => true]]], $publisher),
             'projects' => app(SaveProject::class)->handle(new Project, ['status' => 'ongoing', 'office_id' => $office->id, 'translations' => ['en' => ['title' => "Sample budget project {$i}", 'published' => true]]], $publisher),
         };
     }
@@ -79,8 +79,8 @@ it('reads a listing with the same number of queries for two records or eight', f
     'news' => ['posts', '/en/news'],
     'events' => ['events', '/en/events'],
     'documents' => ['documents', '/en/documents'],
-    'leaders' => ['leaders', '/en/leaders'],
-    'offices' => ['offices', '/en/offices'],
+    'leaders' => ['leaders', '/en/about/leadership'],
+    'offices' => ['offices', '/en/about/offices'],
     'projects' => ['projects', '/en/projects'],
 ]);
 

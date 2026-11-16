@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
  * Who a campaign reaches (PLAN.md §5): confirmed subscribers of the channel by
  * topic and language; or active volunteers who have an address for the
  * channel and did not opt out. The volunteer audience needs the permission to
- * see them, over the woredas the sender looks after.
+ * see them, over the offices the sender looks after.
  */
 final class Audience
 {
@@ -98,7 +98,7 @@ final class Audience
             return null;
         }
         $hash = $this->hashColumn($campaign);
-        $woredas = array_values(array_filter((array) ($audience['woredas'] ?? [])));
+        $offices = array_values(array_filter((array) ($audience['offices'] ?? [])));
 
         return match ($type) {
             'subscribers' => Subscriber::query()->reachable($campaign->channel)
@@ -111,7 +111,7 @@ final class Audience
             'volunteers' => OfficeScope::apply(Volunteer::query(), $this->sender, 'volunteers.view')
                 ->whereNull('erased_at')->whereNull('campaigns_opt_out_at')->whereNotNull($hash)
                 ->where('status', VolunteerStatus::Active->value)
-                ->when($woredas !== [], fn (Builder $q) => $q->whereIn('woreda_id', $woredas)),
+                ->when($offices !== [], fn (Builder $q) => $q->whereIn('office_id', $offices)),
             default => null,
         };
     }

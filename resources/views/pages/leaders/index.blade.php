@@ -3,9 +3,9 @@
 @use('App\Support\Initials')
 @php
     $locale = app()->getLocale();
-    // ADR-0066: the head of the branch office opens the page; the groups follow, the region's government first.
-    $secretariat = collect($groups)->firstWhere('body', LeaderBody::Secretariat);
-    $featured = $secretariat['leaders'][0] ?? null;
+    // The head of the Agency (management's first person by rank) opens the page; the groups follow.
+    $management = collect($groups)->firstWhere('body', LeaderBody::Management);
+    $featured = $management['leaders'][0] ?? null;
     $featuredShown = $featured !== null ? PublicDirectory::shown($featured, $locale) : null;
 @endphp
 <x-layouts.public :title="__('leaders.title')" :description="__('leaders.description')">

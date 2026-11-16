@@ -41,7 +41,7 @@ it('knows the public address of each published language, and none for drafts', f
     $child = app(SavePage::class)->handle(new Page, ['parent_id' => $parent->id, 'translations' => ['en' => ['title' => 'Sample history', 'slug' => 'history', 'published' => true]]], $publisher);
     expect(PublicLinks::for($child))->toBe(['en' => url('/en/sample-about/history')]);
 
-    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'secretariat', 'translations' => [
+    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => [
         'en' => ['name' => 'Sample Leader', 'published' => true],
         'am' => ['name' => 'ናሙና መሪ', 'published' => false],
     ]], $publisher);
@@ -66,10 +66,10 @@ it('puts View on site on the edit page, with the published languages, or says th
 it('offers View on site on list rows and View the site on pages that change the whole site', function () {
     $this->actingAs(staff(SystemRole::Publisher, mfa: false));
     $publisher = staff(SystemRole::Publisher, mfa: false);
-    app(SaveLeader::class)->handle(new Leader, ['body' => 'secretariat', 'translations' => ['en' => ['name' => 'Sample Listed Leader', 'published' => true]]], $publisher);
+    app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Listed Leader', 'published' => true]]], $publisher);
 
     $this->get(LeaderResource::getUrl('index'))->assertOk()
-        ->assertSee('/en/leaders/sample-listed-leader', escape: false);
+        ->assertSee('/en/about/leadership/sample-listed-leader', escape: false);
     $this->get(ManageHomepage::getUrl())->assertOk()
         ->assertSee(__('admin.view_on_site.site'))
         ->assertSee('href="'.url('/en').'"', escape: false);

@@ -21,7 +21,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property int $id
  * @property string $name
  * @property string $channel
- * @property array{type?: string, topics?: list<string>, locales?: list<string>, woredas?: list<string>, statuses?: list<string>} $audience
+ * @property array{type?: string, topics?: list<string>, locales?: list<string>, offices?: list<string>, statuses?: list<string>} $audience
  * @property array<string, array{subject?: ?string, body?: ?string, text?: ?string}> $content
  * @property CampaignStatus $status
  * @property ?CarbonImmutable $scheduled_at

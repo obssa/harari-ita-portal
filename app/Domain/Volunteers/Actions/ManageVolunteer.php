@@ -103,6 +103,6 @@ final class ManageVolunteer
 
     private function authorise(Volunteer $volunteer, User $actor, string $permission): void
     {
-        abort_unless($volunteer->erased_at === null && OfficeScope::covers($actor, $volunteer->woreda_id, $permission), 403);
+        abort_unless($volunteer->erased_at === null && OfficeScope::covers($actor, $volunteer->office_id, $permission), 403);
     }
 }

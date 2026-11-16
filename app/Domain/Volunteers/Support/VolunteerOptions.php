@@ -8,7 +8,7 @@ namespace App\Domain\Volunteers\Support;
  */
 final class VolunteerOptions
 {
-    public const SKILLS = ['mobilisation', 'event_support', 'ushering', 'first_aid', 'logistics', 'driving', 'photo_video', 'social_media', 'writing', 'translation', 'it_support', 'teaching'];
+    public const SKILLS = ['mentoring', 'software', 'web_design', 'data', 'networks', 'cyber_awareness', 'digital_literacy', 'business', 'it_support', 'event_support', 'photo_video', 'social_media', 'writing', 'translation'];
 
     public const AVAILABILITY = ['weekdays', 'evenings', 'weekends', 'events'];
 

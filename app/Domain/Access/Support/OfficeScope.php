@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 
 /**
  * Which offices a person may act for with a permission (PLAN.md §8: office-
- * scoped roles such as Membership Officer per woreda; ADR-0006, ADR-0045).
+ * scoped roles such as a directorate head for their directorate; ADR-0006, ADR-0045).
  * A role held without a scope covers every office; a role scoped to offices
  * covers those only; records without an office belong to unscoped staff.
  */
@@ -52,7 +52,7 @@ final class OfficeScope
      * @param  Builder<TModel>  $query
      * @return Builder<TModel>
      */
-    public static function apply(Builder $query, User $user, string $permission, string $column = 'woreda_id'): Builder
+    public static function apply(Builder $query, User $user, string $permission, string $column = 'office_id'): Builder
     {
         $offices = self::officeIds($user, $permission);
 

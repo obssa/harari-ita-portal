@@ -65,9 +65,9 @@ final class FormController extends Controller
 
         $offices = PublicDirectory::visible(Office::query(), $locale)
             ->where(fn ($q) => $q->whereNotNull('phone')->orWhereNotNull('email'))
-            ->whereIn('type', [OfficeType::Branch->value, OfficeType::Woreda->value, OfficeType::Sector->value])
+            ->whereIn('type', OfficeType::reachableValues())
             ->with('translations')
-            ->orderByRaw('type = ? desc', [OfficeType::Branch->value])->orderBy('sort')
+            ->orderByRaw('type = ? desc', [OfficeType::Directorate->value])->orderBy('sort')
             ->limit(30)->get();
 
         return view('pages.forms.contact', [

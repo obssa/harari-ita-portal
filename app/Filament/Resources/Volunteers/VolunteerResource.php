@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 /**
- * Volunteers (PLAN.md §5, ADR-0048): those of the woredas one looks after,
+ * Volunteers (PLAN.md §5, ADR-0048): those of the offices one looks after,
  * names and phones masked in the list, filtered by what they offer; their
  * tasks and hours on their page.
  */
@@ -92,8 +92,8 @@ class VolunteerResource extends Resource
                 TextInput::make('name')->label(__('membership.field.name'))->required()->maxLength(120)->columnSpanFull(),
                 TextInput::make('phone')->label(__('membership.field.phone'))->tel()->maxLength(20),
                 TextInput::make('email')->label(__('membership.field.email'))->email()->maxLength(190),
-                Select::make('woreda_id')->label(__('membership.field.woreda_id'))->searchable()
-                    ->options(fn (): array => OfficeOptions::of(OfficeType::Woreda)),
+                Select::make('office_id')->label(__('volunteers.field.office_id'))->searchable()
+                    ->options(fn (): array => OfficeOptions::of(OfficeType::reachable())),
             ]),
             Section::make(__('volunteers.admin.offers'))->schema([
                 CheckboxList::make('skills')->label(__('volunteers.form.skills'))->options(VolunteerOptions::skills())->columns(3),
@@ -110,7 +110,7 @@ class VolunteerResource extends Resource
 
         return $table
             ->defaultSort('created_at', 'desc')
-            ->modifyQueryUsing(fn (Builder $query) => $query->with(['woreda.translations'])
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['office.translations'])
                 ->withSum(['assignments as hours_done' => fn (Builder $q) => $q->where('status', AssignmentStatus::Done->value)], 'hours'))
             ->columns([
                 TextColumn::make('masked_name')->label(__('membership.field.name'))
@@ -119,8 +119,8 @@ class VolunteerResource extends Resource
                     ->state(fn (Volunteer $record): string => Mask::phone($record->phone))->fontFamily('mono'),
                 TextColumn::make('status')->label(__('membership.admin.status'))->badge()
                     ->formatStateUsing(fn (VolunteerStatus $state): string => $state->label())->color(fn (VolunteerStatus $state): string => $state->color()),
-                TextColumn::make('woreda')->label(__('membership.field.woreda_id'))
-                    ->state(fn (Volunteer $record): ?string => $record->woreda?->name())->placeholder('—'),
+                TextColumn::make('office')->label(__('volunteers.field.office_id'))
+                    ->state(fn (Volunteer $record): ?string => $record->office?->name())->placeholder('—'),
                 TextColumn::make('skills')->label(__('volunteers.form.skills'))->badge()->limitList(3)
                     ->formatStateUsing(fn (string $state): string => VolunteerOptions::skills()[$state] ?? $state),
                 TextColumn::make('hours_done')->label(__('volunteers.assignment.hours'))->numeric(decimalPlaces: 1)->placeholder('—')->sortable(),
@@ -131,7 +131,7 @@ class VolunteerResource extends Resource
                 SelectFilter::make('skill')->label(__('volunteers.form.skills'))->options(VolunteerOptions::skills())->query($hasChoice('skills')),
                 SelectFilter::make('availability')->label(__('volunteers.form.availability'))->options(VolunteerOptions::availability())->query($hasChoice('availability')),
                 SelectFilter::make('language')->label(__('volunteers.form.languages'))->options(VolunteerOptions::languages())->query($hasChoice('languages')),
-                SelectFilter::make('woreda_id')->label(__('membership.field.woreda_id'))->options(fn (): array => OfficeOptions::of(OfficeType::Woreda)),
+                SelectFilter::make('office_id')->label(__('volunteers.field.office_id'))->options(fn (): array => OfficeOptions::of(OfficeType::reachable())),
             ])
             ->recordActions([ViewAction::make()])
             ->recordUrl(fn (Volunteer $record): string => self::getUrl('view', ['record' => $record]))
@@ -147,7 +147,7 @@ class VolunteerResource extends Resource
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 2])->schema([
                 Section::make(__('volunteers.admin.contact'))->columns(2)->schema([
                     TextEntry::make('name')->label(__('membership.field.name')),
-                    TextEntry::make('woreda_name')->label(__('membership.field.woreda_id'))->state(fn (Volunteer $record): ?string => $record->woreda?->name())->placeholder('—'),
+                    TextEntry::make('office_name')->label(__('volunteers.field.office_id'))->state(fn (Volunteer $record): ?string => $record->office?->name())->placeholder('—'),
                     TextEntry::make('phone')->label(__('membership.field.phone'))->copyable()->placeholder('—'),
                     TextEntry::make('email')->label(__('membership.field.email'))->copyable()->placeholder('—'),
                 ]),

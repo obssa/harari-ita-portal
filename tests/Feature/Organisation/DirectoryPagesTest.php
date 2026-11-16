@@ -16,7 +16,7 @@ use App\Domain\Organisation\Models\Pillar;
  * @param  array<string, array<string, mixed>>  $translations
  * @param  array<string, mixed>  $data
  */
-function directoryOffice(array $translations, string $type = 'woreda', array $data = []): Office
+function directoryOffice(array $translations, string $type = 'regional_office', array $data = []): Office
 {
     return app(SaveOffice::class)->handle(new Office, ['type' => $type, 'translations' => $translations, ...$data], staff(SystemRole::Publisher));
 }
@@ -25,27 +25,27 @@ function directoryOffice(array $translations, string $type = 'woreda', array $da
  * @param  array<string, array<string, mixed>>  $translations
  * @param  array<string, mixed>  $data
  */
-function directoryLeader(array $translations, string $body = 'executive_committee', array $data = []): Leader
+function directoryLeader(array $translations, string $body = 'management', array $data = []): Leader
 {
     return app(SaveLeader::class)->handle(new Leader, ['body' => $body, 'translations' => $translations, ...$data], staff(SystemRole::Publisher));
 }
 
 it('lists published leaders by body and hides drafts', function () {
     directoryLeader(['en' => ['name' => 'Sample Chair', 'position' => 'Sample head of the branch', 'published' => true]], data: ['rank' => 1]);
-    directoryLeader(['en' => ['name' => 'Sample Member', 'published' => true]], 'central_committee');
+    directoryLeader(['en' => ['name' => 'Sample Member', 'published' => true]], 'directors');
     directoryLeader(['en' => ['name' => 'Sample Draft Person']]);
 
-    $this->get('/en/leaders')
+    $this->get('/en/about/leadership')
         ->assertOk()
-        ->assertSeeInOrder([__('organisation.leader_body.executive_committee', [], 'en'), 'Sample Chair', __('organisation.leader_body.central_committee', [], 'en'), 'Sample Member'])
+        ->assertSeeInOrder([__('organisation.leader_body.management', [], 'en'), 'Sample Chair', __('organisation.leader_body.directors', [], 'en'), 'Sample Member'])
         ->assertDontSee('Sample Draft Person');
 
-    $this->get('/am/leaders')->assertOk()->assertSee(__('directory.empty', [], 'am'));
+    $this->get('/am/about/leadership')->assertOk()->assertSee(__('directory.empty', [], 'am'));
 });
 
 it('shows a leader profile with office, term, socials, posts and person data', function () {
     $office = directoryOffice(['en' => ['name' => 'Sample Woreda Office', 'published' => true]]);
-    $leader = directoryLeader(['en' => ['name' => 'Sample Speaker', 'position' => 'Sample role', 'summary' => 'Sample introduction.', 'published' => true]], 'office_heads', [
+    $leader = directoryLeader(['en' => ['name' => 'Sample Speaker', 'position' => 'Sample role', 'summary' => 'Sample introduction.', 'published' => true]], 'directors', [
         'office_id' => $office->id,
         'term_start' => '2024-07-01',
         'socials' => ['telegram' => 'https://t.me/sample'],
@@ -59,10 +59,10 @@ it('shows a leader profile with office, term, socials, posts and person data', f
     ], $publisher);
     app(ContentWorkflow::class)->apply($speech, 'en', Transition::Publish, $publisher);
 
-    $html = (string) $this->get('/en/leaders/sample-speaker')
+    $html = (string) $this->get('/en/about/leadership/sample-speaker')
         ->assertOk()
         ->assertSee('Sample role')
-        ->assertSee('/en/offices/sample-woreda-office')
+        ->assertSee('/en/about/offices/sample-woreda-office')
         ->assertSee('https://t.me/sample')
         ->assertSee('mailto:speaker@example.org', escape: false)
         ->assertSee(__('leaders.present', [], 'en'))
@@ -71,35 +71,35 @@ it('shows a leader profile with office, term, socials, posts and person data', f
     expect($html)->toContain('"@type":"Person"')
         ->toContain('Sample speech on the budget');
 
-    $this->get('/am/leaders/sample-speaker')->assertNotFound();
+    $this->get('/am/about/leadership/sample-speaker')->assertNotFound();
 });
 
 it('lists offices with type filter and search, and shows an office page with map, head and sub-offices', function () {
-    $head = directoryLeader(['en' => ['name' => 'Sample Office Head', 'published' => true]], 'office_heads');
-    $branch = directoryOffice(['en' => ['name' => 'Sample Branch Office', 'address' => 'Sample street', 'hours' => 'Mon to Fri', 'published' => true]], 'branch', [
+    $head = directoryLeader(['en' => ['name' => 'Sample Office Head', 'published' => true]], 'directors');
+    $directorate = directoryOffice(['en' => ['name' => 'Sample Directorate', 'address' => 'Sample street', 'hours' => 'Mon to Fri', 'published' => true]], 'directorate', [
         'head_leader_id' => $head->id,
         'latitude' => '9.3125',
         'longitude' => '42.1194',
         'phone' => '+251 25 000 0000',
     ]);
-    directoryOffice(['en' => ['name' => 'Sample Kebele Office', 'published' => true]], 'kebele', ['parent_id' => $branch->id]);
-    directoryOffice(['en' => ['name' => 'Sample Unpublished Office']], 'sector');
+    directoryOffice(['en' => ['name' => 'Sample Team', 'published' => true]], 'team', ['parent_id' => $directorate->id]);
+    directoryOffice(['en' => ['name' => 'Sample Unpublished Office']], 'team');
 
-    $this->get('/en/offices')->assertOk()->assertSee('Sample Branch Office')->assertSee('Sample Kebele Office')->assertDontSee('Sample Unpublished Office');
-    $this->get('/en/offices?type=kebele')->assertOk()->assertDontSee('Sample Branch Office')->assertSee('Sample Kebele Office');
-    $this->get('/en/offices?q=branch')->assertOk()->assertSee('Sample Branch Office')->assertDontSee('Sample Kebele Office');
-    $this->get('/en/offices?q=%25')->assertOk()->assertSee(__('directory.empty', [], 'en'));
+    $this->get('/en/about/offices')->assertOk()->assertSee('Sample Directorate')->assertSee('Sample Team')->assertDontSee('Sample Unpublished Office');
+    $this->get('/en/about/offices?type=team')->assertOk()->assertDontSee('Sample Directorate')->assertSee('Sample Team');
+    $this->get('/en/about/offices?q=directorate')->assertOk()->assertSee('Sample Directorate')->assertDontSee('Sample Team');
+    $this->get('/en/about/offices?q=%25')->assertOk()->assertSee(__('directory.empty', [], 'en'));
 
-    $this->get('/en/offices/sample-branch-office')
+    $this->get('/en/about/offices/sample-directorate')
         ->assertOk()
         ->assertSee('Sample Office Head')
         ->assertSee('Sample street')
         ->assertSee('tel:+251250000000', escape: false)
         ->assertSee('https://www.openstreetmap.org/export/embed.html', escape: false)
-        ->assertSee('Sample Kebele Office')
+        ->assertSee('Sample Team')
         ->assertHeader('Content-Security-Policy');
 
-    expect((string) $this->get('/en/offices/sample-branch-office')->headers->get('Content-Security-Policy'))
+    expect((string) $this->get('/en/about/offices/sample-directorate')->headers->get('Content-Security-Policy'))
         ->toContain('https://www.openstreetmap.org');
 });
 
@@ -112,8 +112,7 @@ it('shows pillars with their chair and leadership', function () {
     directoryLeader(['en' => ['name' => 'Sample Pillar Secretary', 'published' => true]], 'pillars', ['pillar_id' => $pillar->id]);
 
     $this->get('/en/pillars')->assertOk()->assertSee('Sample Youth Pillar')->assertSee('Sample summary')
-        // ADR-0078: the directive's own word for the women's and youth organisations.
-        ->assertSee(__('pillars.title', [], 'en'))->assertDontSee('Pillars and forums');
+        ->assertSee(__('pillars.title', [], 'en'));
     $this->get('/en/pillars/sample-youth-pillar')
         ->assertOk()
         ->assertSee('Sample Pillar Chair')
@@ -121,14 +120,14 @@ it('shows pillars with their chair and leadership', function () {
 });
 
 it('builds the organisational structure from the office tree', function () {
-    $head = directoryLeader(['en' => ['name' => 'Sample Structure Head', 'published' => true]], 'office_heads');
-    $branch = directoryOffice(['en' => ['name' => 'Sample Root Office', 'published' => true]], 'branch', ['head_leader_id' => $head->id]);
-    $woreda = directoryOffice(['en' => ['name' => 'Sample Child Woreda', 'published' => true]], 'woreda', ['parent_id' => $branch->id]);
-    directoryOffice(['en' => ['name' => 'Sample Grandchild Kebele', 'published' => true]], 'kebele', ['parent_id' => $woreda->id]);
+    $head = directoryLeader(['en' => ['name' => 'Sample Structure Head', 'published' => true]], 'directors');
+    $directorate = directoryOffice(['en' => ['name' => 'Sample Root Office', 'published' => true]], 'directorate', ['head_leader_id' => $head->id]);
+    $regional = directoryOffice(['en' => ['name' => 'Sample Regional Office', 'published' => true]], 'regional_office', ['parent_id' => $directorate->id]);
+    directoryOffice(['en' => ['name' => 'Sample Team Unit', 'published' => true]], 'team', ['parent_id' => $regional->id]);
 
-    $this->get('/en/structure')
+    $this->get('/en/about/structure')
         ->assertOk()
-        ->assertSeeInOrder(['Sample Root Office', __('structure.headed_by', ['name' => 'Sample Structure Head'], 'en'), 'Sample Child Woreda', 'Sample Grandchild Kebele'])
+        ->assertSeeInOrder(['Sample Root Office', __('structure.headed_by', ['name' => 'Sample Structure Head'], 'en'), 'Sample Regional Office', 'Sample Team Unit'])
         ->assertSee('<details', escape: false);
 });
 
@@ -138,11 +137,11 @@ it('shows Amharic directory entries to Harari readers and links each language', 
         'en' => ['name' => 'Sample Leader', 'published' => true],
     ]);
 
-    $this->get('/har/leaders')->assertOk()->assertSee('ናሙና መሪ')->assertSee('lang="am"', escape: false);
-    $this->get('/en/leaders/sample-leader')
+    $this->get('/har/about/leadership')->assertOk()->assertSee('ናሙና መሪ')->assertSee('lang="am"', escape: false);
+    $this->get('/en/about/leadership/sample-leader')
         ->assertOk()
         ->assertSee('hreflang="am"', escape: false)
-        ->assertSee(url('/om/leaders'), escape: false);
+        ->assertSee(url('/om/about/leadership'), escape: false);
 });
 
 it('lists the directory in the sitemaps and keeps pages off its addresses', function () {
@@ -151,7 +150,7 @@ it('lists the directory in the sitemaps and keeps pages off its addresses', func
 
     $this->get('/sitemaps/en.xml')
         ->assertOk()
-        ->assertSee(url('/en/offices/sample-mapped-office'), escape: false)
-        ->assertSee(url('/en/leaders/sample-listed-leader'), escape: false)
-        ->assertSee('<loc>'.url('/en/structure').'</loc>', escape: false);
+        ->assertSee(url('/en/about/offices/sample-mapped-office'), escape: false)
+        ->assertSee(url('/en/about/leadership/sample-listed-leader'), escape: false)
+        ->assertSee('<loc>'.url('/en/about/structure').'</loc>', escape: false);
 });

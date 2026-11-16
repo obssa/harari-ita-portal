@@ -75,7 +75,7 @@ it('keeps deadlines only for vacancies, tenders and notices', function () {
 });
 
 it('lists library documents with filters and keeps notices on their own page', function () {
-    $office = app(SaveOffice::class)->handle(new Office, ['type' => 'sector', 'translations' => ['en' => ['name' => 'Sample sector office', 'published' => true]]], staff(SystemRole::Publisher));
+    $office = app(SaveOffice::class)->handle(new Office, ['type' => 'team', 'translations' => ['en' => ['name' => 'Sample sector office', 'published' => true]]], staff(SystemRole::Publisher));
     makeDocument(['en' => ['title' => 'Sample budget report', 'published' => true]], data: ['year' => 2025, 'office_id' => $office->id]);
     makeDocument(['en' => ['title' => 'Sample land policy', 'published' => true]], DocumentType::Policy, ['year' => 2024]);
     makeDocument(['en' => ['title' => 'Sample draft bylaw']], DocumentType::Bylaw);

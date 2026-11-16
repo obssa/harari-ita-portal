@@ -38,7 +38,7 @@ final class PressController extends Controller
         $logos = Media::query()->library()->whereKey($ids)->get()
             ->sortBy(fn (Media $m): int => (int) array_search($m->id, $ids, true))->values();
 
-        $leaders = Leader::query()->where('body', LeaderBody::ExecutiveCommittee->value)->whereNotNull('portrait_id')
+        $leaders = Leader::query()->where('body', LeaderBody::Management->value)->whereNotNull('portrait_id')
             ->with(['translations', 'portrait'])->orderBy('rank')->limit(12)->get()
             ->map(fn (Leader $leader): ?array => ($shown = PublicDirectory::shown($leader, $locale)) !== null ? ['leader' => $leader, 'translation' => $shown] : null)
             ->filter()->values();

@@ -48,7 +48,7 @@ final class SaveCampaign
             'type' => $type,
             'topics' => array_values(array_intersect(SubscriptionOptions::TOPICS, (array) ($input['topics'] ?? []))),
             'locales' => array_values(array_intersect(Locales::all(), (array) ($input['locales'] ?? []))),
-            'woredas' => Office::query()->where('type', OfficeType::Woreda->value)->whereKey(array_map('strval', (array) ($input['woredas'] ?? [])))->pluck('id')->values()->all(),
+            'offices' => Office::query()->whereIn('type', OfficeType::reachableValues())->whereKey(array_map('strval', (array) ($input['offices'] ?? [])))->pluck('id')->values()->all(),
         ];
 
         $content = [];

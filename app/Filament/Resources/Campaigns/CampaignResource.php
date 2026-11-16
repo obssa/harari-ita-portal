@@ -89,8 +89,8 @@ class CampaignResource extends Resource
                     ->options(SubscriptionOptions::topics())->visible($type('subscribers')),
                 CheckboxList::make('audience.locales')->label(__('campaigns.field.locales'))->helperText(__('campaigns.help.locales'))
                     ->options(collect(Locales::all())->mapWithKeys(fn (string $l): array => [$l => Locales::nativeName($l)])->all())->visible($type('subscribers')),
-                Select::make('audience.woredas')->label(__('campaigns.field.woredas'))->helperText(__('campaigns.help.woredas'))->multiple()->searchable()
-                    ->options(fn (): array => OfficeOptions::of(OfficeType::Woreda))->visible($type('volunteers')),
+                Select::make('audience.offices')->label(__('campaigns.field.offices'))->helperText(__('campaigns.help.offices'))->multiple()->searchable()
+                    ->options(fn (): array => OfficeOptions::of(OfficeType::reachable()))->visible($type('volunteers')),
             ]),
             Section::make(__('campaigns.admin.section.text'))->description(__('campaigns.help.languages'))->schema([
                 Tabs::make('content')->tabs(array_map(fn (string $locale): Tab => Tab::make(Locales::nativeName($locale))->schema([

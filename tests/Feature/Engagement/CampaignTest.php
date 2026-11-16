@@ -112,10 +112,10 @@ it('reaches confirmed subscribers by topic and language, each address once', fun
 });
 
 it('reaches volunteers only for staff who may see them, over their woredas, without those who opted out', function () {
-    $north = app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'translations' => ['en' => ['name' => 'Sample North', 'published' => true]]], staff(SystemRole::Publisher));
-    $south = app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'translations' => ['en' => ['name' => 'Sample South', 'published' => true]]], staff(SystemRole::Publisher));
+    $north = app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample North', 'published' => true]]], staff(SystemRole::Publisher));
+    $south = app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample South', 'published' => true]]], staff(SystemRole::Publisher));
     $volunteer = function (Office $w, string $phone): Volunteer {
-        $volunteer = app(SaveVolunteer::class)->signUp(['name' => 'Sample Volunteer', 'phone' => $phone, 'woreda_id' => $w->id, 'skills' => ['ushering'],
+        $volunteer = app(SaveVolunteer::class)->signUp(['name' => 'Sample Volunteer', 'phone' => $phone, 'office_id' => $w->id, 'skills' => ['mentoring'],
             'availability' => ['weekends'], 'languages' => ['en'], 'consent' => '1', SpamGuard::STARTED => Crypt::encryptString((string) (time() - 10))], 'en');
         $volunteer->forceFill(['status' => VolunteerStatus::Active])->save();
 
@@ -133,7 +133,7 @@ it('reaches volunteers only for staff who may see them, over their woredas, with
         'content' => ['en' => ['text' => 'Sample meeting on Saturday']]], $actor);
 
     expect((new Audience($officer->refresh()))->count($sms($officer, ['type' => 'volunteers'])))->toBe(1)
-        ->and((new Audience(staff(SystemRole::Admin)))->count($sms(staff(SystemRole::Admin), ['type' => 'volunteers', 'woredas' => [$south->id]])))->toBe(1)
+        ->and((new Audience(staff(SystemRole::Admin)))->count($sms(staff(SystemRole::Admin), ['type' => 'volunteers', 'offices' => [$south->id]])))->toBe(1)
         ->and((new Audience(staff(SystemRole::CommunicationsOfficer)))->allowed('volunteers'))->toBeFalse();
 });
 

@@ -91,7 +91,7 @@ final class PersonalDataSearch
         return Volunteer::query()
             ->whereNull('erased_at')
             ->where(fn (Builder $q) => $this->byHashes($q))
-            ->with(['woreda.translations', 'notes', 'assignments.event.translations'])
+            ->with(['office.translations', 'notes', 'assignments.event.translations'])
             ->orderBy('created_at')
             ->get();
     }

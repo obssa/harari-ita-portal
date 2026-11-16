@@ -1292,7 +1292,7 @@
             "name": "body",
             "in": "query",
             "required": false,
-            "description": "Only this body, such as executive_committee.",
+            "description": "Only this body, such as management.",
             "schema": {
               "type": "string"
             }

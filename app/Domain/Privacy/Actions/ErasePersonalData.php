@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
  * ADR-0041). Registrations and tickets stay as anonymous records, so event
  * numbers and inbox statistics still add up, but their name, contact
  * details, answers, attachments and the text of notes are removed, and
- * ticket links stop working. Volunteers keep their woreda, status
+ * ticket links stop working. Volunteers keep their office, status
  * (inactive) and the hours of their tasks. Newsletter subscriptions and
  * media contacts are deleted. Failed sign-ins forget the email tried.
  * Staff accounts are not touched here. Backups age out within their retention.

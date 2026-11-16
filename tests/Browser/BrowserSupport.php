@@ -37,7 +37,7 @@ function browserContent(): void
         'translations' => ['en' => ['title' => 'Sample browser forum', 'venue' => 'Sample hall', 'published' => true]],
     ], $publisher);
 
-    app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'email' => 'office@example.org', 'phone' => '+251911000000',
+    app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'email' => 'office@example.org', 'phone' => '+251911000000',
         'translations' => ['en' => ['name' => 'Sample browser office', 'published' => true]]], $publisher);
 
     app(SaveForm::class)->handle(new Form, [

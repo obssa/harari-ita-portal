@@ -21,7 +21,7 @@ in the new folder only, and never change the PP repo.
 - **Organisation:** keep **Office** as **Directorate/Unit**.
   - Replace the `app/Domain/Organisation/Enums/OfficeType.php` values with `directorate`, `team`, `regional_office` and `partner`. Write a migration to map any data.
   - Keep **Leader** as **Leadership**. Replace `LeaderBody.php` with `management` and `directors`.
-  - Change the public routes `/offices` to `/about/structure` and `/leaders` to `/about/leadership`.
+  - Move the public routes under About: `/about/structure` (the tree), `/about/offices` (the list and each unit) and `/about/leadership`.
 - **League becomes Pillar** (decided in phase 0): the five pillars need what League does (logo, cover, accent colour, head, landing page, tagged content, role scope). Rename the model, tables, routes (`/pillars`), permissions, `ScopeType::Pillar`, the homepage section and menu type.
 - **Volunteers:** become **Mentors & tech volunteers**: rename the labels and keep the model.
 - **Dashboard:** in `app/Filament/Support/DashboardRegistry.php`, rename the office filter to directorate. Remove PeopleOverview, PeopleBreakdown and DonationTotals; add the PLAN §6 widgets later.

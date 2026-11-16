@@ -125,7 +125,7 @@ it('reorders, switches off and limits sections, and hides them per language', fu
 it('shows the ticker, leadership message, counters, pillars and partner links once set up', function () {
     $news = homePost(['en' => ['title' => 'Sample breaking item']]);
     $message = homePost(['en' => ['title' => 'Sample full message']], ['type' => 'speech']);
-    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'executive_committee', 'translations' => ['en' => ['name' => 'Sample Chair', 'position' => 'Sample head', 'published' => true]]], staff(SystemRole::Publisher));
+    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Chair', 'position' => 'Sample head', 'published' => true]]], staff(SystemRole::Publisher));
     app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample Youth Pillar', 'published' => true]]], staff(SystemRole::Publisher));
 
     arrangeHomepage([
@@ -139,7 +139,7 @@ it('shows the ticker, leadership message, counters, pillars and partner links on
         ->assertSee(__('homepage.section.ticker', [], 'en'))
         ->assertSee('Sample breaking item')
         ->assertSee('Sample quote for the homepage.')
-        ->assertSee('/en/leaders/sample-chair')
+        ->assertSee('/en/about/leadership/sample-chair')
         ->assertSee('/en/news/sample-full-message')
         ->assertSee('1,200')
         ->assertSee('Sample members')

@@ -19,9 +19,9 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * An office of the party structure (PLAN.md §3, §10): the branch office,
- * woreda and kebele offices, sector offices and basic organisations, as a
- * tree with a head, contacts and a map pin.
+ * A unit of the Agency's structure (PLAN.md §3, §10): a directorate, a team,
+ * an office in the region or a partner institution, as a tree with a head,
+ * contacts and a map pin.
  *
  * @property string $id
  * @property OfficeType $type
@@ -49,7 +49,7 @@ class Office extends Model implements TranslatableModel
     use SoftDeletes;
     use TracksEditors;
 
-    /** Branch → woreda → kebele → basic organisation is the deepest chain. */
+    /** The deepest chain, e.g. directorate → team → sub-team → unit. */
     public const MAX_DEPTH = 4;
 
     protected $fillable = ['type', 'parent_id', 'head_leader_id', 'phone', 'email', 'latitude', 'longitude', 'cover_image_id', 'sort'];

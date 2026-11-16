@@ -26,7 +26,7 @@ use function Pest\Livewire\livewire;
 /**
  * @param  array<string, mixed>  $data
  */
-function makeOffice(string $name, OfficeType $type = OfficeType::Woreda, ?Office $parent = null, array $data = []): Office
+function makeOffice(string $name, OfficeType $type = OfficeType::RegionalOffice, ?Office $parent = null, array $data = []): Office
 {
     return app(SaveOffice::class)->handle(new Office, [
         'type' => $type->value,
@@ -39,7 +39,7 @@ function makeOffice(string $name, OfficeType $type = OfficeType::Woreda, ?Office
 /**
  * @param  array<string, mixed>  $data
  */
-function makeLeader(string $name, LeaderBody $body = LeaderBody::ExecutiveCommittee, array $data = []): Leader
+function makeLeader(string $name, LeaderBody $body = LeaderBody::Management, array $data = []): Leader
 {
     return app(SaveLeader::class)->handle(new Leader, [
         'body' => $body->value,
@@ -49,15 +49,15 @@ function makeLeader(string $name, LeaderBody $body = LeaderBody::ExecutiveCommit
 }
 
 it('keeps the office tree free of loops and within four levels', function () {
-    $branch = makeOffice('Sample branch office', OfficeType::Branch);
-    $woreda = makeOffice('Sample woreda', OfficeType::Woreda, $branch);
-    $kebele = makeOffice('Sample kebele', OfficeType::Kebele, $woreda);
-    $basic = makeOffice('Sample basic organisation', OfficeType::BasicOrganisation, $kebele);
+    $branch = makeOffice('Sample branch office', OfficeType::Directorate);
+    $regional = makeOffice('Sample woreda', OfficeType::RegionalOffice, $branch);
+    $kebele = makeOffice('Sample kebele', OfficeType::Team, $regional);
+    $basic = makeOffice('Sample basic organisation', OfficeType::Partner, $kebele);
 
-    expect($basic->ancestorIds())->toBe([$kebele->id, $woreda->id, $branch->id])
-        ->and(fn () => makeOffice('Too deep', OfficeType::BasicOrganisation, $basic))->toThrow(ValidationException::class)
+    expect($basic->ancestorIds())->toBe([$kebele->id, $regional->id, $branch->id])
+        ->and(fn () => makeOffice('Too deep', OfficeType::Partner, $basic))->toThrow(ValidationException::class)
         ->and(fn () => app(SaveOffice::class)->handle($branch, [
-            'type' => 'branch',
+            'type' => 'directorate',
             'parent_id' => $kebele->id,
             'translations' => ['en' => ['name' => 'Sample branch office']],
         ], staff(SystemRole::Publisher)))->toThrow(ValidationException::class);
@@ -73,8 +73,8 @@ it('validates office details', function (array $data) {
 ]);
 
 it('stores contacts, the map pin and the head of office', function () {
-    $head = makeLeader('Sample head', LeaderBody::OfficeHeads);
-    $office = makeOffice('Sample sector office', OfficeType::Sector, data: [
+    $head = makeLeader('Sample head', LeaderBody::Directors);
+    $office = makeOffice('Sample sector office', OfficeType::Team, data: [
         'head_leader_id' => $head->id,
         'phone' => ' +251 25 000 0000 ',
         'email' => 'office@example.org',
@@ -122,7 +122,7 @@ it('lets editors and publishers manage the directory and keeps it from others', 
     $this->actingAs(staff(SystemRole::Editor))->get('/admin/pillars')->assertOk();
     $this->actingAs(staff(SystemRole::Publisher))->get('/admin/offices/'.$office->id.'/edit')->assertOk()->assertSee('Sample office');
 
-    makeOffice('Sample kebele', OfficeType::Kebele, $office);
+    makeOffice('Sample kebele', OfficeType::Team, $office);
     expect(staff(SystemRole::Publisher)->can('delete', $office))->toBeFalse();
 });
 
@@ -130,15 +130,15 @@ it('creates and edits offices, leaders and pillars from the admin', function () 
     $this->actingAs(staff(SystemRole::Publisher));
 
     livewire(CreateOffice::class)
-        ->fillForm(['type' => 'sector', 'translations' => ['am' => ['name' => 'ናሙና የዘርፍ ጽሕፈት ቤት', 'hours' => 'ከሰኞ እስከ ዓርብ', 'published' => true]]])
+        ->fillForm(['type' => 'team', 'translations' => ['am' => ['name' => 'ናሙና የዘርፍ ጽሕፈት ቤት', 'hours' => 'ከሰኞ እስከ ዓርብ', 'published' => true]]])
         ->call('create')
         ->assertHasNoFormErrors();
     $office = Office::query()->with('translations')->firstOrFail();
-    expect($office->type)->toBe(OfficeType::Sector)
+    expect($office->type)->toBe(OfficeType::Team)
         ->and($office->translation('am', fallback: false)?->getAttribute('hours'))->toBe('ከሰኞ እስከ ዓርብ');
 
     livewire(CreateLeader::class)
-        ->fillForm(['body' => 'secretariat', 'office_id' => $office->id, 'translations' => ['en' => ['name' => 'Sample secretary', 'position' => 'Sample role']]])
+        ->fillForm(['body' => 'management', 'office_id' => $office->id, 'translations' => ['en' => ['name' => 'Sample secretary', 'position' => 'Sample role']]])
         ->call('create')
         ->assertHasNoFormErrors();
     $leader = Leader::query()->firstOrFail();

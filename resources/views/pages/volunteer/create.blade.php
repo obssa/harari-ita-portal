@@ -35,14 +35,14 @@
                         @error('email')<p id="email-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                     </div>
                     <div class="sm:col-span-2">
-                        <label for="woreda_id" class="font-medium">{{ __('membership.field.woreda_id') }}</label>
-                        <select id="woreda_id" name="woreda_id" @error('woreda_id') aria-invalid="true" aria-describedby="woreda_id-error" @enderror class="{{ $field }}">
-                            <option value="">{{ $woredas->isEmpty() ? __('membership.none_listed') : '—' }}</option>
-                            @foreach ($woredas as $id => $label)
-                                <option value="{{ $id }}" @selected(old('woreda_id') === $id)>{{ $label }}</option>
+                        <label for="office_id" class="font-medium">{{ __('volunteers.field.office_id') }}</label>
+                        <select id="office_id" name="office_id" @error('office_id') aria-invalid="true" aria-describedby="office_id-error" @enderror class="{{ $field }}">
+                            <option value="">{{ $offices->isEmpty() ? __('membership.none_listed') : '—' }}</option>
+                            @foreach ($offices as $id => $label)
+                                <option value="{{ $id }}" @selected(old('office_id') === $id)>{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('woreda_id')<p id="woreda_id-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                        @error('office_id')<p id="office_id-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                     </div>
                 </div>
 

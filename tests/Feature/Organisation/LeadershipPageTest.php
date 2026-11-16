@@ -13,28 +13,31 @@ function samplePerson(string $body, string $name, string $position, int $rank = 
     ]], staff(SystemRole::Publisher, mfa: false));
 }
 
-it('lists the region\'s government first, then the secretariat and the rest, with the branch head featured', function () {
-    samplePerson('office_heads', 'Sample Sector Head', 'Sample head of a sector');
-    samplePerson('secretariat', 'Sample Branch Head', 'Sample head of the branch office', 1);
-    samplePerson('government', 'Sample President', 'Sample president of the region', 1);
+it('lists management first, then the directors and the pillar leads, with the head of the Agency featured', function () {
+    samplePerson('pillars', 'Sample Pillar Lead', 'Sample lead of a pillar');
+    samplePerson('directors', 'Sample Director', 'Sample director of a directorate');
+    samplePerson('management', 'Sample Deputy', 'Sample deputy head', 2);
+    samplePerson('management', 'Sample Agency Head', 'Sample head of the Agency', 1);
 
-    $html = (string) $this->get('/en/leaders')->assertOk()->getContent();
+    $html = (string) $this->get('/en/about/leadership')->assertOk()->getContent();
 
-    $government = strpos($html, 'id="body-government"');
-    $secretariat = strpos($html, 'id="body-secretariat"');
-    $heads = strpos($html, 'id="body-office_heads"');
-    expect($government)->toBeInt()->toBeLessThan($secretariat)
-        ->and($secretariat)->toBeLessThan($heads)
-        ->and($html)->toContain(__('leaders.featured'), 'href="#body-government"', e(LeaderBody::Government->description('en')))
-        ->and(strpos($html, __('leaders.featured')))->toBeLessThan($government);
+    $management = strpos($html, 'id="body-management"');
+    $directors = strpos($html, 'id="body-directors"');
+    $pillars = strpos($html, 'id="body-pillars"');
+    $featured = strpos($html, __('leaders.featured'));
+    expect($management)->toBeInt()->toBeLessThan($directors)
+        ->and($directors)->toBeLessThan($pillars)
+        ->and($html)->toContain('href="#body-management"', e(LeaderBody::Management->description('en')))
+        ->and($featured)->toBeInt()->toBeLessThan($management)
+        ->and(strpos($html, 'Sample Agency Head'))->toBeLessThan($management);
 });
 
 it('draws initials without honorifics for people without a photo', function () {
-    expect(Initials::of('Getu Weyesa'))->toBe('GW')
-        ->and(Initials::of('አቶ ጌቱ ወዬሳ'))->toBe('ጌወ')
-        ->and(Initials::of('H.E Getu Weyessa Tola'))->toBe('GW')
-        ->and(Initials::of('ክቡር አቶ ጌቱ ወዬሳ ቶላ'))->toBe('ጌወ')
-        ->and(Initials::of('Kabajamoo Obbo Geetuu Wayyeessaa Tolaa'))->toBe('GW')
-        ->and(Initials::of('Obbo Geetuu Wayyeessaa'))->toBe('GW')
-        ->and(Initials::of('Ordin'))->toBe('O');
+    expect(Initials::of('Sample Person'))->toBe('SP')
+        ->and(Initials::of('አቶ ናሙና ሰው'))->toBe('ናሰ')
+        ->and(Initials::of('H.E Sample Person Name'))->toBe('SP')
+        ->and(Initials::of('ክቡር አቶ ናሙና ሰው ስም'))->toBe('ናሰ')
+        ->and(Initials::of('Kabajamoo Obbo Fakkii Namaa Maqaa'))->toBe('FN')
+        ->and(Initials::of('Obbo Fakkii Namaa'))->toBe('FN')
+        ->and(Initials::of('Sample'))->toBe('S');
 });

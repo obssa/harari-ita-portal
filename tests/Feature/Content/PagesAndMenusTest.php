@@ -136,9 +136,9 @@ it('builds the main menu from the admin, per language, hiding targets that are n
 
 it('shows the sections of the design until a main menu exists', function () {
     $om = (string) $this->get('/om')->getContent();
-    expect($om)->toContain(__('nav.media', [], 'om'), __('nav.offices_woreda', [], 'om'), __('nav.contact', [], 'om'), __('nav.menu', [], 'om'));
+    expect($om)->toContain(__('nav.media', [], 'om'), __('offices.title', [], 'om'), __('nav.contact', [], 'om'), __('nav.menu', [], 'om'));
 
-    $leaders = (string) $this->get('/en/leaders')->getContent();
+    $leaders = (string) $this->get('/en/about/leadership')->getContent();
     expect($leaders)->toMatch('/border-gold-500 text-primary-700[^>]*>\s*About/');
 });
 

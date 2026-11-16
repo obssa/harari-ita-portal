@@ -23,7 +23,7 @@ function hubPost(SocialSource $source, string $text, string $at, array $data = [
 }
 
 it('shows the visible posts, pinned first, with filters and the accounts to follow', function () {
-    $office = app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'translations' => ['en' => ['name' => 'Sample woreda office', 'published' => true]]], staff(SystemRole::Publisher));
+    $office = app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => 'Sample woreda office', 'published' => true]]], staff(SystemRole::Publisher));
     $telegram = SocialSource::query()->create(['platform' => Platform::Telegram, 'handle' => 'samplechannel', 'name' => 'Sample branch channel']);
     $youtube = SocialSource::query()->create(['platform' => Platform::YouTube, 'handle' => 'UCabcdefghijklmnopqrstuv', 'name' => 'Sample woreda videos', 'office_id' => $office->id]);
     $off = SocialSource::query()->create(['platform' => Platform::X, 'handle' => 'sampleoff', 'name' => 'Sample switched off', 'enabled' => false]);
@@ -47,7 +47,7 @@ it('shows the visible posts, pinned first, with filters and the accounts to foll
     $this->get('/en/social?office='.$office->id)->assertSee('Sample woreda video')->assertDontSee('Sample newest post');
 
     // The office page shows its own account's posts.
-    $this->get('/en/offices/sample-woreda-office')->assertSee('Sample woreda video')->assertDontSee('Sample newest post');
+    $this->get('/en/about/offices/sample-woreda-office')->assertSee('Sample woreda video')->assertDontSee('Sample newest post');
 });
 
 it('shows the latest posts on the homepage and lists the hub in the sitemaps', function () {

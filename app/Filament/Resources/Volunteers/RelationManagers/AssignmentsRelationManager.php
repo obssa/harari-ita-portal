@@ -114,7 +114,7 @@ class AssignmentsRelationManager extends RelationManager
 
     private function canManage(): bool
     {
-        return OfficeScope::covers(CurrentUser::get(), $this->volunteer()->woreda_id, 'volunteers.manage');
+        return OfficeScope::covers(CurrentUser::get(), $this->volunteer()->office_id, 'volunteers.manage');
     }
 
     private function volunteer(): Volunteer

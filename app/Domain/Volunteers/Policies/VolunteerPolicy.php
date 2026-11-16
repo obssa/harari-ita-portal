@@ -8,7 +8,7 @@ use App\Models\User;
 
 /**
  * Volunteers are seen by those with `volunteers.view` and managed by those
- * with `volunteers.manage`, for the woredas they cover (ADR-0048); they are
+ * with `volunteers.manage`, for the offices they cover (ADR-0048); they are
  * removed through privacy requests, not a delete button.
  */
 final class VolunteerPolicy
@@ -20,7 +20,7 @@ final class VolunteerPolicy
 
     public function view(User $actor, Volunteer $volunteer): bool
     {
-        return OfficeScope::covers($actor, $volunteer->woreda_id, 'volunteers.view');
+        return OfficeScope::covers($actor, $volunteer->office_id, 'volunteers.view');
     }
 
     public function create(User $actor): bool
@@ -30,7 +30,7 @@ final class VolunteerPolicy
 
     public function update(User $actor, Volunteer $volunteer): bool
     {
-        return OfficeScope::covers($actor, $volunteer->woreda_id, 'volunteers.manage');
+        return OfficeScope::covers($actor, $volunteer->office_id, 'volunteers.manage');
     }
 
     public function delete(User $actor, Volunteer $volunteer): bool

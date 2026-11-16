@@ -35,13 +35,13 @@ use function Pest\Livewire\livewire;
 
 function volunteerWoreda(string $name): Office
 {
-    return app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
+    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
 }
 
-function coordinatorFor(Office $woreda): User
+function coordinatorFor(Office $office): User
 {
     $officer = staff(SystemRole::MembershipOfficer);
-    $officer->assignScopedRole(SystemRole::MembershipOfficer, ScopeType::Office, $woreda->id);
+    $officer->assignScopedRole(SystemRole::MembershipOfficer, ScopeType::Office, $office->id);
 
     return $officer->refresh();
 }
@@ -50,17 +50,17 @@ function coordinatorFor(Office $woreda): User
 function volunteerAnswers(array $overrides = []): array
 {
     return [
-        'name' => 'Sample Volunteer Person', 'phone' => '0911 55 66 77', 'email' => '', 'woreda_id' => null,
-        'skills' => ['ushering', 'first_aid'], 'availability' => ['weekends'], 'languages' => ['har', 'am'],
+        'name' => 'Sample Volunteer Person', 'phone' => '0911 55 66 77', 'email' => '', 'office_id' => null,
+        'skills' => ['mentoring', 'software'], 'availability' => ['weekends'], 'languages' => ['har', 'am'],
         'message' => 'Sample message: I helped at school events.', 'consent' => '1',
         SpamGuard::STARTED => Crypt::encryptString((string) (time() - 10)),
         ...$overrides,
     ];
 }
 
-function sampleVolunteer(?Office $woreda, array $overrides = []): Volunteer
+function sampleVolunteer(?Office $office, array $overrides = []): Volunteer
 {
-    return app(SaveVolunteer::class)->signUp(volunteerAnswers(['woreda_id' => $woreda?->id, 'phone' => '+2519'.random_int(10000000, 99999999), ...$overrides]), 'en');
+    return app(SaveVolunteer::class)->signUp(volunteerAnswers(['office_id' => $office?->id, 'phone' => '+2519'.random_int(10000000, 99999999), ...$overrides]), 'en');
 }
 
 it('takes a sign-up from the public form and tells the woreda\'s coordinators', function () {
@@ -70,9 +70,9 @@ it('takes a sign-up from the public form and tells the woreda\'s coordinators', 
     $northCoordinator = coordinatorFor($north);
     $southCoordinator = coordinatorFor($south);
 
-    $this->get('/en/volunteer')->assertOk()->assertSee(__('volunteers.form.title'))->assertSee(__('volunteers.skill.first_aid'))
+    $this->get('/en/volunteer')->assertOk()->assertSee(__('volunteers.form.title'))->assertSee(__('volunteers.skill.mentoring'))
         ->assertHeader('Cache-Control', 'max-age=0, no-store, private');
-    $this->post('/en/volunteer', volunteerAnswers(['woreda_id' => $north->id]))->assertRedirect(route('volunteer.thanks', ['locale' => 'en']));
+    $this->post('/en/volunteer', volunteerAnswers(['office_id' => $north->id]))->assertRedirect(route('volunteer.thanks', ['locale' => 'en']));
     $this->get('/en/volunteer/thanks')->assertOk()->assertSee(__('volunteers.thanks.title'));
     $this->get('/en/volunteer/thanks')->assertRedirect(route('volunteer.create', ['locale' => 'en']));
 
@@ -80,7 +80,7 @@ it('takes a sign-up from the public form and tells the woreda\'s coordinators', 
     expect($volunteer->status)->toBe(VolunteerStatus::New)
         ->and($volunteer->phone)->toBe('+251911556677')
         ->and($volunteer->phone_hash)->toBe(EventRegistration::hash('+251911556677'))
-        ->and($volunteer->skills)->toBe(['ushering', 'first_aid'])
+        ->and($volunteer->skills)->toBe(['mentoring', 'software'])
         ->and($volunteer->consented_at)->not->toBeNull();
     expect(json_encode((array) DB::table('volunteers')->first()))->not->toContain('Sample Volunteer Person')->not->toContain('251911556677')->not->toContain('school events');
 
@@ -101,7 +101,7 @@ it('refuses incomplete sign-ups and robots', function () {
 
 it('lists the volunteers of a coordinator\'s woredas masked and filtered by what they offer', function () {
     $north = volunteerWoreda('Sample Woreda North');
-    $mine = sampleVolunteer($north, ['phone' => '0911000101', 'skills' => ['driving']]);
+    $mine = sampleVolunteer($north, ['phone' => '0911000101', 'skills' => ['data']]);
     $alsoMine = sampleVolunteer($north, ['skills' => ['writing']]);
     $other = sampleVolunteer(volunteerWoreda('Sample Woreda South'));
     $this->actingAs(coordinatorFor($north));
@@ -111,7 +111,7 @@ it('lists the volunteers of a coordinator\'s woredas masked and filtered by what
     $this->get(VolunteerResource::getUrl('view', ['record' => $mine]))->assertOk()->assertSee('Sample Volunteer Person')->assertSee('school events');
     $this->get(VolunteerResource::getUrl('view', ['record' => $other]))->assertNotFound();
 
-    livewire(ListVolunteers::class)->filterTable('skill', 'driving')->assertCanSeeTableRecords([$mine])->assertCanNotSeeTableRecords([$alsoMine]);
+    livewire(ListVolunteers::class)->filterTable('skill', 'data')->assertCanSeeTableRecords([$mine])->assertCanNotSeeTableRecords([$alsoMine]);
     $this->actingAs(staff(SystemRole::Editor))->get(VolunteerResource::getUrl('index'))->assertForbidden();
 });
 
@@ -178,7 +178,7 @@ it('finds, copies and erases volunteer sign-ups in privacy requests, and deletes
     $search = new PersonalDataSearch('volunteer@example.org', null);
     expect($search->counts())->toMatchArray(['volunteers' => 1]);
     $export = app(ExportPersonalData::class)->handle($search, staff(SystemRole::Admin));
-    expect($export['volunteering'][0])->toMatchArray(['name' => 'Sample Volunteer Person', 'phone' => '+251911424242', 'skills' => ['ushering', 'first_aid']])
+    expect($export['volunteering'][0])->toMatchArray(['name' => 'Sample Volunteer Person', 'phone' => '+251911424242', 'skills' => ['mentoring', 'software']])
         ->and($export['volunteering'][0]['assignments'][0])->toMatchArray(['task' => 'Sample task', 'hours' => '4.00']);
 
     app(ErasePersonalData::class)->handle(new PersonalDataSearch(null, '0911424242'), staff(SystemRole::Admin));

@@ -184,13 +184,14 @@ Route::prefix('{locale}')
         Route::get('feed.xml', [FeedController::class, 'rss'])->name('feed.rss');
         Route::get('feed.json', [FeedController::class, 'json'])->name('feed.json');
 
-        Route::get('leaders', [LeaderController::class, 'index'])->name('leaders.index');
-        Route::get('leaders/{slug}', [LeaderController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('leaders.show');
-        Route::get('offices', [OfficeController::class, 'index'])->name('offices.index');
-        Route::get('offices/{slug}', [OfficeController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('offices.show');
+        // The Agency's About section: leadership, structure and its directorates and offices.
+        Route::get('about/leadership', [LeaderController::class, 'index'])->name('leaders.index');
+        Route::get('about/leadership/{slug}', [LeaderController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('leaders.show');
+        Route::get('about/structure', StructureController::class)->name('structure');
+        Route::get('about/offices', [OfficeController::class, 'index'])->name('offices.index');
+        Route::get('about/offices/{slug}', [OfficeController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('offices.show');
         Route::get('pillars', [PillarController::class, 'index'])->name('pillars.index');
         Route::get('pillars/{slug}', [PillarController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('pillars.show');
-        Route::get('structure', StructureController::class)->name('structure');
         Route::get('events', [EventController::class, 'index'])->name('events.index');
         Route::get('events/feed.ics', [EventController::class, 'feed'])->name('events.feed');
         Route::get('events/{slug}.ics', [EventController::class, 'ics'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('events.ics');

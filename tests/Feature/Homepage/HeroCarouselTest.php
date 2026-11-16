@@ -89,7 +89,7 @@ it('checks a slide before saving it', function (array $data, string $field) {
 ]);
 
 it('sends buttons only to site pages, profiles and safe addresses', function () {
-    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'secretariat', 'translations' => ['en' => ['name' => 'Sample Slide Leader', 'published' => true]]], staff(SystemRole::Publisher, mfa: false));
+    $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Slide Leader', 'published' => true]]], staff(SystemRole::Publisher, mfa: false));
 
     expect(SlideLink::isValid('route:volunteer.create'))->toBeTrue()
         ->and(SlideLink::isValid('route:admin.dashboard'))->toBeFalse()
@@ -98,7 +98,7 @@ it('sends buttons only to site pages, profiles and safe addresses', function () 
         ->and(SlideLink::isValid('url://evil.example'))->toBeFalse()
         ->and(SlideLink::isValid('url:javascript:alert(1)'))->toBeFalse()
         ->and(SlideLink::url('route:volunteer.create', 'am'))->toBe(url('/am/volunteer'))
-        ->and(SlideLink::url("leader:{$leader->id}", 'en'))->toBe(url('/en/leaders/sample-slide-leader'))
+        ->and(SlideLink::url("leader:{$leader->id}", 'en'))->toBe(url('/en/about/leadership/sample-slide-leader'))
         ->and(SlideLink::url('leader:missing', 'en'))->toBeNull();
 
     heroSlide(['content' => ['en' => ['title' => 'Sample buttons']], 'buttons' => [
@@ -109,7 +109,7 @@ it('sends buttons only to site pages, profiles and safe addresses', function () 
 
     $this->get('/en')
         ->assertSee('href="'.url('/en/volunteer').'"', escape: false)
-        ->assertSee('href="'.url('/en/leaders/sample-slide-leader').'"', escape: false)
+        ->assertSee('href="'.url('/en/about/leadership/sample-slide-leader').'"', escape: false)
         ->assertSee('rel="noopener"', escape: false);
 });
 

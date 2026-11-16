@@ -27,7 +27,7 @@ function makeEvent(array $translations, string $starts = '+3 days 09:00', array 
 }
 
 it('saves events with agenda, speakers and a map pin, and checks the times', function () {
-    $speaker = app(SaveLeader::class)->handle(new Leader, ['body' => 'executive_committee', 'translations' => ['en' => ['name' => 'Sample Speaker', 'published' => true]]], staff(SystemRole::Publisher));
+    $speaker = app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Speaker', 'published' => true]]], staff(SystemRole::Publisher));
 
     $event = makeEvent([
         'en' => ['title' => 'Sample town hall', 'venue' => 'Sample hall', 'published' => true, 'agenda' => [

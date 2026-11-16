@@ -74,15 +74,15 @@ it('only finds what is published, Amharic included for the other languages', fun
 it('finds pages, people and offices with links to them', function () {
     $publisher = staff(SystemRole::Publisher);
     app(SavePage::class)->handle(new Page, ['translations' => ['en' => ['title' => 'Sample history of the branch', 'published' => true]]], $publisher);
-    app(SaveLeader::class)->handle(new Leader, ['body' => 'secretariat', 'translations' => ['en' => ['name' => 'Sample Branch Secretary', 'position' => 'Sample role', 'published' => true]]], $publisher);
-    app(SaveOffice::class)->handle(new Office, ['type' => 'sector', 'translations' => ['en' => ['name' => 'Sample branch sector office', 'published' => true]]], $publisher);
+    app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'translations' => ['en' => ['name' => 'Sample Branch Secretary', 'position' => 'Sample role', 'published' => true]]], $publisher);
+    app(SaveOffice::class)->handle(new Office, ['type' => 'team', 'translations' => ['en' => ['name' => 'Sample branch sector office', 'published' => true]]], $publisher);
 
     $this->get('/en/search?q=branch')
         ->assertOk()
         ->assertSeeInOrder([__('search.kind.pages', [], 'en'), 'Sample history of the branch', __('search.kind.people', [], 'en'), 'Sample Branch Secretary', __('search.kind.offices', [], 'en'), 'Sample branch sector office'])
         ->assertSee('/en/sample-history-of-the-branch')
-        ->assertSee('/en/leaders/sample-branch-secretary')
-        ->assertSee('/en/offices/sample-branch-sector-office');
+        ->assertSee('/en/about/leadership/sample-branch-secretary')
+        ->assertSee('/en/about/offices/sample-branch-sector-office');
 });
 
 it('limits each kind on the overview and links to the rest', function () {

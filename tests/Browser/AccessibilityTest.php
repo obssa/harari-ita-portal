@@ -18,8 +18,8 @@ it('has no serious accessibility issues on the main pages', function () {
     $pages = [
         '/en', '/am', '/en/news', '/en/news/sample-browser-story', '/am/news/yenamuna-yeasash-zena',
         '/en/events', '/en/events/sample-browser-forum', '/en/events/sample-browser-forum/register',
-        '/en/offices', '/en/offices/sample-browser-office', '/en/documents', '/en/search?q=sample',
-        '/en/contact', '/en/social', '/en/press', '/en/structure', '/en/get-involved', '/om/volunteer', '/om/newsletter',
+        '/en/about/offices', '/en/about/offices/sample-browser-office', '/en/documents', '/en/search?q=sample',
+        '/en/contact', '/en/social', '/en/press', '/en/about/structure', '/en/get-involved', '/om/volunteer', '/om/newsletter',
     ];
 
     foreach ($pages as $path) {

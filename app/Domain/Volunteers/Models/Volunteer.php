@@ -18,7 +18,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Someone who offered to help (PLAN.md §4, §5; ADR-0048). Contact details
  * and their message are encrypted; the audit log records only the status
- * and the woreda.
+ * and the office.
  *
  * @property string $id
  * @property VolunteerStatus $status
@@ -29,7 +29,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?string $phone_hash
  * @property ?string $email
  * @property ?string $email_hash
- * @property ?string $woreda_id
+ * @property ?string $office_id
  * @property list<string> $skills
  * @property list<string> $availability
  * @property list<string> $languages
@@ -38,7 +38,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?CarbonImmutable $erased_at
  * @property ?CarbonImmutable $campaigns_opt_out_at
  * @property CarbonImmutable $created_at
- * @property-read ?Office $woreda
+ * @property-read ?Office $office
  */
 class Volunteer extends Model
 {
@@ -50,7 +50,7 @@ class Volunteer extends Model
 
     public const SOURCE_STAFF = 'staff';
 
-    protected $fillable = ['status', 'source', 'locale', 'name', 'phone', 'phone_hash', 'email', 'email_hash', 'woreda_id',
+    protected $fillable = ['status', 'source', 'locale', 'name', 'phone', 'phone_hash', 'email', 'email_hash', 'office_id',
         'skills', 'availability', 'languages', 'message', 'consented_at'];
 
     protected $hidden = ['name', 'phone', 'email', 'message'];
@@ -77,9 +77,9 @@ class Volunteer extends Model
     /**
      * @return BelongsTo<Office, $this>
      */
-    public function woreda(): BelongsTo
+    public function office(): BelongsTo
     {
-        return $this->belongsTo(Office::class, 'woreda_id');
+        return $this->belongsTo(Office::class, 'office_id');
     }
 
     /**
@@ -100,7 +100,7 @@ class Volunteer extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->useLogName('volunteers')->logOnly(['status', 'woreda_id'])
+        return LogOptions::defaults()->useLogName('volunteers')->logOnly(['status', 'office_id'])
             ->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 }

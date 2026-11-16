@@ -22,7 +22,7 @@ class ViewVolunteer extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        $canManage = fn (): bool => OfficeScope::covers(CurrentUser::get(), $this->volunteer()->woreda_id, 'volunteers.manage');
+        $canManage = fn (): bool => OfficeScope::covers(CurrentUser::get(), $this->volunteer()->office_id, 'volunteers.manage');
 
         return [
             EditAction::make()->visible($canManage),

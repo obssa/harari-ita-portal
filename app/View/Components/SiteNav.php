@@ -81,7 +81,7 @@ final class SiteNav extends Component
                 ...$about,
                 $link('structure.title', route('structure'), 'structure', 'nav.structure_hint'),
                 $link('leaders.title', route('leaders.index'), 'leaders.*', 'nav.leaders_hint'),
-                $link('nav.branch_office', route('offices.index', ['type' => 'branch']), null, 'nav.branch_office_hint'),
+                $link('offices.title', route('offices.index'), 'offices.*', 'nav.offices_hint'),
             ]),
             $section('nav.media', 'nav.media_desc', route('news.index'), null, [
                 $link('nav.news', route('news.index'), 'news.*', 'nav.news_hint'),
@@ -92,12 +92,6 @@ final class SiteNav extends Component
                 $link('nav.videos', route('videos.index'), 'videos.*', 'nav.videos_hint'),
                 $link('social.hub.title', route('social'), 'social', 'nav.social_hint'),
                 $link('press.title', route('press'), 'press*', 'nav.press_hint'),
-            ]),
-            $section('nav.offices', 'nav.offices_desc', route('offices.index'), 'offices.*', [
-                $link('nav.offices_woreda', route('offices.index', ['type' => 'woreda']), null, 'nav.offices_woreda_hint'),
-                $link('nav.offices_kebele', route('offices.index', ['type' => 'kebele']), null, 'nav.offices_kebele_hint'),
-                $link('nav.offices_sector', route('offices.index', ['type' => 'sector']), null, 'nav.offices_sector_hint'),
-                $link('nav.offices_basic', route('offices.index', ['type' => 'basic_org']), null, 'nav.offices_basic_hint'),
             ]),
             $link('nav.pillars', route('pillars.index'), 'pillars.*'),
             $section('nav.programmes', 'nav.programmes_desc', route('projects.index'), null, [

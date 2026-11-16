@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Notification;
 
 function noticeOffice(string $name): Office
 {
-    return app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
+    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
 }
 
 function noticeForm(?Office $office = null): Form

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->char('phone_hash', 64)->nullable()->index();
             $table->text('email')->nullable();
             $table->char('email_hash', 64)->nullable()->index();
-            $table->foreignUlid('woreda_id')->nullable()->constrained('offices')->nullOnDelete();
+            $table->foreignUlid('office_id')->nullable()->constrained('offices')->nullOnDelete();
             $table->json('skills');
             $table->json('availability');
             $table->json('languages');

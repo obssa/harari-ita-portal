@@ -22,7 +22,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * A development project (PLAN.md §4 Programmes & Achievements, ADR-0027):
- * sector, office or woreda, status and progress, dates, the budget when it
+ * sector, directorate or office, status and progress, dates, the budget when it
  * may be published, a map pin, photos and its own statistics.
  *
  * @property string $id

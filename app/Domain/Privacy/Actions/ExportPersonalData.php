@@ -71,7 +71,7 @@ final class ExportPersonalData
                 'name' => $v->name,
                 'phone' => $v->phone,
                 'email' => $v->email,
-                'woreda' => $v->woreda?->name(),
+                'office' => $v->office?->name(),
                 'skills' => $v->skills,
                 'availability' => $v->availability,
                 'languages' => $v->languages,

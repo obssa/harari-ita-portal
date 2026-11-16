@@ -53,7 +53,7 @@ function makeForm(array $data = [], string $title = 'Sample feedback form'): For
 
 function sampleOffice(string $name, ?string $email = null): Office
 {
-    return app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'email' => $email, 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
+    return app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'email' => $email, 'translations' => ['en' => ['name' => $name, 'published' => true]]], staff(SystemRole::Publisher));
 }
 
 /**

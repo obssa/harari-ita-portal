@@ -37,53 +37,63 @@ function samplePack(array $records): string
     return "{$folder}/pack.json";
 }
 
-it('loads the real content pack, published, with portraits, heads, pages and the homepage', function () {
+it('ships an empty pack until the Agency sends its content', function () {
     staff(SystemRole::SuperAdmin, mfa: false);
 
-    $counts = app(LoadContentPack::class)->handle(database_path('content/pack.json'));
+    expect(app(LoadContentPack::class)->handle(database_path('content/pack.json')))->toBe([]);
+});
 
-    expect($counts)->toMatchArray(['pillars' => 2, 'offices' => 10, 'leaders' => 14, 'pages' => 4, 'events' => 1, 'homepage' => 2, 'settings' => 2, 'slides' => 3]);
+it('loads a pack, published, with a portrait, heads, pages, the homepage and a slide', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    $path = samplePack([
+        'pillars' => [['key' => 'pillar.sample', 'head' => 'leader.sample-head', 'translations' => ['en' => ['name' => 'Sample Pillar', 'summary' => 'Sample summary.']]]],
+        'offices' => [
+            ['key' => 'office.sample', 'type' => 'directorate', 'head' => 'leader.sample-head', 'translations' => ['en' => ['name' => 'Sample Directorate']]],
+            ['key' => 'office.sample-team', 'type' => 'team', 'parent' => 'office.sample', 'translations' => ['en' => ['name' => 'Sample Team']]],
+        ],
+        'leaders' => [['key' => 'leader.sample-head', 'body' => 'management', 'rank' => 1, 'office' => 'office.sample', 'photo' => 'sample-head.jpg',
+            'source_url' => 'https://example.org/sample-appointment',
+            'translations' => ['en' => ['name' => 'Sample Head', 'position' => 'Sample head of the Agency'], 'am' => ['name' => 'ናሙና ኃላፊ']]]],
+        'pages' => [['key' => 'page.about', 'translations' => ['en' => ['title' => 'Sample about page', 'slug' => 'about',
+            'body' => ['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => 'Sample text about the Agency.']]]]]]]]],
+        'events' => [['key' => 'event.sample', 'starts_at' => now()->addMonth()->toDateString(), 'all_day' => true, 'translations' => ['en' => ['title' => 'Sample Event']]]],
+        'homepage' => [
+            'leadership' => ['leader' => 'leader.sample-head', 'quote' => ['en' => 'Sample quote.']],
+            'counters' => [['value' => '1', 'label' => ['en' => 'Sample figure']], ['value' => '2', 'label' => ['en' => 'Another sample figure']]],
+        ],
+        'settings' => ['social_links' => ['telegram' => 'https://t.me/sample_channel']],
+        'slides' => [['key' => 'slide.sample', 'name' => 'Sample slide', 'layout' => 'photo', 'sort' => 1,
+            'content' => ['en' => ['title' => 'Sample slide heading']],
+            'buttons' => [['link' => 'route:volunteer.create', 'style' => 'primary', 'label' => ['en' => 'Sample button']]]]],
+    ]);
+    File::ensureDirectoryExists(dirname($path).'/photos');
+    $image = imagecreatetruecolor(600, 600);
+    imagefill($image, 0, 0, imagecolorallocate($image, 5, 37, 59));
+    imagejpeg($image, dirname($path).'/photos/sample-head.jpg', 80);
 
-    $head = Leader::query()->whereHas('translations', fn ($q) => $q->where('name', 'H.E Getu Weyessa Tola'))->firstOrFail();
-    expect($head->translation('en')?->position)->toBe('Head of Harari Region Prosperity Party')
-        ->and($head->translation('am', fallback: false)?->name)->toBe('ክቡር አቶ ጌቱ ወዬሳ ቶላ')
-        ->and($head->body)->toBe(LeaderBody::Secretariat)
-        ->and($head->source_url)->toBe('https://t.me/hrprosperityparty/23920')
-        ->and($head->portrait?->alt)->toHaveKeys(['en', 'am', 'om'])
-        ->and($head->portrait?->credit)->toBe('t.me')
+    $counts = app(LoadContentPack::class)->handle($path);
+
+    expect($counts)->toMatchArray(['pillars' => 1, 'offices' => 2, 'leaders' => 1, 'pages' => 1, 'events' => 1, 'homepage' => 2, 'settings' => 1, 'slides' => 1]);
+    $head = Leader::query()->firstOrFail();
+    expect($head->body)->toBe(LeaderBody::Management)
+        ->and($head->translation('am', fallback: false)?->name)->toBe('ናሙና ኃላፊ')
         ->and($head->translation('am', fallback: false)?->status)->toBe(ContentStatus::Published)
-        ->and(Office::query()->where('type', 'branch')->value('head_leader_id'))->toBe($head->id)
-        ->and(Office::query()->where('type', 'woreda')->count())->toBe(9)
-        ->and(Pillar::query()->whereNotNull('head_leader_id')->count())->toBe(1)
-        ->and(Leader::query()->where('body', LeaderBody::Government->value)->count())->toBe(7)
-        ->and(Event::query()->count())->toBe(1);
+        ->and($head->portrait?->alt)->toHaveKey('en', 'Sample Head')
+        ->and($head->portrait?->credit)->toBe('example.org')
+        ->and(Office::query()->where('type', 'directorate')->value('head_leader_id'))->toBe($head->id)
+        ->and(Office::query()->where('type', 'team')->value('parent_id'))->toBe(Office::query()->where('type', 'directorate')->value('id'))
+        ->and(Pillar::query()->value('head_leader_id'))->toBe($head->id)
+        ->and(Event::query()->count())->toBe(1)
+        ->and(HomepageSection::query()->where('key', SectionKey::Leadership->value)->firstOrFail()->setting('leader_id'))->toBe($head->id)
+        ->and(HomepageSection::query()->where('key', SectionKey::Counters->value)->firstOrFail()->setting('items'))->toHaveCount(2)
+        ->and(app(SiteSettings::class)->social_links['telegram'] ?? null)->toBe('https://t.me/sample_channel')
+        ->and(HeroSlide::query()->count())->toBe(1);
 
-    $leadership = HomepageSection::query()->where('key', SectionKey::Leadership->value)->firstOrFail();
-    expect($leadership->enabled)->toBeTrue()
-        ->and($leadership->setting('leader_id'))->toBe($head->id)
-        ->and(HomepageSection::query()->where('key', SectionKey::Counters->value)->firstOrFail()->setting('items'))->toHaveCount(4)
-        ->and(app(SiteSettings::class)->social_links['telegram'] ?? null)->toBe('https://t.me/hrprosperityparty')
-        ->and(app(SiteSettings::class)->social_links['facebook'] ?? null)->toBe('https://www.facebook.com/profile.php?id=100064354104698');
-
-    $this->get('/en/about')->assertOk()->assertSee('About the branch')->assertSee('It is headed by H.E Getu Weyessa Tola.')->assertSee('https://t.me/hrprosperityparty/23920', escape: false);
-    $this->get('/am/about/history')->assertOk()->assertSee('ሀረሪ ብሔራዊ ሊግ');
-    $this->get('/om/about/harar')->assertOk()->assertSee('Harar Jugol');
-    // ADR-0078: the structure as Directive No. 24/2017 sets it, and the About page in its terms.
-    $this->get('/en/about/organisation')->assertOk()->assertSee('How the party is organised')
-        ->assertSee('Prosperity Family: 11 to 35 full and candidate members', escape: false)->assertSee('Directive No. 24/2017');
-    $this->get('/am/about/organisation')->assertOk()->assertSee('የፓርቲው አደረጃጀት')->assertSee('ብልፅግና ቤተሰብ፦ ከ11 እስከ 35');
-    $this->get('/om/about/organisation')->assertOk()->assertSee('Maatii Badhaadhinaa');
-    $this->get('/en/about')->assertOk()->assertSee('the woredas, kebeles, Prosperity Unions and Prosperity Families')->assertDontSee('basic organisations');
-    $this->get('/am/about')->assertOk()->assertSee('ብልፅግና ህብረቶችና ብልፅግና ቤተሰቦች')->assertDontSee('መሰረታዊ ድርጅቶች');
-    $this->get('/am/about')->assertOk()->assertSee('ክቡር አቶ ጌቱ ወዬሳ ቶላ')->assertDontSee('ክቡር ክቡር');
-    $this->get('/en/leaders')->assertOk()->assertSee('H.E Getu Weyessa Tola')->assertSee(LeaderBody::Government->label('en'));
-    expect(HeroSlide::query()->orderBy('sort')->pluck('layout')->map(fn ($layout) => $layout->value)->all())->toBe(['photo', 'banner', 'portrait']);
-    $this->get('/en')->assertOk()
-        ->assertSeeInOrder(['id="hero-slide-1"', 'Harari Region Prosperity Party', 'id="hero-slide-2"', 'Prosperity Party ብልፅግና', 'id="hero-slide-3"', 'H.E Getu Weyessa Tola'], escape: false)
-        ->assertSee('href="'.url('/en/leaders/'.$head->translation('en')?->slug).'"', escape: false);
-    $this->get('/am')->assertSee('ለኢትዮጵያ እና ህዝቦቿ ብልፅግና እንተጋለን');
-    $this->get('/en/leaders/'.$head->translation('en')?->slug)->assertOk()
-        ->assertSee('href="https://t.me/hrprosperityparty/23920"', escape: false);
+    $this->get('/en/about')->assertOk()->assertSee('Sample text about the Agency.');
+    $this->get('/en/about/leadership')->assertOk()->assertSee('Sample Head')->assertSee(LeaderBody::Management->label('en'));
+    $this->get('/en/about/structure')->assertOk()->assertSeeInOrder(['Sample Directorate', 'Sample Team']);
+    $this->get('/en')->assertOk()->assertSee('Sample slide heading');
+    expect(app(LoadContentPack::class)->handle($path))->toBe([]);
 });
 
 it('loads each record once and never brings back what an editor deleted', function () {
@@ -145,7 +155,7 @@ it('corrects a name and a phrase once, as the branch office asked, and then leav
     staff(SystemRole::SuperAdmin, mfa: false);
     $body = fn (string $text): array => ['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => $text]]]]];
     app(LoadContentPack::class)->handle(samplePack([
-        'leaders' => [['key' => 'leader.sample', 'body' => 'secretariat', 'translations' => ['en' => ['name' => 'Sample Person', 'position' => 'Sample head']]]],
+        'leaders' => [['key' => 'leader.sample', 'body' => 'management', 'translations' => ['en' => ['name' => 'Sample Person', 'position' => 'Sample head']]]],
         'pages' => [['key' => 'page.sample', 'translations' => ['en' => ['title' => 'Sample page', 'slug' => 'sample-page', 'body' => $body('It is headed by Sample Person.')]]]],
     ]));
     $corrections = samplePack(['updates' => [
@@ -169,7 +179,7 @@ it('corrects a phrase once wherever the site shows it, then leaves it to editors
     $admin = staff(SystemRole::SuperAdmin, mfa: false);
     $body = fn (string $text): array => ['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => $text]]]]];
     app(LoadContentPack::class)->handle(samplePack([
-        'leaders' => [['key' => 'leader.sample', 'body' => 'secretariat', 'translations' => ['en' => ['name' => 'H.E Sample Wayyesa', 'position' => 'Sample head']]]],
+        'leaders' => [['key' => 'leader.sample', 'body' => 'management', 'translations' => ['en' => ['name' => 'H.E Sample Wayyesa', 'position' => 'Sample head']]]],
         'pages' => [['key' => 'page.sample', 'translations' => ['en' => ['title' => 'Sample page', 'slug' => 'sample-page', 'body' => $body('Led by H.E Sample Wayyesa.')]]]],
         'slides' => [['key' => 'slide.sample', 'name' => 'Message from H.E Sample Wayyesa', 'layout' => 'photo', 'content' => ['en' => ['title' => 'Sample heading', 'note' => "H.E Sample Wayyesa\nSample head"]]]],
     ]));
@@ -224,7 +234,7 @@ it('waits for a Super Admin and a pack file without failing a deploy', function 
 
 it('accepts only web addresses as a leader source', function () {
     $publisher = staff(SystemRole::Publisher, mfa: false);
-    $data = ['body' => 'office_heads', 'source_url' => 'javascript:alert(1)', 'translations' => ['en' => ['name' => 'Sample Person']]];
+    $data = ['body' => 'directors', 'source_url' => 'javascript:alert(1)', 'translations' => ['en' => ['name' => 'Sample Person']]];
 
     expect(fn () => app(SaveLeader::class)->handle(new Leader, $data, $publisher))->toThrow(ValidationException::class);
 

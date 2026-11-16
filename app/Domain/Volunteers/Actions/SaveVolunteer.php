@@ -20,7 +20,7 @@ use Throwable;
 
 /**
  * Volunteer sign-ups from the public form and corrections by coordinators
- * (PLAN.md §4, §5). Coordinators of the woreda hear about each sign-up.
+ * (PLAN.md §4, §5). Coordinators of the office hear about each sign-up.
  */
 final class SaveVolunteer
 {
@@ -40,7 +40,7 @@ final class SaveVolunteer
 
         try {
             $coordinators = Recipients::withPermission('volunteers.view')
-                ->filter(fn (User $user): bool => OfficeScope::covers($user, $volunteer->woreda_id, 'volunteers.view'));
+                ->filter(fn (User $user): bool => OfficeScope::covers($user, $volunteer->office_id, 'volunteers.view'));
             Recipients::notify($coordinators, NewVolunteerNotice::for($volunteer));
         } catch (Throwable $e) {
             report($e);
@@ -57,18 +57,18 @@ final class SaveVolunteer
     public function handle(Volunteer $volunteer, array $data, User $actor): Volunteer
     {
         $creating = ! $volunteer->exists;
-        abort_unless($creating ? $actor->can('volunteers.manage') : OfficeScope::covers($actor, $volunteer->woreda_id, 'volunteers.manage'), 403);
+        abort_unless($creating ? $actor->can('volunteers.manage') : OfficeScope::covers($actor, $volunteer->office_id, 'volunteers.manage'), 403);
 
         $values = $this->validate($data, 'data.', false);
-        if (! OfficeScope::covers($actor, $values['woreda_id'], 'volunteers.manage')) {
-            throw ValidationException::withMessages(['data.woreda_id' => __('members.validation.outside_scope')]);
+        if (! OfficeScope::covers($actor, $values['office_id'], 'volunteers.manage')) {
+            throw ValidationException::withMessages(['data.office_id' => __('volunteers.validation.outside_scope')]);
         }
 
         $volunteer->fill($values);
         if ($creating) {
             $volunteer->forceFill(['status' => VolunteerStatus::Active, 'source' => Volunteer::SOURCE_STAFF, 'locale' => app()->getLocale()]);
         }
-        $changed = array_values(array_intersect(['name', 'phone', 'email', 'woreda_id', 'skills', 'availability', 'languages'], array_keys($volunteer->getDirty())));
+        $changed = array_values(array_intersect(['name', 'phone', 'email', 'office_id', 'skills', 'availability', 'languages'], array_keys($volunteer->getDirty())));
         $volunteer->save();
 
         if (! $creating && $changed !== []) {
@@ -81,7 +81,7 @@ final class SaveVolunteer
 
     /**
      * @param  array<string, mixed>  $input
-     * @return array{name: string, phone: ?string, phone_hash: ?string, email: ?string, email_hash: ?string, woreda_id: ?string, skills: list<string>, availability: list<string>, languages: list<string>, message?: ?string}
+     * @return array{name: string, phone: ?string, phone_hash: ?string, email: ?string, email_hash: ?string, office_id: ?string, skills: list<string>, availability: list<string>, languages: list<string>, message?: ?string}
      */
     private function validate(array $input, string $prefix, bool $public): array
     {
@@ -103,9 +103,9 @@ final class SaveVolunteer
             $errors["{$prefix}phone"] = __('volunteers.validation.contact');
         }
 
-        $woreda = filled($input['woreda_id'] ?? null) ? (string) $input['woreda_id'] : null;
-        if ($woreda !== null && ! Office::query()->whereKey($woreda)->where('type', OfficeType::Woreda->value)->exists()) {
-            $errors["{$prefix}woreda_id"] = __('membership.validation.office');
+        $office = filled($input['office_id'] ?? null) ? (string) $input['office_id'] : null;
+        if ($office !== null && ! Office::query()->whereKey($office)->whereIn('type', OfficeType::reachableValues())->exists()) {
+            $errors["{$prefix}office_id"] = __('membership.validation.office');
         }
 
         $lists = [];
@@ -132,7 +132,7 @@ final class SaveVolunteer
             'phone_hash' => $phone !== null ? EventRegistration::hash($phone) : null,
             'email' => $email !== '' ? $email : null,
             'email_hash' => $email !== '' ? EventRegistration::hash($email) : null,
-            'woreda_id' => $woreda,
+            'office_id' => $office,
             ...$lists,
             ...($public ? ['message' => $message !== '' ? $message : null] : []),
         ];

@@ -22,7 +22,7 @@ use function Pest\Livewire\livewire;
 it('shows the press kit with the boilerplate, contact, logos, colours, portraits and releases', function () {
     $logo = app(UploadMedia::class)->handle(TestFiles::svg('<rect width="10" height="10" fill="#3151ed"/>'), 'logo.svg');
     $portrait = app(UploadMedia::class)->handle(TestFiles::image(300, 300), 'leader.jpg');
-    app(SaveLeader::class)->handle(new Leader, ['body' => 'executive_committee', 'portrait_id' => $portrait->id,
+    app(SaveLeader::class)->handle(new Leader, ['body' => 'management', 'portrait_id' => $portrait->id,
         'translations' => ['en' => ['name' => 'Sample Chairperson', 'published' => true]]], staff(SystemRole::Publisher));
     $press = app(SaveForm::class)->handle(new Form, ['type' => 'press', 'translations' => ['en' => ['title' => 'Sample press enquiry', 'published' => true]]], staff(SystemRole::Publisher));
     $publisher = staff(SystemRole::Publisher);

@@ -24,7 +24,7 @@ final class VolunteerController extends Controller
         $locale = app()->getLocale();
 
         return view('pages.volunteer.create', [
-            'woredas' => PublicDirectory::visible(Office::query()->where('type', OfficeType::Woreda->value), $locale)
+            'offices' => PublicDirectory::visible(Office::query()->whereIn('type', OfficeType::reachableValues()), $locale)
                 ->with('translations')->orderBy('sort')->get()
                 ->mapWithKeys(fn (Office $office): array => [$office->id => $office->name($locale)])->sort(),
             'turnstileKey' => $turnstile->siteKey(),
