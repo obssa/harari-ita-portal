@@ -22,11 +22,11 @@ use App\Domain\Media\Actions\SyncMediaUsage;
 use App\Domain\Media\Actions\UploadMedia;
 use App\Domain\Media\Models\Media;
 use App\Domain\Organisation\Actions\SaveLeader;
-use App\Domain\Organisation\Actions\SaveLeague;
 use App\Domain\Organisation\Actions\SaveOffice;
+use App\Domain\Organisation\Actions\SavePillar;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Social\Enums\Platform;
 use App\Domain\Social\Models\SocialSource;
 use App\Filament\Pages\ManageHomepage;
@@ -49,7 +49,7 @@ final class LoadContentPack
     private array $counts = [];
 
     public function __construct(
-        private readonly SaveLeague $leagues,
+        private readonly SavePillar $pillars,
         private readonly SaveOffice $offices,
         private readonly SaveLeader $leaders,
         private readonly SavePage $pages,
@@ -79,8 +79,8 @@ final class LoadContentPack
         $this->counts = [];
         $photos = dirname($path).'/photos';
 
-        foreach ((array) ($pack['leagues'] ?? []) as $item) {
-            $this->once($item, 'leagues', fn (array $data): Model => $this->leagues->handle(new League, $data, $actor));
+        foreach ((array) ($pack['pillars'] ?? []) as $item) {
+            $this->once($item, 'pillars', fn (array $data): Model => $this->pillars->handle(new Pillar, $data, $actor));
         }
         foreach ((array) ($pack['offices'] ?? []) as $item) {
             $this->once($item, 'offices', fn (array $data): Model => $this->offices->handle(new Office, [
@@ -91,7 +91,7 @@ final class LoadContentPack
             $this->once($item, 'leaders', fn (array $data): Model => $this->leaders->handle(new Leader, [
                 ...$data,
                 'office_id' => $this->id($item['office'] ?? null),
-                'league_id' => $this->id($item['league'] ?? null),
+                'pillar_id' => $this->id($item['pillar'] ?? null),
                 'portrait_id' => $this->photo($photos, $item, $actor),
             ], $actor));
         }
@@ -189,7 +189,7 @@ final class LoadContentPack
 
     /**
      * Later additions to records the pack loaded (ADR-0065): a photo, a page
-     * template, a league colour, a body. Each fills only what is still empty,
+     * template, a pillar colour, a body. Each fills only what is still empty,
      * once, so an editor's choice always stays. Corrections the branch office
      * asked for (ADR-0069) are the exception: `rename` sets a person's name
      * and title, `replace` swaps a phrase in the record's text, each once.
@@ -225,11 +225,11 @@ final class LoadContentPack
                 $this->usage->handle($record, 'featured_image', [$record->featured_image_id]);
             }
 
-            if ($record instanceof League && $record->accent === null && in_array($update['accent'] ?? null, League::ACCENTS, true)) {
+            if ($record instanceof Pillar && $record->accent === null && in_array($update['accent'] ?? null, Pillar::ACCENTS, true)) {
                 $record->forceFill(['accent' => $update['accent'], 'updated_by' => $actor->id])->save();
             }
 
-            if ($record instanceof League || $record instanceof Page) {
+            if ($record instanceof Pillar || $record instanceof Page) {
                 foreach ((array) ($update['body'] ?? []) as $locale => $body) {
                     $translation = $record->translations()->where('locale', (string) $locale)->first();
                     if ($translation !== null && BodyRenderer::isEmpty(is_array($translation->getAttribute('body')) ? $translation->getAttribute('body') : null) && is_array($body)) {
@@ -341,7 +341,7 @@ final class LoadContentPack
     /**
      * A correction the branch office asked for after the pack was loaded
      * (ADR-0075): phrases swapped, once by key, wherever the site shows them:
-     * people, pages, offices, leagues, stories, carousel slides and picture
+     * people, pages, offices, pillars, stories, carousel slides and picture
      * descriptions (or the kinds the correction names).
      *
      * @param  array<string, mixed>  $correction
@@ -353,10 +353,10 @@ final class LoadContentPack
         if ($key === '' || $pairs === [] || ContentPackItem::query()->where('key', $key)->exists()) {
             return;
         }
-        $in = (array) ($correction['in'] ?? ['leaders', 'pages', 'offices', 'leagues', 'posts', 'slides', 'media']);
+        $in = (array) ($correction['in'] ?? ['leaders', 'pages', 'offices', 'pillars', 'posts', 'slides', 'media']);
 
         DB::transaction(function () use ($key, $pairs, $in): void {
-            $translated = ['leaders' => Leader::class, 'pages' => Page::class, 'offices' => Office::class, 'leagues' => League::class, 'posts' => Post::class];
+            $translated = ['leaders' => Leader::class, 'pages' => Page::class, 'offices' => Office::class, 'pillars' => Pillar::class, 'posts' => Post::class];
             foreach ($translated as $kind => $class) {
                 if (in_array($kind, $in, true)) {
                     $class::query()->with('translations')->each(function (Model $record) use ($pairs): void {
@@ -392,14 +392,14 @@ final class LoadContentPack
     }
 
     /**
-     * Office and league heads, set once both records exist and only where
+     * Office and pillar heads, set once both records exist and only where
      * no head has been chosen meanwhile.
      *
      * @param  array<string, mixed>  $pack
      */
     private function heads(array $pack, User $actor): void
     {
-        foreach (['offices' => Office::class, 'leagues' => League::class] as $kind => $class) {
+        foreach (['offices' => Office::class, 'pillars' => Pillar::class] as $kind => $class) {
             foreach ((array) ($pack[$kind] ?? []) as $item) {
                 $key = (string) ($item['key'] ?? '').'#head';
                 $record = $class::query()->find($this->id($item['key'] ?? null));

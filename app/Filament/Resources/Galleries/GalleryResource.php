@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Galleries;
 
 use App\Domain\Media\Enums\MediaKind;
 use App\Domain\Media\Models\Gallery;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\Galleries\Pages\CreateGallery;
 use App\Filament\Resources\Galleries\Pages\EditGallery;
@@ -104,10 +104,10 @@ class GalleryResource extends Resource
                     ->searchable()
                     ->options(fn (): array => Office::query()->with('translations')->orderBy('sort')->get()
                         ->mapWithKeys(fn (Office $o): array => [$o->id => $o->name()])->all()),
-                Select::make('league_id')
-                    ->label(__('admin.leaders.field.league'))
-                    ->options(fn (): array => League::query()->with('translations')->orderBy('sort')->get()
-                        ->mapWithKeys(fn (League $l): array => [$l->id => $l->name()])->all()),
+                Select::make('pillar_id')
+                    ->label(__('admin.leaders.field.pillar'))
+                    ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()
+                        ->mapWithKeys(fn (Pillar $l): array => [$l->id => $l->name()])->all()),
                 Toggle::make('allow_download')
                     ->label(__('gallery.admin.field.allow_download'))
                     ->helperText(__('gallery.admin.help.allow_download')),

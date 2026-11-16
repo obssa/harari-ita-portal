@@ -123,12 +123,12 @@ class EditPost extends EditRecord
     {
         /** @var Post $post */
         $post = $this->getRecord();
-        $post->loadMissing(['translations', 'categories', 'tags', 'offices', 'leagues', 'leaders']);
+        $post->loadMissing(['translations', 'categories', 'tags', 'offices', 'pillars', 'leaders']);
 
         $data['categories'] = $post->categories->modelKeys();
         $data['tags'] = $post->tags->modelKeys();
         $data['offices'] = $post->offices->modelKeys();
-        $data['leagues'] = $post->leagues->modelKeys();
+        $data['pillars'] = $post->pillars->modelKeys();
         $data['leaders'] = $post->leaders->modelKeys();
         $data['translations'] = [];
 

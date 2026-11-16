@@ -1,18 +1,18 @@
 @use('App\Domain\Organisation\Queries\PublicDirectory')
 @php $locale = app()->getLocale(); @endphp
-<x-layouts.public :title="__('leagues.title')" :description="__('leagues.description')">
-    <x-page-hero :title="__('leagues.title')" :lead="__('leagues.description')" tone="plaster" :crumbs="[]" />
+<x-layouts.public :title="__('pillars.title')" :description="__('pillars.description')">
+    <x-page-hero :title="__('pillars.title')" :lead="__('pillars.description')" tone="plaster" :crumbs="[]" />
     <div class="mx-auto max-w-page px-4 pt-2 pb-12 sm:px-6">
 
-        @if ($leagues->isEmpty())
+        @if ($pillars->isEmpty())
             <p class="mt-10 rounded-card border border-line bg-surface px-5 py-8 text-center text-ink-muted">{{ __('directory.empty') }}</p>
         @else
-            {{-- ADR-0065: each league in its own colour, as on the homepage. --}}
+            {{-- ADR-0065: each pillar in its own colour, as on the homepage. --}}
             <ul class="mt-8 grid gap-6 sm:grid-cols-2">
-                @foreach ($leagues as $league)
+                @foreach ($pillars as $pillar)
                     @php
-                        $shown = PublicDirectory::shown($league, $locale);
-                        $ground = match ($league->accentTone()) {
+                        $shown = PublicDirectory::shown($pillar, $locale);
+                        $ground = match ($pillar->accentTone()) {
                             'magenta' => 'bg-magenta-700',
                             'accent' => 'bg-accent-700',
                             'night' => 'bg-primary-900',
@@ -25,7 +25,7 @@
                             @include('pages.home._plate', ['class' => 'pointer-events-none absolute -end-16 -top-16 size-60 opacity-30 transition-transform duration-700 group-hover:rotate-12'])
                             <div class="relative">
                                 <h2 class="text-3xl font-extrabold tracking-tight">
-                                    <a href="{{ route('leagues.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}" class="after:absolute after:inset-0">{{ $shown->getAttribute('name') }}</a>
+                                    <a href="{{ route('pillars.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}" class="after:absolute after:inset-0">{{ $shown->getAttribute('name') }}</a>
                                 </h2>
                                 @if (filled($shown->getAttribute('summary')))
                                     <p class="mt-3 max-w-prose text-lg text-white/85">{{ $shown->getAttribute('summary') }}</p>

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Schema;
  */
 return new class extends Migration
 {
-    private const TABLES = ['post_translations', 'page_translations', 'leader_translations', 'office_translations', 'league_translations'];
+    private const TABLES = ['post_translations', 'page_translations', 'leader_translations', 'office_translations', 'pillar_translations'];
 
     public function up(): void
     {

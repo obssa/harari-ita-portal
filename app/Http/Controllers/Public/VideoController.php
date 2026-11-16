@@ -46,7 +46,7 @@ final class VideoController extends Controller
 
         /** @var VideoTranslation|null $translation */
         $translation = VideoTranslation::query()->where('locale', $locale)->where('slug', $slug)->first();
-        $video = $translation?->video()->with(['translations', 'thumbnail', 'category.translations', 'office.translations', 'league.translations'])->first();
+        $video = $translation?->video()->with(['translations', 'thumbnail', 'category.translations', 'office.translations', 'pillar.translations'])->first();
         abort_if($translation === null || $video === null || ! $translation->isLive(), 404);
 
         $url = route('videos.show', ['slug' => $translation->slug]);
@@ -57,7 +57,7 @@ final class VideoController extends Controller
             'translation' => $translation,
             'link' => $link,
             'office' => $video->office !== null ? PublicDirectory::shown($video->office, $locale) : null,
-            'league' => $video->league !== null ? PublicDirectory::shown($video->league, $locale) : null,
+            'pillar' => $video->pillar !== null ? PublicDirectory::shown($video->pillar, $locale) : null,
             'alternates' => PublicDirectory::alternates($video, 'videos.show', 'videos.index'),
             'image' => PublicDirectory::shareImage($video->thumbnail, 'landscape', "video-{$video->id}-{$locale}", $translation->title, __('video.title')),
             'jsonLd' => [array_filter([

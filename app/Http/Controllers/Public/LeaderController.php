@@ -42,7 +42,7 @@ final class LeaderController extends Controller
 
         /** @var LeaderTranslation|null $translation */
         $translation = LeaderTranslation::query()->where('locale', $locale)->where('slug', $slug)->first();
-        $leader = $translation?->leader()->with(['translations', 'portrait', 'office.translations', 'league.translations'])->first();
+        $leader = $translation?->leader()->with(['translations', 'portrait', 'office.translations', 'pillar.translations'])->first();
         abort_if($translation === null || $leader === null || ! $translation->isLive(), 404);
 
         $url = route('leaders.show', ['slug' => $translation->slug]);
@@ -53,7 +53,7 @@ final class LeaderController extends Controller
             'translation' => $translation,
             'body' => BodyRenderer::toHtml($translation->body),
             'office' => $leader->office !== null ? PublicDirectory::shown($leader->office, $locale) : null,
-            'league' => $leader->league !== null ? PublicDirectory::shown($leader->league, $locale) : null,
+            'pillar' => $leader->pillar !== null ? PublicDirectory::shown($leader->pillar, $locale) : null,
             'posts' => $posts->linkedTo($locale, 'leaders', $leader->id),
             'alternates' => PublicDirectory::alternates($leader, 'leaders.show', 'leaders.index'),
             'image' => PublicDirectory::shareImage($portrait, 'square', "leader-{$leader->id}-{$locale}", $translation->name, (string) $translation->position),

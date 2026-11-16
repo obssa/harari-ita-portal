@@ -7,8 +7,8 @@ use App\Domain\Content\Concerns\HasTranslations;
 use App\Domain\Content\Concerns\TracksEditors;
 use App\Domain\Content\Contracts\TranslatableModel;
 use App\Domain\Documents\Enums\DocumentType;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Translation\Support\Locales;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,11 +32,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?CarbonImmutable $issued_on
  * @property ?CarbonImmutable $deadline_at
  * @property ?string $office_id
- * @property ?string $league_id
+ * @property ?string $pillar_id
  * @property string $access
  * @property int $download_count
  * @property-read ?Office $office
- * @property-read ?League $league
+ * @property-read ?Pillar $pillar
  */
 class Document extends Model implements TranslatableModel
 {
@@ -53,7 +53,7 @@ class Document extends Model implements TranslatableModel
     /** Every document is public; the column leaves room for an internal level later. */
     public const ACCESS_PUBLIC = 'public';
 
-    protected $fillable = ['type', 'year', 'issued_on', 'deadline_at', 'office_id', 'league_id', 'access'];
+    protected $fillable = ['type', 'year', 'issued_on', 'deadline_at', 'office_id', 'pillar_id', 'access'];
 
     protected $attributes = ['access' => self::ACCESS_PUBLIC, 'download_count' => 0];
 
@@ -89,11 +89,11 @@ class Document extends Model implements TranslatableModel
     }
 
     /**
-     * @return BelongsTo<League, $this>
+     * @return BelongsTo<Pillar, $this>
      */
-    public function league(): BelongsTo
+    public function pillar(): BelongsTo
     {
-        return $this->belongsTo(League::class);
+        return $this->belongsTo(Pillar::class);
     }
 
     /**

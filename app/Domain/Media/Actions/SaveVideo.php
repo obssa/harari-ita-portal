@@ -7,8 +7,8 @@ use App\Domain\Content\Models\Category;
 use App\Domain\Media\Models\Media;
 use App\Domain\Media\Models\Video;
 use App\Domain\Media\Support\VideoLink;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
@@ -71,7 +71,7 @@ final class SaveVideo
                 'thumbnail_id' => $thumbnail,
                 'category_id' => filled($data['category_id'] ?? null) && Category::query()->whereKey($data['category_id'])->where('type', Category::TYPE_VIDEO)->exists() ? (string) $data['category_id'] : null,
                 'office_id' => filled($data['office_id'] ?? null) && Office::query()->whereKey($data['office_id'])->exists() ? (string) $data['office_id'] : null,
-                'league_id' => filled($data['league_id'] ?? null) && League::query()->whereKey($data['league_id'])->exists() ? (string) $data['league_id'] : null,
+                'pillar_id' => filled($data['pillar_id'] ?? null) && Pillar::query()->whereKey($data['pillar_id'])->exists() ? (string) $data['pillar_id'] : null,
                 'recorded_on' => $this->time($data['recorded_on'] ?? null)?->startOfDay(),
                 'is_featured' => (bool) ($data['is_featured'] ?? false),
                 'is_live' => $isLive,

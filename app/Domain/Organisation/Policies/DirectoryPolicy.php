@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Offices, leaders and leagues (PLAN.md §8): `{module}.view` to see them in
+ * Offices, leaders and pillars (PLAN.md §8): `{module}.view` to see them in
  * the admin, `{module}.manage` to change, publish and remove them.
  */
 abstract class DirectoryPolicy

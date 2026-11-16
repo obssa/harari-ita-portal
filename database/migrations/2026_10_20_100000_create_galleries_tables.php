@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained()->restrictOnDelete();
             $table->foreignId('cover_id')->nullable()->constrained('media')->nullOnDelete();
             $table->foreignUlid('office_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignUlid('league_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('pillar_id')->nullable()->constrained()->nullOnDelete();
             $table->date('taken_on')->nullable();
             $table->boolean('allow_download')->default(false);
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();

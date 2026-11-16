@@ -44,13 +44,13 @@ it('makes alike-sounding Ethiopic letters and Latin accents match', function () 
 });
 
 it('finds posts by any of their words, in any order and spelling', function () {
-    searchPost(['en' => ['title' => 'Youth league meeting held in Harar', 'excerpt' => 'Sample summary']]);
+    searchPost(['en' => ['title' => 'Youth pillar meeting held in Harar', 'excerpt' => 'Sample summary']]);
     searchPost(['am' => ['title' => 'የሐረር ክልል ምክር ቤት ስብሰባ']], ['am']);
     searchPost(['en' => ['title' => 'Unrelated sample item']]);
 
     $this->get('/en/search?q=harar+YOUTH')
         ->assertOk()
-        ->assertSee('Youth league meeting held in Harar')
+        ->assertSee('Youth pillar meeting held in Harar')
         ->assertDontSee('Unrelated sample item');
 
     $this->get('/am/search?q='.urlencode('ሀረር ስብሰባ'))->assertSee('የሐረር ክልል ምክር ቤት ስብሰባ');

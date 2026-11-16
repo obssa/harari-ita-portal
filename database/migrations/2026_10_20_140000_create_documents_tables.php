@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('issued_on')->nullable();
             $table->timestamp('deadline_at')->nullable();
             $table->foreignUlid('office_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignUlid('league_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('pillar_id')->nullable()->constrained()->nullOnDelete();
             // Every document is public; the column stays for a future restricted level.
             $table->string('access', 10)->default('public');
             $table->unsignedInteger('download_count')->default(0);

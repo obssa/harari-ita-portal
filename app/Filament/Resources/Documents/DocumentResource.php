@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Documents;
 use App\Domain\Documents\Enums\DocumentType;
 use App\Domain\Documents\Models\Document;
 use App\Domain\Media\Enums\MediaKind;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Filament\Resources\Documents\Pages\CreateDocument;
 use App\Filament\Resources\Documents\Pages\EditDocument;
 use App\Filament\Resources\Documents\Pages\ListDocuments;
@@ -98,9 +98,9 @@ class DocumentResource extends Resource
                     Select::make('office_id')->label(__('admin.leaders.field.office'))->searchable()
                         ->options(fn (): array => Office::query()->with('translations')->orderBy('sort')->get()
                             ->mapWithKeys(fn (Office $o): array => [$o->id => $o->name()])->all()),
-                    Select::make('league_id')->label(__('admin.leaders.field.league'))
-                        ->options(fn (): array => League::query()->with('translations')->orderBy('sort')->get()
-                            ->mapWithKeys(fn (League $l): array => [$l->id => $l->name()])->all()),
+                    Select::make('pillar_id')->label(__('admin.leaders.field.pillar'))
+                        ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()
+                            ->mapWithKeys(fn (Pillar $l): array => [$l->id => $l->name()])->all()),
                     Select::make('related')->label(__('documents.admin.field.related'))->multiple()->searchable()
                         ->maxItems(8)
                         ->options(fn (?Document $record): array => Document::query()->with('translations')

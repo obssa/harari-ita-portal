@@ -6,8 +6,8 @@ use App\Domain\Content\Concerns\BelongsToSite;
 use App\Domain\Content\Concerns\HasTranslations;
 use App\Domain\Content\Concerns\TracksEditors;
 use App\Domain\Content\Contracts\TranslatableModel;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
@@ -20,17 +20,17 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * A photo album (PLAN.md §4 News & Media, ADR-0023): library photos in
  * order with captions per language, a cover, the day the photos were taken
- * and the office or league it belongs to.
+ * and the office or pillar it belongs to.
  *
  * @property string $id
  * @property ?int $cover_id
  * @property ?string $office_id
- * @property ?string $league_id
+ * @property ?string $pillar_id
  * @property ?CarbonImmutable $taken_on
  * @property bool $allow_download
  * @property-read ?Media $cover
  * @property-read ?Office $office
- * @property-read ?League $league
+ * @property-read ?Pillar $pillar
  */
 class Gallery extends Model implements TranslatableModel
 {
@@ -47,7 +47,7 @@ class Gallery extends Model implements TranslatableModel
     /** Most photos in one album. */
     public const MAX_ITEMS = 200;
 
-    protected $fillable = ['cover_id', 'office_id', 'league_id', 'taken_on', 'allow_download'];
+    protected $fillable = ['cover_id', 'office_id', 'pillar_id', 'taken_on', 'allow_download'];
 
     protected $attributes = ['allow_download' => false];
 
@@ -67,7 +67,7 @@ class Gallery extends Model implements TranslatableModel
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName('media')
-            ->logOnly(['cover_id', 'office_id', 'league_id', 'taken_on', 'allow_download'])
+            ->logOnly(['cover_id', 'office_id', 'pillar_id', 'taken_on', 'allow_download'])
             ->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
@@ -96,11 +96,11 @@ class Gallery extends Model implements TranslatableModel
     }
 
     /**
-     * @return BelongsTo<League, $this>
+     * @return BelongsTo<Pillar, $this>
      */
-    public function league(): BelongsTo
+    public function pillar(): BelongsTo
     {
-        return $this->belongsTo(League::class);
+        return $this->belongsTo(Pillar::class);
     }
 
     /** The name for the admin: this language, its fallbacks, or any language. */

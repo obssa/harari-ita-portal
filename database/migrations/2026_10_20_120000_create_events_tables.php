@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('online_url', 500)->nullable();
             $table->foreignId('cover_id')->nullable()->constrained('media')->nullOnDelete();
             $table->foreignUlid('office_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignUlid('league_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('pillar_id')->nullable()->constrained()->nullOnDelete();
             $table->boolean('registration_enabled')->default(false);
             $table->unsignedInteger('capacity')->nullable();
             $table->boolean('waitlist')->default(true);

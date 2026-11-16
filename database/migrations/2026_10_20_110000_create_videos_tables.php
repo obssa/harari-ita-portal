@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('thumbnail_id')->nullable()->constrained('media')->nullOnDelete();
             $table->foreignUlid('category_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignUlid('office_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignUlid('league_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('pillar_id')->nullable()->constrained()->nullOnDelete();
             $table->date('recorded_on')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_live')->default(false);

@@ -7,7 +7,7 @@ use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Post;
 use App\Domain\Content\Workflow\ContentWorkflow;
 use App\Domain\Content\Workflow\Transition;
-use App\Domain\Organisation\Models\League;
+use App\Domain\Organisation\Models\Pillar;
 use App\Support\HararPhotos;
 use Illuminate\Support\Facades\File;
 
@@ -51,10 +51,10 @@ it('loads the Harar photos onto the pages and the wings their colours and work, 
     expect($about->template)->toBe('landing')
         ->and($about->featuredImage?->credit)->toBe('Giustino, CC BY 2.0, Wikimedia Commons');
 
-    $women = League::query()->whereHas('translations', fn ($q) => $q->where('name', "Women's Wing"))->firstOrFail();
+    $women = Pillar::query()->whereHas('translations', fn ($q) => $q->where('name', "Women's Wing"))->firstOrFail();
     expect($women->accentTone())->toBe('magenta');
 
-    $this->get('/en/leagues/'.$women->translation('en')?->slug)->assertOk()
+    $this->get('/en/pillars/'.$women->translation('en')?->slug)->assertOk()
         ->assertSee('bg-magenta-700', escape: false)
         ->assertSee('Zinet Yusuf')
         ->assertSee('Resurgence Day')
@@ -67,18 +67,18 @@ it('keeps a colour an editor chose when the pack adds a wing profile later', fun
     staff(SystemRole::SuperAdmin, mfa: false);
     $folder = storage_path('framework/testing/pack-'.uniqid());
     File::ensureDirectoryExists($folder);
-    $league = ['key' => 'league.sample', 'translations' => ['en' => ['name' => 'Sample Wing', 'summary' => 'Sample summary.']]];
-    file_put_contents("{$folder}/pack.json", json_encode(['leagues' => [$league]]));
+    $pillar = ['key' => 'pillar.sample', 'translations' => ['en' => ['name' => 'Sample Wing', 'summary' => 'Sample summary.']]];
+    file_put_contents("{$folder}/pack.json", json_encode(['pillars' => [$pillar]]));
     app(LoadContentPack::class)->handle("{$folder}/pack.json");
 
-    League::query()->firstOrFail()->forceFill(['accent' => 'night'])->save();
+    Pillar::query()->firstOrFail()->forceFill(['accent' => 'night'])->save();
     $body = ['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => 'Sample work of the wing.']]]]];
-    file_put_contents("{$folder}/pack.json", json_encode(['leagues' => [$league], 'updates' => [
-        ['key' => 'league.sample#profile', 'target' => 'league.sample', 'accent' => 'magenta', 'body' => ['en' => $body]],
+    file_put_contents("{$folder}/pack.json", json_encode(['pillars' => [$pillar], 'updates' => [
+        ['key' => 'pillar.sample#profile', 'target' => 'pillar.sample', 'accent' => 'magenta', 'body' => ['en' => $body]],
     ]]));
 
     expect(app(LoadContentPack::class)->handle("{$folder}/pack.json"))->toBe(['updates' => 1]);
-    $saved = League::query()->firstOrFail();
+    $saved = Pillar::query()->firstOrFail();
     expect($saved->accent)->toBe('night')
         ->and($saved->translation('en')?->getAttribute('body'))->toEqual($body)
         ->and(app(LoadContentPack::class)->handle("{$folder}/pack.json"))->toBe([]);

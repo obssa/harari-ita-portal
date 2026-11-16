@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\SocialSources;
 
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Social\Actions\AddPostByAddress;
 use App\Domain\Social\Actions\CheckFacebookTokens;
 use App\Domain\Social\Actions\FetchSocialSource;
@@ -82,8 +82,8 @@ class SocialSourceResource extends Resource
             TextInput::make('name')->label(__('social.source.field.name'))->required()->maxLength(160),
             Select::make('office_id')->label(__('admin.leaders.field.office'))->searchable()
                 ->options(fn (): array => Office::query()->with('translations')->orderBy('sort')->get()->mapWithKeys(fn (Office $o): array => [$o->id => $o->name()])->all()),
-            Select::make('league_id')->label(__('admin.leaders.field.league'))
-                ->options(fn (): array => League::query()->with('translations')->orderBy('sort')->get()->mapWithKeys(fn (League $l): array => [$l->id => $l->name()])->all()),
+            Select::make('pillar_id')->label(__('admin.leaders.field.pillar'))
+                ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()->mapWithKeys(fn (Pillar $l): array => [$l->id => $l->name()])->all()),
             TextInput::make('interval_minutes')->label(__('social.source.field.interval'))->numeric()->integer()->minValue(15)->maxValue(1440)->default(60)->suffix(__('social.source.minutes')),
             Toggle::make('enabled')->label(__('social.source.field.enabled'))->default(true),
         ]);

@@ -28,7 +28,7 @@ final class SlideLink
         'leaders.index' => 'leaders.title',
         'structure' => 'structure.title',
         'offices.index' => 'offices.title',
-        'leagues.index' => 'leagues.title',
+        'pillars.index' => 'pillars.title',
         'events.index' => 'events.title',
         'projects.index' => 'projects.title',
         'documents.index' => 'documents.title',

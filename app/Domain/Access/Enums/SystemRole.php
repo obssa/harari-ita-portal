@@ -49,7 +49,7 @@ enum SystemRole: string
     public function allowedScopes(): array
     {
         return match ($this) {
-            self::Publisher, self::Editor, self::Author => [ScopeType::Office, ScopeType::League],
+            self::Publisher, self::Editor, self::Author => [ScopeType::Office, ScopeType::Pillar],
             self::Translator => [ScopeType::Language],
             self::MembershipOfficer, self::SupportAgent, self::OfficeHead => [ScopeType::Office],
             default => [],
@@ -78,7 +78,7 @@ enum SystemRole: string
                 'media.view', 'media.upload', 'media.update',
                 'galleries.manage', 'videos.manage',
                 'leaders.view', 'leaders.manage', 'offices.view', 'offices.manage',
-                'leagues.view', 'leagues.manage', 'events.view', 'events.manage', 'events.registrations',
+                'pillars.view', 'pillars.manage', 'events.view', 'events.manage', 'events.registrations',
                 'documents.view', 'documents.manage', 'projects.view', 'projects.manage',
                 'translations.view', 'analytics.view',
             ],
@@ -90,7 +90,7 @@ enum SystemRole: string
                 'media.view', 'media.upload', 'media.update',
                 'galleries.manage', 'videos.manage',
                 'leaders.view', 'leaders.manage', 'offices.view', 'offices.manage',
-                'leagues.view', 'leagues.manage', 'events.view', 'events.manage',
+                'pillars.view', 'pillars.manage', 'events.view', 'events.manage',
                 'documents.view', 'documents.manage', 'projects.view', 'projects.manage',
                 'translations.view',
             ],

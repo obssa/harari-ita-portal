@@ -13,18 +13,18 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * One language of a league or forum.
+ * One language of a pillar or forum.
  *
- * @property string $league_id
+ * @property string $pillar_id
  * @property string $name
  * @property ?string $summary
  * @property ?array<string, mixed> $body
  * @property ContentStatus $status
  * @property ?CarbonImmutable $published_at
  * @property ?CarbonImmutable $updated_at
- * @property-read League $league
+ * @property-read Pillar $pillar
  */
-class LeagueTranslation extends Translation
+class PillarTranslation extends Translation
 {
     use LogsActivity;
     use PublishedPerLanguage;
@@ -59,10 +59,10 @@ class LeagueTranslation extends Translation
     }
 
     /**
-     * @return BelongsTo<League, $this>
+     * @return BelongsTo<Pillar, $this>
      */
-    public function league(): BelongsTo
+    public function pillar(): BelongsTo
     {
-        return $this->belongsTo(League::class);
+        return $this->belongsTo(Pillar::class);
     }
 }

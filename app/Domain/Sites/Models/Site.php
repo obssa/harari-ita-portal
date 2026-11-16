@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media as BaseMedia;
 
 /**
  * A portal site. Only the default site exists for now; sub-sites for offices
- * or leagues can be added later without schema changes (PLAN.md §7).
+ * or pillars can be added later without schema changes (PLAN.md §7).
  * The site owns its media library (ADR-0009).
  *
  * @property int $id

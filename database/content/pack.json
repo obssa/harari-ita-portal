@@ -2,9 +2,9 @@
   "version": 1,
   "compiled": "2026-10-21",
   "note": "Real content gathered from public sources on 2026-10-21; every item carries its source. Loaded once per key by `php artisan content:load-pack` (ADR-0063, ADR-0065, ADR-0069, ADR-0070, ADR-0071, ADR-0072, ADR-0075).",
-  "leagues": [
+  "pillars": [
     {
-      "key": "league.women",
+      "key": "pillar.women",
       "sort": 1,
       "head": "leader.zinet-yusuf",
       "translations": {
@@ -24,7 +24,7 @@
       "accent": "magenta"
     },
     {
-      "key": "league.youth",
+      "key": "pillar.youth",
       "sort": 2,
       "translations": {
         "en": {
@@ -354,7 +354,7 @@
     },
     {
       "key": "leader.zinet-yusuf",
-      "body": "leagues",
+      "body": "pillars",
       "rank": 20,
       "source_url": "https://t.me/hrprosperityparty/23217",
       "source_date": "2026-07-08",
@@ -370,11 +370,11 @@
           "summary": null
         }
       },
-      "league": "league.women"
+      "pillar": "pillar.women"
     },
     {
       "key": "leader.tuna-ibrahim",
-      "body": "leagues",
+      "body": "pillars",
       "rank": 21,
       "source_url": "https://t.me/hrprosperityparty/23217",
       "source_date": "2026-07-08",
@@ -390,7 +390,7 @@
           "summary": null
         }
       },
-      "league": "league.women"
+      "pillar": "pillar.women"
     },
     {
       "key": "leader.ordin-bedri",
@@ -1501,7 +1501,7 @@
         "en": {
           "title": "History",
           "slug": "history",
-          "excerpt": "From the Harari National League to the Prosperity Party, and the general elections of 2021 and 2026.",
+          "excerpt": "From the Harari National Pillar to the Prosperity Party, and the general elections of 2021 and 2026.",
           "body": {
             "type": "doc",
             "content": [
@@ -1513,7 +1513,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "The Harari National League"
+                    "text": "The Harari National Pillar"
                   }
                 ]
               },
@@ -1522,7 +1522,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "The Harari National League (HNL) was founded in 1991. Until 2019 it led the Harari Region as a party allied to the EPRDF."
+                    "text": "The Harari National Pillar (HNL) was founded in 1991. Until 2019 it led the Harari Region as a party allied to the EPRDF."
                   }
                 ]
               },
@@ -1660,7 +1660,7 @@
                         "content": [
                           {
                             "type": "text",
-                            "text": "Wikipedia: Harari National League",
+                            "text": "Wikipedia: Harari National Pillar",
                             "marks": [
                               {
                                 "type": "link",
@@ -2011,7 +2011,7 @@
                         "content": [
                           {
                             "type": "text",
-                            "text": "Wikipedia: Harari National League",
+                            "text": "Wikipedia: Harari National Pillar",
                             "marks": [
                               {
                                 "type": "link",
@@ -2362,7 +2362,7 @@
                         "content": [
                           {
                             "type": "text",
-                            "text": "Wikipedia: Harari National League",
+                            "text": "Wikipedia: Harari National Pillar",
                             "marks": [
                               {
                                 "type": "link",
@@ -4408,8 +4408,8 @@
       "template": "landing"
     },
     {
-      "key": "league.women#profile",
-      "target": "league.women",
+      "key": "pillar.women#profile",
+      "target": "pillar.women",
       "accent": "magenta",
       "body": {
         "en": {
@@ -5015,8 +5015,8 @@
       }
     },
     {
-      "key": "league.youth#profile",
-      "target": "league.youth",
+      "key": "pillar.youth#profile",
+      "target": "pillar.youth",
       "accent": "primary",
       "body": {
         "en": {

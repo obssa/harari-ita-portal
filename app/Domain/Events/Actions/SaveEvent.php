@@ -7,8 +7,8 @@ use App\Domain\Events\Models\Event;
 use App\Domain\Events\Models\EventTranslation;
 use App\Domain\Media\Actions\SyncMediaUsage;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +65,7 @@ final class SaveEvent
                 'online_url' => $online !== '' ? $online : null,
                 'cover_id' => filled($data['cover_id'] ?? null) ? (int) $data['cover_id'] : null,
                 'office_id' => filled($data['office_id'] ?? null) && Office::query()->whereKey($data['office_id'])->exists() ? (string) $data['office_id'] : null,
-                'league_id' => filled($data['league_id'] ?? null) && League::query()->whereKey($data['league_id'])->exists() ? (string) $data['league_id'] : null,
+                'pillar_id' => filled($data['pillar_id'] ?? null) && Pillar::query()->whereKey($data['pillar_id'])->exists() ? (string) $data['pillar_id'] : null,
                 'registration_enabled' => (bool) ($data['registration_enabled'] ?? false),
                 'capacity' => $capacity,
                 'waitlist' => (bool) ($data['waitlist'] ?? true),

@@ -6,11 +6,11 @@ use App\Domain\Content\Models\Post;
 use App\Domain\Content\Workflow\ContentWorkflow;
 use App\Domain\Content\Workflow\Transition;
 use App\Domain\Organisation\Actions\SaveLeader;
-use App\Domain\Organisation\Actions\SaveLeague;
 use App\Domain\Organisation\Actions\SaveOffice;
+use App\Domain\Organisation\Actions\SavePillar;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 
 /**
  * @param  array<string, array<string, mixed>>  $translations
@@ -103,21 +103,21 @@ it('lists offices with type filter and search, and shows an office page with map
         ->toContain('https://www.openstreetmap.org');
 });
 
-it('shows leagues with their chair and leadership', function () {
-    $chair = directoryLeader(['en' => ['name' => 'Sample League Chair', 'published' => true]], 'leagues');
-    $league = app(SaveLeague::class)->handle(new League, [
+it('shows pillars with their chair and leadership', function () {
+    $chair = directoryLeader(['en' => ['name' => 'Sample Pillar Chair', 'published' => true]], 'pillars');
+    $pillar = app(SavePillar::class)->handle(new Pillar, [
         'head_leader_id' => $chair->id,
-        'translations' => ['en' => ['name' => 'Sample Youth League', 'summary' => 'Sample summary', 'published' => true]],
+        'translations' => ['en' => ['name' => 'Sample Youth Pillar', 'summary' => 'Sample summary', 'published' => true]],
     ], staff(SystemRole::Publisher));
-    directoryLeader(['en' => ['name' => 'Sample League Secretary', 'published' => true]], 'leagues', ['league_id' => $league->id]);
+    directoryLeader(['en' => ['name' => 'Sample Pillar Secretary', 'published' => true]], 'pillars', ['pillar_id' => $pillar->id]);
 
-    $this->get('/en/leagues')->assertOk()->assertSee('Sample Youth League')->assertSee('Sample summary')
+    $this->get('/en/pillars')->assertOk()->assertSee('Sample Youth Pillar')->assertSee('Sample summary')
         // ADR-0078: the directive's own word for the women's and youth organisations.
-        ->assertSee(__('leagues.title', [], 'en'))->assertDontSee('Leagues and forums');
-    $this->get('/en/leagues/sample-youth-league')
+        ->assertSee(__('pillars.title', [], 'en'))->assertDontSee('Pillars and forums');
+    $this->get('/en/pillars/sample-youth-pillar')
         ->assertOk()
-        ->assertSee('Sample League Chair')
-        ->assertSee('Sample League Secretary');
+        ->assertSee('Sample Pillar Chair')
+        ->assertSee('Sample Pillar Secretary');
 });
 
 it('builds the organisational structure from the office tree', function () {

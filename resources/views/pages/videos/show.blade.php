@@ -30,8 +30,8 @@
                         @if ($office)
                             <a href="{{ route('offices.show', ['locale' => $office->locale, 'slug' => $office->slug]) }}" class="text-link hover:underline">{{ $office->getAttribute('name') }}</a>
                         @endif
-                        @if ($league)
-                            <a href="{{ route('leagues.show', ['locale' => $league->locale, 'slug' => $league->slug]) }}" class="text-link hover:underline">{{ $league->getAttribute('name') }}</a>
+                        @if ($pillar)
+                            <a href="{{ route('pillars.show', ['locale' => $pillar->locale, 'slug' => $pillar->slug]) }}" class="text-link hover:underline">{{ $pillar->getAttribute('name') }}</a>
                         @endif
                     </p>
                 </header>

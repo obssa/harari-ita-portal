@@ -39,7 +39,7 @@ it('records role grants, scope changes and signs the person out everywhere', fun
     expect(DB::table('sessions')->where('user_id', $user->id)->count())->toBe(0)
         ->and($user->fresh()->remember_token)->not->toBe($token);
 
-    $user->assignScopedRole(SystemRole::Editor, ScopeType::League, 'youth');
+    $user->assignScopedRole(SystemRole::Editor, ScopeType::Pillar, 'youth');
     $user->roleScopes()->first()->delete();
     $user->removeRole('editor');
 

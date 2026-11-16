@@ -55,9 +55,9 @@ final class PublicPosts
     }
 
     /**
-     * Latest live posts linked to an office, league or leader.
+     * Latest live posts linked to an office, pillar or leader.
      *
-     * @param  'offices'|'leagues'|'leaders'  $relation
+     * @param  'offices'|'pillars'|'leaders'  $relation
      * @return Collection<int, Post>
      */
     public function linkedTo(string $locale, string $relation, string $id, int $limit = 6): Collection

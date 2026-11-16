@@ -17,7 +17,7 @@ final class DuplicatePost
 
     public function handle(Post $original): Post
     {
-        $original->loadMissing(['translations', 'categories', 'tags', 'offices', 'leagues', 'leaders']);
+        $original->loadMissing(['translations', 'categories', 'tags', 'offices', 'pillars', 'leaders']);
 
         return DB::transaction(function () use ($original): Post {
             $copy = new Post($original->only(['type', 'featured_image_id', 'source_locale']));
@@ -25,7 +25,7 @@ final class DuplicatePost
             $copy->categories()->sync($original->categories->modelKeys());
             $copy->tags()->sync($original->tags->modelKeys());
             $copy->offices()->sync($original->offices->modelKeys());
-            $copy->leagues()->sync($original->leagues->modelKeys());
+            $copy->pillars()->sync($original->pillars->modelKeys());
             $copy->leaders()->sync($original->leaders->modelKeys());
 
             foreach ($original->translations as $translation) {

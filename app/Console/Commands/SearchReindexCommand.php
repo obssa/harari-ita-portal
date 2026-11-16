@@ -7,8 +7,8 @@ use App\Domain\Content\Models\PostTranslation;
 use App\Domain\Documents\Models\DocumentTranslation;
 use App\Domain\Events\Models\EventTranslation;
 use App\Domain\Organisation\Models\LeaderTranslation;
-use App\Domain\Organisation\Models\LeagueTranslation;
 use App\Domain\Organisation\Models\OfficeTranslation;
+use App\Domain\Organisation\Models\PillarTranslation;
 use App\Domain\Projects\Models\ProjectTranslation;
 use App\Domain\Search\SiteSearch;
 use App\Domain\Search\Support\SearchText;
@@ -26,7 +26,7 @@ final class SearchReindexCommand extends Command
 {
     protected $signature = 'portal:search-reindex';
 
-    protected $description = 'Rebuild the search text of every post, page, leader, office and league language';
+    protected $description = 'Rebuild the search text of every post, page, leader, office and pillar language';
 
     public function handle(): int
     {
@@ -41,7 +41,7 @@ final class SearchReindexCommand extends Command
             $count = 0;
             $model::query()->chunkById(200, function (Collection $translations) use (&$count): void {
                 foreach ($translations as $translation) {
-                    /** @var PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|LeagueTranslation|EventTranslation|DocumentTranslation|ProjectTranslation $translation */
+                    /** @var PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|PillarTranslation|EventTranslation|DocumentTranslation|ProjectTranslation $translation */
                     $translation->forceFill(['search_text' => SearchText::build($translation->searchableParts())])->saveQuietly();
                     $count++;
                 }

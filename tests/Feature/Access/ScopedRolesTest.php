@@ -9,18 +9,18 @@ it('applies a role without scopes everywhere', function () {
     $editor = staff(SystemRole::Editor);
 
     expect($editor->hasPermissionInScope('posts.update', ScopeType::Office, 'any-office'))->toBeTrue()
-        ->and($editor->hasPermissionInScope('posts.update', ScopeType::League, 'youth'))->toBeTrue();
+        ->and($editor->hasPermissionInScope('posts.update', ScopeType::Pillar, 'youth'))->toBeTrue();
 });
 
 it('limits a scoped role to its scopes', function () {
     $editor = User::factory()->create();
-    $editor->assignScopedRole(SystemRole::Editor, ScopeType::League, 'youth');
+    $editor->assignScopedRole(SystemRole::Editor, ScopeType::Pillar, 'youth');
     $editor = $editor->fresh();
 
-    expect($editor->hasPermissionInScope('posts.update', ScopeType::League, 'youth'))->toBeTrue()
-        ->and($editor->hasPermissionInScope('posts.update', ScopeType::League, 'women'))->toBeFalse()
+    expect($editor->hasPermissionInScope('posts.update', ScopeType::Pillar, 'youth'))->toBeTrue()
+        ->and($editor->hasPermissionInScope('posts.update', ScopeType::Pillar, 'women'))->toBeFalse()
         ->and($editor->hasPermissionInScope('posts.update', ScopeType::Office, 'branch'))->toBeFalse()
-        ->and($editor->hasPermissionInScope('posts.publish', ScopeType::League, 'youth'))->toBeFalse();
+        ->and($editor->hasPermissionInScope('posts.publish', ScopeType::Pillar, 'youth'))->toBeFalse();
 });
 
 it('lets a Harari translator edit Harari strings only', function () {
@@ -35,11 +35,11 @@ it('lets a Harari translator edit Harari strings only', function () {
 
 it('combines a scoped role with a global one', function () {
     $user = User::factory()->create();
-    $user->assignScopedRole(SystemRole::Editor, ScopeType::League, 'youth');
+    $user->assignScopedRole(SystemRole::Editor, ScopeType::Pillar, 'youth');
     $user->assignRole(SystemRole::Publisher->value);
     $user = $user->fresh();
 
-    expect($user->hasPermissionInScope('posts.update', ScopeType::League, 'women'))->toBeTrue();
+    expect($user->hasPermissionInScope('posts.update', ScopeType::Pillar, 'women'))->toBeTrue();
 });
 
 it('gives Super Admins every scope', function () {
@@ -57,7 +57,7 @@ it('saves roles and scopes for a user and drops scopes of roles that were remove
     $user = User::factory()->create();
 
     app(UpdateUserAccess::class)($admin, $user, ['editor', 'translator'], [
-        ['role' => 'editor', 'scope_type' => 'league', 'scope_value' => 'youth'],
+        ['role' => 'editor', 'scope_type' => 'pillar', 'scope_value' => 'youth'],
         ['role' => 'translator', 'scope_type' => 'language', 'scope_value' => 'har'],
         ['role' => 'translator', 'scope_type' => 'office', 'scope_value' => 'not-allowed'],
         ['role' => 'author', 'scope_type' => 'office', 'scope_value' => 'role-not-held'],
@@ -68,7 +68,7 @@ it('saves roles and scopes for a user and drops scopes of roles that were remove
         ->and($user->roleScopes)->toHaveCount(2);
 
     app(UpdateUserAccess::class)($admin, $user, ['editor'], [
-        ['role' => 'editor', 'scope_type' => 'league', 'scope_value' => 'youth'],
+        ['role' => 'editor', 'scope_type' => 'pillar', 'scope_value' => 'youth'],
         ['role' => 'translator', 'scope_type' => 'language', 'scope_value' => 'har'],
     ]);
 

@@ -8,8 +8,8 @@ use App\Domain\Media\Enums\MediaKind;
 use App\Domain\Media\Models\Media;
 use App\Domain\Organisation\Enums\LeaderBody;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
@@ -53,13 +53,13 @@ final class SaveLeader
         }
         $sourceDate = $this->date($data['source_date'] ?? null);
 
-        $leagueId = filled($data['league_id'] ?? null) && League::query()->whereKey($data['league_id'])->exists() ? (string) $data['league_id'] : null;
+        $pillarId = filled($data['pillar_id'] ?? null) && Pillar::query()->whereKey($data['pillar_id'])->exists() ? (string) $data['pillar_id'] : null;
 
-        return DB::transaction(function () use ($leader, $data, $translations, $actor, $body, $termStart, $termEnd, $officeId, $leagueId, $source, $sourceDate): Leader {
+        return DB::transaction(function () use ($leader, $data, $translations, $actor, $body, $termStart, $termEnd, $officeId, $pillarId, $source, $sourceDate): Leader {
             $leader->fill([
                 'body' => $body,
                 'office_id' => $officeId,
-                'league_id' => $leagueId,
+                'pillar_id' => $pillarId,
                 'rank' => max(0, (int) ($data['rank'] ?? 100)),
                 'term_start' => $termStart,
                 'term_end' => $termEnd,

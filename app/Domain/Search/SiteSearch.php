@@ -9,8 +9,8 @@ use App\Domain\Content\Queries\PublicPosts;
 use App\Domain\Documents\Models\DocumentTranslation;
 use App\Domain\Events\Models\EventTranslation;
 use App\Domain\Organisation\Models\LeaderTranslation;
-use App\Domain\Organisation\Models\LeagueTranslation;
 use App\Domain\Organisation\Models\OfficeTranslation;
+use App\Domain\Organisation\Models\PillarTranslation;
 use App\Domain\Projects\Models\ProjectTranslation;
 use App\Domain\Search\Support\SearchText;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,18 +19,18 @@ use Illuminate\Support\Collection;
 
 /**
  * Site search (PLAN.md §4 Search, ADR-0020): posts, pages, people, offices
- * and leagues published in the reader's language (and, for Harari, in
+ * and pillars published in the reader's language (and, for Harari, in
  * Amharic), each kind with its own list.
  */
 final class SiteSearch
 {
-    /** @var array<string, array{model: class-string<PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|LeagueTranslation|EventTranslation|DocumentTranslation|ProjectTranslation>, parent: string, order: string, public_access?: bool}> */
+    /** @var array<string, array{model: class-string<PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|PillarTranslation|EventTranslation|DocumentTranslation|ProjectTranslation>, parent: string, order: string, public_access?: bool}> */
     public const KINDS = [
         'news' => ['model' => PostTranslation::class, 'parent' => 'post', 'order' => 'published_at'],
         'pages' => ['model' => PageTranslation::class, 'parent' => 'page', 'order' => 'title'],
         'people' => ['model' => LeaderTranslation::class, 'parent' => 'leader', 'order' => 'name'],
         'offices' => ['model' => OfficeTranslation::class, 'parent' => 'office', 'order' => 'name'],
-        'leagues' => ['model' => LeagueTranslation::class, 'parent' => 'league', 'order' => 'name'],
+        'pillars' => ['model' => PillarTranslation::class, 'parent' => 'pillar', 'order' => 'name'],
         'events' => ['model' => EventTranslation::class, 'parent' => 'event', 'order' => 'title'],
         'projects' => ['model' => ProjectTranslation::class, 'parent' => 'project', 'order' => 'title'],
         'documents' => ['model' => DocumentTranslation::class, 'parent' => 'document', 'order' => 'title', 'public_access' => true],
@@ -144,11 +144,11 @@ final class SiteSearch
                 'label' => __('search.kind.events'),
                 'locale' => $locale,
             ],
-            $translation instanceof LeagueTranslation => [
-                'url' => route('leagues.show', ['locale' => $locale, 'slug' => $slug]),
+            $translation instanceof PillarTranslation => [
+                'url' => route('pillars.show', ['locale' => $locale, 'slug' => $slug]),
                 'title' => $translation->name,
                 'summary' => $translation->summary,
-                'label' => __('search.kind.leagues'),
+                'label' => __('search.kind.pillars'),
                 'locale' => $locale,
             ],
             default => null,

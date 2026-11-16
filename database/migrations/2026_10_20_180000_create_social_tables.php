@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * The social media hub (PLAN.md §4, §10 `social_sources`, `social_posts`,
- * ADR-0031): accounts of the branch, its offices and leagues, and the
+ * ADR-0031): accounts of the branch, its offices and pillars, and the
  * public posts read from them.
  */
 return new class extends Migration
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('handle', 160);
             $table->string('name', 160);
             $table->foreignUlid('office_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignUlid('league_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('pillar_id')->nullable()->constrained()->nullOnDelete();
             $table->text('credentials')->nullable();
             $table->boolean('enabled')->default(true);
             $table->unsignedSmallInteger('interval_minutes')->default(60);

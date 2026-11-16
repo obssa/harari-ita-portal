@@ -22,12 +22,12 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * A person in the leadership directory (PLAN.md §4 About, §10): body,
  * position per language, rank, term, portrait, public contacts and social
- * links, the office or league they serve, and the posts they appear in.
+ * links, the office or pillar they serve, and the posts they appear in.
  *
  * @property string $id
  * @property LeaderBody $body
  * @property ?string $office_id
- * @property ?string $league_id
+ * @property ?string $pillar_id
  * @property int $rank
  * @property ?CarbonImmutable $term_start
  * @property ?CarbonImmutable $term_end
@@ -39,7 +39,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?string $source_url
  * @property ?CarbonImmutable $source_date
  * @property-read ?Office $office
- * @property-read ?League $league
+ * @property-read ?Pillar $pillar
  * @property-read ?Media $portrait
  */
 class Leader extends Model implements TranslatableModel
@@ -57,7 +57,7 @@ class Leader extends Model implements TranslatableModel
     /** Social networks a profile may link to, in display order. */
     public const SOCIALS = ['facebook', 'telegram', 'x', 'youtube', 'tiktok', 'linkedin'];
 
-    protected $fillable = ['body', 'office_id', 'league_id', 'rank', 'term_start', 'term_end', 'portrait_id', 'photo_ids', 'phone', 'email', 'socials', 'source_url', 'source_date'];
+    protected $fillable = ['body', 'office_id', 'pillar_id', 'rank', 'term_start', 'term_end', 'portrait_id', 'photo_ids', 'phone', 'email', 'socials', 'source_url', 'source_date'];
 
     /** Most photos a profile's gallery shows (ADR-0071). */
     public const MAX_PHOTOS = 24;
@@ -85,7 +85,7 @@ class Leader extends Model implements TranslatableModel
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName('organisation')
-            ->logOnly(['body', 'office_id', 'league_id', 'rank', 'term_start', 'term_end', 'portrait_id', 'photo_ids', 'phone', 'email', 'socials'])
+            ->logOnly(['body', 'office_id', 'pillar_id', 'rank', 'term_start', 'term_end', 'portrait_id', 'photo_ids', 'phone', 'email', 'socials'])
             ->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
@@ -98,11 +98,11 @@ class Leader extends Model implements TranslatableModel
     }
 
     /**
-     * @return BelongsTo<League, $this>
+     * @return BelongsTo<Pillar, $this>
      */
-    public function league(): BelongsTo
+    public function pillar(): BelongsTo
     {
-        return $this->belongsTo(League::class);
+        return $this->belongsTo(Pillar::class);
     }
 
     /**

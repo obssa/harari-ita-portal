@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Events;
 use App\Domain\Events\Enums\RegistrationStatus;
 use App\Domain\Events\Models\Event;
 use App\Domain\Media\Enums\MediaKind;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Filament\Resources\Events\Pages\CreateEvent;
 use App\Filament\Resources\Events\Pages\EditEvent;
 use App\Filament\Resources\Events\Pages\ListEvents;
@@ -114,9 +114,9 @@ class EventResource extends Resource
                     Select::make('office_id')->label(__('admin.leaders.field.office'))->searchable()
                         ->options(fn (): array => Office::query()->with('translations')->orderBy('sort')->get()
                             ->mapWithKeys(fn (Office $o): array => [$o->id => $o->name()])->all()),
-                    Select::make('league_id')->label(__('admin.leaders.field.league'))
-                        ->options(fn (): array => League::query()->with('translations')->orderBy('sort')->get()
-                            ->mapWithKeys(fn (League $l): array => [$l->id => $l->name()])->all()),
+                    Select::make('pillar_id')->label(__('admin.leaders.field.pillar'))
+                        ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()
+                            ->mapWithKeys(fn (Pillar $l): array => [$l->id => $l->name()])->all()),
                 ]),
                 Section::make(__('events.admin.section.registration'))->collapsible()->schema([
                     Toggle::make('registration_enabled')->label(__('events.admin.field.registration_enabled'))->live(),

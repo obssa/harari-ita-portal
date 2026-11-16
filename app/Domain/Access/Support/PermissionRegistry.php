@@ -31,7 +31,7 @@ final class PermissionRegistry
         'videos' => ['manage'],
         'leaders' => ['view', 'manage'],
         'offices' => ['view', 'manage'],
-        'leagues' => ['view', 'manage'],
+        'pillars' => ['view', 'manage'],
         'events' => ['view', 'manage', 'registrations'],
         'documents' => ['view', 'manage'],
         'projects' => ['view', 'manage'],

@@ -10,8 +10,8 @@ use App\Domain\Forms\Models\Form;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\Video;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Projects\Models\Project;
 use App\Domain\Translation\Support\Locales;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +34,7 @@ final class PublicLinks
         Video::class => 'videos.show',
         Leader::class => 'leaders.show',
         Office::class => 'offices.show',
-        League::class => 'leagues.show',
+        Pillar::class => 'pillars.show',
         Form::class => 'forms.show',
     ];
 

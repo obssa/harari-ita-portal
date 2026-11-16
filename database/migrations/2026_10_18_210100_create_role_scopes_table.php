@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
             $table->string('scope_type', 16);
-            // ULID of an office/league (Phase 2) or a locale code such as "har".
+            // ULID of an office/pillar (Phase 2) or a locale code such as "har".
             $table->string('scope_value', 64);
             $table->timestamps();
 

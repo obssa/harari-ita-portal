@@ -9,8 +9,8 @@ use App\Domain\Content\Models\Post;
 use App\Domain\Content\Models\Tag;
 use App\Domain\Content\Support\BodyRenderer;
 use App\Domain\Media\Enums\MediaKind;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\Offices\OfficeResource;
 use App\Filament\Support\CurrentUser;
@@ -88,11 +88,11 @@ class PostForm
                             ->searchable()
                             ->options(fn (): array => Office::query()->with('translations')->orderBy('sort')->get()
                                 ->mapWithKeys(fn (Office $o): array => [$o->id => $o->name()])->all()),
-                        Select::make('leagues')
-                            ->label(__('admin.leagues.plural'))
+                        Select::make('pillars')
+                            ->label(__('admin.pillars.plural'))
                             ->multiple()
-                            ->options(fn (): array => League::query()->with('translations')->orderBy('sort')->get()
-                                ->mapWithKeys(fn (League $l): array => [$l->id => $l->name()])->all()),
+                            ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()
+                                ->mapWithKeys(fn (Pillar $l): array => [$l->id => $l->name()])->all()),
                         Select::make('leaders')
                             ->label(__('admin.posts.field.leaders'))
                             ->helperText(__('admin.posts.help.leaders'))

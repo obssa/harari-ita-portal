@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * Writes the languages of a record with a per-language publish switch
- * (ADR-0017): offices, leaders, leagues, galleries, events … A language
+ * (ADR-0017): offices, leaders, pillars, galleries, events … A language
  * whose main text (name or title) is emptied is removed; `published` switches a
  * language between draft and published for those allowed to publish.
  */

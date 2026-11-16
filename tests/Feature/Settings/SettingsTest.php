@@ -148,7 +148,7 @@ it('starts with one default site', function () {
 
 it('serves a site whose domain matches the request', function () {
     Site::forgetCurrent();
-    Site::query()->create(['key' => 'youth', 'name' => 'Youth League', 'domain' => 'localhost']);
+    Site::query()->create(['key' => 'youth', 'name' => 'Youth Pillar', 'domain' => 'localhost']);
 
     expect(Site::current()->key)->toBe('youth');
     Site::forgetCurrent();
@@ -161,7 +161,7 @@ it('stores every setting against the default site', function () {
 });
 
 it('keeps each site’s settings apart', function () {
-    $other = Site::query()->create(['key' => 'youth', 'name' => 'Youth League (sample)', 'domain' => 'youth.example.org']);
+    $other = Site::query()->create(['key' => 'youth', 'name' => 'Youth Pillar (sample)', 'domain' => 'youth.example.org']);
     expect(config('settings.repositories.database.type'))->toBe(SiteSettingsRepository::class);
     $repository = new SiteSettingsRepository(config('settings.repositories.database'));
 

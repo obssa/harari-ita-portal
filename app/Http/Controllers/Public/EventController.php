@@ -62,7 +62,7 @@ final class EventController extends Controller
             'body' => BodyRenderer::toHtml($translation->body),
             'speakers' => $speakers,
             'office' => $event->office !== null ? PublicDirectory::shown($event->office, $locale) : null,
-            'league' => $event->league !== null ? PublicDirectory::shown($event->league, $locale) : null,
+            'pillar' => $event->pillar !== null ? PublicDirectory::shown($event->pillar, $locale) : null,
             'alternates' => PublicDirectory::alternates($event, 'events.show', 'events.index'),
             'image' => PublicDirectory::shareImage($event->cover, 'landscape', "event-{$event->id}-{$locale}", $translation->title, __('events.title')),
             'jsonLd' => [array_filter([
@@ -117,7 +117,7 @@ final class EventController extends Controller
     {
         /** @var EventTranslation|null $translation */
         $translation = EventTranslation::query()->where('locale', app()->getLocale())->where('slug', $slug)->first();
-        $event = $translation?->event()->with(['translations', 'cover', 'office.translations', 'league.translations'])->first();
+        $event = $translation?->event()->with(['translations', 'cover', 'office.translations', 'pillar.translations'])->first();
         abort_if($translation === null || $event === null || ! $translation->isLive(), 404);
 
         return [$event, $translation];

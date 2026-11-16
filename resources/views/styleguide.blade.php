@@ -84,7 +84,7 @@
             <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <x-ui.card title="Sample news item (placeholder)" kicker="News" href="#sg-cards">
                     <x-slot:badges><x-ui.badge tone="primary">News</x-ui.badge><x-ui.badge>Harar</x-ui.badge></x-slot:badges>
-                    Cards show a content-type badge and the office or league they belong to.
+                    Cards show a content-type badge and the office or pillar they belong to.
                     <x-slot:meta><x-date :date="now()" /></x-slot:meta>
                 </x-ui.card>
                 <x-ui.card title="Card without a link" kicker="Event">

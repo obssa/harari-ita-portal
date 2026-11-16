@@ -86,7 +86,7 @@ final class DocumentController extends Controller
             'versions' => $versions,
             'related' => $related,
             'office' => $document->office !== null ? PublicDirectory::shown($document->office, $locale) : null,
-            'league' => $document->league !== null ? PublicDirectory::shown($document->league, $locale) : null,
+            'pillar' => $document->pillar !== null ? PublicDirectory::shown($document->pillar, $locale) : null,
             'indexRoute' => $index,
             'alternates' => PublicDirectory::alternates($document, 'documents.show', $index),
             'jsonLd' => [array_filter([
@@ -142,7 +142,7 @@ final class DocumentController extends Controller
     {
         /** @var DocumentTranslation|null $translation */
         $translation = DocumentTranslation::query()->where('locale', app()->getLocale())->where('slug', $slug)->first();
-        $document = $translation?->document()->with(['translations.file', 'office.translations', 'league.translations'])->first();
+        $document = $translation?->document()->with(['translations.file', 'office.translations', 'pillar.translations'])->first();
         abort_if($translation === null || $document === null || ! $translation->isLive() || $document->access !== Document::ACCESS_PUBLIC, 404);
 
         return [$document, $translation];

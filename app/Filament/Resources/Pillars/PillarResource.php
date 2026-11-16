@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\Leagues;
+namespace App\Filament\Resources\Pillars;
 
 use App\Domain\Media\Enums\MediaKind;
-use App\Domain\Organisation\Models\League;
-use App\Filament\Resources\Leagues\Pages\CreateLeague;
-use App\Filament\Resources\Leagues\Pages\EditLeague;
-use App\Filament\Resources\Leagues\Pages\ListLeagues;
+use App\Domain\Organisation\Models\Pillar;
 use App\Filament\Resources\Offices\OfficeResource;
+use App\Filament\Resources\Pillars\Pages\CreatePillar;
+use App\Filament\Resources\Pillars\Pages\EditPillar;
+use App\Filament\Resources\Pillars\Pages\ListPillars;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
 use App\Filament\Support\Translatable;
@@ -31,9 +31,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use UnitEnum;
 
-class LeagueResource extends Resource
+class PillarResource extends Resource
 {
-    protected static ?string $model = League::class;
+    protected static ?string $model = Pillar::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFlag;
 
@@ -41,12 +41,12 @@ class LeagueResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('admin.leagues.singular');
+        return __('admin.pillars.singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('admin.leagues.plural');
+        return __('admin.pillars.plural');
     }
 
     public static function getNavigationGroup(): string|UnitEnum|null
@@ -59,29 +59,29 @@ class LeagueResource extends Resource
         return $schema->columns(3)->components([
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 2])->schema([
                 Translatable::tabs(fn (string $locale): array => [
-                    Translatable::mainField($locale, 'name', 200)->label(__('admin.leagues.field.name')),
-                    Translatable::slugField($locale, 'league_translations'),
+                    Translatable::mainField($locale, 'name', 200)->label(__('admin.pillars.field.name')),
+                    Translatable::slugField($locale, 'pillar_translations'),
                     Textarea::make("translations.{$locale}.summary")
-                        ->label(__('admin.leagues.field.summary'))
+                        ->label(__('admin.pillars.field.summary'))
                         ->rows(2)
                         ->maxLength(400),
-                    DirectoryFields::body($locale, __('admin.leagues.field.body')),
-                    DirectoryFields::published($locale, 'leagues.manage'),
+                    DirectoryFields::body($locale, __('admin.pillars.field.body')),
+                    DirectoryFields::published($locale, 'pillars.manage'),
                 ]),
             ]),
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 1])->schema([
                 Section::make(__('admin.posts.section.details'))->schema([
                     Select::make('head_leader_id')
-                        ->label(__('admin.leagues.field.head'))
+                        ->label(__('admin.pillars.field.head'))
                         ->searchable()
                         ->options(fn (): array => OfficeResource::leaderOptions()),
                     TextInput::make('sort')->label(__('admin.categories.field.sort'))->numeric()->integer()->minValue(0)->default(0),
                     Select::make('accent')
-                        ->label(__('admin.leagues.field.accent'))
-                        ->helperText(__('admin.leagues.help.accent'))
-                        ->placeholder(__('admin.leagues.accent.auto'))
-                        ->options(collect(League::ACCENTS)->mapWithKeys(fn (string $tone): array => [$tone => __("admin.leagues.accent.{$tone}")])->all()),
-                    MediaPicker::make('logo_id', [MediaKind::Image])->label(__('admin.leagues.field.logo')),
+                        ->label(__('admin.pillars.field.accent'))
+                        ->helperText(__('admin.pillars.help.accent'))
+                        ->placeholder(__('admin.pillars.accent.auto'))
+                        ->options(collect(Pillar::ACCENTS)->mapWithKeys(fn (string $tone): array => [$tone => __("admin.pillars.accent.{$tone}")])->all()),
+                    MediaPicker::make('logo_id', [MediaKind::Image])->label(__('admin.pillars.field.logo')),
                     MediaPicker::make('cover_image_id', [MediaKind::Image])->label(__('admin.offices.field.cover_image')),
                 ]),
                 Section::make(__('admin.leaders.section.contacts'))->collapsed()->schema([
@@ -100,11 +100,11 @@ class LeagueResource extends Resource
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['translations', 'head.translations']))
             ->columns([
                 TextColumn::make('name')
-                    ->label(__('admin.leagues.field.name'))
-                    ->state(fn (League $record): string => $record->name()),
+                    ->label(__('admin.pillars.field.name'))
+                    ->state(fn (Pillar $record): string => $record->name()),
                 TextColumn::make('head')
-                    ->label(__('admin.leagues.field.head'))
-                    ->state(fn (League $record): ?string => $record->head?->name()),
+                    ->label(__('admin.pillars.field.head'))
+                    ->state(fn (Pillar $record): ?string => $record->head?->name()),
                 DirectoryFields::languagesColumn(),
             ])
             ->filters([TrashedFilter::make()])
@@ -114,18 +114,18 @@ class LeagueResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListLeagues::route('/'),
-            'create' => CreateLeague::route('/create'),
-            'edit' => EditLeague::route('/{record}/edit'),
+            'index' => ListPillars::route('/'),
+            'create' => CreatePillar::route('/create'),
+            'edit' => EditPillar::route('/{record}/edit'),
         ];
     }
 
     /**
-     * @return Builder<League>
+     * @return Builder<Pillar>
      */
     public static function getEloquentQuery(): Builder
     {
-        /** @var Builder<League> */
+        /** @var Builder<Pillar> */
         return parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 }

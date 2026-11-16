@@ -9,8 +9,8 @@ use App\Domain\Content\Contracts\TranslatableModel;
 use App\Domain\Events\Enums\RegistrationStatus;
 use App\Domain\Media\Models\Media;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Services\Calendar\EthiopianCalendar;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,14 +37,14 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?string $online_url
  * @property ?int $cover_id
  * @property ?string $office_id
- * @property ?string $league_id
+ * @property ?string $pillar_id
  * @property bool $registration_enabled
  * @property ?int $capacity
  * @property bool $waitlist
  * @property ?CarbonImmutable $registration_closes_at
  * @property-read ?Media $cover
  * @property-read ?Office $office
- * @property-read ?League $league
+ * @property-read ?Pillar $pillar
  */
 class Event extends Model implements TranslatableModel
 {
@@ -59,7 +59,7 @@ class Event extends Model implements TranslatableModel
     use TracksEditors;
 
     protected $fillable = [
-        'starts_at', 'ends_at', 'all_day', 'latitude', 'longitude', 'online_url', 'cover_id', 'office_id', 'league_id',
+        'starts_at', 'ends_at', 'all_day', 'latitude', 'longitude', 'online_url', 'cover_id', 'office_id', 'pillar_id',
         'registration_enabled', 'capacity', 'waitlist', 'registration_closes_at',
     ];
 
@@ -120,11 +120,11 @@ class Event extends Model implements TranslatableModel
     }
 
     /**
-     * @return BelongsTo<League, $this>
+     * @return BelongsTo<Pillar, $this>
      */
-    public function league(): BelongsTo
+    public function pillar(): BelongsTo
     {
-        return $this->belongsTo(League::class);
+        return $this->belongsTo(Pillar::class);
     }
 
     /**

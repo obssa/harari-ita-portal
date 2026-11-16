@@ -16,7 +16,7 @@ enum SectionKey: string
     case Press = 'press';
     case Counters = 'counters';
     case Values = 'values';
-    case Leagues = 'leagues';
+    case Pillars = 'pillars';
     case Partners = 'partners';
     case Gallery = 'gallery';
     case Video = 'video';
@@ -42,7 +42,7 @@ enum SectionKey: string
             self::Ticker, self::Hero, self::Press => 5,
             self::LatestNews => 12,
             self::Counters, self::Values => 8,
-            self::Leagues => 4,
+            self::Pillars => 4,
             self::Events => 6,
             self::Projects => 6,
             self::Social => 12,
@@ -57,7 +57,7 @@ enum SectionKey: string
     {
         return match ($this) {
             self::LatestNews => 6,
-            self::Leagues => 2,
+            self::Pillars => 2,
             self::Events => 3,
             self::Projects => 3,
             self::Social => 6,

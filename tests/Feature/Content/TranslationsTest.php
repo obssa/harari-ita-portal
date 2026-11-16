@@ -48,10 +48,10 @@ it('finds records written in one exact language', function () {
 });
 
 it('keeps the slug when the name changes, so links keep working', function () {
-    $category = category(['en' => 'Youth League']);
-    $category->putTranslation('en', ['name' => 'Youth and Students League']);
+    $category = category(['en' => 'Youth Pillar']);
+    $category->putTranslation('en', ['name' => 'Youth and Students Pillar']);
 
-    expect($category->translation('en')?->slug)->toBe('youth-league');
+    expect($category->translation('en')?->slug)->toBe('youth-pillar');
 
     $category->putTranslation('en', ['slug' => 'youth-and-students']);
     expect($category->refresh()->translation('en')?->slug)->toBe('youth-and-students');
@@ -62,7 +62,7 @@ it('belongs to the current site and records who changed it', function () {
     $this->actingAs($editor);
 
     $category = category(['en' => 'Statements']);
-    $other = Site::query()->create(['key' => 'youth', 'name' => 'Youth League (sample)', 'domain' => 'youth.example.org']);
+    $other = Site::query()->create(['key' => 'youth', 'name' => 'Youth Pillar (sample)', 'domain' => 'youth.example.org']);
 
     expect($category->site_id)->toBe(Site::current()->id)
         ->and($category->created_by)->toBe($editor->id)

@@ -241,7 +241,7 @@ final class ApiPresenter
             'body' => $leader->body->value,
             'body_label' => $leader->body->label(),
             'office_id' => $leader->office_id,
-            'league_id' => $leader->league_id,
+            'pillar_id' => $leader->pillar_id,
             'rank' => $leader->rank,
             'lang' => $t->locale,
             'slug' => $t->slug,

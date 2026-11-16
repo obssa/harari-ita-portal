@@ -5,7 +5,7 @@ namespace App\Domain\Organisation\Enums;
 /**
  * The bodies the leadership directory is grouped by (PLAN.md §4 About:
  * Executive Committee, Central Committee, Secretariat, office heads), plus
- * league and forum leaders, and the region's government and councils
+ * pillar and forum leaders, and the region's government and councils
  * (ADR-0063).
  */
 enum LeaderBody: string
@@ -14,7 +14,7 @@ enum LeaderBody: string
     case CentralCommittee = 'central_committee';
     case Secretariat = 'secretariat';
     case OfficeHeads = 'office_heads';
-    case Leagues = 'leagues';
+    case Pillars = 'pillars';
     case Government = 'government';
 
     /**
@@ -25,7 +25,7 @@ enum LeaderBody: string
      */
     public static function displayOrder(): array
     {
-        return [self::Government, self::ExecutiveCommittee, self::CentralCommittee, self::Secretariat, self::OfficeHeads, self::Leagues];
+        return [self::Government, self::ExecutiveCommittee, self::CentralCommittee, self::Secretariat, self::OfficeHeads, self::Pillars];
     }
 
     public function description(?string $locale = null): string

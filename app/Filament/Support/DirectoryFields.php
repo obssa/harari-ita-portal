@@ -13,7 +13,7 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Form pieces shared by the office, leader and league screens (ADR-0017).
+ * Form pieces shared by the office, leader and pillar screens (ADR-0017).
  */
 final class DirectoryFields
 {

@@ -99,7 +99,7 @@ final class SiteNav extends Component
                 $link('nav.offices_sector', route('offices.index', ['type' => 'sector']), null, 'nav.offices_sector_hint'),
                 $link('nav.offices_basic', route('offices.index', ['type' => 'basic_org']), null, 'nav.offices_basic_hint'),
             ]),
-            $link('nav.leagues', route('leagues.index'), 'leagues.*'),
+            $link('nav.pillars', route('pillars.index'), 'pillars.*'),
             $section('nav.programmes', 'nav.programmes_desc', route('projects.index'), null, [
                 $link('projects.title', route('projects.index'), 'projects.index', 'nav.projects_hint'),
                 $link('nav.achievements', route('projects.achievements'), 'projects.achievements', 'nav.achievements_hint'),

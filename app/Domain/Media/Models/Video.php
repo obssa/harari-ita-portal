@@ -8,8 +8,8 @@ use App\Domain\Content\Concerns\TracksEditors;
 use App\Domain\Content\Contracts\TranslatableModel;
 use App\Domain\Content\Models\Category;
 use App\Domain\Media\Support\VideoLink;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -31,7 +31,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?int $thumbnail_id
  * @property ?string $category_id
  * @property ?string $office_id
- * @property ?string $league_id
+ * @property ?string $pillar_id
  * @property ?CarbonImmutable $recorded_on
  * @property bool $is_featured
  * @property bool $is_live
@@ -40,7 +40,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property-read ?Media $thumbnail
  * @property-read ?Category $category
  * @property-read ?Office $office
- * @property-read ?League $league
+ * @property-read ?Pillar $pillar
  */
 class Video extends Model implements TranslatableModel
 {
@@ -57,7 +57,7 @@ class Video extends Model implements TranslatableModel
     /** A live broadcast without an end time counts as live for this long. */
     public const LIVE_HOURS = 6;
 
-    protected $fillable = ['provider', 'url', 'youtube_id', 'thumbnail_id', 'category_id', 'office_id', 'league_id', 'recorded_on', 'is_featured', 'is_live', 'live_starts_at', 'live_ends_at'];
+    protected $fillable = ['provider', 'url', 'youtube_id', 'thumbnail_id', 'category_id', 'office_id', 'pillar_id', 'recorded_on', 'is_featured', 'is_live', 'live_starts_at', 'live_ends_at'];
 
     protected $attributes = ['is_featured' => false, 'is_live' => false];
 
@@ -80,7 +80,7 @@ class Video extends Model implements TranslatableModel
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName('media')
-            ->logOnly(['provider', 'url', 'thumbnail_id', 'category_id', 'office_id', 'league_id', 'recorded_on', 'is_featured', 'is_live', 'live_starts_at', 'live_ends_at'])
+            ->logOnly(['provider', 'url', 'thumbnail_id', 'category_id', 'office_id', 'pillar_id', 'recorded_on', 'is_featured', 'is_live', 'live_starts_at', 'live_ends_at'])
             ->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
@@ -109,11 +109,11 @@ class Video extends Model implements TranslatableModel
     }
 
     /**
-     * @return BelongsTo<League, $this>
+     * @return BelongsTo<Pillar, $this>
      */
-    public function league(): BelongsTo
+    public function pillar(): BelongsTo
     {
-        return $this->belongsTo(League::class);
+        return $this->belongsTo(Pillar::class);
     }
 
     public function link(): ?VideoLink

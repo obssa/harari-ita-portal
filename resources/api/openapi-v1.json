@@ -1802,7 +1802,7 @@
                 "pages",
                 "people",
                 "offices",
-                "leagues",
+                "pillars",
                 "events",
                 "projects",
                 "documents"
@@ -2759,7 +2759,7 @@
               "null"
             ]
           },
-          "league_id": {
+          "pillar_id": {
             "type": [
               "string",
               "null"
@@ -3000,7 +3000,7 @@
               "pages",
               "people",
               "offices",
-              "leagues",
+              "pillars",
               "events",
               "projects",
               "documents"

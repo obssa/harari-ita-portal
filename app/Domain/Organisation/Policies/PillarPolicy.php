@@ -2,10 +2,10 @@
 
 namespace App\Domain\Organisation\Policies;
 
-final class LeaguePolicy extends DirectoryPolicy
+final class PillarPolicy extends DirectoryPolicy
 {
     protected function module(): string
     {
-        return 'leagues';
+        return 'pillars';
     }
 }

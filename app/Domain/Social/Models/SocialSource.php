@@ -4,8 +4,8 @@ namespace App\Domain\Social\Models;
 
 use App\Domain\Content\Concerns\BelongsToSite;
 use App\Domain\Content\Concerns\TracksEditors;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Social\Enums\Platform;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +17,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * An account of the branch, an office or a league on one network
+ * An account of the branch, an office or a pillar on one network
  * (ADR-0031). Credentials, when a network needs them, are encrypted and
  * never logged.
  *
@@ -26,14 +26,14 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property string $handle
  * @property string $name
  * @property ?string $office_id
- * @property ?string $league_id
+ * @property ?string $pillar_id
  * @property ?array<string, mixed> $credentials
  * @property bool $enabled
  * @property int $interval_minutes
  * @property ?CarbonImmutable $last_fetched_at
  * @property ?string $last_error
  * @property-read ?Office $office
- * @property-read ?League $league
+ * @property-read ?Pillar $pillar
  */
 class SocialSource extends Model
 {
@@ -42,7 +42,7 @@ class SocialSource extends Model
     use LogsActivity;
     use TracksEditors;
 
-    protected $fillable = ['platform', 'handle', 'name', 'office_id', 'league_id', 'credentials', 'enabled', 'interval_minutes'];
+    protected $fillable = ['platform', 'handle', 'name', 'office_id', 'pillar_id', 'credentials', 'enabled', 'interval_minutes'];
 
     protected $hidden = ['credentials'];
 
@@ -62,7 +62,7 @@ class SocialSource extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName('social')
-            ->logOnly(['platform', 'handle', 'name', 'office_id', 'league_id', 'enabled', 'interval_minutes'])
+            ->logOnly(['platform', 'handle', 'name', 'office_id', 'pillar_id', 'enabled', 'interval_minutes'])
             ->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
@@ -83,11 +83,11 @@ class SocialSource extends Model
     }
 
     /**
-     * @return BelongsTo<League, $this>
+     * @return BelongsTo<Pillar, $this>
      */
-    public function league(): BelongsTo
+    public function pillar(): BelongsTo
     {
-        return $this->belongsTo(League::class);
+        return $this->belongsTo(Pillar::class);
     }
 
     public function url(): string

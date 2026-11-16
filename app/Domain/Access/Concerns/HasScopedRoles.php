@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Role scopes (PLAN.md §8): a role assigned without scopes applies
- * everywhere; a role with scopes applies only to those offices, leagues or
+ * everywhere; a role with scopes applies only to those offices, pillars or
  * languages. Permission checks that concern a slice of content must use
  * hasPermissionInScope(); plain can() answers "anywhere at all".
  *

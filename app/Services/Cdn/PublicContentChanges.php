@@ -29,10 +29,10 @@ use App\Domain\Media\Models\Video;
 use App\Domain\Media\Models\VideoTranslation;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\LeaderTranslation;
-use App\Domain\Organisation\Models\League;
-use App\Domain\Organisation\Models\LeagueTranslation;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\OfficeTranslation;
+use App\Domain\Organisation\Models\Pillar;
+use App\Domain\Organisation\Models\PillarTranslation;
 use App\Domain\Projects\Models\Project;
 use App\Domain\Projects\Models\ProjectTranslation;
 use App\Domain\Projects\Models\Statistic;
@@ -59,7 +59,7 @@ final class PublicContentChanges
         Document::class, DocumentTranslation::class, DocumentVersion::class, Event::class, EventTranslation::class,
         Form::class, FormTranslation::class, HeroSlide::class, HomepageSection::class, Gallery::class, GalleryItem::class,
         GalleryTranslation::class, Media::class, Video::class, VideoTranslation::class, Leader::class,
-        LeaderTranslation::class, League::class, LeagueTranslation::class, Office::class, OfficeTranslation::class,
+        LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class,
         Project::class, ProjectTranslation::class, Statistic::class, StatisticTranslation::class,
         SocialPost::class, SocialSource::class, UiTranslation::class,
     ];

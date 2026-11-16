@@ -35,8 +35,8 @@
                             @if ($office)
                                 <li><a href="{{ route('offices.show', ['locale' => $office->locale, 'slug' => $office->slug]) }}"><x-ui.badge tone="primary">{{ $office->getAttribute('name') }}</x-ui.badge></a></li>
                             @endif
-                            @if ($league)
-                                <li><a href="{{ route('leagues.show', ['locale' => $league->locale, 'slug' => $league->slug]) }}"><x-ui.badge tone="magenta">{{ $league->getAttribute('name') }}</x-ui.badge></a></li>
+                            @if ($pillar)
+                                <li><a href="{{ route('pillars.show', ['locale' => $pillar->locale, 'slug' => $pillar->slug]) }}"><x-ui.badge tone="magenta">{{ $pillar->getAttribute('name') }}</x-ui.badge></a></li>
                             @endif
                         </ul>
                     </div>

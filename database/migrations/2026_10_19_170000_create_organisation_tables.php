@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Offices, leaders and leagues (PLAN.md §4, §7, §10), each written per
+ * Offices, leaders and pillars (PLAN.md §4, §7, §10), each written per
  * language, and their links to posts.
  */
 return new class extends Migration
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->index(['site_id', 'parent_id']);
         });
 
-        Schema::create('leagues', function (Blueprint $table): void {
+        Schema::create('pillars', function (Blueprint $table): void {
             $table->ulid('id')->primary();
             $table->foreignId('site_id')->constrained()->restrictOnDelete();
             $table->ulid('head_leader_id')->nullable();
@@ -56,7 +56,7 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained()->restrictOnDelete();
             $table->string('body', 32);
             $table->foreignUlid('office_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignUlid('league_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('pillar_id')->nullable()->constrained()->nullOnDelete();
             $table->unsignedInteger('rank')->default(100);
             $table->date('term_start')->nullable();
             $table->date('term_end')->nullable();
@@ -75,7 +75,7 @@ return new class extends Migration
         Schema::table('offices', function (Blueprint $table): void {
             $table->foreign('head_leader_id')->references('id')->on('leaders')->nullOnDelete();
         });
-        Schema::table('leagues', function (Blueprint $table): void {
+        Schema::table('pillars', function (Blueprint $table): void {
             $table->foreign('head_leader_id')->references('id')->on('leaders')->nullOnDelete();
         });
 
@@ -97,9 +97,9 @@ return new class extends Migration
             $table->unique(['locale', 'slug']);
         });
 
-        Schema::create('league_translations', function (Blueprint $table): void {
+        Schema::create('pillar_translations', function (Blueprint $table): void {
             $table->id();
-            $table->foreignUlid('league_id')->constrained()->cascadeOnDelete();
+            $table->foreignUlid('pillar_id')->constrained()->cascadeOnDelete();
             $table->string('locale', 8);
             $table->string('name', 200);
             $table->string('slug', 160);
@@ -109,7 +109,7 @@ return new class extends Migration
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
 
-            $table->unique(['league_id', 'locale']);
+            $table->unique(['pillar_id', 'locale']);
             $table->unique(['locale', 'slug']);
         });
 
@@ -137,10 +137,10 @@ return new class extends Migration
             $table->index('post_id');
         });
 
-        Schema::create('league_post', function (Blueprint $table): void {
-            $table->foreignUlid('league_id')->constrained()->cascadeOnDelete();
+        Schema::create('pillar_post', function (Blueprint $table): void {
+            $table->foreignUlid('pillar_id')->constrained()->cascadeOnDelete();
             $table->foreignUlid('post_id')->constrained()->cascadeOnDelete();
-            $table->primary(['league_id', 'post_id']);
+            $table->primary(['pillar_id', 'post_id']);
             $table->index('post_id');
         });
 
@@ -155,15 +155,15 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('leader_post');
-        Schema::dropIfExists('league_post');
+        Schema::dropIfExists('pillar_post');
         Schema::dropIfExists('office_post');
         Schema::dropIfExists('leader_translations');
-        Schema::dropIfExists('league_translations');
+        Schema::dropIfExists('pillar_translations');
         Schema::dropIfExists('office_translations');
-        Schema::table('leagues', fn (Blueprint $table) => $table->dropForeign(['head_leader_id']));
+        Schema::table('pillars', fn (Blueprint $table) => $table->dropForeign(['head_leader_id']));
         Schema::table('offices', fn (Blueprint $table) => $table->dropForeign(['head_leader_id']));
         Schema::dropIfExists('leaders');
-        Schema::dropIfExists('leagues');
+        Schema::dropIfExists('pillars');
         Schema::dropIfExists('offices');
     }
 };

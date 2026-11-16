@@ -32,7 +32,7 @@ final class GalleryController extends Controller
 
         /** @var GalleryTranslation|null $translation */
         $translation = GalleryTranslation::query()->where('locale', $locale)->where('slug', $slug)->first();
-        $gallery = $translation?->gallery()->with(['translations', 'cover', 'items.media', 'office.translations', 'league.translations'])->first();
+        $gallery = $translation?->gallery()->with(['translations', 'cover', 'items.media', 'office.translations', 'pillar.translations'])->first();
         abort_if($translation === null || $gallery === null || ! $translation->isLive(), 404);
 
         // Photos removed from the library leave their albums too (foreign key cascade).
@@ -44,7 +44,7 @@ final class GalleryController extends Controller
             'translation' => $translation,
             'items' => $items,
             'office' => $gallery->office !== null ? PublicDirectory::shown($gallery->office, $locale) : null,
-            'league' => $gallery->league !== null ? PublicDirectory::shown($gallery->league, $locale) : null,
+            'pillar' => $gallery->pillar !== null ? PublicDirectory::shown($gallery->pillar, $locale) : null,
             'alternates' => PublicDirectory::alternates($gallery, 'gallery.show', 'gallery.index'),
             'image' => PublicDirectory::shareImage($gallery->cover ?? $items->first()?->media, 'landscape', "gallery-{$gallery->id}-{$locale}", $translation->title, __('gallery.title')),
             'jsonLd' => [array_filter([

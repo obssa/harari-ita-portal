@@ -10,9 +10,9 @@ use App\Domain\Homepage\Enums\SectionKey;
 use App\Domain\Homepage\Models\HomepageSection;
 use App\Domain\Homepage\Support\HomepageLayout;
 use App\Domain\Organisation\Actions\SaveLeader;
-use App\Domain\Organisation\Actions\SaveLeague;
+use App\Domain\Organisation\Actions\SavePillar;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
+use App\Domain\Organisation\Models\Pillar;
 use App\Filament\Pages\ManageHomepage;
 use Illuminate\Validation\ValidationException;
 
@@ -122,11 +122,11 @@ it('reorders, switches off and limits sections, and hides them per language', fu
     $this->get('/om')->assertDontSee(__('homepage.value.medemer', [], 'om'));
 });
 
-it('shows the ticker, leadership message, counters, leagues and partner links once set up', function () {
+it('shows the ticker, leadership message, counters, pillars and partner links once set up', function () {
     $news = homePost(['en' => ['title' => 'Sample breaking item']]);
     $message = homePost(['en' => ['title' => 'Sample full message']], ['type' => 'speech']);
     $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'executive_committee', 'translations' => ['en' => ['name' => 'Sample Chair', 'position' => 'Sample head', 'published' => true]]], staff(SystemRole::Publisher));
-    app(SaveLeague::class)->handle(new League, ['translations' => ['en' => ['name' => 'Sample Youth League', 'published' => true]]], staff(SystemRole::Publisher));
+    app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample Youth Pillar', 'published' => true]]], staff(SystemRole::Publisher));
 
     arrangeHomepage([
         'ticker' => ['enabled' => true, 'curated_ids' => [$news->id]],
@@ -144,7 +144,7 @@ it('shows the ticker, leadership message, counters, leagues and partner links on
         ->assertSee('1,200')
         ->assertSee('Sample members')
         ->assertDontSee('Dropped')
-        ->assertSee('Sample Youth League')
+        ->assertSee('Sample Youth Pillar')
         ->assertSee('href="https://example.org"', escape: false);
 
     expect(fn () => arrangeHomepage(['partners' => ['partner_items' => [['url' => 'http://example.org', 'label' => ['en' => 'Plain']]]]]))

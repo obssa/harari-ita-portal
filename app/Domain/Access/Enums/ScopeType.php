@@ -4,12 +4,12 @@ namespace App\Domain\Access\Enums;
 
 /**
  * Narrows a role to a slice of the portal (PLAN.md §8): one office, one
- * league, or one language.
+ * pillar, or one language.
  */
 enum ScopeType: string
 {
     case Office = 'office';
-    case League = 'league';
+    case Pillar = 'pillar';
     case Language = 'language';
 
     public function label(): string

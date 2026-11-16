@@ -74,7 +74,7 @@ final class SavePost
                 $post->categories()->sync(array_values((array) ($data['categories'] ?? [])));
                 $post->tags()->sync(array_values((array) ($data['tags'] ?? [])));
                 $post->offices()->sync(array_values((array) ($data['offices'] ?? [])));
-                $post->leagues()->sync(array_values((array) ($data['leagues'] ?? [])));
+                $post->pillars()->sync(array_values((array) ($data['pillars'] ?? [])));
                 $post->leaders()->sync(array_values((array) ($data['leaders'] ?? [])));
             }
 

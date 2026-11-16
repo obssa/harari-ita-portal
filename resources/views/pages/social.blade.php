@@ -19,7 +19,7 @@
             </nav>
         @endif
 
-        @if ($offices !== [] || $leagues !== [])
+        @if ($offices !== [] || $pillars !== [])
             <form method="get" action="{{ route('social') }}" aria-label="{{ __('social.hub.filter') }}" class="mt-4 flex flex-wrap items-end gap-4">
                 @if ($platform)<input type="hidden" name="platform" value="{{ $platform->value }}">@endif
                 @if ($offices !== [])
@@ -33,13 +33,13 @@
                         </select>
                     </div>
                 @endif
-                @if ($leagues !== [])
+                @if ($pillars !== [])
                     <div>
-                        <label for="filter-league" class="text-sm font-medium">{{ __('admin.leaders.field.league') }}</label>
-                        <select id="filter-league" name="league" class="{{ $select }}">
-                            <option value="">{{ __('social.hub.all_leagues') }}</option>
-                            @foreach ($leagues as $id => $name)
-                                <option value="{{ $id }}" @selected($filters['league'] === (string) $id)>{{ $name }}</option>
+                        <label for="filter-pillar" class="text-sm font-medium">{{ __('admin.leaders.field.pillar') }}</label>
+                        <select id="filter-pillar" name="pillar" class="{{ $select }}">
+                            <option value="">{{ __('social.hub.all_pillars') }}</option>
+                            @foreach ($pillars as $id => $name)
+                                <option value="{{ $id }}" @selected($filters['pillar'] === (string) $id)>{{ $name }}</option>
                             @endforeach
                         </select>
                     </div>

@@ -14,7 +14,7 @@ use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\GalleryItem;
 use App\Domain\Media\Models\Video;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Organisation\Queries\PublicDirectory;
 use App\Domain\Projects\Models\Project;
 use App\Domain\Social\Models\SocialPost;
@@ -128,7 +128,7 @@ final class HomepageLayout
             SectionKey::Press => $this->nonEmpty($this->posts->take($locale, $limit, ['types' => [PostType::PressRelease, PostType::Statement]])),
             SectionKey::Counters => $this->items($section, $locale, 'label', ['value']),
             SectionKey::Values => $this->items($section, $locale, 'title', [], ['text']),
-            SectionKey::Leagues => $this->leagues($locale, $limit),
+            SectionKey::Pillars => $this->pillars($locale, $limit),
             SectionKey::Gallery => $this->gallery($locale, $limit),
             SectionKey::Video => $this->video($locale),
             SectionKey::Projects => $this->nonEmptyProjects(PublicDirectory::visible(Project::query(), $locale)->with(['cover', 'sector.translations'])
@@ -248,16 +248,16 @@ final class HomepageLayout
     }
 
     /**
-     * Published leagues, each with its latest post.
+     * Published pillars, each with its latest post.
      *
-     * @return list<array{league: League, post: ?Post}>|null
+     * @return list<array{pillar: Pillar, post: ?Post}>|null
      */
-    private function leagues(string $locale, int $limit): ?array
+    private function pillars(string $locale, int $limit): ?array
     {
-        $leagues = PublicDirectory::visible(League::query(), $locale)->with(['logo', 'coverImage'])->orderBy('sort')->limit($limit)->get();
+        $pillars = PublicDirectory::visible(Pillar::query(), $locale)->with(['logo', 'coverImage'])->orderBy('sort')->limit($limit)->get();
         $spotlight = [];
-        foreach ($leagues as $league) {
-            $spotlight[] = ['league' => $league, 'post' => $this->posts->linkedTo($locale, 'leagues', $league->id, 1)->first()];
+        foreach ($pillars as $pillar) {
+            $spotlight[] = ['pillar' => $pillar, 'post' => $this->posts->linkedTo($locale, 'pillars', $pillar->id, 1)->first()];
         }
 
         return $spotlight === [] ? null : $spotlight;

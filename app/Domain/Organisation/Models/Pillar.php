@@ -18,8 +18,8 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * A league or forum (PLAN.md §3 Leagues & Forums: Youth League, Women's
- * League, forums): its own page with leadership, news and contacts.
+ * A pillar or forum (PLAN.md §3 Pillars & Forums: Youth Pillar, Women's
+ * Pillar, forums): its own page with leadership, news and contacts.
  *
  * @property string $id
  * @property ?string $head_leader_id
@@ -34,11 +34,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property-read ?Media $logo
  * @property-read ?Media $coverImage
  */
-class League extends Model implements TranslatableModel
+class Pillar extends Model implements TranslatableModel
 {
     use BelongsToSite;
 
-    /** @use HasTranslations<LeagueTranslation> */
+    /** @use HasTranslations<PillarTranslation> */
     use HasTranslations;
 
     use HasUlids;
@@ -48,7 +48,7 @@ class League extends Model implements TranslatableModel
 
     protected $fillable = ['head_leader_id', 'logo_id', 'cover_image_id', 'phone', 'email', 'socials', 'sort', 'accent'];
 
-    /** Brand colours a league can wear (ADR-0065). */
+    /** Brand colours a pillar can wear (ADR-0065). */
     public const ACCENTS = ['primary', 'magenta', 'accent', 'night'];
 
     protected $attributes = ['sort' => 0];
@@ -62,7 +62,7 @@ class League extends Model implements TranslatableModel
     }
 
     /**
-     * The league's colour: its own choice, else one by its place in the list.
+     * The pillar's colour: its own choice, else one by its place in the list.
      */
     public function accentTone(): string
     {
@@ -71,7 +71,7 @@ class League extends Model implements TranslatableModel
 
     public static function translationModel(): string
     {
-        return LeagueTranslation::class;
+        return PillarTranslation::class;
     }
 
     public function getActivitylogOptions(): LogOptions

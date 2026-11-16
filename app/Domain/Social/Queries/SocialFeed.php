@@ -16,14 +16,14 @@ final class SocialFeed
     /**
      * @return Builder<SocialPost>
      */
-    public static function query(?Platform $platform = null, ?string $officeId = null, ?string $leagueId = null): Builder
+    public static function query(?Platform $platform = null, ?string $officeId = null, ?string $pillarId = null): Builder
     {
         return SocialPost::query()->visible()
             ->with(['source', 'image'])
-            ->when($platform !== null || $officeId !== null || $leagueId !== null, fn (Builder $q) => $q->whereHas('source', fn (Builder $s) => $s
+            ->when($platform !== null || $officeId !== null || $pillarId !== null, fn (Builder $q) => $q->whereHas('source', fn (Builder $s) => $s
                 ->when($platform !== null, fn (Builder $p) => $p->where('platform', $platform?->value))
                 ->when($officeId !== null, fn (Builder $p) => $p->where('office_id', $officeId))
-                ->when($leagueId !== null, fn (Builder $p) => $p->where('league_id', $leagueId))))
+                ->when($pillarId !== null, fn (Builder $p) => $p->where('pillar_id', $pillarId))))
             ->orderByDesc('is_pinned')
             ->orderByDesc('posted_at');
     }
@@ -31,8 +31,8 @@ final class SocialFeed
     /**
      * @return Collection<int, SocialPost>
      */
-    public static function latest(int $limit, ?string $officeId = null, ?string $leagueId = null): Collection
+    public static function latest(int $limit, ?string $officeId = null, ?string $pillarId = null): Collection
     {
-        return self::query(officeId: $officeId, leagueId: $leagueId)->limit($limit)->get();
+        return self::query(officeId: $officeId, pillarId: $pillarId)->limit($limit)->get();
     }
 }

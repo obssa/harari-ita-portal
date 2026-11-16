@@ -10,8 +10,8 @@ use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Enums\PostType;
 use App\Domain\Media\Models\Media;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Press\Models\PressDistribution;
 use App\Domain\Social\Models\SocialShare;
 use Carbon\CarbonImmutable;
@@ -117,11 +117,11 @@ class Post extends Model implements TranslatableModel
     }
 
     /**
-     * @return BelongsToMany<League, $this>
+     * @return BelongsToMany<Pillar, $this>
      */
-    public function leagues(): BelongsToMany
+    public function pillars(): BelongsToMany
     {
-        return $this->belongsToMany(League::class);
+        return $this->belongsToMany(Pillar::class);
     }
 
     /**

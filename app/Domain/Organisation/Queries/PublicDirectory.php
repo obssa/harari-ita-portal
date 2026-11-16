@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * What the public directory shows of offices, leaders and leagues
+ * What the public directory shows of offices, leaders and pillars
  * (ADR-0017). Readers see each record in their language, or in the
  * language their language falls back to for content (Harari → Amharic,
  * ADR-0014), and only languages that are published.

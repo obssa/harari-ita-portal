@@ -6,18 +6,18 @@ use App\Domain\Content\Actions\SavePost;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Models\Post;
 use App\Domain\Organisation\Actions\SaveLeader;
-use App\Domain\Organisation\Actions\SaveLeague;
 use App\Domain\Organisation\Actions\SaveOffice;
+use App\Domain\Organisation\Actions\SavePillar;
 use App\Domain\Organisation\Enums\LeaderBody;
 use App\Domain\Organisation\Enums\OfficeType;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Filament\Resources\Leaders\Pages\CreateLeader;
 use App\Filament\Resources\Leaders\Pages\EditLeader;
-use App\Filament\Resources\Leagues\Pages\CreateLeague;
 use App\Filament\Resources\Offices\Pages\CreateOffice;
 use App\Filament\Resources\Offices\Pages\EditOffice;
+use App\Filament\Resources\Pillars\Pages\CreatePillar;
 use App\Filament\Resources\Posts\Pages\EditPost;
 use Illuminate\Validation\ValidationException;
 
@@ -90,9 +90,9 @@ it('stores contacts, the map pin and the head of office', function () {
 });
 
 it('saves leaders with terms, socials and per-language publishing', function () {
-    $league = app(SaveLeague::class)->handle(new League, ['translations' => ['en' => ['name' => 'Sample youth league', 'published' => true]]], staff(SystemRole::Publisher));
-    $leader = makeLeader('Sample chair', LeaderBody::Leagues, [
-        'league_id' => $league->id,
+    $pillar = app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample youth pillar', 'published' => true]]], staff(SystemRole::Publisher));
+    $leader = makeLeader('Sample chair', LeaderBody::Pillars, [
+        'pillar_id' => $pillar->id,
         'term_start' => '2024-07-01',
         'term_end' => '2029-06-30',
         'socials' => ['telegram' => 'https://t.me/sample', 'facebook' => ''],
@@ -102,7 +102,7 @@ it('saves leaders with terms, socials and per-language publishing', function () 
         ],
     ]);
 
-    expect($leader->league?->is($league))->toBeTrue()
+    expect($leader->pillar?->is($pillar))->toBeTrue()
         ->and($leader->term_start?->toDateString())->toBe('2024-07-01')
         ->and($leader->socialLinks())->toBe(['telegram' => 'https://t.me/sample'])
         ->and($leader->translation('en', fallback: false)?->getAttribute('status'))->toBe(ContentStatus::Published)
@@ -119,14 +119,14 @@ it('lets editors and publishers manage the directory and keeps it from others', 
 
     $this->actingAs(staff(SystemRole::Author))->get('/admin/offices')->assertForbidden();
     $this->actingAs(staff(SystemRole::Translator))->get('/admin/leaders')->assertForbidden();
-    $this->actingAs(staff(SystemRole::Editor))->get('/admin/leagues')->assertOk();
+    $this->actingAs(staff(SystemRole::Editor))->get('/admin/pillars')->assertOk();
     $this->actingAs(staff(SystemRole::Publisher))->get('/admin/offices/'.$office->id.'/edit')->assertOk()->assertSee('Sample office');
 
     makeOffice('Sample kebele', OfficeType::Kebele, $office);
     expect(staff(SystemRole::Publisher)->can('delete', $office))->toBeFalse();
 });
 
-it('creates and edits offices, leaders and leagues from the admin', function () {
+it('creates and edits offices, leaders and pillars from the admin', function () {
     $this->actingAs(staff(SystemRole::Publisher));
 
     livewire(CreateOffice::class)
@@ -157,29 +157,29 @@ it('creates and edits offices, leaders and leagues from the admin', function () 
         ->assertHasNoFormErrors();
     expect($office->fresh()?->head_leader_id)->toBe($leader->id);
 
-    livewire(CreateLeague::class)
+    livewire(CreatePillar::class)
         ->fillForm(['head_leader_id' => $leader->id, 'translations' => ['om' => ['name' => 'Liigii Dargaggootaa (fakkeenya)', 'published' => true]]])
         ->call('create')
         ->assertHasNoFormErrors();
-    expect(League::query()->firstOrFail()->head?->is($leader))->toBeTrue();
+    expect(Pillar::query()->firstOrFail()->head?->is($leader))->toBeTrue();
 });
 
-it('links posts to offices, leagues and leaders and keeps the links on copies', function () {
+it('links posts to offices, pillars and leaders and keeps the links on copies', function () {
     $office = makeOffice('Sample office');
-    $league = app(SaveLeague::class)->handle(new League, ['translations' => ['en' => ['name' => 'Sample league']]], staff(SystemRole::Publisher));
+    $pillar = app(SavePillar::class)->handle(new Pillar, ['translations' => ['en' => ['name' => 'Sample pillar']]], staff(SystemRole::Publisher));
     $leader = makeLeader('Sample speaker');
 
     $post = app(SavePost::class)->handle(new Post, [
         'type' => 'speech',
         'offices' => [$office->id],
-        'leagues' => [$league->id],
+        'pillars' => [$pillar->id],
         'leaders' => [$leader->id],
         'translations' => ['en' => ['title' => 'Sample speech']],
     ], staff(SystemRole::Publisher));
 
     expect($post->offices->modelKeys())->toBe([$office->id])
         ->and($leader->posts()->pluck('posts.id')->all())->toBe([$post->id])
-        ->and($league->posts()->count())->toBe(1);
+        ->and($pillar->posts()->count())->toBe(1);
 
     $copy = app(DuplicatePost::class)->handle($post);
     expect($copy->leaders()->pluck('leaders.id')->all())->toBe([$leader->id]);

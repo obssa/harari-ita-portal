@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Leaders;
 use App\Domain\Media\Enums\MediaKind;
 use App\Domain\Organisation\Enums\LeaderBody;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Filament\Resources\Leaders\Pages\CreateLeader;
 use App\Filament\Resources\Leaders\Pages\EditLeader;
 use App\Filament\Resources\Leaders\Pages\ListLeaders;
@@ -93,10 +93,10 @@ class LeaderResource extends Resource
                         ->searchable()
                         ->options(fn (): array => Office::query()->with('translations')->orderBy('sort')->get()
                             ->mapWithKeys(fn (Office $o): array => [$o->id => $o->name()])->all()),
-                    Select::make('league_id')
-                        ->label(__('admin.leaders.field.league'))
-                        ->options(fn (): array => League::query()->with('translations')->orderBy('sort')->get()
-                            ->mapWithKeys(fn (League $l): array => [$l->id => $l->name()])->all()),
+                    Select::make('pillar_id')
+                        ->label(__('admin.leaders.field.pillar'))
+                        ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()
+                            ->mapWithKeys(fn (Pillar $l): array => [$l->id => $l->name()])->all()),
                     Grid::make(2)->schema([
                         DatePicker::make('term_start')->label(__('admin.leaders.field.term_start')),
                         DatePicker::make('term_end')->label(__('admin.leaders.field.term_end'))->afterOrEqual('term_start'),

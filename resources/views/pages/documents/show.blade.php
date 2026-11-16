@@ -100,10 +100,10 @@
                                 <dd class="mt-0.5"><a href="{{ route('offices.show', ['locale' => $office->locale, 'slug' => $office->slug]) }}" class="text-link hover:underline">{{ $office->getAttribute('name') }}</a></dd>
                             </div>
                         @endif
-                        @if ($league)
+                        @if ($pillar)
                             <div>
-                                <dt class="font-semibold">{{ __('admin.leaders.field.league') }}</dt>
-                                <dd class="mt-0.5"><a href="{{ route('leagues.show', ['locale' => $league->locale, 'slug' => $league->slug]) }}" class="text-link hover:underline">{{ $league->getAttribute('name') }}</a></dd>
+                                <dt class="font-semibold">{{ __('admin.leaders.field.pillar') }}</dt>
+                                <dd class="mt-0.5"><a href="{{ route('pillars.show', ['locale' => $pillar->locale, 'slug' => $pillar->slug]) }}" class="text-link hover:underline">{{ $pillar->getAttribute('name') }}</a></dd>
                             </div>
                         @endif
                         @if ($file?->version_note)

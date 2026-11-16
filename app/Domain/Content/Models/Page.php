@@ -52,7 +52,7 @@ class Page extends Model implements TranslatableModel
      * reached; such a page gets "-page" added instead.
      */
     public const RESERVED_SLUGS = [
-        'news', 'offices', 'leaders', 'leagues', 'events', 'documents', 'projects', 'social', 'search',
+        'news', 'offices', 'leaders', 'pillars', 'events', 'documents', 'projects', 'social', 'search',
         'gallery', 'videos', 'live', 'contact', 'join', 'members', 'volunteer', 'newsletter', 'feedback',
         'preview', 'feed', 'structure', 'notices', 'achievements', 'press', 'get-involved', 'tickets', 'forms',
     ];

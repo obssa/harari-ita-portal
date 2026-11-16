@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Videos;
 use App\Domain\Content\Models\Category;
 use App\Domain\Media\Enums\MediaKind;
 use App\Domain\Media\Models\Video;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Filament\Resources\Videos\Pages\CreateVideo;
 use App\Filament\Resources\Videos\Pages\EditVideo;
 use App\Filament\Resources\Videos\Pages\ListVideos;
@@ -101,10 +101,10 @@ class VideoResource extends Resource
                         ->searchable()
                         ->options(fn (): array => Office::query()->with('translations')->orderBy('sort')->get()
                             ->mapWithKeys(fn (Office $o): array => [$o->id => $o->name()])->all()),
-                    Select::make('league_id')
-                        ->label(__('admin.leaders.field.league'))
-                        ->options(fn (): array => League::query()->with('translations')->orderBy('sort')->get()
-                            ->mapWithKeys(fn (League $l): array => [$l->id => $l->name()])->all()),
+                    Select::make('pillar_id')
+                        ->label(__('admin.leaders.field.pillar'))
+                        ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()
+                            ->mapWithKeys(fn (Pillar $l): array => [$l->id => $l->name()])->all()),
                     Toggle::make('is_featured')->label(__('video.admin.field.is_featured'))->helperText(__('video.admin.help.is_featured')),
                 ]),
                 Section::make(__('video.admin.section.live'))->collapsible()->schema([

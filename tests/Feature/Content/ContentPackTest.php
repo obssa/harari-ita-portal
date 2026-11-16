@@ -15,8 +15,8 @@ use App\Domain\Media\Actions\UploadMedia;
 use App\Domain\Organisation\Actions\SaveLeader;
 use App\Domain\Organisation\Enums\LeaderBody;
 use App\Domain\Organisation\Models\Leader;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Social\Enums\Platform;
 use App\Domain\Social\Models\SocialSource;
 use App\Settings\SiteSettings;
@@ -42,7 +42,7 @@ it('loads the real content pack, published, with portraits, heads, pages and the
 
     $counts = app(LoadContentPack::class)->handle(database_path('content/pack.json'));
 
-    expect($counts)->toMatchArray(['leagues' => 2, 'offices' => 10, 'leaders' => 14, 'pages' => 4, 'events' => 1, 'homepage' => 2, 'settings' => 2, 'slides' => 3]);
+    expect($counts)->toMatchArray(['pillars' => 2, 'offices' => 10, 'leaders' => 14, 'pages' => 4, 'events' => 1, 'homepage' => 2, 'settings' => 2, 'slides' => 3]);
 
     $head = Leader::query()->whereHas('translations', fn ($q) => $q->where('name', 'H.E Getu Weyessa Tola'))->firstOrFail();
     expect($head->translation('en')?->position)->toBe('Head of Harari Region Prosperity Party')
@@ -54,7 +54,7 @@ it('loads the real content pack, published, with portraits, heads, pages and the
         ->and($head->translation('am', fallback: false)?->status)->toBe(ContentStatus::Published)
         ->and(Office::query()->where('type', 'branch')->value('head_leader_id'))->toBe($head->id)
         ->and(Office::query()->where('type', 'woreda')->count())->toBe(9)
-        ->and(League::query()->whereNotNull('head_leader_id')->count())->toBe(1)
+        ->and(Pillar::query()->whereNotNull('head_leader_id')->count())->toBe(1)
         ->and(Leader::query()->where('body', LeaderBody::Government->value)->count())->toBe(7)
         ->and(Event::query()->count())->toBe(1);
 
@@ -88,16 +88,16 @@ it('loads the real content pack, published, with portraits, heads, pages and the
 
 it('loads each record once and never brings back what an editor deleted', function () {
     staff(SystemRole::SuperAdmin, mfa: false);
-    $path = samplePack(['leagues' => [
-        ['key' => 'league.sample', 'translations' => ['en' => ['name' => 'Sample Wing', 'summary' => 'Sample summary.']]],
+    $path = samplePack(['pillars' => [
+        ['key' => 'pillar.sample', 'translations' => ['en' => ['name' => 'Sample Wing', 'summary' => 'Sample summary.']]],
     ]]);
 
-    expect(app(LoadContentPack::class)->handle($path))->toBe(['leagues' => 1]);
-    League::query()->firstOrFail()->delete();
+    expect(app(LoadContentPack::class)->handle($path))->toBe(['pillars' => 1]);
+    Pillar::query()->firstOrFail()->delete();
 
     expect(app(LoadContentPack::class)->handle($path))->toBe([])
-        ->and(League::query()->count())->toBe(0)
-        ->and(ContentPackItem::query()->where('key', 'league.sample')->exists())->toBeTrue();
+        ->and(Pillar::query()->count())->toBe(0)
+        ->and(ContentPackItem::query()->where('key', 'pillar.sample')->exists())->toBeTrue();
 });
 
 it('keeps the social links and homepage an editor already set', function () {

@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * ADR-0065: each league or wing has its colour from the brand (the
+     * ADR-0065: each pillar or wing has its colour from the brand (the
      * women's wing magenta, the youth wing blue), chosen in the admin.
      */
     public function up(): void
     {
-        Schema::table('leagues', function (Blueprint $table) {
+        Schema::table('pillars', function (Blueprint $table) {
             $table->string('accent', 16)->nullable()->after('socials');
         });
     }
 
     public function down(): void
     {
-        Schema::table('leagues', fn (Blueprint $table) => $table->dropColumn('accent'));
+        Schema::table('pillars', fn (Blueprint $table) => $table->dropColumn('accent'));
     }
 };

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Restricts one of a user's roles to an office, league or language. A role
+ * Restricts one of a user's roles to an office, pillar or language. A role
  * with no scope rows for that user applies everywhere (PLAN.md §8).
  *
  * @property int $id

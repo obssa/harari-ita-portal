@@ -6,8 +6,8 @@ use App\Domain\Content\Actions\WriteTranslations;
 use App\Domain\Media\Enums\MediaKind;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\Media;
-use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Translation\Support\Locales;
 use App\Models\User;
 use Carbon\CarbonImmutable;
@@ -43,7 +43,7 @@ final class SaveGallery
             $gallery->fill([
                 'cover_id' => $cover,
                 'office_id' => filled($data['office_id'] ?? null) && Office::query()->whereKey($data['office_id'])->exists() ? (string) $data['office_id'] : null,
-                'league_id' => filled($data['league_id'] ?? null) && League::query()->whereKey($data['league_id'])->exists() ? (string) $data['league_id'] : null,
+                'pillar_id' => filled($data['pillar_id'] ?? null) && Pillar::query()->whereKey($data['pillar_id'])->exists() ? (string) $data['pillar_id'] : null,
                 'taken_on' => $this->date($data['taken_on'] ?? null),
                 'allow_download' => (bool) ($data['allow_download'] ?? false),
             ]);
