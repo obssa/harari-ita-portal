@@ -21,7 +21,8 @@ concurrency:
 jobs:
   lighthouse:
     name: lighthouse
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    # Only once staging exists: until DEPLOY_ENABLED is set, Deploy only builds the release.
+    if: vars.DEPLOY_ENABLED == 'true' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:

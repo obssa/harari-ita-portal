@@ -14,7 +14,7 @@ No new features yet (those start in phase 1). Recipe: `docs/FORK.md`.
 | 0.3 | (merged into 0.2) | |
 | 0.4 | Office becomes Directorate/Unit (new OfficeType values), Leader becomes Leadership (new bodies); public routes `/about/structure` and `/about/leadership`; Volunteers become Mentors & tech volunteers (they choose a directorate or office instead of a woreda; tech skills); the party content pack and its photos are emptied here, since its offices and bodies no longer exist | `415e44b` |
 | 0.5 | Roles and permissions per PLAN §7 (party roles out); dashboard directorate filter; party widgets out | `006bb1e` |
-| 0.6 | Rebrand: names in 4 languages, Organization JSON-LD, Filament brand, config, URLs, docs reset (DECISIONS, CHANGELOG, README, AGENTS); the `membership.*`/`members.*` strings still used by volunteers, campaigns and press move to neutral keys | |
+| 0.6 | Rebrand: names in 4 languages, Organization JSON-LD, Filament brand, config, URLs, docs reset (DECISIONS, CHANGELOG, README, AGENTS); the `membership.*`/`members.*` strings still used by volunteers, campaigns and press move to neutral keys | `ea197d8`, `1e4199b`, `20dedcb` |
 | 0.7 | Staging: cPanel subdomain + database, GitHub secrets/variables, first deploy, first Super Admin | needs Ramin |
 
 Each step ends with:
