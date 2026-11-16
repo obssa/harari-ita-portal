@@ -223,3 +223,14 @@ gold edges and woven patterns are gone).
   `aria-current="step"`. For applications, enrolments and requests.
 - `x-ui.skeleton` (decorative, the loading region carries `aria-busy`) and `x-ui.code` (escaped snippets on night
   for the developer and API pages).
+
+## ADR-0014 — The Jugol circuit and the error pages (2026-11-16)
+
+**Decision.** The "Jugol circuit" (`x-circuit`) abstracts the walled town's lanes into circuit traces: straight
+runs that turn at 45 degrees where the alleys bend, with pads where they meet (the junctions in the logo's
+orange). It is decorative, drawn in `currentColor`, and can trace itself in once (`draw`, off under reduced
+motion). It sits with the hexagon field on `/styleguide`.
+
+Error pages (403, 404, 419, 429, 500, 503) are always night: the emblem and wordmark, the mono error label, the code
+large in the display face (cyan to orange), the message in each language asked for, the way home in the action
+colour, and the circuit drawn in along the foot. They still need no database and stay noindex.

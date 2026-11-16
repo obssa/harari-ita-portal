@@ -58,3 +58,11 @@ it('picks the error-page language from the address, cookie, browser, then defaul
         ->and(Locales::fromRequest($request('/x', [Locales::COOKIE => 'fr'], ['HTTP_ACCEPT_LANGUAGE' => 'om-ET'])))->toBe('om')
         ->and(Locales::fromRequest($request('/x', [], ['HTTP_ACCEPT_LANGUAGE' => ''])))->toBe(Locales::default());
 });
+
+it('draws error pages in the night look with the circuit and the large code', function () {
+    $this->get('/en/this-page-does-not-exist')
+        ->assertNotFound()
+        ->assertSee('bg-night-900', escape: false)
+        ->assertSee('draw-in', escape: false)
+        ->assertSee('/brand/wordmark-dark.png', escape: false);
+});

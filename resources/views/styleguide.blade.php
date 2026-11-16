@@ -131,6 +131,14 @@
             </div>
         </section>
 
+        <section aria-labelledby="sg-motifs">
+            <h2 id="sg-motifs" class="heading-2">Motifs</h2>
+            <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                <div class="relative h-48 overflow-hidden rounded-card bg-night-900"><x-circuit :draw="true" class="absolute inset-0 size-full text-cyan-500/50" /></div>
+                <div class="relative h-48 overflow-hidden rounded-card bg-night-900"><x-hex-field id="sg-hex" class="absolute inset-0 size-full text-cyan-500/30" /></div>
+            </div>
+        </section>
+
         <section aria-labelledby="sg-data">
             <h2 id="sg-data" class="heading-2">Figures and code</h2>
             <div class="mt-4 grid gap-4 sm:grid-cols-3">
