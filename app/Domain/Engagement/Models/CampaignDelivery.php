@@ -2,7 +2,6 @@
 
 namespace App\Domain\Engagement\Models;
 
-use App\Domain\Membership\Models\Member;
 use App\Domain\Volunteers\Models\Volunteer;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
@@ -39,7 +38,7 @@ class CampaignDelivery extends Model
 
     public const SKIPPED = 'skipped';
 
-    public const TYPES = ['subscriber' => Subscriber::class, 'member' => Member::class, 'volunteer' => Volunteer::class];
+    public const TYPES = ['subscriber' => Subscriber::class, 'volunteer' => Volunteer::class];
 
     protected $guarded = ['id'];
 
@@ -62,7 +61,7 @@ class CampaignDelivery extends Model
     }
 
     /** The person, if their record still exists. */
-    public function recipient(): Subscriber|Member|Volunteer|null
+    public function recipient(): Subscriber|Volunteer|null
     {
         $class = self::TYPES[$this->recipient_type] ?? null;
 

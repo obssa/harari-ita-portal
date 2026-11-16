@@ -3,14 +3,12 @@
 namespace App\Filament\Resources\Volunteers;
 
 use App\Domain\Access\Support\OfficeScope;
-use App\Domain\Membership\Models\PersonNote;
-use App\Domain\Membership\Support\Mask;
 use App\Domain\Organisation\Enums\OfficeType;
+use App\Domain\People\Models\PersonNote;
 use App\Domain\Volunteers\Enums\AssignmentStatus;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
 use App\Domain\Volunteers\Support\VolunteerOptions;
-use App\Filament\Resources\Members\MemberResource;
 use App\Filament\Resources\Volunteers\Pages\CreateVolunteer;
 use App\Filament\Resources\Volunteers\Pages\EditVolunteer;
 use App\Filament\Resources\Volunteers\Pages\ListVolunteers;
@@ -18,6 +16,8 @@ use App\Filament\Resources\Volunteers\Pages\ViewVolunteer;
 use App\Filament\Resources\Volunteers\RelationManagers\AssignmentsRelationManager;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\OfficeOptions;
+use App\Support\Mask;
 use BackedEnum;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\CheckboxList;
@@ -93,7 +93,7 @@ class VolunteerResource extends Resource
                 TextInput::make('phone')->label(__('membership.field.phone'))->tel()->maxLength(20),
                 TextInput::make('email')->label(__('membership.field.email'))->email()->maxLength(190),
                 Select::make('woreda_id')->label(__('membership.field.woreda_id'))->searchable()
-                    ->options(fn (): array => MemberResource::offices(OfficeType::Woreda)),
+                    ->options(fn (): array => OfficeOptions::of(OfficeType::Woreda)),
             ]),
             Section::make(__('volunteers.admin.offers'))->schema([
                 CheckboxList::make('skills')->label(__('volunteers.form.skills'))->options(VolunteerOptions::skills())->columns(3),
@@ -131,7 +131,7 @@ class VolunteerResource extends Resource
                 SelectFilter::make('skill')->label(__('volunteers.form.skills'))->options(VolunteerOptions::skills())->query($hasChoice('skills')),
                 SelectFilter::make('availability')->label(__('volunteers.form.availability'))->options(VolunteerOptions::availability())->query($hasChoice('availability')),
                 SelectFilter::make('language')->label(__('volunteers.form.languages'))->options(VolunteerOptions::languages())->query($hasChoice('languages')),
-                SelectFilter::make('woreda_id')->label(__('membership.field.woreda_id'))->options(fn (): array => MemberResource::offices(OfficeType::Woreda)),
+                SelectFilter::make('woreda_id')->label(__('membership.field.woreda_id'))->options(fn (): array => OfficeOptions::of(OfficeType::Woreda)),
             ])
             ->recordActions([ViewAction::make()])
             ->recordUrl(fn (Volunteer $record): string => self::getUrl('view', ['record' => $record]))
@@ -164,10 +164,6 @@ class VolunteerResource extends Resource
                     ->formatStateUsing(fn (VolunteerStatus $state): string => $state->label())->color(fn (VolunteerStatus $state): string => $state->color()),
                 TextEntry::make('created_at')->label(__('volunteers.admin.signed_up'))->formatStateUsing(CalendarDate::format(withTime: true)),
                 TextEntry::make('source')->label(__('members.field.source'))->formatStateUsing(fn (string $state): string => __("volunteers.source.{$state}")),
-                TextEntry::make('member_no')->label(__('volunteers.admin.member'))->fontFamily('mono')
-                    ->state(fn (Volunteer $record): ?string => $record->member?->member_no)->placeholder(__('volunteers.admin.not_member'))
-                    ->url(fn (Volunteer $record): ?string => $record->member !== null && CurrentUser::get()->can('view', $record->member)
-                        ? MemberResource::getUrl('view', ['record' => $record->member]) : null),
             ]),
         ]);
     }

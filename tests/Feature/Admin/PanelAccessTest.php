@@ -13,18 +13,13 @@ it('sends guests to the admin sign-in page', function () {
     $this->get('/admin/login')->assertOk();
 });
 
-it('keeps public members and role-less accounts out of the admin panel', function (?SystemRole $role) {
-    $user = $role ? staff($role) : User::factory()->create();
-
-    $this->actingAs($user)->get('/admin')->assertForbidden();
-})->with([
-    'member' => [SystemRole::Member],
-    'no role' => [null],
-]);
+it('keeps role-less accounts out of the admin panel', function () {
+    $this->actingAs(User::factory()->create())->get('/admin')->assertForbidden();
+});
 
 it('lets every staff role reach the dashboard', function (SystemRole $role) {
     $this->actingAs(staff($role))->get('/admin')->assertOk();
-})->with(array_values(array_filter(SystemRole::cases(), fn (SystemRole $r) => $r !== SystemRole::Member)));
+})->with(SystemRole::cases());
 
 it('blocks suspended and deleted accounts even with an open session', function () {
     $suspended = staff(SystemRole::Editor, attributes: ['status' => UserStatus::Suspended]);

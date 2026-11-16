@@ -4,12 +4,10 @@ use App\Domain\Access\Enums\ScopeType;
 use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Events\Actions\SaveEvent;
 use App\Domain\Events\Models\Event;
-use App\Domain\Membership\Actions\SaveMember;
-use App\Domain\Membership\Models\Member;
-use App\Domain\Membership\Models\MembershipApplication;
-use App\Domain\Membership\Models\PersonNote;
+use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Organisation\Actions\SaveOffice;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\People\Models\PersonNote;
 use App\Domain\Privacy\Actions\ErasePersonalData;
 use App\Domain\Privacy\Actions\ExportPersonalData;
 use App\Domain\Privacy\Support\PersonalDataSearch;
@@ -65,13 +63,12 @@ function sampleVolunteer(?Office $woreda, array $overrides = []): Volunteer
     return app(SaveVolunteer::class)->signUp(volunteerAnswers(['woreda_id' => $woreda?->id, 'phone' => '+2519'.random_int(10000000, 99999999), ...$overrides]), 'en');
 }
 
-it('takes a sign-up from the public form, links a member with the same phone and tells the woreda\'s coordinators', function () {
+it('takes a sign-up from the public form and tells the woreda\'s coordinators', function () {
     Notification::fake();
     $north = volunteerWoreda('Sample Woreda North');
     $south = volunteerWoreda('Sample Woreda South');
     $northCoordinator = coordinatorFor($north);
     $southCoordinator = coordinatorFor($south);
-    $member = app(SaveMember::class)->handle(new Member, ['name' => 'Sample Member', 'sex' => 'female', 'id_type' => 'none', 'phone' => '0911556677', 'joined_on' => '2025-01-01', 'woreda_id' => $north->id], staff(SystemRole::Admin));
 
     $this->get('/en/volunteer')->assertOk()->assertSee(__('volunteers.form.title'))->assertSee(__('volunteers.skill.first_aid'))
         ->assertHeader('Cache-Control', 'max-age=0, no-store, private');
@@ -82,9 +79,8 @@ it('takes a sign-up from the public form, links a member with the same phone and
     $volunteer = Volunteer::query()->sole();
     expect($volunteer->status)->toBe(VolunteerStatus::New)
         ->and($volunteer->phone)->toBe('+251911556677')
-        ->and($volunteer->phone_hash)->toBe(MembershipApplication::hash('+251911556677'))
+        ->and($volunteer->phone_hash)->toBe(EventRegistration::hash('+251911556677'))
         ->and($volunteer->skills)->toBe(['ushering', 'first_aid'])
-        ->and($volunteer->member_id)->toBe($member->id)
         ->and($volunteer->consented_at)->not->toBeNull();
     expect(json_encode((array) DB::table('volunteers')->first()))->not->toContain('Sample Volunteer Person')->not->toContain('251911556677')->not->toContain('school events');
 
@@ -198,7 +194,7 @@ it('finds, copies and erases volunteer sign-ups in privacy requests, and deletes
     $old->forceFill(['created_at' => now()->subDays(400)])->save();
     $followed = sampleVolunteer($north);
     $followed->forceFill(['created_at' => now()->subDays(400), 'status' => VolunteerStatus::Active])->save();
-    $this->artisan('membership:purge-applications')->assertSuccessful();
+    $this->artisan('portal:purge-sign-ups')->assertSuccessful();
     expect(Volunteer::query()->whereKey($old->id)->exists())->toBeFalse()
         ->and(Volunteer::query()->whereKey($followed->id)->exists())->toBeTrue();
 });

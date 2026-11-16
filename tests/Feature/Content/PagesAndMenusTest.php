@@ -8,7 +8,6 @@ use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Redirect;
 use App\Filament\Resources\Menus\Pages\ManageMenus;
 use App\Filament\Resources\Pages\Pages\CreatePage;
-use App\Settings\DonationSettings;
 use Illuminate\Validation\ValidationException;
 
 use function Pest\Livewire\livewire;
@@ -137,19 +136,10 @@ it('builds the main menu from the admin, per language, hiding targets that are n
 
 it('shows the sections of the design until a main menu exists', function () {
     $om = (string) $this->get('/om')->getContent();
-    expect($om)->toContain(__('nav.media', [], 'om'), __('nav.offices_woreda', [], 'om'), __('nav.contact', [], 'om'), __('nav.menu', [], 'om'))
-        ->not->toContain(__('donations.title', [], 'om'));
+    expect($om)->toContain(__('nav.media', [], 'om'), __('nav.offices_woreda', [], 'om'), __('nav.contact', [], 'om'), __('nav.menu', [], 'om'));
 
     $leaders = (string) $this->get('/en/leaders')->getContent();
     expect($leaders)->toMatch('/border-gold-500 text-primary-700[^>]*>\s*About/');
-});
-
-it('lists donations in the default menu once they are open', function () {
-    $settings = app(DonationSettings::class);
-    $settings->enabled = true;
-    $settings->save();
-
-    $this->get('/en')->assertSee(__('donations.title', [], 'en'));
 });
 
 it('lets publishers edit menus and keeps them from authors', function () {

@@ -23,7 +23,6 @@ enum SystemRole: string
     case SupportAgent = 'support_agent';
     case Analyst = 'analyst';
     case OfficeHead = 'office_head';
-    case Member = 'member';
 
     /** Permissions only a Super Admin holds (PLAN.md §8: Admin "cannot"). */
     public const SUPER_ADMIN_ONLY = [
@@ -67,11 +66,7 @@ enum SystemRole: string
         $permissions = match ($this) {
             self::SuperAdmin => PermissionRegistry::all(),
 
-            self::Admin => array_values(array_diff(
-                PermissionRegistry::all(),
-                self::SUPER_ADMIN_ONLY,
-                ['portal.access'],
-            )),
+            self::Admin => array_values(array_diff(PermissionRegistry::all(), self::SUPER_ADMIN_ONLY)),
 
             self::Publisher => [
                 ...$staff,
@@ -133,8 +128,6 @@ enum SystemRole: string
 
             self::MembershipOfficer => [
                 ...$staff,
-                'applications.view', 'applications.review', 'applications.export',
-                'members.view', 'members.create', 'members.update', 'members.import', 'members.export',
                 'volunteers.view', 'volunteers.manage', 'campaigns.send', 'events.view', 'events.registrations',
             ],
 
@@ -144,7 +137,6 @@ enum SystemRole: string
 
             self::OfficeHead => [...$staff, 'posts.view', 'events.view', 'documents.view', 'inbox.view'],
 
-            self::Member => ['portal.access'],
         };
 
         return array_values(array_unique($permissions));

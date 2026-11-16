@@ -194,18 +194,16 @@ class PrivacyRequests extends Page implements HasTable
     }
 
     /**
-     * The numbers for the summary sentences; requests logged before ADR-0046 have no membership counts.
+     * The numbers for the summary sentences.
      *
      * @param  array<string, mixed>  $counts
-     * @return array{registrations: int, submissions: int, applications: int, members: int, volunteers: int, subscribers: int}
+     * @return array{registrations: int, submissions: int, volunteers: int, subscribers: int}
      */
     private function summary(array $counts): array
     {
         return [
             'registrations' => (int) ($counts['registrations'] ?? 0),
             'submissions' => (int) ($counts['submissions'] ?? 0),
-            'applications' => (int) ($counts['applications'] ?? 0),
-            'members' => (int) ($counts['members'] ?? 0),
             'volunteers' => (int) ($counts['volunteers'] ?? 0),
             'subscribers' => (int) ($counts['subscribers'] ?? 0),
         ];
@@ -229,12 +227,9 @@ class PrivacyRequests extends Page implements HasTable
             Grid::make(['default' => 2, 'md' => 3])->schema([
                 TextEntry::make('registrations')->label(__('privacy.found.registrations'))->state($counts['registrations']),
                 TextEntry::make('submissions')->label(__('privacy.found.submissions'))->state($counts['submissions']),
-                TextEntry::make('applications')->label(__('privacy.found.applications'))->state($counts['applications']),
-                TextEntry::make('members')->label(__('privacy.found.members'))->state($counts['members']),
                 TextEntry::make('volunteers')->label(__('privacy.found.volunteers'))->state($counts['volunteers']),
                 TextEntry::make('subscribers')->label(__('privacy.found.subscribers'))->state($counts['subscribers']),
                 TextEntry::make('media_contacts')->label(__('privacy.found.media_contacts'))->state($counts['media_contacts']),
-                TextEntry::make('donations')->label(__('privacy.found.donations'))->state($counts['donations']),
                 TextEntry::make('failed')->label(__('privacy.found.failed_sign_ins'))->state($counts['failed_sign_ins']),
                 TextEntry::make('staff')->label(__('privacy.found.staff_account'))
                     ->state($counts['staff_account'] > 0 ? __('privacy.found.staff_yes') : __('privacy.found.staff_no')),

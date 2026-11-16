@@ -230,6 +230,6 @@ it('finds, copies and deletes subscriptions in privacy requests, and drops uncon
     $this->post('/en/newsletter', subscription(['email' => 'third@example.org']));
     Subscriber::query()->get()->each(fn (Subscriber $s) => $s->forceFill(['created_at' => now()->subDays(Subscribe::UNCONFIRMED_DAYS + 1)])->save());
     app(Subscribe::class)->confirmEmail(Subscriber::query()->where('email_hash', Subscriber::hash('third@example.org'))->sole());
-    $this->artisan('membership:purge-applications')->assertSuccessful();
+    $this->artisan('portal:purge-sign-ups')->assertSuccessful();
     expect(Subscriber::query()->count())->toBe(1);
 });

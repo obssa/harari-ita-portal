@@ -65,7 +65,7 @@ final class PublicLinks
      */
     private static function resolve(Model $record): array
     {
-        if (($record instanceof Form && ! $record->active) || ($record instanceof Document && $record->access === Document::ACCESS_MEMBERS)) {
+        if ($record instanceof Form && ! $record->active) {
             return [];
         }
 

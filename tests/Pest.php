@@ -9,7 +9,7 @@ use Tests\BrowserTestCase;
 use Tests\TestCase;
 
 /*
-| Feature tests boot the app and run against MySQL (harari_test) inside a
+| Feature tests boot the app and run against MySQL (hita_test) inside a
 | transaction-safe refresh. Unit tests also get the app container so services
 | can resolve config and translations, but never touch the database.
 */

@@ -51,11 +51,6 @@
             </div>
             <div class="flex min-w-0 flex-1 items-center justify-between gap-x-3 md:flex-none md:justify-end">
                 <div class="-ms-2.5 min-w-0 overflow-x-auto [scrollbar-width:none] md:ms-0"><x-language-switcher :alternates="$alternates" /></div>
-                <span aria-hidden="true" class="hidden h-4 w-px bg-white/20 md:block"></span>
-                <a href="{{ route('member.sign-in') }}" class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-1 font-semibold text-gold-400 hover:bg-white/10 hover:text-gold-300">
-                    <svg aria-hidden="true" class="size-[1.1rem]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-                    <span class="sr-only sm:not-sr-only">{{ __('nav.member_login') }}</span>
-                </a>
             </div>
         </div>
     </div>
@@ -89,11 +84,6 @@
                     </div>
                 </details>
                 @endunless
-                <a href="{{ route('membership.apply') }}" class="group/join inline-flex h-10 items-center gap-2 rounded-full bg-gold-500 px-4 text-sm font-bold text-ink-brand shadow-sm shadow-gold-500/30 transition-colors hover:bg-gold-400 lg:h-11 lg:px-5 lg:text-[15px]">
-                    <span class="sm:hidden">{{ __('nav.join_short') }}</span>
-                    <span class="hidden sm:inline">{{ __('nav.join') }}</span>
-                    <svg aria-hidden="true" class="hidden size-4 transition-transform group-hover/join:translate-x-0.5 sm:block rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                </a>
                 <div class="lg:hidden"><x-site-nav variant="drawer" /></div>
             </div>
         </div>

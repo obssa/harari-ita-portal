@@ -1,13 +1,10 @@
 <?php
 
 use App\Domain\Translation\Support\Locales;
-use App\Http\Controllers\DonationReceiptController;
 use App\Http\Controllers\Public\CampaignLinkController;
 use App\Http\Controllers\Public\DocumentController;
-use App\Http\Controllers\Public\DonationController;
 use App\Http\Controllers\Public\EventController;
 use App\Http\Controllers\Public\EventRegistrationController;
-use App\Http\Controllers\Public\FaydaController;
 use App\Http\Controllers\Public\FeedController;
 use App\Http\Controllers\Public\FormController;
 use App\Http\Controllers\Public\GalleryController;
@@ -15,8 +12,6 @@ use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\LeaderController;
 use App\Http\Controllers\Public\LeagueController;
 use App\Http\Controllers\Public\MediaFileController;
-use App\Http\Controllers\Public\MemberPortalController;
-use App\Http\Controllers\Public\MembershipController;
 use App\Http\Controllers\Public\NewsController;
 use App\Http\Controllers\Public\NewsletterController;
 use App\Http\Controllers\Public\OfficeController;
@@ -37,10 +32,8 @@ use App\Http\Controllers\Public\VideoController;
 use App\Http\Controllers\Public\VolunteerController;
 use App\Http\Controllers\TelegramWebhookController;
 use App\Http\Middleware\CachePublicPages;
-use App\Http\Middleware\EnsureMemberSignedIn;
 use App\Http\Middleware\NoStore;
 use App\Http\Middleware\OutsideProductionOnly;
-use App\Http\Middleware\RestrictAdminByIp;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -126,16 +119,6 @@ Route::post('/{locale}/press/opt-out/{token}', [PressOptOutController::class, 's
     ->withoutMiddleware($stateless)
     ->name('press.opt-out.store');
 
-// ADR-0058: eSignet sends members back here after signing in with Fayda; one address for every language.
-Route::get('/member/fayda/callback', [FaydaController::class, 'callback'])
-    ->middleware(['throttle:membership', NoStore::class])
-    ->name('member.fayda.callback');
-
-// ADR-0060: the printable receipt of a recorded donation, for staff who may see donations.
-Route::get('/admin/donation-receipts/{donation}', DonationReceiptController::class)
-    ->middleware([RestrictAdminByIp::class, NoStore::class])
-    ->name('donations.receipt');
-
 // ADR-0055: Telegram delivers messages for the bot here, with the secret header it was given.
 Route::post('/telegram/webhook', TelegramWebhookController::class)
     ->middleware('throttle:beacon')
@@ -172,16 +155,6 @@ Route::prefix('{locale}')
         Route::get('tickets', [FormController::class, 'lookup'])->middleware(['throttle:search', NoStore::class])->name('tickets.lookup');
         Route::get('tickets/{reference}', [FormController::class, 'ticket'])->where('reference', 'HPP-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}')->middleware(['throttle:search', NoStore::class])->name('tickets.show');
 
-        // ADR-0044: the membership application, step by step, and its status page.
-        Route::get('membership/apply', [MembershipController::class, 'apply'])->middleware(NoStore::class)->name('membership.apply');
-        Route::post('membership/apply/about', [MembershipController::class, 'about'])->middleware('throttle:membership')->name('membership.about');
-        Route::post('membership/apply/place', [MembershipController::class, 'place'])->middleware('throttle:membership')->name('membership.place');
-        Route::post('membership/apply/code', [MembershipController::class, 'sendCode'])->middleware('throttle:membership')->name('membership.code');
-        Route::post('membership/apply/verify', [MembershipController::class, 'verify'])->middleware('throttle:membership')->name('membership.verify');
-        Route::post('membership/apply/submit', [MembershipController::class, 'submit'])->middleware('throttle:membership')->name('membership.submit');
-        Route::get('membership/done', [MembershipController::class, 'done'])->middleware(NoStore::class)->name('membership.done');
-        Route::match(['get', 'post'], 'membership/status', [MembershipController::class, 'status'])->middleware(['throttle:search', NoStore::class])->name('membership.status');
-
         // ADR-0048: volunteers sign up.
         Route::get('volunteer', [VolunteerController::class, 'create'])->middleware(NoStore::class)->name('volunteer.create');
         Route::post('volunteer', [VolunteerController::class, 'store'])->middleware('throttle:forms')->name('volunteer.store');
@@ -191,36 +164,10 @@ Route::prefix('{locale}')
         Route::get('newsletter', [NewsletterController::class, 'create'])->middleware(NoStore::class)->name('newsletter.create');
         Route::post('newsletter', [NewsletterController::class, 'store'])->middleware('throttle:forms')->name('newsletter.store');
         Route::get('newsletter/check', [NewsletterController::class, 'check'])->middleware(NoStore::class)->name('newsletter.check');
-        Route::post('newsletter/check', [NewsletterController::class, 'verify'])->middleware('throttle:membership')->name('newsletter.verify');
+        Route::post('newsletter/check', [NewsletterController::class, 'verify'])->middleware('throttle:verification')->name('newsletter.verify');
         Route::get('newsletter/confirm/{token}', [NewsletterController::class, 'confirm'])->where('token', '[A-Za-z0-9]{40}')->middleware(NoStore::class)->name('newsletter.confirm');
         Route::get('newsletter/preferences/{token}', [NewsletterController::class, 'preferences'])->where('token', '[A-Za-z0-9]{40}')->middleware(NoStore::class)->name('newsletter.preferences');
         Route::post('newsletter/preferences/{token}', [NewsletterController::class, 'update'])->where('token', '[A-Za-z0-9]{40}')->middleware('throttle:forms')->name('newsletter.update');
-
-        // ADR-0049: the member portal, signed in with the phone number and password (ADR-0080); the card check is public.
-        Route::get('member/sign-in', [MemberPortalController::class, 'signIn'])->middleware(NoStore::class)->name('member.sign-in');
-        Route::post('member/sign-in', [MemberPortalController::class, 'authenticate'])->middleware('throttle:membership')->name('member.authenticate');
-        // ADR-0080: the SMS code page is gone; old links land on the sign-in.
-        Route::redirect('member/code', 'sign-in');
-        Route::post('member/sign-out', [MemberPortalController::class, 'signOut'])->name('member.sign-out');
-        // ADR-0060: the donate page, only while donations are switched on.
-        Route::get('donate', [DonationController::class, 'create'])->middleware(NoStore::class)->name('donations.create');
-        Route::post('donate', [DonationController::class, 'store'])->middleware('throttle:forms')->name('donations.store');
-        Route::get('donate/thanks', [DonationController::class, 'thanks'])->middleware(NoStore::class)->name('donations.thanks');
-        Route::get('member/fayda', [FaydaController::class, 'start'])->middleware(['throttle:membership', NoStore::class])->name('member.fayda');
-        Route::middleware([EnsureMemberSignedIn::class, NoStore::class])->group(function (): void {
-            Route::get('member', [MemberPortalController::class, 'home'])->name('member.home');
-            Route::get('member/card', [MemberPortalController::class, 'card'])->name('member.card');
-            Route::get('member/profile', [MemberPortalController::class, 'profile'])->name('member.profile');
-            Route::post('member/profile', [MemberPortalController::class, 'requestChange'])->middleware('throttle:forms')->name('member.request');
-            Route::post('member/password', [MemberPortalController::class, 'changePassword'])->middleware('throttle:membership')->name('member.password');
-            Route::get('member/events', [MemberPortalController::class, 'events'])->name('member.events');
-            Route::get('member/documents', [MemberPortalController::class, 'documents'])->name('member.documents');
-            Route::get('member/fayda/link', [FaydaController::class, 'start'])->middleware('throttle:membership')->name('member.fayda.link');
-            Route::post('member/fayda/unlink', [FaydaController::class, 'unlink'])->name('member.fayda.unlink');
-            Route::get('member/documents/{slug}/download', [MemberPortalController::class, 'download'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('member.download');
-        });
-        Route::get('verify/{number}/{check}', [MemberPortalController::class, 'verifyCard'])
-            ->where(['number' => 'HPP-[0-9]{6}', 'check' => '[0-9a-f]{16}'])->middleware(['throttle:search', NoStore::class])->name('member.verify');
     });
 
 // Every public page lives under its language: /en, /am, /om, /har (PLAN.md §3).

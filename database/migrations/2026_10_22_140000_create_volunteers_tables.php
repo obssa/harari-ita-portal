@@ -29,7 +29,6 @@ return new class extends Migration
             $table->json('availability');
             $table->json('languages');
             $table->text('message')->nullable();
-            $table->foreignUlid('member_id')->nullable()->constrained('members')->nullOnDelete();
             $table->timestamp('consented_at')->nullable();
             $table->timestamp('erased_at')->nullable();
             $table->timestamps();

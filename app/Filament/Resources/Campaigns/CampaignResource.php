@@ -10,16 +10,15 @@ use App\Domain\Engagement\Support\Audience;
 use App\Domain\Engagement\Support\CampaignReport;
 use App\Domain\Engagement\Support\SmsLength;
 use App\Domain\Engagement\Support\SubscriptionOptions;
-use App\Domain\Membership\Enums\MemberStatus;
 use App\Domain\Organisation\Enums\OfficeType;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\Campaigns\Pages\CreateCampaign;
 use App\Filament\Resources\Campaigns\Pages\EditCampaign;
 use App\Filament\Resources\Campaigns\Pages\ListCampaigns;
 use App\Filament\Resources\Campaigns\Pages\ViewCampaign;
-use App\Filament\Resources\Members\MemberResource;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\OfficeOptions;
 use BackedEnum;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\CheckboxList;
@@ -91,9 +90,7 @@ class CampaignResource extends Resource
                 CheckboxList::make('audience.locales')->label(__('campaigns.field.locales'))->helperText(__('campaigns.help.locales'))
                     ->options(collect(Locales::all())->mapWithKeys(fn (string $l): array => [$l => Locales::nativeName($l)])->all())->visible($type('subscribers')),
                 Select::make('audience.woredas')->label(__('campaigns.field.woredas'))->helperText(__('campaigns.help.woredas'))->multiple()->searchable()
-                    ->options(fn (): array => MemberResource::offices(OfficeType::Woreda))->visible($type('members', 'volunteers')),
-                CheckboxList::make('audience.statuses')->label(__('campaigns.field.statuses'))->helperText(__('campaigns.help.statuses'))
-                    ->options(collect(MemberStatus::cases())->mapWithKeys(fn (MemberStatus $s): array => [$s->value => $s->label()])->all())->visible($type('members')),
+                    ->options(fn (): array => OfficeOptions::of(OfficeType::Woreda))->visible($type('volunteers')),
             ]),
             Section::make(__('campaigns.admin.section.text'))->description(__('campaigns.help.languages'))->schema([
                 Tabs::make('content')->tabs(array_map(fn (string $locale): Tab => Tab::make(Locales::nativeName($locale))->schema([

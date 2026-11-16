@@ -3,12 +3,11 @@
 namespace App\Domain\Volunteers\Actions;
 
 use App\Domain\Access\Support\OfficeScope;
-use App\Domain\Membership\Models\Member;
-use App\Domain\Membership\Models\MembershipApplication;
-use App\Domain\Membership\Models\PersonNote;
+use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Notifications\Support\Recipients;
 use App\Domain\Organisation\Enums\OfficeType;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\People\Models\PersonNote;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
 use App\Domain\Volunteers\Notifications\NewVolunteerNotice;
@@ -21,9 +20,7 @@ use Throwable;
 
 /**
  * Volunteer sign-ups from the public form and corrections by coordinators
- * (PLAN.md §4, §5; ADR-0048). A sign-up from a phone that is already a
- * member's is linked to that member. Coordinators of the woreda hear about
- * each sign-up.
+ * (PLAN.md §4, §5). Coordinators of the woreda hear about each sign-up.
  */
 final class SaveVolunteer
 {
@@ -38,7 +35,7 @@ final class SaveVolunteer
         }
 
         $volunteer = new Volunteer([...$values, 'locale' => $locale, 'status' => VolunteerStatus::New, 'source' => Volunteer::SOURCE_FORM,
-            'consented_at' => CarbonImmutable::now(), 'member_id' => $this->memberId($values['phone_hash'])]);
+            'consented_at' => CarbonImmutable::now()]);
         $volunteer->save();
 
         try {
@@ -70,9 +67,6 @@ final class SaveVolunteer
         $volunteer->fill($values);
         if ($creating) {
             $volunteer->forceFill(['status' => VolunteerStatus::Active, 'source' => Volunteer::SOURCE_STAFF, 'locale' => app()->getLocale()]);
-        }
-        if ($volunteer->isDirty('phone_hash')) {
-            $volunteer->member_id = $this->memberId($values['phone_hash']);
         }
         $changed = array_values(array_intersect(['name', 'phone', 'email', 'woreda_id', 'skills', 'availability', 'languages'], array_keys($volunteer->getDirty())));
         $volunteer->save();
@@ -135,17 +129,12 @@ final class SaveVolunteer
         return [
             'name' => $name,
             'phone' => $phone,
-            'phone_hash' => $phone !== null ? MembershipApplication::hash($phone) : null,
+            'phone_hash' => $phone !== null ? EventRegistration::hash($phone) : null,
             'email' => $email !== '' ? $email : null,
-            'email_hash' => $email !== '' ? MembershipApplication::hash($email) : null,
+            'email_hash' => $email !== '' ? EventRegistration::hash($email) : null,
             'woreda_id' => $woreda,
             ...$lists,
             ...($public ? ['message' => $message !== '' ? $message : null] : []),
         ];
-    }
-
-    private function memberId(?string $phoneHash): ?string
-    {
-        return $phoneHash === null ? null : Member::query()->where('phone_hash', $phoneHash)->whereNull('erased_at')->value('id');
     }
 }

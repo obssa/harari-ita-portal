@@ -31,9 +31,6 @@
                     <button type="submit" class="rounded-control bg-gold-500 px-4 py-2.5 font-bold text-ink-brand hover:bg-gold-400">{{ __('newsletter.footer_button') }}</button>
                 </div>
             </form>
-            {{-- ADR-0079: applicants find their application's status from every page. --}}
-            <p class="mt-6 text-white/70">{{ __('membership.status.prompt') }}
-                <a href="{{ route('membership.status') }}" class="font-semibold underline underline-offset-4">{{ __('membership.status.link') }}</a></p>
         </section>
 
         @if ($links !== [])

@@ -38,8 +38,7 @@
                             <p class="mt-5 max-w-prose text-lg text-white/85 sm:text-xl">{{ $translation->summary }}</p>
                         @endif
                         <p class="mt-8 flex flex-wrap gap-3">
-                            <x-ui.button :href="route('membership.apply')" variant="gold" size="lg">{{ __('nav.join') }}</x-ui.button>
-                            <x-ui.button :href="route('volunteer.create')" variant="light" size="lg">{{ __('nav.volunteer') }}</x-ui.button>
+                            <x-ui.button :href="route('volunteer.create')" variant="gold" size="lg">{{ __('nav.volunteer') }}</x-ui.button>
                         </p>
                     </header>
                     @if ($head)
@@ -98,7 +97,6 @@
                         <h2 id="league-take-part" class="relative text-lg font-extrabold">{{ __('leagues.take_part_title') }}</h2>
                         <p class="relative mt-2 text-sm text-ink-muted">{{ __('leagues.take_part_text') }}</p>
                         <p class="relative mt-4 flex flex-wrap gap-2">
-                            <x-ui.button :href="route('membership.apply')" size="sm">{{ __('nav.join') }}</x-ui.button>
                             <x-ui.button :href="route('events.index')" variant="secondary" size="sm">{{ __('events.title') }}</x-ui.button>
                         </p>
                     </section>

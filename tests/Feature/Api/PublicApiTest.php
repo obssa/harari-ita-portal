@@ -278,10 +278,11 @@ it('lists upcoming, past and dated events and shows one with its registration', 
         ->assertJsonPath('data.calendar_url', route('events.ics', ['locale' => 'en', 'slug' => 'sample-town-hall']));
 });
 
-it('gives public documents only, never members-only ones', function () {
+it('gives public documents only, never internal ones', function () {
     $key = apiKey([ApiScope::Documents]);
     apiRecord(SaveDocument::class, new Document, ['type' => DocumentType::Report->value, 'year' => 2025, 'translations' => ['en' => ['title' => 'Sample annual report', 'published' => true]]]);
-    $private = apiRecord(SaveDocument::class, new Document, ['type' => DocumentType::Report->value, 'access' => Document::ACCESS_MEMBERS, 'translations' => ['en' => ['title' => 'Sample members report', 'published' => true]]]);
+    $private = apiRecord(SaveDocument::class, new Document, ['type' => DocumentType::Report->value, 'translations' => ['en' => ['title' => 'Sample members report', 'published' => true]]]);
+    $private->forceFill(['access' => 'internal'])->save();
     apiRecord(SaveDocument::class, new Document, [
         'type' => DocumentType::Vacancy->value, 'deadline_at' => now()->addWeek()->toDateTimeString(),
         'translations' => ['en' => ['title' => 'Sample vacancy', 'published' => true]],

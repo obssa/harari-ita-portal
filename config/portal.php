@@ -91,19 +91,6 @@ return [
     'submission_retention_days' => (int) env('PORTAL_SUBMISSION_RETENTION_DAYS', 730),
 
     /*
-    | Days after a rejected or withdrawn membership application was decided
-    | that it is kept (ADR-0044). Unfinished applications go after a week.
-    */
-    'closed_application_retention_days' => (int) env('PORTAL_CLOSED_APPLICATION_RETENTION_DAYS', 180),
-
-    /*
-    | Membership renewals (ADR-0046): members get one SMS this many days before
-    | their renewal is due, and become lapsed this many days after it.
-    */
-    'membership_reminder_days' => (int) env('PORTAL_MEMBERSHIP_REMINDER_DAYS', 30),
-    'membership_grace_days' => (int) env('PORTAL_MEMBERSHIP_GRACE_DAYS', 90),
-
-    /*
     | Campaign sending limits per minute (ADR-0052), to stay within what the mail
     | and SMS accounts accept.
     */
@@ -160,8 +147,7 @@ return [
 
     /*
     | Public API (ADR-0056): items per page, requests per minute a new key
-    | gets and the most a key may get, how long apps may keep an answer, and
-    | how long a member stays signed in to the member app (ADR-0057).
+    | gets and the most a key may get, and how long apps may keep an answer.
     */
     'api' => [
         'per_page' => 20,
@@ -169,7 +155,6 @@ return [
         'default_rate' => (int) env('PORTAL_API_DEFAULT_RATE', 60),
         'max_rate' => 600,
         'max_age' => 60,
-        'member_token_days' => (int) env('PORTAL_MEMBER_TOKEN_DAYS', 90),
     ],
 
     /*

@@ -50,10 +50,8 @@ class Document extends Model implements TranslatableModel
     use SoftDeletes;
     use TracksEditors;
 
+    /** Every document is public; the column leaves room for an internal level later. */
     public const ACCESS_PUBLIC = 'public';
-
-    /** For the member portal (Phase 6); never shown or served until then. */
-    public const ACCESS_MEMBERS = 'members';
 
     protected $fillable = ['type', 'year', 'issued_on', 'deadline_at', 'office_id', 'league_id', 'access'];
 
@@ -116,20 +114,7 @@ class Document extends Model implements TranslatableModel
     }
 
     /**
-     * Whether a library file belongs to a members-only document (ADR-0049), in
-     * any language or earlier version; such files are served only in the member
-     * portal.
-     */
-    public static function isMembersOnlyFile(int $mediaId): bool
-    {
-        $members = fn ($query) => $query->where('access', self::ACCESS_MEMBERS);
-
-        return DocumentTranslation::query()->where('file_id', $mediaId)->whereHas('document', $members)->exists()
-            || DocumentVersion::query()->where('media_id', $mediaId)->whereHas('document', $members)->exists();
-    }
-
-    /**
-     * Only what the public may see: members-only documents are in the member portal (ADR-0049).
+     * Only what the public may see.
      *
      * @param  Builder<static>  $query
      * @return Builder<static>

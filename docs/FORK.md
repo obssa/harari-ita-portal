@@ -10,7 +10,8 @@ in the new folder only, and never change the PP repo.
 
 ## 1. Keep as is
 - **Domains:** Access, Analytics, Api, Content, Dashboard, Documents, Engagement (newsletter only), Events, Forms, Health, Homepage, Import, Media, Notifications, Press, Privacy, Search, Settings, Sites, Social, Translation, Webhooks.
-- **Services:** Calendar, Cdn, Fayda (kept for staff and optional applicant sign-in), Sms, Telegram, Translation.
+- **Services:** Calendar, Cdn, Sms, Telegram, Translation.
+- **Fayda** was wired only to member sign-in in PP, so it went out with Membership in step 0.1. PLAN wants it for optional applicant sign-in: restore `app/Services/Fayda` and its integration settings from commit `34e7d99` when the Innovation applications need it (phase 3).
 - **Middleware and support:** `app/Http/Middleware/SecurityHeaders.php` (CSP), `app/Support/Turnstile.php`, SpamGuard, PhoneNumber, NoStore.
 - **Tooling:** `scripts/task.py`, `compose.test.yml` (rename the test database to `hita_test`), `scripts/check-hardcoded-strings.py`, `scripts/fonts/build_fonts.py`, `scripts/coverage-gate.py`.
 - **Workflows:** `.github/workflows/ci.yml`, `deploy.yml`, `lighthouse.yml`, `security-audit.yml`, and `scripts/deploy/*`.
@@ -21,6 +22,7 @@ in the new folder only, and never change the PP repo.
   - Replace the `app/Domain/Organisation/Enums/OfficeType.php` values with `directorate`, `team`, `regional_office` and `partner`. Write a migration to map any data.
   - Keep **Leader** as **Leadership**. Replace `LeaderBody.php` with `management` and `directors`.
   - Change the public routes `/offices` to `/about/structure` and `/leaders` to `/about/leadership`.
+- **League becomes Pillar** (decided in phase 0): the five pillars need what League does (logo, cover, accent colour, head, landing page, tagged content, role scope). Rename the model, tables, routes (`/pillars`), permissions, `ScopeType::Pillar`, the homepage section and menu type.
 - **Volunteers:** become **Mentors & tech volunteers**: rename the labels and keep the model.
 - **Dashboard:** in `app/Filament/Support/DashboardRegistry.php`, rename the office filter to directorate. Remove PeopleOverview, PeopleBreakdown and DonationTotals; add the PLAN §6 widgets later.
 - **Access:** in `app/Domain/Access/Enums/SystemRole.php` and `Support/PermissionRegistry.php`, remove the party roles and permissions and seed the PLAN §7 roles.
@@ -37,10 +39,7 @@ in the new folder only, and never change the PP repo.
   - `app/Domain/Donations`, `app/Services/Payments`, `DonationController`.
   - The Donations resource, `ManageDonations` and `DonationSettings`.
   - `tests/Feature/Donations`.
-- **League:** the model, resource, controller and the `ScopeType::League` scope, removed carefully.
-  - It is referenced by content, documents, events, forms, galleries, videos, projects, social sources and homepage slides.
-  - Drop the foreign keys in one migration, and update the policies and the API DirectoryController.
-- **StructureController party texts** become the directorate tree. `LeagueController` is removed.
+- **StructureController party texts** become the directorate tree.
 - **Privacy hooks** for members, applications and donations go from `app/Domain/Privacy/Actions/*`, along with the tests that exercise them.
 - **The header:** the "Join" button and "Member login" link in `resources/views/components/layouts/public.blade.php` and `site-nav.blade.php`.
 - **Content pack:** empty `database/content/pack.json` to the schema skeleton, and delete `database/content/photos/*` (real party people).

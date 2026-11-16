@@ -15,7 +15,7 @@ use Illuminate\Http\Response;
  * The links of campaign messages (ADR-0052, ADR-0053): counted clicks and
  * opens, and the unsubscribe link. Opening the unsubscribe link shows
  * a button; pressing it, or a mail app's one-click POST, stops campaigns for
- * that person: a subscriber unsubscribes, a member or volunteer opts out.
+ * that person: a subscriber unsubscribes, a volunteer opts out.
  * No session, so mail apps can post without a form token.
  */
 final class CampaignLinkController extends Controller

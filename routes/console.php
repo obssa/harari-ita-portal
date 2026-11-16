@@ -38,7 +38,7 @@ Schedule::command('events:purge-registrations')->dailyAt('03:30');
 
 // ADR-0041: resolved tickets, old notices and failed jobs are removed after their retention period.
 Schedule::command('forms:purge-submissions')->dailyAt('03:40');
-Schedule::command('membership:purge-applications')->dailyAt('03:42');
+Schedule::command('portal:purge-sign-ups')->dailyAt('03:42');
 Schedule::command('notifications:prune')->dailyAt('03:45');
 Schedule::command('queue:prune-failed', ['--hours' => 720])->dailyAt('03:50');
 
@@ -54,9 +54,6 @@ Schedule::command('analytics:send-reports')->dailyAt('04:00')->withoutOverlappin
 
 // ADR-0052: scheduled campaigns start on the minute.
 Schedule::command('campaigns:dispatch')->everyMinute()->withoutOverlapping();
-
-// ADR-0046: renewal reminders go out at 09:00 Addis Ababa time; long-overdue memberships lapse.
-Schedule::command('membership:renewals')->dailyAt('06:00')->withoutOverlapping();
 
 // ADR-0037: health checks every five minutes; the scheduler and queue checks need their heartbeats.
 Schedule::command(RunHealthChecksCommand::class)->everyFiveMinutes()->withoutOverlapping();

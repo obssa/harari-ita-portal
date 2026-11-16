@@ -1,6 +1,5 @@
 <?php
 
-use App\Domain\Membership\Models\Member;
 use App\Models\User;
 
 return [
@@ -43,12 +42,6 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
-        // ADR-0049: members sign in to the member portal with a code by SMS.
-        'member' => [
-            'driver' => 'session',
-            'provider' => 'members',
-        ],
     ],
 
     /*
@@ -72,11 +65,6 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
-        ],
-
-        'members' => [
-            'driver' => 'eloquent',
-            'model' => Member::class,
         ],
 
         // 'users' => [

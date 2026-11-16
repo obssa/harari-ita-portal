@@ -5,8 +5,6 @@ namespace App\Domain\Engagement\Support;
 use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Engagement\Models\Campaign;
 use App\Domain\Engagement\Models\Subscriber;
-use App\Domain\Membership\Enums\MemberStatus;
-use App\Domain\Membership\Models\Member;
 use App\Domain\Translation\Support\Locales;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
@@ -14,15 +12,14 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Who a campaign reaches (PLAN.md §5, ADR-0052): confirmed subscribers of the
- * channel by topic and language; or members (by woreda and status) or active
- * volunteers who have an address for the channel and did not opt out. Member
- * and volunteer audiences need the permission to see them, over the woredas
- * the sender looks after.
+ * Who a campaign reaches (PLAN.md §5): confirmed subscribers of the channel by
+ * topic and language; or active volunteers who have an address for the
+ * channel and did not opt out. The volunteer audience needs the permission to
+ * see them, over the woredas the sender looks after.
  */
 final class Audience
 {
-    public const TYPES = ['subscribers', 'members', 'volunteers'];
+    public const TYPES = ['subscribers', 'volunteers'];
 
     public function __construct(private readonly User $sender) {}
 
@@ -31,7 +28,6 @@ final class Audience
     {
         return match ($type) {
             'subscribers' => $this->sender->can('campaigns.send') || $this->sender->can('campaigns.manage'),
-            'members' => $this->sender->can('members.view'),
             'volunteers' => $this->sender->can('volunteers.view'),
             default => false,
         };
@@ -75,28 +71,24 @@ final class Audience
         }
         $column = $this->hashColumn($campaign);
         $type = match ($campaign->audience['type'] ?? '') {
-            'members' => 'member',
             'volunteers' => 'volunteer',
             default => 'subscriber',
         };
         $default = Locales::default();
         $seen = [];
-        foreach ($query->with($type === 'member' ? ['application:id,locale'] : [])->lazyById(500) as $person) {
+        foreach ($query->lazyById(500) as $person) {
             $hash = (string) $person->getAttribute($column);
             if ($hash === '' || isset($seen[$hash])) {
                 continue;
             }
             $seen[$hash] = true;
-            $locale = match (true) {
-                $person instanceof Member => $person->application->locale ?? $default,
-                default => (string) $person->getAttribute('locale'),
-            };
+            $locale = (string) ($person->getAttribute('locale') ?? $default);
             yield ['type' => $type, 'id' => (string) $person->getKey(), 'locale' => $locale, 'hash' => $hash];
         }
     }
 
     /**
-     * @return Builder<Subscriber>|Builder<Member>|Builder<Volunteer>|null
+     * @return Builder<Subscriber>|Builder<Volunteer>|null
      */
     public function query(Campaign $campaign): ?Builder
     {
@@ -116,10 +108,6 @@ final class Audience
                     }
                 }))
                 ->when(($audience['locales'] ?? []) !== [], fn (Builder $q) => $q->whereIn('locale', (array) $audience['locales'])),
-            'members' => OfficeScope::apply(Member::query(), $this->sender, 'members.view')
-                ->whereNull('erased_at')->whereNull('campaigns_opt_out_at')->whereNotNull($hash)
-                ->whereIn('status', ($audience['statuses'] ?? []) !== [] ? (array) $audience['statuses'] : [MemberStatus::Active->value])
-                ->when($woredas !== [], fn (Builder $q) => $q->whereIn('woreda_id', $woredas)),
             'volunteers' => OfficeScope::apply(Volunteer::query(), $this->sender, 'volunteers.view')
                 ->whereNull('erased_at')->whereNull('campaigns_opt_out_at')->whereNotNull($hash)
                 ->where('status', VolunteerStatus::Active->value)

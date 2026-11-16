@@ -35,8 +35,7 @@
                     <p class="heading-display animate-rise mt-6 text-white [--rise-delay:120ms]">{{ __('site.name') }}</p>
                     <p class="animate-rise mt-5 max-w-prose text-lg text-white/85 [--rise-delay:240ms] sm:text-xl">{{ __('site.description') }}</p>
                     <p class="animate-rise mt-9 flex flex-wrap gap-3 [--rise-delay:360ms]">
-                        <x-ui.button :href="route('membership.apply')" variant="gold" size="lg" class="shadow-lg shadow-gold-500/20">{{ __('nav.join') }}</x-ui.button>
-                        <x-ui.button :href="route('news.index')" variant="light" size="lg" class="backdrop-blur">{{ __('nav.news') }}</x-ui.button>
+                        <x-ui.button :href="route('news.index')" variant="gold" size="lg" class="shadow-lg shadow-gold-500/20">{{ __('nav.news') }}</x-ui.button>
                         <x-ui.button :href="route('leaders.index')" variant="light" size="lg" class="backdrop-blur">{{ __('leaders.title') }}</x-ui.button>
                     </p>
                 </div>

@@ -7,7 +7,6 @@ use App\Domain\Engagement\Models\Campaign;
 use App\Domain\Engagement\Support\Audience;
 use App\Domain\Engagement\Support\SmsLength;
 use App\Domain\Engagement\Support\SubscriptionOptions;
-use App\Domain\Membership\Enums\MemberStatus;
 use App\Domain\Organisation\Enums\OfficeType;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Translation\Support\Locales;
@@ -50,7 +49,6 @@ final class SaveCampaign
             'topics' => array_values(array_intersect(SubscriptionOptions::TOPICS, (array) ($input['topics'] ?? []))),
             'locales' => array_values(array_intersect(Locales::all(), (array) ($input['locales'] ?? []))),
             'woredas' => Office::query()->where('type', OfficeType::Woreda->value)->whereKey(array_map('strval', (array) ($input['woredas'] ?? [])))->pluck('id')->values()->all(),
-            'statuses' => array_values(array_intersect(array_map(fn (MemberStatus $s): string => $s->value, MemberStatus::cases()), (array) ($input['statuses'] ?? []))),
         ];
 
         $content = [];

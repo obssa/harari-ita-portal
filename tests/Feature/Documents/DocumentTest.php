@@ -165,9 +165,9 @@ it('lets only this site show PDFs in a frame', function () {
         ->assertHeader('X-Frame-Options', 'DENY');
 });
 
-it('keeps members-only documents out of every public place until the member portal exists', function () {
+it('keeps documents that are not public out of every public place', function () {
     $document = makeDocument(['en' => ['title' => 'Sample internal guideline', 'published' => true]], DocumentType::Policy);
-    $document->forceFill(['access' => Document::ACCESS_MEMBERS])->save();
+    $document->forceFill(['access' => 'internal'])->save();
 
     $this->get('/en/documents/sample-internal-guideline')->assertNotFound();
     $this->get('/en/documents')->assertDontSee('Sample internal guideline');

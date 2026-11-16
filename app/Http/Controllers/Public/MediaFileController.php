@@ -26,8 +26,6 @@ final class MediaFileController extends Controller
             ->first();
 
         abort_if($media === null || $media->file_name !== $name, 404);
-        // ADR-0049: files of members-only documents are only served in the member portal.
-        abort_if(Document::isMembersOnlyFile((int) $media->getKey()), 404);
 
         $path = $media->getPathRelativeToRoot();
         abort_unless(Storage::disk('media')->exists($path), 404);

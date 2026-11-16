@@ -65,18 +65,6 @@
                     </ul>
                 </nav>
 
-                <div class="mt-5 grid gap-3 sm:grid-cols-2">
-                    <a href="{{ route('membership.apply') }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gold-500 font-bold text-ink-brand hover:bg-gold-400">
-                        {{ __('nav.join') }}
-                        <svg aria-hidden="true" class="size-4 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                    </a>
-                    <a href="{{ route('member.sign-in') }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-line font-bold text-ink hover:bg-surface-muted">
-                        <svg aria-hidden="true" class="size-[1.1rem]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-                        {{ __('nav.member_login') }}
-                    </a>
-                </div>
-                <p class="mt-3 text-center text-sm text-ink-muted">{{ __('membership.status.prompt') }}
-                    <a href="{{ route('membership.status') }}" class="font-semibold text-link underline-offset-4 hover:underline">{{ __('membership.status.link') }}</a></p>
 
                 @php $socialLinks = \App\Support\SocialLinks::all(); @endphp
                 @if ($socialLinks !== [])

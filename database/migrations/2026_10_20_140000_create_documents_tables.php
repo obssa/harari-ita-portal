@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('deadline_at')->nullable();
             $table->foreignUlid('office_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignUlid('league_id')->nullable()->constrained()->nullOnDelete();
-            // "members" is kept for the member portal (Phase 6); until then everything is public.
+            // Every document is public; the column stays for a future restricted level.
             $table->string('access', 10)->default('public');
             $table->unsignedInteger('download_count')->default(0);
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();

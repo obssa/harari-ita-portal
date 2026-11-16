@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Public;
 
 use App\Domain\Engagement\Actions\Subscribe;
 use App\Domain\Engagement\Models\Subscriber;
-use App\Domain\Membership\Support\Mask;
 use App\Http\Controllers\Controller;
+use App\Support\Mask;
 use App\Support\PhoneNumber;
 use App\Support\SpamGuard;
 use App\Support\Turnstile;

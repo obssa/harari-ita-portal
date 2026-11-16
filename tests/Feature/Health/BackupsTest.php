@@ -85,7 +85,7 @@ it('restores a backup into a database with one command, after asking', function 
     $backup = makeBackup();
 
     $this->artisan('portal:restore-database', ['--connection' => 'drill'])
-        ->expectsConfirmation("Replace the tables of the database \"harari_drill\" (drill) with the backup {$backup}?", 'no')
+        ->expectsConfirmation("Replace the tables of the database \"hita_drill\" (drill) with the backup {$backup}?", 'no')
         ->assertFailed();
     expect(drillTables())->toBe([]);
 

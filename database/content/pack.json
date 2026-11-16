@@ -5505,7 +5505,7 @@
       },
       "buttons": [
         {
-          "link": "route:membership.apply",
+          "link": "route:volunteer.create",
           "style": "primary",
           "label": {
             "en": "Join the party",
@@ -5561,7 +5561,7 @@
       },
       "buttons": [
         {
-          "link": "route:membership.apply",
+          "link": "route:volunteer.create",
           "style": "primary",
           "label": {
             "en": "Join now",

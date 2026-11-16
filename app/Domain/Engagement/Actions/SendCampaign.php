@@ -9,7 +9,6 @@ use App\Domain\Engagement\Models\Campaign;
 use App\Domain\Engagement\Models\CampaignDelivery;
 use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Engagement\Support\Audience;
-use App\Domain\Membership\Models\Member;
 use App\Domain\Volunteers\Models\Volunteer;
 use App\Models\User;
 use App\Services\Sms\SmsGateway;
@@ -137,7 +136,7 @@ final class SendCampaign
     }
 
     /** Whether the person still wants campaigns on this channel. */
-    public static function stillWanted(Subscriber|Member|Volunteer $person, string $channel): bool
+    public static function stillWanted(Subscriber|Volunteer $person, string $channel): bool
     {
         if ($person instanceof Subscriber) {
             return $person->reachableBy($channel);

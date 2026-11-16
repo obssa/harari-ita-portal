@@ -3,9 +3,8 @@
 namespace App\Domain\Volunteers\Models;
 
 use App\Domain\Content\Concerns\BelongsToSite;
-use App\Domain\Membership\Models\Member;
-use App\Domain\Membership\Models\PersonNote;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\People\Models\PersonNote;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -35,13 +34,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property list<string> $availability
  * @property list<string> $languages
  * @property ?string $message
- * @property ?string $member_id
  * @property ?CarbonImmutable $consented_at
  * @property ?CarbonImmutable $erased_at
  * @property ?CarbonImmutable $campaigns_opt_out_at
  * @property CarbonImmutable $created_at
  * @property-read ?Office $woreda
- * @property-read ?Member $member
  */
 class Volunteer extends Model
 {
@@ -54,7 +51,7 @@ class Volunteer extends Model
     public const SOURCE_STAFF = 'staff';
 
     protected $fillable = ['status', 'source', 'locale', 'name', 'phone', 'phone_hash', 'email', 'email_hash', 'woreda_id',
-        'skills', 'availability', 'languages', 'message', 'member_id', 'consented_at'];
+        'skills', 'availability', 'languages', 'message', 'consented_at'];
 
     protected $hidden = ['name', 'phone', 'email', 'message'];
 
@@ -86,14 +83,6 @@ class Volunteer extends Model
     }
 
     /**
-     * @return BelongsTo<Member, $this>
-     */
-    public function member(): BelongsTo
-    {
-        return $this->belongsTo(Member::class);
-    }
-
-    /**
      * @return HasMany<VolunteerAssignment, $this>
      */
     public function assignments(): HasMany
@@ -111,7 +100,7 @@ class Volunteer extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->useLogName('volunteers')->logOnly(['status', 'woreda_id', 'member_id'])
+        return LogOptions::defaults()->useLogName('volunteers')->logOnly(['status', 'woreda_id'])
             ->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 }

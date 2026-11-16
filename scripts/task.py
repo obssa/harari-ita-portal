@@ -8,7 +8,7 @@ Usage:
     python scripts/task.py doctor
     python scripts/task.py up | down
     python scripts/task.py install            # composer install inside the container
-    python scripts/task.py test [pest args]   # Pest against MySQL 8 (harari_test)
+    python scripts/task.py test [pest args]   # Pest against MySQL 8 (hita_test)
     python scripts/task.py coverage           # Pest with coverage and the CI minimum
     python scripts/task.py lint               # Pint --test + Larastan
     python scripts/task.py fix                # Pint (writes)

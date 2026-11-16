@@ -64,7 +64,7 @@ it('lists the library with filters for missing alt text and unused files', funct
     $described = libraryFile('described.jpg');
     $described->update(['alt' => ['en' => 'A', 'am' => 'ሀ', 'om' => 'A']]);
     $bare = libraryFile('bare.jpg');
-    app(SyncMediaUsage::class)->handle(staff(SystemRole::Member), 'avatar', [$described->id]);
+    app(SyncMediaUsage::class)->handle(User::factory()->create(), 'avatar', [$described->id]);
 
     livewire(ListMedia::class)
         ->assertCanSeeTableRecords([$described, $bare])
@@ -162,7 +162,7 @@ it('records where files are used and keeps used files from being deleted', funct
     $manager = staff(SystemRole::MediaManager);
     $this->actingAs($manager);
     $media = libraryFile();
-    $page = staff(SystemRole::Member);
+    $page = User::factory()->create();
 
     app(SyncMediaUsage::class)->handle($page, 'featured_image', [$media->id]);
     expect($media->isUsed())->toBeTrue()
@@ -181,7 +181,7 @@ it('records where files are used and keeps used files from being deleted', funct
 it('syncs usage idempotently per place and forgets it for a removed model', function () {
     $a = libraryFile('a.jpg');
     $b = libraryFile('b.jpg');
-    $owner = staff(SystemRole::Member);
+    $owner = User::factory()->create();
     $sync = app(SyncMediaUsage::class);
 
     $sync->handle($owner, 'gallery', [$a->id, $b->id, $a->id, null]);
@@ -199,7 +199,7 @@ it('deletes in bulk but keeps files that are in use', function () {
     $this->actingAs(staff(SystemRole::MediaManager));
     $used = libraryFile('used.jpg');
     $free = libraryFile('free.jpg');
-    app(SyncMediaUsage::class)->handle(staff(SystemRole::Member), 'avatar', [$used->id]);
+    app(SyncMediaUsage::class)->handle(User::factory()->create(), 'avatar', [$used->id]);
 
     livewire(ListMedia::class)
         ->callTableBulkAction('delete', [$used, $free])

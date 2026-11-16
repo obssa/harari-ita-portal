@@ -13,15 +13,18 @@ use App\Domain\Engagement\Models\CampaignDelivery;
 use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Engagement\Support\Audience;
 use App\Domain\Engagement\Support\SmsLength;
-use App\Domain\Membership\Actions\SaveMember;
-use App\Domain\Membership\Models\Member;
 use App\Domain\Organisation\Actions\SaveOffice;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Volunteers\Actions\SaveVolunteer;
+use App\Domain\Volunteers\Enums\VolunteerStatus;
+use App\Domain\Volunteers\Models\Volunteer;
 use App\Filament\Resources\Campaigns\CampaignResource;
 use App\Filament\Resources\Campaigns\Pages\ViewCampaign;
 use App\Models\User;
 use App\Services\Sms\SmsGateway;
+use App\Support\SpamGuard;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
@@ -83,7 +86,7 @@ it('writes drafts and checks the channel, the audience and the SMS length', func
     $campaign = emailCampaign($officer);
     expect($campaign->status)->toBe(CampaignStatus::Draft)->and($campaign->languages())->toBe(['en', 'am']);
 
-    expect(fn () => emailCampaign($officer, ['type' => 'members']))->toThrow(ValidationException::class, __('campaigns.validation.audience'))
+    expect(fn () => emailCampaign($officer, ['type' => 'volunteers']))->toThrow(ValidationException::class, __('campaigns.validation.audience'))
         ->and(fn () => app(SaveCampaign::class)->handle(new Campaign, ['name' => 'x', 'channel' => 'sms', 'audience' => ['type' => 'subscribers'],
             'content' => ['am' => ['text' => str_repeat('ሀ', 300)]]], $officer))->toThrow(ValidationException::class)
         ->and(fn () => emailCampaign(staff(SystemRole::Editor)))->toThrow(HttpException::class);
@@ -108,13 +111,19 @@ it('reaches confirmed subscribers by topic and language, each address once', fun
         ->and($audience->count(emailCampaign($sender, ['type' => 'subscribers', 'locales' => ['en']])))->toBe(1);
 });
 
-it('reaches members and volunteers only for staff who may see them, over their woredas, without those who opted out', function () {
+it('reaches volunteers only for staff who may see them, over their woredas, without those who opted out', function () {
     $north = app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'translations' => ['en' => ['name' => 'Sample North', 'published' => true]]], staff(SystemRole::Publisher));
     $south = app(SaveOffice::class)->handle(new Office, ['type' => 'woreda', 'translations' => ['en' => ['name' => 'Sample South', 'published' => true]]], staff(SystemRole::Publisher));
-    $member = fn (Office $w, string $phone): Member => app(SaveMember::class)->handle(new Member, ['name' => 'Sample', 'sex' => 'male', 'id_type' => 'none', 'phone' => $phone, 'joined_on' => '2025-01-01', 'woreda_id' => $w->id], staff(SystemRole::Admin));
-    $member($north, '0911000011');
-    $member($south, '0911000012');
-    $out = $member($north, '0911000013');
+    $volunteer = function (Office $w, string $phone): Volunteer {
+        $volunteer = app(SaveVolunteer::class)->signUp(['name' => 'Sample Volunteer', 'phone' => $phone, 'woreda_id' => $w->id, 'skills' => ['ushering'],
+            'availability' => ['weekends'], 'languages' => ['en'], 'consent' => '1', SpamGuard::STARTED => Crypt::encryptString((string) (time() - 10))], 'en');
+        $volunteer->forceFill(['status' => VolunteerStatus::Active])->save();
+
+        return $volunteer;
+    };
+    $volunteer($north, '0911000011');
+    $volunteer($south, '0911000012');
+    $out = $volunteer($north, '0911000013');
     $out->forceFill(['campaigns_opt_out_at' => now()])->save();
 
     $officer = staff(SystemRole::MembershipOfficer);
@@ -123,9 +132,9 @@ it('reaches members and volunteers only for staff who may see them, over their w
     $sms = fn (User $actor, array $audience): Campaign => app(SaveCampaign::class)->handle(new Campaign, ['name' => 'x', 'channel' => 'sms', 'audience' => $audience,
         'content' => ['en' => ['text' => 'Sample meeting on Saturday']]], $actor);
 
-    expect((new Audience($officer->refresh()))->count($sms($officer, ['type' => 'members'])))->toBe(1)
-        ->and((new Audience(staff(SystemRole::Admin)))->count($sms(staff(SystemRole::Admin), ['type' => 'members', 'woredas' => [$south->id]])))->toBe(1)
-        ->and((new Audience(staff(SystemRole::CommunicationsOfficer)))->allowed('members'))->toBeFalse();
+    expect((new Audience($officer->refresh()))->count($sms($officer, ['type' => 'volunteers'])))->toBe(1)
+        ->and((new Audience(staff(SystemRole::Admin)))->count($sms(staff(SystemRole::Admin), ['type' => 'volunteers', 'woredas' => [$south->id]])))->toBe(1)
+        ->and((new Audience(staff(SystemRole::CommunicationsOfficer)))->allowed('volunteers'))->toBeFalse();
 });
 
 it('sends an email campaign in each person\'s language with an unsubscribe link, skipping anyone who left meanwhile', function () {

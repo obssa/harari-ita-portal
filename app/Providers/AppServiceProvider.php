@@ -35,8 +35,6 @@ use App\Domain\Documents\Models\Document;
 use App\Domain\Documents\Models\DocumentVersion;
 use App\Domain\Documents\Policies\DocumentPolicy;
 use App\Domain\Documents\Policies\DocumentVersionPolicy;
-use App\Domain\Donations\Models\Donation;
-use App\Domain\Donations\Policies\DonationPolicy;
 use App\Domain\Engagement\Models\Campaign;
 use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Engagement\Policies\CampaignPolicy;
@@ -69,20 +67,14 @@ use App\Domain\Media\Policies\GalleryPolicy;
 use App\Domain\Media\Policies\MediaFolderPolicy;
 use App\Domain\Media\Policies\MediaPolicy;
 use App\Domain\Media\Policies\VideoPolicy;
-use App\Domain\Membership\Models\Member;
-use App\Domain\Membership\Models\MemberImport;
-use App\Domain\Membership\Models\MembershipApplication;
-use App\Domain\Membership\Models\PersonNote;
-use App\Domain\Membership\Policies\MemberImportPolicy;
-use App\Domain\Membership\Policies\MemberPolicy;
-use App\Domain\Membership\Policies\MembershipApplicationPolicy;
-use App\Domain\Membership\Policies\PersonNotePolicy;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\League;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Policies\LeaderPolicy;
 use App\Domain\Organisation\Policies\LeaguePolicy;
 use App\Domain\Organisation\Policies\OfficePolicy;
+use App\Domain\People\Models\PersonNote;
+use App\Domain\People\Policies\PersonNotePolicy;
 use App\Domain\Press\Models\MediaContact;
 use App\Domain\Press\Policies\MediaContactPolicy;
 use App\Domain\Privacy\Models\PrivacyRequest;
@@ -115,8 +107,6 @@ use App\Domain\Webhooks\Models\Webhook;
 use App\Domain\Webhooks\Policies\WebhookPolicy;
 use App\Models\User;
 use App\Services\Cdn\PublicContentChanges;
-use App\Services\Payments\BankTransferGateway;
-use App\Services\Payments\PaymentGateway;
 use App\Services\Sms\LogSmsGateway;
 use App\Services\Sms\SmsGateway;
 use App\Settings\SiteSettings;
@@ -158,7 +148,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->scoped(CurrentSite::class);
 
         // ADR-0060: pledges are paid by bank transfer until an online payment provider is added.
-        $this->app->bind(PaymentGateway::class, fn (): PaymentGateway => new BankTransferGateway);
 
         // spatie/laravel-translation-loader builds its loader from lang/ only, which
         // drops Laravel's built-in English framework strings (validation, auth,
@@ -234,10 +223,10 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('search', fn (Request $request): Limit => Limit::perMinute(30)->by((string) $request->ip()));
 
-        // ADR-0044: the membership steps post several times; codes have their own limits.
-        RateLimiter::for('membership', fn (Request $request): array => [
-            Limit::perMinute(20)->by('membership-minute:'.$request->ip()),
-            Limit::perHour(60)->by('membership-hour:'.$request->ip()),
+        // Steps that check a code: several posts per person, with their own limits per code.
+        RateLimiter::for('verification', fn (Request $request): array => [
+            Limit::perMinute(20)->by('verification-minute:'.$request->ip()),
+            Limit::perHour(60)->by('verification-hour:'.$request->ip()),
         ]);
 
         // ADR-0040: page view beacons, generous but bounded per address.
@@ -282,7 +271,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Comment::class, CommentPolicy::class);
         Gate::policy(Webhook::class, WebhookPolicy::class);
         Gate::policy(ApiKey::class, ApiKeyPolicy::class);
-        Gate::policy(Donation::class, DonationPolicy::class);
         Gate::policy(Office::class, OfficePolicy::class);
         Gate::policy(Leader::class, LeaderPolicy::class);
         Gate::policy(League::class, LeaguePolicy::class);
@@ -308,10 +296,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(GlossaryTerm::class, GlossaryTermPolicy::class);
         Gate::policy(AnalyticsReport::class, AnalyticsReportPolicy::class);
         Gate::policy(PrivacyRequest::class, PrivacyRequestPolicy::class);
-        Gate::policy(MembershipApplication::class, MembershipApplicationPolicy::class);
-        Gate::policy(Member::class, MemberPolicy::class);
         Gate::policy(PersonNote::class, PersonNotePolicy::class);
-        Gate::policy(MemberImport::class, MemberImportPolicy::class);
         Gate::policy(Volunteer::class, VolunteerPolicy::class);
         Gate::policy(VolunteerAssignment::class, VolunteerAssignmentPolicy::class);
         Gate::policy(Subscriber::class, SubscriberPolicy::class);

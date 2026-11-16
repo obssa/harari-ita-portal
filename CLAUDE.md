@@ -64,7 +64,7 @@ Cyber-awareness. Fully translated in English (en), Amharic (am), Afaan Oromo (om
 - A modular monolith, `app/Domain/<Module>`, each with Models, Policies, Actions, Enums, Observers and Support. Controllers are thin; writes go through Actions.
 - **Modules:** Services, Support, Status, Innovation, Projects, OpenData, Academy and Opportunities, plus the CMS modules kept from the fork.
 - `site_id` is on all content tables. Media are referenced by library id (`<x-picture>`, `UploadMedia`, `SyncMediaUsage`).
-- Services have driver interfaces: TranslationProvider, SmsGateway, SocialFetcher, FaydaClient.
+- Services have driver interfaces: TranslationProvider, SmsGateway, SocialFetcher (FaydaClient returns in phase 3; see FORK.md).
 
 ## How to work
 

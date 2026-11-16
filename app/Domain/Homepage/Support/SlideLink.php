@@ -13,7 +13,7 @@ use Throwable;
 /**
  * Where a carousel button goes (ADR-0070), stored as one string:
  *
- *   route:membership.apply   a page of the site, in the visitor's language
+ *   route:volunteer.create   a page of the site, in the visitor's language
  *   leader:<id>              a leader's profile
  *   page:<id>, post:<id>     a page or a story, where it is published
  *   url:https://…            any web address, or a path on this site (/en/…)
@@ -22,8 +22,8 @@ final class SlideLink
 {
     /** Site pages a button may open: route name => label key. */
     public const ROUTES = [
-        'membership.apply' => 'nav.join',
         'get-involved' => 'nav.get_involved',
+        'volunteer.create' => 'nav.volunteer',
         'news.index' => 'nav.news',
         'leaders.index' => 'leaders.title',
         'structure' => 'structure.title',
@@ -35,7 +35,6 @@ final class SlideLink
         'gallery.index' => 'gallery.title',
         'social' => 'social.hub.title',
         'newsletter.create' => 'nav.newsletter',
-        'donations.create' => 'donations.title',
         'contact' => 'nav.contact',
         'home' => 'nav.home',
     ];

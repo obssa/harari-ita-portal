@@ -64,7 +64,7 @@ it('follows PLAN.md §8 for what each role may and may not do', function (System
         expect($grants)->not->toContain($permission);
     }
 })->with([
-    'admin' => [SystemRole::Admin, ['users.create', 'roles.update', 'posts.publish', 'members.export'],
+    'admin' => [SystemRole::Admin, ['users.create', 'roles.update', 'posts.publish', 'volunteers.manage'],
         ['settings.manage', 'integrations.manage', 'audit.purge', 'backups.manage', 'users.impersonate']],
     'publisher' => [SystemRole::Publisher, ['posts.publish', 'posts.feature', 'menus.manage', 'homepage.manage'],
         ['users.view', 'settings.view', 'roles.view']],
@@ -75,14 +75,13 @@ it('follows PLAN.md §8 for what each role may and may not do', function (System
     'translator' => [SystemRole::Translator, ['translations.har.edit', 'translations.import', 'translations.export'],
         ['posts.update', 'posts.publish', 'pages.publish']],
     'media manager' => [SystemRole::MediaManager, ['media.delete', 'galleries.manage', 'social.manage'],
-        ['posts.view', 'members.view']],
+        ['posts.view', 'volunteers.manage']],
     'communications officer' => [SystemRole::CommunicationsOfficer, ['press_kit.manage', 'media_contacts.manage', 'campaigns.send'],
-        ['members.view', 'settings.view']],
-    'membership officer' => [SystemRole::MembershipOfficer, ['applications.review', 'members.export', 'volunteers.manage'],
+        ['volunteers.manage', 'settings.view']],
+    'membership officer' => [SystemRole::MembershipOfficer, ['volunteers.view', 'volunteers.manage', 'campaigns.send'],
         ['posts.view', 'settings.view']],
-    'support agent' => [SystemRole::SupportAgent, ['inbox.view', 'inbox.reply'], ['posts.view', 'members.view']],
+    'support agent' => [SystemRole::SupportAgent, ['inbox.view', 'inbox.reply'], ['posts.view', 'volunteers.manage']],
     'office head' => [SystemRole::OfficeHead, ['inbox.view', 'posts.view'], ['posts.create', 'inbox.reply']],
-    'member' => [SystemRole::Member, ['portal.access'], ['admin.access']],
 ]);
 
 it('keeps the analyst strictly read-only', function () {
@@ -99,8 +98,8 @@ it('reserves super-admin-only permissions for the Super Admin role', function ()
     }
 });
 
-it('lets every staff role into the admin panel but not members', function (SystemRole $role) {
-    expect(Role::findByName($role->value)->hasPermissionTo('admin.access'))->toBe($role !== SystemRole::Member);
+it('lets every staff role into the admin panel', function (SystemRole $role) {
+    expect(Role::findByName($role->value)->hasPermissionTo('admin.access'))->toBeTrue();
 })->with(SystemRole::cases());
 
 it('requires two-factor login exactly for Super Admin, Admin and Publisher', function () {

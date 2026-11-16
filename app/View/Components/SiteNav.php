@@ -5,7 +5,6 @@ namespace App\View\Components;
 use App\Domain\Content\Models\Menu;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\PageTranslation;
-use App\Settings\DonationSettings;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
@@ -70,15 +69,10 @@ final class SiteNav extends Component
         ];
 
         $getInvolved = [
-            $link('nav.become_member', route('membership.apply'), 'membership.*', 'nav.become_member_hint'),
             $link('nav.volunteer', route('volunteer.create'), 'volunteer.*', 'nav.volunteer_hint'),
             $link('events.title', route('events.index'), 'events.*', 'nav.events_hint'),
             $link('nav.newsletter', route('newsletter.create'), 'newsletter.*', 'nav.newsletter_hint'),
         ];
-        if (self::donationsOpen()) {
-            $getInvolved[] = $link('donations.title', route('donations.create'), 'donations.*', 'nav.donate_hint');
-        }
-        $getInvolved[] = $link('nav.member_portal', route('member.sign-in'), 'member.*', 'nav.member_portal_hint');
 
         $about = self::aboutPages(app()->getLocale());
 
@@ -155,15 +149,6 @@ final class SiteNav extends Component
             });
         } catch (Throwable) {
             return [];
-        }
-    }
-
-    private static function donationsOpen(): bool
-    {
-        try {
-            return app(DonationSettings::class)->enabled;
-        } catch (Throwable) {
-            return false;
         }
     }
 }

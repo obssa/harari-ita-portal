@@ -91,24 +91,24 @@ it('checks a slide before saving it', function (array $data, string $field) {
 it('sends buttons only to site pages, profiles and safe addresses', function () {
     $leader = app(SaveLeader::class)->handle(new Leader, ['body' => 'secretariat', 'translations' => ['en' => ['name' => 'Sample Slide Leader', 'published' => true]]], staff(SystemRole::Publisher, mfa: false));
 
-    expect(SlideLink::isValid('route:membership.apply'))->toBeTrue()
+    expect(SlideLink::isValid('route:volunteer.create'))->toBeTrue()
         ->and(SlideLink::isValid('route:admin.dashboard'))->toBeFalse()
         ->and(SlideLink::isValid('url:https://example.org/sample'))->toBeTrue()
         ->and(SlideLink::isValid('url:/en/news'))->toBeTrue()
         ->and(SlideLink::isValid('url://evil.example'))->toBeFalse()
         ->and(SlideLink::isValid('url:javascript:alert(1)'))->toBeFalse()
-        ->and(SlideLink::url('route:membership.apply', 'am'))->toBe(url('/am/membership/apply'))
+        ->and(SlideLink::url('route:volunteer.create', 'am'))->toBe(url('/am/volunteer'))
         ->and(SlideLink::url("leader:{$leader->id}", 'en'))->toBe(url('/en/leaders/sample-slide-leader'))
         ->and(SlideLink::url('leader:missing', 'en'))->toBeNull();
 
     heroSlide(['content' => ['en' => ['title' => 'Sample buttons']], 'buttons' => [
-        ['kind' => 'route', 'route' => 'membership.apply', 'style' => 'primary', 'label' => ['en' => 'Sample join']],
+        ['kind' => 'route', 'route' => 'volunteer.create', 'style' => 'primary', 'label' => ['en' => 'Sample join']],
         ['kind' => 'leader', 'leader' => $leader->id, 'style' => 'secondary', 'label' => ['en' => 'Sample profile']],
         ['kind' => 'url', 'url' => 'https://example.org/sample', 'style' => 'secondary', 'label' => ['en' => 'Sample away']],
     ]]);
 
     $this->get('/en')
-        ->assertSee('href="'.url('/en/membership/apply').'"', escape: false)
+        ->assertSee('href="'.url('/en/volunteer').'"', escape: false)
         ->assertSee('href="'.url('/en/leaders/sample-slide-leader').'"', escape: false)
         ->assertSee('rel="noopener"', escape: false);
 });
@@ -117,7 +117,7 @@ it('draws the banner and the portrait layouts', function () {
     $picture = slidePicture();
     heroSlide(['layout' => 'banner', 'image_id' => $picture->id, 'content' => ['en' => [
         'title' => 'Prosperity Party', 'highlight' => 'ብልፅግና', 'text' => 'Sample tagline.', 'note' => 'Sample slogan ahead',
-    ]], 'buttons' => [['kind' => 'route', 'route' => 'membership.apply', 'label' => ['en' => 'Join now']]]]);
+    ]], 'buttons' => [['kind' => 'route', 'route' => 'volunteer.create', 'label' => ['en' => 'Join now']]]]);
     heroSlide(['layout' => 'portrait', 'image_id' => $picture->id, 'content' => ['en' => [
         'kicker' => 'Sample kicker', 'title' => 'Sample message on a firm foundation', 'highlight' => 'on a firm foundation',
         'note' => "H.E Sample Person\nHead of the sample party",

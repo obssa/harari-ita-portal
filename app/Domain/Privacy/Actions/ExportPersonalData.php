@@ -2,14 +2,11 @@
 
 namespace App\Domain\Privacy\Actions;
 
-use App\Domain\Donations\Models\Donation;
 use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Models\SubmissionNote;
-use App\Domain\Membership\Models\Member;
-use App\Domain\Membership\Models\MembershipApplication;
-use App\Domain\Membership\Models\PersonNote;
+use App\Domain\People\Models\PersonNote;
 use App\Domain\Press\Models\MediaContact;
 use App\Domain\Privacy\Models\PrivacyRequest;
 use App\Domain\Privacy\Support\PersonalDataSearch;
@@ -34,12 +31,9 @@ final class ExportPersonalData
         $registrations = $search->registrations();
         $submissions = $search->submissions();
         $failed = $search->failedSignIns();
-        $applications = $search->applications();
-        $members = $search->members();
         $volunteers = $search->volunteers();
         $subscribers = $search->subscribers();
         $mediaContacts = $search->mediaContacts();
-        $donations = $search->donations();
 
         $export = [
             'exported_at' => now()->toIso8601String(),
@@ -70,25 +64,6 @@ final class ExportPersonalData
                     ->filter(fn (SubmissionNote $n): bool => in_array($n->kind, [SubmissionNote::REPLY, SubmissionNote::NOTE], true))
                     ->map(fn (SubmissionNote $n): array => ['kind' => $n->kind, 'at' => $n->created_at->toIso8601String(), 'text' => $n->body])
                     ->values()->all(),
-            ])->values()->all(),
-            'membership_applications' => $applications->map(fn (MembershipApplication $a): array => [
-                'reference' => $a->reference,
-                'status' => $a->status->value,
-                'submitted_at' => $a->submitted_at?->toIso8601String(),
-                'decided_at' => $a->decided_at?->toIso8601String(),
-                'reason' => $a->reason,
-                ...self::person($a),
-                'language' => $a->locale,
-                'history' => self::history($a->notes),
-            ])->values()->all(),
-            'membership' => $members->map(fn (Member $m): array => [
-                'member_no' => $m->member_no,
-                'status' => $m->status->value,
-                'joined_on' => $m->joined_on->toDateString(),
-                'renewed_on' => $m->renewed_on?->toDateString(),
-                'renewal_due_on' => $m->renewal_due_on?->toDateString(),
-                ...self::person($m),
-                'history' => self::history($m->notes),
             ])->values()->all(),
             'volunteering' => $volunteers->map(fn (Volunteer $v): array => [
                 'signed_up_at' => $v->created_at->toIso8601String(),
@@ -122,12 +97,6 @@ final class ExportPersonalData
                 'languages' => $c->languages, 'notes' => $c->notes, 'opted_out_at' => $c->opted_out_at?->toIso8601String(),
                 'press_releases_received' => $c->distributions()->where('status', 'sent')->count(),
             ])->values()->all(),
-            'donations' => $donations->map(fn (Donation $d): array => [
-                'reference' => $d->reference, 'name' => $d->name, 'email' => $d->email, 'phone' => $d->phone,
-                'amount' => $d->amount, 'currency' => $d->currency, 'purpose' => $d->purpose, 'anonymous' => $d->anonymous,
-                'status' => $d->status->value, 'received_amount' => $d->received_amount, 'received_on' => $d->received_on?->toDateString(),
-                'receipt_no' => $d->receipt_no, 'pledged_at' => $d->created_at->toIso8601String(),
-            ])->values()->all(),
             'failed_sign_ins' => $failed->map(fn (Activity $a): array => ['at' => $a->created_at?->toIso8601String()])->values()->all(),
             'staff_account' => $search->staffAccount() !== null,
         ];
@@ -141,28 +110,6 @@ final class ExportPersonalData
         activity('privacy')->causedBy($actor)->event('export')->withProperties(['found' => $search->counts()])->log('Personal data exported');
 
         return $export;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private static function person(MembershipApplication|Member $person): array
-    {
-        return [
-            'name' => $person->name,
-            'sex' => $person->sex,
-            'birth_date' => $person->birth_date,
-            'id_type' => $person->id_type,
-            'id_number' => $person->id_number,
-            'education' => $person->education,
-            'occupation' => $person->occupation,
-            'woreda' => $person->woreda?->name(),
-            'kebele' => $person->kebele?->name(),
-            'basic_organisation' => $person->basicOrganisation?->name(),
-            'address' => $person->address_note,
-            'phone' => $person->phone,
-            'email' => $person->email,
-        ];
     }
 
     /**

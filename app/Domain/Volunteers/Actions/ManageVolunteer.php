@@ -4,7 +4,7 @@ namespace App\Domain\Volunteers\Actions;
 
 use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Events\Models\Event;
-use App\Domain\Membership\Models\PersonNote;
+use App\Domain\People\Models\PersonNote;
 use App\Domain\Volunteers\Enums\AssignmentStatus;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;

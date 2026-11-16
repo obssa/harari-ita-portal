@@ -70,7 +70,7 @@ class Subscriber extends Model
         ];
     }
 
-    /** The keyed hash used for every lookup (same key as registrations, members and tickets). */
+    /** The keyed hash used for every lookup (same key as registrations, volunteers and tickets). */
     public static function hash(string $value): string
     {
         return EventRegistration::hash($value);

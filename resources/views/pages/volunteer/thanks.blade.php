@@ -5,7 +5,6 @@
             <p class="mt-4 text-lg">{{ __('volunteers.thanks.text') }}</p>
             <p class="mt-8 flex flex-wrap gap-x-6 gap-y-2 font-semibold">
                 <a href="{{ route('events.index') }}" class="text-link underline-offset-4 hover:underline">{{ __('volunteers.thanks.events') }}</a>
-                <a href="{{ route('membership.apply') }}" class="text-link underline-offset-4 hover:underline">{{ __('membership.apply.link') }}</a>
             </p>
         </div>
     </div>

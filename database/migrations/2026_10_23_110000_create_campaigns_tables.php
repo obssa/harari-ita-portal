@@ -50,7 +50,7 @@ return new class extends Migration
             $table->index(['campaign_id', 'status']);
         });
 
-        foreach (['members', 'volunteers'] as $people) {
+        foreach (['volunteers'] as $people) {
             Schema::table($people, function (Blueprint $table): void {
                 $table->timestamp('campaigns_opt_out_at')->nullable();
             });
@@ -59,7 +59,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        foreach (['members', 'volunteers'] as $people) {
+        foreach (['volunteers'] as $people) {
             Schema::table($people, function (Blueprint $table): void {
                 $table->dropColumn('campaigns_opt_out_at');
             });
