@@ -6,7 +6,7 @@ namespace App\Domain\Content\Support;
  * The privacy policy, terms of use and accessibility statement (PLAN.md §11,
  * ADR-0043) as first drafts in English, Amharic and Afaan Oromo, written to
  * match what the portal actually does. Each opens with a notice that it
- * awaits the branch office's legal review; Harari is left to its translator.
+ * awaits the Agency's legal review; Harari is left to its translator.
  * `portal:legal-pages` creates them once; after that they are ordinary
  * pages that editors change in the admin.
  */
@@ -57,7 +57,7 @@ final class LegalPages
         return ['type' => 'doc', 'content' => $content];
     }
 
-    private const DRAFT_EN = 'Draft for legal review: this text has not yet been approved by the branch office and may change.';
+    private const DRAFT_EN = 'Draft for legal review: this text has not yet been approved by the Agency and may change.';
 
     /**
      * @return array{title: string, excerpt: string, draft: string, sections: list<array{0: string, 1: list<string>}>}
@@ -70,20 +70,22 @@ final class LegalPages
             'draft' => self::DRAFT_EN,
             'sections' => [
                 ['Who is responsible', [
-                    'This website is run by the Prosperity Party Harari Regional Branch Office ("the branch office"). You can reach us through the contact page or the email address at the foot of every page.',
+                    'This website is run by the Harari Regional State Innovation and Technology Agency ("the Agency"). You can reach us through the contact page or the email address at the foot of every page.',
                 ]],
                 ['What we collect and why', [
                     'Event registrations: your name and your phone number or email address, to manage your place, send your ticket and remind you of the event. They are deleted 180 days after the event.',
                     'Messages and requests: your name, your contact details, your answers and any files you attach, so that we can answer you. They are deleted two years after the matter is closed.',
+                    'Newsletter: your phone number or email address, your language and the topics you chose, to send you the news you asked for. They are kept until you unsubscribe; an address that is never confirmed is deleted after 7 days.',
+                    'Mentor and volunteer sign-ups: your name, your contact details, your skills, when you are free and the languages you speak, so that a coordinator can reach you. They are kept while you mentor or volunteer; sign-ups nobody followed up are deleted after a year.',
                     'Visits: we count how often pages are opened without cookies and without anything that identifies you: only the page, its language, the site you came from, the kind of device and the country. Browsers that ask not to be tracked are not counted. We use no advertising or tracking services.',
                     'Security: our hosting provider and Cloudflare process technical data such as IP addresses to deliver the site and protect it from attacks. Forms may use Cloudflare Turnstile to tell people from automated programs.',
                     'Videos and maps come from YouTube (in its privacy-enhanced mode) and OpenStreetMap only when you choose to play or show them.',
                 ]],
                 ['Our legal basis', [
-                    'We use your data with your consent, which you give on each form, and to carry out the branch office\'s task of informing and serving the public, in line with the Personal Data Protection Proclamation No. 1321/2024.',
+                    'We use your data with your consent, which you give on each form, and to carry out the Agency\'s public task of serving and informing the public, in line with the Personal Data Protection Proclamation No. 1321/2024.',
                 ]],
                 ['Who can see your data', [
-                    'Only staff of the branch office and its offices whose role needs it, for example the office that handles your request. We do not sell your data or use it for advertising. Our hosting, email and text message providers process it only on our behalf.',
+                    'Only staff of the Agency whose role needs it, for example the directorate that handles your request. We do not sell your data or use it for advertising. Our hosting, email and text message providers process it only on our behalf.',
                 ]],
                 ['How we protect it', [
                     'Names and contact details are stored encrypted, staff accounts use two-step sign-in, every access is recorded, and backups are encrypted and kept for 30 days.',
@@ -112,10 +114,10 @@ final class LegalPages
             'draft' => self::DRAFT_EN,
             'sections' => [
                 ['About this website', [
-                    'This is the website of the Prosperity Party Harari Regional Branch Office. By using it you accept these terms.',
+                    'This is the website of the Harari Regional State Innovation and Technology Agency. By using it you accept these terms.',
                 ]],
                 ['Using our content', [
-                    'You may share and quote our news, statements and documents if you name the branch office as the source, link to the original and do not change its meaning. Some photos and documents belong to others; their notes say so.',
+                    'You may share and quote our news, statements and documents if you name the Agency as the source, link to the original and do not change its meaning. Some photos and documents belong to others; their notes say so.',
                 ]],
                 ['Accuracy', [
                     'We work to keep the information correct and up to date. Where a document on this site differs from the signed original, the original prevails.',

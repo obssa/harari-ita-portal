@@ -8,7 +8,7 @@ namespace App\Domain\Content\Support;
  */
 final class LegalPagesOm
 {
-    private const DRAFT = 'Wixinee gamaaggama seeraaf dhiyaate: barreeffamni kun hanga ammaatti waajjira damee biratti hin raggaafamne, jijjiiramuus ni danda\'a.';
+    private const DRAFT = 'Wixinee gamaaggama seeraaf dhiyaate: barreeffamni kun hanga ammaatti Ejansicha biratti hin raggaafamne, jijjiiramuus ni danda\'a.';
 
     /**
      * @return array{title: string, excerpt: string, draft: string, sections: list<array{0: string, 1: list<string>}>}
@@ -21,20 +21,22 @@ final class LegalPagesOm
             'draft' => self::DRAFT,
             'sections' => [
                 ['Kan itti gaafatamu', [
-                    'Marsariitiin kun Paartii Badhaadhinaa Waajjira Damee Naannoo Harariitiin ("waajjira damee") bulfama. Fuula quunnamtii ykn teessoo imeelii fuula hundaa jalatti argamuun nu argachuu dandeessu.',
+                    'Marsariitiin kun Ejansii Kalaqaa fi Teeknooloojii Mootummaa Naannoo Harariitiin ("Ejansicha") bulfama. Fuula quunnamtii ykn teessoo imeelii fuula hundaa jalatti argamuun nu argachuu dandeessu.',
                 ]],
                 ['Maal akka sassaabnuu fi maaliif', [
                     'Galmee sagantaa: bakka keessan bulchuuf, tikeetii keessan erguuf fi sagantaa isin yaadachiisuuf maqaa keessanii fi lakkoofsa bilbilaa ykn teessoo imeelii keessan ni sassaabna. Sagantaa booda guyyoota 180 keessatti ni haqamu.',
                     'Ergaawwanii fi gaaffilee: deebii isinii kennuuf maqaa keessan, odeeffannoo quunnamtii keessan, deebiiwwan keessanii fi faayilii isin walitti maxxantan ni sassaabna. Dhimmichi erga cufamee booda waggaa lama keessatti ni haqamu.',
+                    'Galmee oduu: oduu gaafattan isiniif erguuf lakkoofsa bilbilaa ykn teessoo imeelii keessan, afaan keessanii fi mata dureewwan filattan ni sassaabna. Hanga galmee keessan addaan kuttanitti ni turu; teessoon hin mirkanoofne guyyaa 7 booda ni haqama.',
+                    'Galmee gorsitootaa fi tola-ooltotaa: akka qindeessaan isin quunnamuuf maqaa, teessoo, dandeettii, yeroo isinitti tolu fi afaanota dubbattan ni sassaabna. Hamma gorsitanii ykn tola ooltanitti ni turu; galmeen namni hin hordofne waggaa tokko booda ni haqama.',
                     'Daawwannaa: fuulli yeroo meeqa akka banames kuukii malee fi odeeffannoo isin adda baasu tokko malee lakkoofna: fuula, afaan isaa, marsariitii irraa dhuftan, gosa meeshaa fi biyya qofa. Biraawuzarri akka hin hordofamne gaafatan hin lakkaa\'aman. Tajaajila beeksisaa ykn hordoffii hin fayyadamnu.',
                     'Nageenya: dhiyeessaan tajaajila keessummeessaa keenyaa fi Cloudflare marsariitii dhiyeessuu fi haleellaa irraa eeguuf odeeffannoo teeknikaa kan akka teessoo IP ni keessummeessu. Unkaaleen namoota sagantaalee ofumaan hojjetan irraa adda baasuuf Cloudflare Turnstile fayyadamuu danda\'u.',
                     'Viidiyoowwanii fi kaartaaleen YouTube (haala dhuunfaa cimsateen) fi OpenStreetMap irraa kan fe\'aman yeroo taphachiisuu ykn agarsiisuu filattan qofa.',
                 ]],
                 ['Bu\'uura seeraa keenya', [
-                    'Daataa keessan kan fayyadamnu hayyama unka tokkoon tokkoon isaa irratti kennitaniin, akkasumas hojii waajjira damee ummata beeksisuu fi tajaajiluu raawwachuuf, Labsii Eegumsa Odeeffannoo Dhuunfaa Lakk. 1321/2024 waliin kan walsimu.',
+                    'Daataa keessan kan fayyadamnu hayyama unka tokkoon tokkoon isaa irratti kennitaniin, akkasumas hojii Ejansichaa ummata tajaajiluu fi beeksisuu raawwachuuf, Labsii Eegumsa Odeeffannoo Dhuunfaa Lakk. 1321/2024 waliin kan walsimu.',
                 ]],
                 ['Daataa keessan eenyutu arga', [
-                    'Hojjettoota waajjira damee fi waajjiraalee isaa kanneen hojiin isaanii barbaachisu qofa, fakkeenyaaf waajjira gaaffii keessan keessummeessu. Daataa keessan hin gurgurru; beeksisaafis itti hin fayyadamnu. Dhiyeessitoonni tajaajila keessummeessaa, imeelii fi ergaa gabaabaa keenyaa nuuf qofa keessummeessu.',
+                    'Hojjettoota Ejansichaa kanneen hojiin isaanii barbaachisu qofa, fakkeenyaaf daayireektoreetii gaaffii keessan keessummeessu. Daataa keessan hin gurgurru; beeksisaafis itti hin fayyadamnu. Dhiyeessitoonni tajaajila keessummeessaa, imeelii fi ergaa gabaabaa keenyaa nuuf qofa keessummeessu.',
                 ]],
                 ['Akkamitti akka eegnu', [
                     'Maqaawwanii fi odeeffannoon quunnamtii iccitiin eegamanii kuufamu; akkaawuntiiwwan hojjettootaa seensa sadarkaa lamaa fayyadamu; seensi hundi ni galmaa\'a; kuusaan hambaas iccitiin eegamee guyyoota 30 tura.',
@@ -63,10 +65,10 @@ final class LegalPagesOm
             'draft' => self::DRAFT,
             'sections' => [
                 ['Waa\'ee marsariitii kanaa', [
-                    'Kun marsariitii Paartii Badhaadhinaa Waajjira Damee Naannoo Harariiti. Itti fayyadamuun keessan haalota kana fudhachuu keessan agarsiisa.',
+                    'Kun marsariitii Ejansii Kalaqaa fi Teeknooloojii Mootummaa Naannoo Harariiti. Itti fayyadamuun keessan haalota kana fudhachuu keessan agarsiisa.',
                 ]],
                 ['Qabiyyee keenya itti fayyadamuu', [
-                    'Waajjira damee akka madditti yoo caqasattan, gara isa jalqabaatti yoo walqabsiiftanii fi hiika isaa yoo hin jijjiirre oduu, ibsaa fi sanadoota keenya qooddachuu fi caqasuu dandeessu. Suuraaleen fi sanadoonni tokko tokko kan warra biraati; yaadannoon isaanii kana ibsa.',
+                    'Ejansicha akka madditti yoo caqasattan, gara isa jalqabaatti yoo walqabsiiftanii fi hiika isaa yoo hin jijjiirre oduu, ibsaa fi sanadoota keenya qooddachuu fi caqasuu dandeessu. Suuraaleen fi sanadoonni tokko tokko kan warra biraati; yaadannoon isaanii kana ibsa.',
                 ]],
                 ['Sirrummaa', [
                     'Odeeffannoon sirrii fi yeroo isaa kan eeggate akka ta\'uuf ni hojjenna. Sanadni marsariitii kana irra jiru sanada jalqabaa mallattaa\'e irraa yoo adda ta\'e, kan jalqabaatu hojiirra oola.',
