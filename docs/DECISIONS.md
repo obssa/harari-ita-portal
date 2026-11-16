@@ -326,3 +326,22 @@ the items still unconfirmed with `--remove`.
 
 **Why.** Ramin asked for the services the Agency should offer to be added. The project rule is never to state the
 Agency's facts without the Agency; the mark keeps the proposal useful on staging without presenting it as fact.
+
+## ADR-0020 — The startups directory (2026-11-18)
+
+**Decision.** `App\Domain\Innovation` holds `Startup` (reference `STU-XXXX-XXXX`, sector from the shared sector
+categories, stage, founded year, team size, area, website, logo, label claim, listing status, the founders'
+encrypted contact with keyed hashes) and `StartupTranslation` (name, pitch, products one per line, story).
+
+- Founders ask to be listed at `/innovation/startups/apply` in the language they write in (Turnstile, the spam
+  guard, consent). The request stays off the site; the founders follow the review with the reference plus their
+  email or phone (ADR-0003).
+- An Innovation Officer reviews it: listed (its languages go live), changes asked or declined (with a note the
+  founders read), or archived (off the site again). The founders are told by email.
+- The label claim is "none", "self-declared" (the founders say they hold the Ministry's startup label) or
+  "verified" (the Agency has seen the certificate); only the review's "Verify label" sets "verified", never the
+  edit form. The law and the label are the Ministry of Innovation and Technology's; the directory says so and does
+  not restate the criteria.
+- Public `/innovation/startups` filters by sector, stage and label; a profile page with `Organization` JSON-LD;
+  site search, sitemap and the edge-cache purge include listed startups; the founders' contact is never public.
+- The "Innovation" menu section appears with the directory.

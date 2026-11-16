@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Innovation\Models\Startup;
 use App\Domain\Support\Models\Ticket;
 use App\Domain\Translation\Support\Locales;
 use App\Http\Controllers\Public\CampaignLinkController;
@@ -29,6 +30,8 @@ use App\Http\Controllers\Public\ServiceController;
 use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Public\SlidePreviewController;
 use App\Http\Controllers\Public\SocialController;
+use App\Http\Controllers\Public\StartupController;
+use App\Http\Controllers\Public\StartupListingController;
 use App\Http\Controllers\Public\StatusController;
 use App\Http\Controllers\Public\StructureController;
 use App\Http\Controllers\Public\SupportController;
@@ -170,6 +173,13 @@ Route::prefix('{locale}')
         Route::post('support/track/{reference}/rate', [SupportController::class, 'rate'])->where('reference', Ticket::REFERENCE_PATTERN)->middleware('throttle:forms')->name('support.rate');
         Route::get('support/track/{reference}/files/{key}', [SupportController::class, 'file'])->where(['reference' => Ticket::REFERENCE_PATTERN, 'key' => 't\d|m\d+-\d'])->middleware(['throttle:search', NoStore::class])->name('support.file');
 
+        // ADR-0020: founders ask to be listed and follow the review with the reference plus their contact.
+        Route::get('innovation/startups/apply', [StartupListingController::class, 'create'])->middleware(NoStore::class)->name('startups.apply');
+        Route::post('innovation/startups/apply', [StartupListingController::class, 'store'])->middleware('throttle:forms')->name('startups.apply.store');
+        Route::get('innovation/startups/listing', [StartupListingController::class, 'lookup'])->middleware(NoStore::class)->name('startups.listing');
+        Route::post('innovation/startups/listing', [StartupListingController::class, 'verify'])->middleware('throttle:verification')->name('startups.listing.verify');
+        Route::get('innovation/startups/listing/{reference}', [StartupListingController::class, 'show'])->where('reference', Startup::REFERENCE_PATTERN)->middleware(['throttle:search', NoStore::class])->name('startups.listing.show');
+
         // ADR-0048: volunteers sign up.
         Route::get('volunteer', [VolunteerController::class, 'create'])->middleware(NoStore::class)->name('volunteer.create');
         Route::post('volunteer', [VolunteerController::class, 'store'])->middleware('throttle:forms')->name('volunteer.store');
@@ -209,6 +219,9 @@ Route::prefix('{locale}')
         Route::get('status', [StatusController::class, 'index'])->name('status');
         Route::get('status.json', [StatusController::class, 'json'])->name('status.json');
         Route::get('status.rss', [StatusController::class, 'rss'])->name('status.rss');
+        // The startups directory (ADR-0020).
+        Route::get('innovation/startups', [StartupController::class, 'index'])->name('startups.index');
+        Route::get('innovation/startups/{slug}', [StartupController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('startups.show');
         // The services catalogue (ADR-0016).
         Route::get('services', [ServiceController::class, 'index'])->name('services.index');
         Route::get('services/{slug}', [ServiceController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('services.show');

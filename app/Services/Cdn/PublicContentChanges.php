@@ -21,6 +21,8 @@ use App\Domain\Forms\Models\Form;
 use App\Domain\Forms\Models\FormTranslation;
 use App\Domain\Homepage\Models\HeroSlide;
 use App\Domain\Homepage\Models\HomepageSection;
+use App\Domain\Innovation\Models\Startup;
+use App\Domain\Innovation\Models\StartupTranslation;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\GalleryItem;
 use App\Domain\Media\Models\GalleryTranslation;
@@ -64,7 +66,7 @@ final class PublicContentChanges
         Document::class, DocumentTranslation::class, DocumentVersion::class, Event::class, EventTranslation::class,
         Form::class, FormTranslation::class, HeroSlide::class, HomepageSection::class, Gallery::class, GalleryItem::class,
         GalleryTranslation::class, Media::class, Video::class, VideoTranslation::class, Leader::class,
-        LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class, ServiceItem::class, ServiceItemTranslation::class, StatusComponent::class, Incident::class, IncidentUpdate::class,
+        LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class, ServiceItem::class, ServiceItemTranslation::class, StatusComponent::class, Incident::class, IncidentUpdate::class, Startup::class, StartupTranslation::class,
         Project::class, ProjectTranslation::class, Statistic::class, StatisticTranslation::class,
         SocialPost::class, SocialSource::class, UiTranslation::class,
     ];

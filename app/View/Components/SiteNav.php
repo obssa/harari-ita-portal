@@ -90,7 +90,13 @@ final class SiteNav extends Component
                 Route::has('status') ? $link('nav.status', route('status'), 'status', 'nav.status_hint') : null,
             ])));
         }
-        foreach (['innovation', 'academy'] as $module) {
+        if (Route::has('startups.index')) {
+            $items[] = $section('nav.innovation', 'nav.innovation_desc', route('startups.index'), null, [
+                $link('innovation.startups.title', route('startups.index'), 'startups.index', 'nav.startups_hint'),
+                $link('innovation.startups.apply', route('startups.apply'), 'startups.apply', 'nav.startups_apply_hint'),
+            ]);
+        }
+        foreach (['academy'] as $module) {
             if (Route::has("{$module}.index")) {
                 $items[] = $link("nav.{$module}", route("{$module}.index"), "{$module}.*");
             }

@@ -58,6 +58,8 @@ use App\Domain\Homepage\Policies\HeroSlidePolicy;
 use App\Domain\Homepage\Policies\HomepageSectionPolicy;
 use App\Domain\Import\Models\ContentSource;
 use App\Domain\Import\Policies\ContentSourcePolicy;
+use App\Domain\Innovation\Models\Startup;
+use App\Domain\Innovation\Policies\StartupPolicy;
 use App\Domain\Media\Enums\MediaKind;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\Media;
@@ -287,6 +289,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(SlaPolicy::class, SlaPolicyPolicy::class);
         Gate::policy(StatusComponent::class, StatusComponentPolicy::class);
         Gate::policy(Incident::class, IncidentPolicy::class);
+        Gate::policy(Startup::class, StartupPolicy::class);
         Gate::policy(Leader::class, LeaderPolicy::class);
         Gate::policy(Pillar::class, PillarPolicy::class);
         Gate::policy(HomepageSection::class, HomepageSectionPolicy::class);

@@ -43,3 +43,4 @@ staging stays noindex. Tick each item when received and note where it is stored.
 ## Heritage and imagery
 - [ ] Confirmation of the five historic gate names and spellings (Jugol Heritage Conservation Office)
 - [ ] Photographs the Agency owns or may use, with photographer credit and consent from the people shown
+- [ ] The official web address of the Ministry of Innovation and Technology (and its startup-label page) to link from the startups directory
