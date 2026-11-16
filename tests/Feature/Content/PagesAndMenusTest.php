@@ -139,7 +139,7 @@ it('shows the sections of the design until a main menu exists', function () {
     expect($om)->toContain(__('nav.media', [], 'om'), __('offices.title', [], 'om'), __('nav.contact', [], 'om'), __('nav.menu', [], 'om'));
 
     $leaders = (string) $this->get('/en/about/leadership')->getContent();
-    expect($leaders)->toMatch('/border-saffron-500 text-primary-700[^>]*>\s*About/');
+    expect($leaders)->toMatch('/after:bg-cyan-500 text-primary-700[^>]*>\s*About/');
 });
 
 it('lets publishers edit menus and keeps them from authors', function () {

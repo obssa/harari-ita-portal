@@ -74,6 +74,8 @@ def variables(text: str) -> dict[str, str]:
 
 LIGHT = variables(block(TOKENS, '@theme'))
 DARK = {**LIGHT, **variables(block(TOKENS, '@media (prefers-color-scheme: dark)'))}
+# The visitor's own choice of dark must match the device's dark (ADR-0008).
+CHOSEN_DARK = {**LIGHT, **variables(block(TOKENS, ":root[data-theme='dark']"))}
 
 
 def resolve(name: str, table: dict[str, str]) -> str:
@@ -105,6 +107,9 @@ def ratio(a: str, b: str) -> float:
 
 def main() -> int:
     failures = 0
+    if CHOSEN_DARK != DARK:
+        print("FAIL the [data-theme='dark'] block differs from the prefers-color-scheme block")
+        failures += 1
     for theme, table in (('light', LIGHT), ('dark', DARK)):
         for label, fg, bg, minimum in PAIRS:
             r = ratio(resolve(fg, table), resolve(bg, table))

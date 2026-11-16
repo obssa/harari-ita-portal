@@ -52,7 +52,7 @@ class AdminPanelProvider extends PanelProvider
                 // The brand colour until the phase 1 tokens (docs/DESIGN.md §1).
                 'primary' => Color::hex('#105D6F'),
             ])
-            ->favicon('/favicon-96.png')
+            ->favicon('/favicon-96.png?v=2')
             // ADR-0064: the public site's brand in the admin; fonts served from this site.
             ->brandLogo(fn (): View => view('filament.brand'))
             ->brandLogoHeight('2.5rem')

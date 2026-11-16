@@ -6,7 +6,6 @@ Sources (as received from the Agency, white background):
 
 Outputs, all with a transparent background unless noted:
     public/brand/emblem-{128,256,512}.png   the round emblem alone (header, footer, admin, placeholders)
-    public/brand/logo-{128,256}.png         the same emblem under the names the templates already use
     public/brand/icon-{192,512}.png         app icons for the web manifest
     public/brand/lockup-horizontal.png      the emblem, wordmark and names in one row (light surfaces)
     public/brand/lockup-stacked.png         the stacked version (press kit, sign-in)
@@ -16,7 +15,7 @@ Outputs, all with a transparent background unless noted:
     public/apple-touch-icon.png             180 px on white (iOS ignores transparency)
 
 Only the white that touches the image's edge is removed (with its anti-aliased rim); the white inside the
-emblem's circle is part of the design and stays; in the lettering every white goes (the inside of the "A").
+emblem's circle is part of the design and stays (new names, not overwritten ones, so caches pick them up); in the lettering every white goes (the inside of the "A").
 The dark-surface variants recolour the lettering to plaster and keep the orange ring. Run after the Agency sends new originals and commit the
 output:
 
@@ -143,8 +142,6 @@ def main() -> None:
 
     for size in (128, 256, 512):
         save(emblem, BRAND / f'emblem-{size}.png', size)
-    for size in (128, 256):
-        save(emblem, BRAND / f'logo-{size}.png', size)
     for size in (192, 512):
         save(emblem, BRAND / f'icon-{size}.png', size)
     save(lockup_h, BRAND / 'lockup-horizontal.png')

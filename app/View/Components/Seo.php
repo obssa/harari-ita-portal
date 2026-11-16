@@ -85,7 +85,7 @@ final class Seo extends Component
             'name' => __('site.name'),
             'alternateName' => __('site.office'),
             'url' => url('/'),
-            'logo' => url('/brand/icon-512.png'),
+            'logo' => url('/brand/emblem-512.png'),
             'areaServed' => ['@type' => 'AdministrativeArea', 'name' => __('site.region')],
             'parentOrganization' => ['@type' => 'GovernmentOrganization', 'name' => __('site.parent')],
         ];

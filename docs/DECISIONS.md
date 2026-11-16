@@ -137,3 +137,30 @@ look as a technology agency (phase 1 plan, "Design direction").
 
 **Consequences.** Templates still have the forked layout until steps 1.4–1.7 rebuild them; the new tokens
 apply from now on. The admin's primary colour is the logo teal.
+
+## ADR-0008 — Light, dark or the device's setting (2026-11-16)
+
+**Decision.** Visitors choose the colour theme with one button in the night strip, which cycles the device's
+setting, light and dark. The choice is kept in the browser (`localStorage` key `hinta-theme`, nothing sent to the
+server) and applied before the first paint by a short inline script carrying the CSP nonce, so cached pages never
+flash. The dark tokens live twice in `tokens.css` (for the device's dark setting and for a chosen dark);
+`scripts/design/contrast.py` fails if the two differ. Tailwind's `dark:` variant follows the same rule. Without
+JavaScript the button stays hidden and the device's setting applies.
+
+## ADR-0009 — The header and the navigation (2026-11-16)
+
+**Decision.**
+
+- A night strip on top: the region with a cyan node, today in both calendars, the hotline when set, the
+  languages and the theme switch, in mono type.
+- One header row, pinned while reading: the emblem and the HinTA wordmark (its light twin in dark mode, the full
+  name for screen readers), the main menu on desktops, search, the orange **Request support** call to action
+  (the support form once phase 2 adds it, the contact page until then) and the menu button below desktops.
+- The default site map follows PLAN §3: About (leadership, structure, directorates and offices, pillars),
+  then Services, Innovation and Academy as soon as their routes exist, Projects & data, News & media,
+  Resources and Get involved. A main menu built in the admin still replaces it.
+- Each section opens a full-width panel: a night card with the hexagon field introduces it, the links follow
+  numbered in mono type; on phones the sections open in place in one sheet. Native `<details>` with a shared
+  `name`, so no script is needed and only one panel is open at a time.
+- The party's core values (inherited from the source project's homepage defaults) were removed, with a data
+  migration for the copy staging held; the Agency's values come from INPUTS.

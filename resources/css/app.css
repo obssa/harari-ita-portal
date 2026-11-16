@@ -7,10 +7,31 @@
 @source not '../views/filament';
 @source '../../app/View';
 
+/* dark: follows the visitor's choice, else the device (ADR-0008). */
+@custom-variant dark {
+    &:where([data-theme='dark'], [data-theme='dark'] *) {
+        @slot;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        &:where(:root:not([data-theme='light']), :root:not([data-theme='light']) *) {
+            @slot;
+        }
+    }
+}
+
 @layer base {
     html {
         color-scheme: light dark;
         -webkit-text-size-adjust: 100%;
+    }
+
+    html[data-theme='light'] {
+        color-scheme: light;
+    }
+
+    html[data-theme='dark'] {
+        color-scheme: dark;
     }
 
     body {

@@ -120,8 +120,10 @@
     --duration-slow: 400ms;
 }
 
+/* Dark mode (ADR-0008): the device's setting unless the visitor chose light; or the visitor's choice of dark.
+   The two blocks must stay identical (scripts/design/contrast.py checks it). */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme='light']) {
         --color-canvas: var(--color-night-900);
         --color-surface: var(--color-night-800);
         --color-surface-muted: var(--color-night-950);
@@ -131,4 +133,15 @@
         --color-link: var(--color-cyan-300);
         --color-eyebrow: var(--color-cyan-300);
     }
+}
+
+:root[data-theme='dark'] {
+    --color-canvas: var(--color-night-900);
+    --color-surface: var(--color-night-800);
+    --color-surface-muted: var(--color-night-950);
+    --color-line: var(--color-night-line);
+    --color-ink: var(--color-night-ink);
+    --color-ink-muted: var(--color-night-muted);
+    --color-link: var(--color-cyan-300);
+    --color-eyebrow: var(--color-cyan-300);
 }

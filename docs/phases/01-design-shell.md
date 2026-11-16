@@ -32,7 +32,7 @@ Ethiopic pages, where headings use Noto Sans Ethiopic).
 
 | # | Step | Commit |
 |---|---|---|
-| 1.1 | **Official logo** (ADR-0006): originals in `resources/brand/`, `scripts/brand/build_brand.py` builds the emblem, favicons, app icons, lockups, wordmark and dark-surface twins; the emblem is never put on a white disc or clipped round; Amharic name and short name **HinTA** from the logo | |
+| 1.1 | **Official logo** (ADR-0006): originals in `resources/brand/`, `scripts/brand/build_brand.py` builds the emblem, favicons, app icons, lockups, wordmark and dark-surface twins; the emblem is never put on a white disc or clipped round; Amharic name and short name **HinTA** from the logo | `6f755f4` |
 | 1.2 | **Palette, type and tokens** from the logo: teal primary ramp, orange (`saffron`) action colour, cyan signal, ruby alerts, ink-teal night, plaster; pillar colours 1–5; semantic set; Space Grotesk and JetBrains Mono added (subset); every text/surface pair checked by `scripts/design/contrast.py` in light and dark (AA). The party's gold, magenta and sky tokens go | |
 | 1.3 | **Theme**: light, dark or the device's setting, remembered, applied before first paint (nonce'd inline script) | |
 | 1.4 | **Header and mega-navigation**, new: lockup, the Agency's site map (About, Services, Innovation, Projects & data, Academy, Opportunities, News & media), search, language, theme, "Request support" as the call to action; items for modules not yet built stay hidden (`Route::has`) | |

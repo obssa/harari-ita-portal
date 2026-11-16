@@ -7,6 +7,7 @@ use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\PageTranslation;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\Component;
 use Throwable;
 
@@ -68,47 +69,54 @@ final class SiteNav extends Component
             ...$link($label, $url, $current), 'description' => __($desc), 'children' => $children,
         ];
 
-        $getInvolved = [
+        $about = self::aboutPages(app()->getLocale());
+
+        // The Agency's site map (PLAN.md §3). The sections of modules still to come (services, innovation,
+        // academy, opportunities) join the menu when their routes exist, so nothing links to a missing page.
+        $items = [
+            $section('nav.about', 'nav.about_desc', $about[0]['url'] ?? route('structure'), null, [
+                ...$about,
+                $link('leaders.title', route('leaders.index'), 'leaders.*', 'nav.leaders_hint'),
+                $link('structure.title', route('structure'), 'structure', 'nav.structure_hint'),
+                $link('offices.title', route('offices.index'), 'offices.*', 'nav.offices_hint'),
+                $link('nav.pillars', route('pillars.index'), 'pillars.*', 'pillars.description'),
+            ]),
+        ];
+        foreach (['services', 'innovation', 'academy'] as $module) {
+            if (Route::has("{$module}.index")) {
+                $items[] = $link("nav.{$module}", route("{$module}.index"), "{$module}.*");
+            }
+        }
+        $items[] = $section('nav.projects_data', 'nav.projects_data_desc', route('projects.index'), null, [
+            $link('projects.title', route('projects.index'), 'projects.index', 'nav.projects_hint'),
+            $link('nav.achievements', route('projects.achievements'), 'projects.achievements', 'nav.achievements_hint'),
+        ]);
+        $items[] = $section('nav.media', 'nav.media_desc', route('news.index'), null, [
+            $link('nav.news', route('news.index'), 'news.*', 'nav.news_hint'),
+            $link('nav.press_releases', route('news.index', ['type' => 'press_release']), null, 'nav.press_releases_hint'),
+            $link('nav.statements', route('news.index', ['type' => 'statement']), null, 'nav.statements_hint'),
+            $link('events.title', route('events.index'), 'events.*', 'nav.events_hint'),
+            $link('gallery.title', route('gallery.index'), 'gallery.*', 'nav.gallery_hint'),
+            $link('nav.videos', route('videos.index'), 'videos.*', 'nav.videos_hint'),
+            $link('social.hub.title', route('social'), 'social', 'nav.social_hint'),
+            $link('press.title', route('press'), 'press*', 'nav.press_hint'),
+        ]);
+        $items[] = $section('nav.resources', 'nav.resources_desc', route('documents.index'), null, [
+            $link('documents.title', route('documents.index'), 'documents.index', 'nav.documents_hint'),
+            $link('nav.doc_programme', route('documents.index', ['type' => 'programme']), null, 'nav.doc_programme_hint'),
+            $link('nav.doc_bylaws', route('documents.index', ['type' => 'bylaw']), null, 'nav.doc_bylaws_hint'),
+            $link('nav.doc_policies', route('documents.index', ['type' => 'policy']), null, 'nav.doc_policies_hint'),
+            $link('nav.doc_reports', route('documents.index', ['type' => 'report']), null, 'nav.doc_reports_hint'),
+            $link('nav.notices', route('documents.notices'), 'documents.notices', 'nav.notices_hint'),
+        ]);
+        $items[] = $section('nav.get_involved', 'nav.get_involved_desc', route('get-involved'), 'get-involved', [
             $link('nav.volunteer', route('volunteer.create'), 'volunteer.*', 'nav.volunteer_hint'),
             $link('events.title', route('events.index'), 'events.*', 'nav.events_hint'),
             $link('nav.newsletter', route('newsletter.create'), 'newsletter.*', 'nav.newsletter_hint'),
-        ];
-
-        $about = self::aboutPages(app()->getLocale());
-
-        return [
-            $section('nav.about', 'nav.about_desc', $about[0]['url'] ?? route('structure'), null, [
-                ...$about,
-                $link('structure.title', route('structure'), 'structure', 'nav.structure_hint'),
-                $link('leaders.title', route('leaders.index'), 'leaders.*', 'nav.leaders_hint'),
-                $link('offices.title', route('offices.index'), 'offices.*', 'nav.offices_hint'),
-            ]),
-            $section('nav.media', 'nav.media_desc', route('news.index'), null, [
-                $link('nav.news', route('news.index'), 'news.*', 'nav.news_hint'),
-                $link('nav.press_releases', route('news.index', ['type' => 'press_release']), null, 'nav.press_releases_hint'),
-                $link('nav.statements', route('news.index', ['type' => 'statement']), null, 'nav.statements_hint'),
-                $link('nav.speeches', route('news.index', ['type' => 'speech']), null, 'nav.speeches_hint'),
-                $link('gallery.title', route('gallery.index'), 'gallery.*', 'nav.gallery_hint'),
-                $link('nav.videos', route('videos.index'), 'videos.*', 'nav.videos_hint'),
-                $link('social.hub.title', route('social'), 'social', 'nav.social_hint'),
-                $link('press.title', route('press'), 'press*', 'nav.press_hint'),
-            ]),
-            $link('nav.pillars', route('pillars.index'), 'pillars.*'),
-            $section('nav.programmes', 'nav.programmes_desc', route('projects.index'), null, [
-                $link('projects.title', route('projects.index'), 'projects.index', 'nav.projects_hint'),
-                $link('nav.achievements', route('projects.achievements'), 'projects.achievements', 'nav.achievements_hint'),
-            ]),
-            $section('nav.get_involved', 'nav.get_involved_desc', route('get-involved'), 'get-involved', $getInvolved),
-            $section('nav.resources', 'nav.resources_desc', route('documents.index'), null, [
-                $link('documents.title', route('documents.index'), 'documents.index', 'nav.documents_hint'),
-                $link('nav.doc_programme', route('documents.index', ['type' => 'programme']), null, 'nav.doc_programme_hint'),
-                $link('nav.doc_bylaws', route('documents.index', ['type' => 'bylaw']), null, 'nav.doc_bylaws_hint'),
-                $link('nav.doc_policies', route('documents.index', ['type' => 'policy']), null, 'nav.doc_policies_hint'),
-                $link('nav.doc_reports', route('documents.index', ['type' => 'report']), null, 'nav.doc_reports_hint'),
-                $link('nav.notices', route('documents.notices'), 'documents.notices', 'nav.notices_hint'),
-            ]),
             $link('nav.contact', route('contact'), 'contact'),
-        ];
+        ]);
+
+        return $items;
     }
 
     /**

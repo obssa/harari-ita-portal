@@ -54,7 +54,7 @@
                            class="relative aspect-square w-full rounded-[1.75rem] object-cover shadow-2xl shadow-black/40 ring-1 ring-white/20" />
             @endif
             <span aria-hidden="true" class="absolute -start-4 -bottom-4 flex size-16 items-center justify-center rounded-full bg-white p-1.5 shadow-xl ring-4 ring-saffron-400 sm:size-20">
-                <img src="/brand/logo-128.png" alt="" width="128" height="128" class="size-full" loading="lazy">
+                <img src="/brand/emblem-128.png" alt="" width="128" height="128" class="size-full" loading="lazy">
             </span>
         </div>
     </div>

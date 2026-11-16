@@ -16,10 +16,10 @@
     <title>{{ $title ? $title.' · ' : '' }}{{ __('site.name') }}</title>
     <meta name="description" content="{{ $description ?? __('site.description') }}">
     <meta name="theme-color" content="#0B4A5C">
-    <link rel="icon" href="/favicon.ico" sizes="48x48">
-    <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" href="/favicon.ico?v=2" sizes="48x48">
+    <link rel="icon" href="/favicon-96.png?v=2" type="image/png" sizes="96x96">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+    <link rel="manifest" href="/site.webmanifest?v=2">
     <link rel="preload" href="/fonts/portal/inter-latin-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
     @if ($ethiopic)
         <link rel="preload" href="/fonts/portal/noto-sans-ethiopic-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
@@ -28,70 +28,79 @@
     @endif
     <x-locale-meta :alternates="$alternates" />
     <x-seo :title="$title ?? __('site.name')" :description="$description ?? __('site.description')" :image="$image ?? app(\App\Domain\Content\Support\OgImage::class)->url('site-'.app()->getLocale(), __('site.name'), __('site.office'))" :type="$type" :json-ld="$jsonLd" />
-    {{-- ADR-0040: a cookieless page view count; the homepage carousel adds its own small script (ADR-0070). --}}
-    @vite(['resources/css/app.css', 'resources/js/beacon.js'])
+    {{-- ADR-0008: the visitor's colour theme, applied before the first paint. --}}
+    <script nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">try{var t=localStorage.getItem('hinta-theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t}}catch(e){}</script>
+    {{-- ADR-0040: a cookieless page view count; ADR-0008: the theme switch; the homepage carousel adds its own small script (ADR-0070). --}}
+    @vite(['resources/css/app.css', 'resources/js/beacon.js', 'resources/js/theme.js'])
 </head>
 <body class="flex min-h-screen flex-col bg-canvas text-ink antialiased">
     <a href="#content" class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-white">
         {{ __('nav.skip') }}
     </a>
 
-    {{-- ADR-0062/0074: the slim dark top bar: both calendars and the hotline from tablets up, the languages and the member portal. --}}
-    <div class="bg-ink-brand text-[13px] text-white/85 sm:text-sm">
-        <div class="mx-auto flex max-w-page items-center justify-between gap-x-6 px-4 py-1 sm:px-6 sm:py-1.5">
-            <div class="hidden items-center gap-x-5 md:flex">
-                <p class="flex items-center gap-2">
-                    <svg aria-hidden="true" class="size-4 text-saffron-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    {{-- ADR-0009: the night strip: the region, today in both calendars, the languages and the theme. --}}
+    <div class="bg-night-950 text-night-muted">
+        <div class="mx-auto flex h-10 max-w-page items-center justify-between gap-x-4 px-4 font-mono text-[0.72rem] tracking-wide sm:px-6">
+            <div class="hidden min-w-0 items-center gap-x-5 md:flex">
+                <p class="flex items-center gap-2 uppercase">
+                    <span aria-hidden="true" class="size-1.5 rounded-full bg-cyan-400 shadow-[0_0_0_3px] shadow-cyan-400/20"></span>
+                    {{ __('site.parent') }}
+                </p>
+                <p class="hidden items-center gap-2 lg:flex">
                     <span class="sr-only">{{ __('calendar.today') }}: </span><x-date :date="now()" />
                 </p>
                 @if ($hotline)
-                    <p class="flex items-center gap-2">
-                        <svg aria-hidden="true" class="size-4 text-saffron-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+                    <p class="hidden items-center gap-2 xl:flex">
                         <span>{{ __('footer.hotline') }}</span>
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $hotline) }}" class="font-semibold text-white">{{ $hotline }}</a>
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $hotline) }}" class="font-semibold text-night-ink hover:text-cyan-300">{{ $hotline }}</a>
                     </p>
                 @endif
             </div>
-            <div class="flex min-w-0 flex-1 items-center justify-between gap-x-3 md:flex-none md:justify-end">
-                <div class="-ms-2.5 min-w-0 overflow-x-auto [scrollbar-width:none] md:ms-0"><x-language-switcher :alternates="$alternates" /></div>
+            <div class="flex min-w-0 flex-1 items-center justify-between gap-x-2 md:flex-none md:justify-end">
+                <div class="-ms-2 min-w-0 overflow-x-auto [scrollbar-width:none] md:ms-0"><x-language-switcher :alternates="$alternates" /></div>
+                <span aria-hidden="true" class="hidden h-4 w-px bg-night-line sm:block"></span>
+                <x-theme-toggle class="text-night-ink" />
             </div>
         </div>
     </div>
 
-    {{-- ADR-0074: one clean row: the Agency's mark and name, then search and (below desktop) the menu.
-         On phones the row stays pinned at the top while reading. --}}
-    <header class="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur-md supports-[backdrop-filter]:bg-surface/80 lg:relative lg:bg-surface lg:backdrop-blur-none">
-        <div class="mx-auto flex h-16 max-w-page items-center justify-between gap-3 px-4 sm:px-6 lg:h-[4.75rem]">
-            <a href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif class="flex min-w-0 items-center gap-3 rounded-control no-underline">
-                <img src="/brand/logo-128.png" alt="" width="56" height="56" class="size-11 shrink-0 lg:size-[3.25rem]">
-                <span class="min-w-0 leading-tight">
-                    <span class="block max-w-[10.5rem] text-[0.95rem] leading-[1.15] font-extrabold tracking-tight text-ink sm:max-w-none sm:text-lg">{{ __('site.name') }}</span>
-                    <span class="hidden truncate text-[13px] text-ink-muted sm:block">{{ __('site.office') }}</span>
-                </span>
+    {{-- ADR-0009: one row: the emblem and wordmark, the main menu (desktops), search, the call to action and
+         (below desktops) the menu button. The row stays pinned at the top while reading. --}}
+    <header class="sticky top-0 z-30 border-b border-line bg-surface/85 backdrop-blur-xl supports-[backdrop-filter]:bg-surface/75">
+        <div class="mx-auto flex h-16 max-w-page items-center gap-4 px-4 sm:px-6 lg:h-[4.5rem]">
+            <a href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif class="flex shrink-0 items-center gap-2.5 rounded-control no-underline">
+                <img src="/brand/emblem-128.png" alt="" width="44" height="44" class="size-10 shrink-0 lg:size-11">
+                <img src="/brand/wordmark.png" alt="" width="387" height="112" class="h-6 w-auto dark:hidden lg:h-7">
+                <img src="/brand/wordmark-dark.png" alt="" width="387" height="112" class="hidden h-6 w-auto dark:block lg:h-7">
+                <span class="sr-only">{{ __('site.name') }}</span>
+                <span aria-hidden="true" class="hidden max-w-[11rem] border-s border-line ps-3 text-xs leading-tight text-ink-muted 2xl:block">{{ __('site.office') }}</span>
             </a>
-            <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
-                {{-- The search field opens under the header; name="site-nav" closes any open menu panel. The search page has its own. --}}
+            <div class="hidden min-w-0 flex-1 justify-center xl:flex"><x-site-nav /></div>
+            <div class="ms-auto flex shrink-0 items-center gap-2">
                 @unless (request()->routeIs('search'))
                 <details name="site-nav" class="group/search">
-                    <summary class="inline-flex size-10 cursor-pointer list-none items-center justify-center gap-2 rounded-full text-ink transition-colors hover:bg-surface-muted group-open/search:bg-surface-muted lg:h-11 lg:w-60 lg:justify-start lg:border lg:border-line lg:bg-surface-muted/60 lg:px-4 lg:text-ink-muted lg:hover:border-primary-600/40 [&::-webkit-details-marker]:hidden">
-                        <svg aria-hidden="true" class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-                        <span class="sr-only lg:not-sr-only lg:truncate lg:text-sm">{{ __('search.short') }}</span>
+                    <summary class="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-control text-ink transition-colors hover:bg-surface-muted group-open/search:bg-surface-muted [&::-webkit-details-marker]:hidden">
+                        <svg aria-hidden="true" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                        <span class="sr-only">{{ __('search.short') }}</span>
                     </summary>
-                    <div class="absolute inset-x-0 top-full z-40 border-t-3 border-saffron-500 bg-surface shadow-2xl">
-                        <form method="get" action="{{ route('search') }}" role="search" class="mx-auto flex max-w-page gap-2 px-4 py-5 sm:px-6 sm:py-6">
+                    <div class="absolute inset-x-0 top-full z-40 border-y border-line bg-surface shadow-2xl shadow-night-950/15">
+                        <form method="get" action="{{ route('search') }}" role="search" class="mx-auto flex max-w-page items-center gap-3 px-4 py-6 sm:px-6">
+                            <svg aria-hidden="true" class="hidden size-5 shrink-0 text-cyan-700 sm:block dark:text-cyan-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 7 5 5-5 5M13 18h6"/></svg>
                             <label for="site-search" class="sr-only">{{ __('search.label') }}</label>
                             <input id="site-search" type="search" name="q" maxlength="100" minlength="2" required placeholder="{{ __('search.placeholder') }}"
-                                   class="min-w-0 flex-1 rounded-full border border-line bg-surface px-5 py-3 text-base focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600/30">
-                            <button type="submit" class="rounded-full bg-ink-brand px-6 py-3 font-bold text-white hover:bg-primary-900">{{ __('search.button') }}</button>
+                                   class="min-w-0 flex-1 border-0 border-b-2 border-line bg-transparent px-1 py-2 font-display text-xl focus:border-cyan-500 focus:ring-0 focus:outline-none sm:text-2xl">
+                            <button type="submit" class="rounded-control bg-primary-700 px-5 py-2.5 font-semibold text-white hover:bg-primary-800">{{ __('search.button') }}</button>
                         </form>
                     </div>
                 </details>
                 @endunless
-                <div class="lg:hidden"><x-site-nav variant="drawer" /></div>
+                <a href="{{ \Illuminate\Support\Facades\Route::has('support.create') ? route('support.create') : route('contact') }}"
+                   class="hidden items-center gap-2 rounded-control bg-saffron-500 px-4 py-2.5 text-sm font-semibold text-ink-brand transition-colors hover:bg-saffron-400 sm:inline-flex">
+                    {{ __('nav.cta_support') }}
+                    <svg aria-hidden="true" class="size-4 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+                <div class="xl:hidden"><x-site-nav variant="drawer" /></div>
             </div>
-        </div>
-        <div class="hidden border-t border-line lg:block">
-            <div class="mx-auto max-w-page px-4 sm:px-6"><x-site-nav /></div>
         </div>
     </header>
 
