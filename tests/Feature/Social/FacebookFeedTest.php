@@ -33,32 +33,32 @@ function galleryPicture(string $name): Media
     return $media;
 }
 
-it('shows the party\'s Facebook page beside its Telegram channel, loading Facebook only once the visitor asks', function () {
-    socialSettings(['facebook' => 'https://www.facebook.com/profile.php?id=100064354104698', 'telegram' => 'https://t.me/hrprosperityparty', 'youtube' => 'https://www.youtube.com/@sample']);
+it('shows the Agency\'s Facebook page beside its Telegram channel, loading Facebook only once the visitor asks', function () {
+    socialSettings(['facebook' => 'https://www.facebook.com/profile.php?id=100000000000001', 'telegram' => 'https://t.me/sample_agency', 'youtube' => 'https://www.youtube.com/@sample']);
 
     $html = (string) $this->get('/en')->assertOk()->getContent();
     expect($html)->toContain('srcdoc=', __('social.facebook.show', [], 'en'))
-        ->and($html)->toContain(e('https://www.facebook.com/plugins/page.php?href='.urlencode('https://www.facebook.com/profile.php?id=100064354104698')))
+        ->and($html)->toContain(e('https://www.facebook.com/plugins/page.php?href='.urlencode('https://www.facebook.com/profile.php?id=100000000000001')))
         ->and($html)->not->toContain('<iframe src="https://www.facebook.com/plugins')
-        ->and($html)->toContain('href="https://t.me/hrprosperityparty"', 'href="https://t.me/s/hrprosperityparty"', __('social.telegram.join', [], 'en'))
-        ->and($html)->toContain('href="https://www.youtube.com/@sample"', '@hrprosperityparty', '@sample', __('social.action.subscribe', [], 'en'))
-        ->and(substr_count($html, 'href="https://www.facebook.com/profile.php?id=100064354104698"'))->toBeGreaterThan(1)
+        ->and($html)->toContain('href="https://t.me/sample_agency"', 'href="https://t.me/s/sample_agency"', __('social.telegram.join', [], 'en'))
+        ->and($html)->toContain('href="https://www.youtube.com/@sample"', '@sample_agency', '@sample', __('social.action.subscribe', [], 'en'))
+        ->and(substr_count($html, 'href="https://www.facebook.com/profile.php?id=100000000000001"'))->toBeGreaterThan(1)
         ->and($html)->toContain(__('social.facebook.see_posts', [], 'en'));
 
     expect($this->get('/en')->headers->get('Content-Security-Policy'))->toContain('frame-src', 'https://www.facebook.com', 'https://web.facebook.com');
 
-    socialSettings(['facebook' => 'https://www.facebook.com/profile.php?id=100064354104698'], 'auto');
+    socialSettings(['facebook' => 'https://www.facebook.com/profile.php?id=100000000000001'], 'auto');
     expect((string) $this->get('/en')->getContent())->toContain('<iframe src="https://www.facebook.com/plugins/page.php?');
     $this->get('/en/social')->assertOk()->assertSee('<iframe src="https://www.facebook.com/plugins/page.php?', escape: false);
 
-    socialSettings(['facebook' => 'https://www.facebook.com/profile.php?id=100064354104698'], 'off');
+    socialSettings(['facebook' => 'https://www.facebook.com/profile.php?id=100000000000001'], 'off');
     expect((string) $this->get('/en')->getContent())->not->toContain('facebook.com/plugins')
-        ->toContain('href="https://www.facebook.com/profile.php?id=100064354104698"');
+        ->toContain('href="https://www.facebook.com/profile.php?id=100000000000001"');
 });
 
 it('loads the Facebook posts at once unless an administrator chose otherwise', function () {
     $settings = app(SiteSettings::class);
-    $settings->social_links = ['facebook' => 'https://www.facebook.com/profile.php?id=100064354104698'];
+    $settings->social_links = ['facebook' => 'https://www.facebook.com/profile.php?id=100000000000001'];
     $settings->save();
 
     $html = (string) $this->get('/en')->getContent();
@@ -69,16 +69,16 @@ it('loads the Facebook posts at once unless an administrator chose otherwise', f
 });
 
 it('leaves the wall of posts out until the server has read some', function () {
-    socialSettings(['facebook' => 'https://www.facebook.com/profile.php?id=100064354104698', 'telegram' => 'https://t.me/hrprosperityparty'], 'auto');
+    socialSettings(['facebook' => 'https://www.facebook.com/profile.php?id=100000000000001', 'telegram' => 'https://t.me/sample_agency'], 'auto');
     $html = (string) $this->get('/en')->getContent();
     expect($html)->not->toContain(__('social.wall.title', [], 'en'));
 });
 
 it('shows the latest Telegram posts as the server read them, with their pictures on this site', function () {
-    socialSettings(['telegram' => 'https://t.me/hrprosperityparty']);
-    $source = SocialSource::query()->create(['platform' => Platform::Telegram, 'handle' => 'hrprosperityparty', 'name' => 'Sample channel']);
+    socialSettings(['telegram' => 'https://t.me/sample_agency']);
+    $source = SocialSource::query()->create(['platform' => Platform::Telegram, 'handle' => 'sample_agency', 'name' => 'Sample channel']);
     foreach ([1, 2, 3, 4, 5] as $n) {
-        $source->posts()->create(['external_id' => (string) $n, 'posted_at' => now()->subHours(6 - $n), 'text' => "Sample channel post {$n}", 'permalink' => "https://t.me/hrprosperityparty/{$n}"]);
+        $source->posts()->create(['external_id' => (string) $n, 'posted_at' => now()->subHours(6 - $n), 'text' => "Sample channel post {$n}", 'permalink' => "https://t.me/sample_agency/{$n}"]);
     }
 
     $this->get('/en')->assertOk()
@@ -86,7 +86,7 @@ it('shows the latest Telegram posts as the server read them, with their pictures
         // Whole rows of three: five posts show as the newest three.
         ->assertSeeInOrder(['Sample channel post 5', 'Sample channel post 4', 'Sample channel post 3'])
         ->assertDontSee('Sample channel post 2')
-        ->assertSee('href="https://t.me/hrprosperityparty/5"', escape: false)
+        ->assertSee('href="https://t.me/sample_agency/5"', escape: false)
         ->assertSee(__('social.hub.open_on', ['platform' => 'Telegram'], 'en'));
 });
 

@@ -41,7 +41,7 @@ function addisToday(): string
 
 it('counts a page view without a cookie or anything about the visitor', function () {
     $response = beacon(['p' => '/en/news', 'r' => 'www.google.com', 'w' => 390], headers: ['HTTP_CF_IPCOUNTRY' => 'ET']);
-    beacon(['p' => '/en/news?utm_source=x', 'r' => 'hararipp.example', 'w' => 390]);
+    beacon(['p' => '/en/news?utm_source=x', 'r' => 'hita.example', 'w' => 390]);
 
     $response->assertNoContent();
     expect($response->headers->getCookies())->toBe([])

@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Access\Enums\SystemRole;
+use App\Domain\Import\Models\ContentSource;
 use App\Models\User;
 use App\Settings\SecuritySettings;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
@@ -45,4 +46,17 @@ function staff(SystemRole $role, ?bool $mfa = null, array $attributes = []): Use
     }
 
     return $user->fresh() ?? $user;
+}
+
+/**
+ * The two sample Telegram channels the import tests read: the Agency's own,
+ * trusted so its stories go live, and an office's. Staff add the real ones.
+ */
+function sampleImportSources(): void
+{
+    foreach ([['sample_agency', 'Sample Agency Channel', 1, true], ['sample_office', 'Sample Office Channel', 2, false]] as [$handle, $name, $priority, $trusted]) {
+        ContentSource::query()->firstOrCreate(['platform' => 'telegram', 'handle' => $handle], [
+            'name' => $name, 'priority' => $priority, 'default_locale' => 'am', 'enabled' => true, 'auto_publish' => $trusted,
+        ]);
+    }
 }

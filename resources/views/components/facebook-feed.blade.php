@@ -1,6 +1,6 @@
 @props(['page', 'mode' => 'auto', 'height' => 140])
 @php
-    // ADR-0071/0072/0073: the party's Facebook page through Facebook's page plugin, header only: cover, name, followers,
+    // ADR-0071/0072/0073: the Agency's Facebook page through Facebook's page plugin, header only: cover, name, followers,
     // Follow and Share. That part loads where facebook.com is reachable; the plugin's own posts are left out because
     // they stay empty on many connections in Ethiopia. Posts are shown by the site itself (the social wall).
     $plugin = 'https://www.facebook.com/plugins/page.php?'.http_build_query([

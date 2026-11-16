@@ -1,4 +1,4 @@
-{{-- ADR-0072/0073: the party on social media: its Facebook page (Facebook's header: cover, followers, Follow) beside its
+{{-- ADR-0072/0073: the Agency on social media: its Facebook page (Facebook's header: cover, followers, Follow) beside its
      Telegram channel, cards for its other pages, and a wall of the latest posts the server read from them, shown in
      the site's own cards so they appear wherever the site does. --}}
 <section aria-labelledby="home-social" class="relative isolate overflow-hidden bg-surface-muted">

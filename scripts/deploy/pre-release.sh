@@ -5,7 +5,7 @@
 set -euo pipefail
 : "${APP_DIR:?APP_DIR is required}"
 PHP_BIN="${PHP_BIN:-php}"
-SNAP_DIR="${SNAP_DIR:-$HOME/releases/hararipp}"
+SNAP_DIR="${SNAP_DIR:-$HOME/releases/hita}"
 
 if [ ! -f "$APP_DIR/.env" ]; then
     echo "ERROR: $APP_DIR/.env is missing. Provision the server first (docs/runbook/server.md)."

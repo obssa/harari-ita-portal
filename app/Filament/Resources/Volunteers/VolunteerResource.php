@@ -89,9 +89,9 @@ class VolunteerResource extends Resource
     {
         return $schema->columns(1)->components([
             Section::make(__('volunteers.admin.contact'))->columns(2)->schema([
-                TextInput::make('name')->label(__('membership.field.name'))->required()->maxLength(120)->columnSpanFull(),
-                TextInput::make('phone')->label(__('membership.field.phone'))->tel()->maxLength(20),
-                TextInput::make('email')->label(__('membership.field.email'))->email()->maxLength(190),
+                TextInput::make('name')->label(__('people.field.name'))->required()->maxLength(120)->columnSpanFull(),
+                TextInput::make('phone')->label(__('people.field.phone'))->tel()->maxLength(20),
+                TextInput::make('email')->label(__('people.field.email'))->email()->maxLength(190),
                 Select::make('office_id')->label(__('volunteers.field.office_id'))->searchable()
                     ->options(fn (): array => OfficeOptions::of(OfficeType::reachable())),
             ]),
@@ -113,11 +113,11 @@ class VolunteerResource extends Resource
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['office.translations'])
                 ->withSum(['assignments as hours_done' => fn (Builder $q) => $q->where('status', AssignmentStatus::Done->value)], 'hours'))
             ->columns([
-                TextColumn::make('masked_name')->label(__('membership.field.name'))
+                TextColumn::make('masked_name')->label(__('people.field.name'))
                     ->state(fn (Volunteer $record): string => Mask::name($record->name)),
-                TextColumn::make('masked_phone')->label(__('membership.field.phone'))
+                TextColumn::make('masked_phone')->label(__('people.field.phone'))
                     ->state(fn (Volunteer $record): string => Mask::phone($record->phone))->fontFamily('mono'),
-                TextColumn::make('status')->label(__('membership.admin.status'))->badge()
+                TextColumn::make('status')->label(__('people.admin.status'))->badge()
                     ->formatStateUsing(fn (VolunteerStatus $state): string => $state->label())->color(fn (VolunteerStatus $state): string => $state->color()),
                 TextColumn::make('office')->label(__('volunteers.field.office_id'))
                     ->state(fn (Volunteer $record): ?string => $record->office?->name())->placeholder('—'),
@@ -127,7 +127,7 @@ class VolunteerResource extends Resource
                 TextColumn::make('created_at')->label(__('volunteers.admin.signed_up'))->formatStateUsing(CalendarDate::format())->sortable(),
             ])
             ->filters([
-                SelectFilter::make('status')->label(__('membership.admin.status'))->options(VolunteerStatus::options()),
+                SelectFilter::make('status')->label(__('people.admin.status'))->options(VolunteerStatus::options()),
                 SelectFilter::make('skill')->label(__('volunteers.form.skills'))->options(VolunteerOptions::skills())->query($hasChoice('skills')),
                 SelectFilter::make('availability')->label(__('volunteers.form.availability'))->options(VolunteerOptions::availability())->query($hasChoice('availability')),
                 SelectFilter::make('language')->label(__('volunteers.form.languages'))->options(VolunteerOptions::languages())->query($hasChoice('languages')),
@@ -146,10 +146,10 @@ class VolunteerResource extends Resource
         return $schema->columns(3)->components([
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 2])->schema([
                 Section::make(__('volunteers.admin.contact'))->columns(2)->schema([
-                    TextEntry::make('name')->label(__('membership.field.name')),
+                    TextEntry::make('name')->label(__('people.field.name')),
                     TextEntry::make('office_name')->label(__('volunteers.field.office_id'))->state(fn (Volunteer $record): ?string => $record->office?->name())->placeholder('—'),
-                    TextEntry::make('phone')->label(__('membership.field.phone'))->copyable()->placeholder('—'),
-                    TextEntry::make('email')->label(__('membership.field.email'))->copyable()->placeholder('—'),
+                    TextEntry::make('phone')->label(__('people.field.phone'))->copyable()->placeholder('—'),
+                    TextEntry::make('email')->label(__('people.field.email'))->copyable()->placeholder('—'),
                 ]),
                 Section::make(__('volunteers.admin.offers'))->schema([
                     TextEntry::make('skills')->label(__('volunteers.form.skills'))->state(fn (Volunteer $record): string => $list(VolunteerOptions::skills())($record->skills)),
@@ -157,13 +157,13 @@ class VolunteerResource extends Resource
                     TextEntry::make('languages')->label(__('volunteers.form.languages'))->state(fn (Volunteer $record): string => $list(VolunteerOptions::languages())($record->languages)),
                     TextEntry::make('message')->label(__('volunteers.form.message'))->placeholder('—')->extraAttributes(['class' => 'whitespace-pre-line']),
                 ]),
-                Section::make(__('membership.admin.history'))->collapsible()->schema(fn (?Volunteer $record): array => $record === null ? [] : self::historyEntries($record)),
+                Section::make(__('people.admin.history'))->collapsible()->schema(fn (?Volunteer $record): array => $record === null ? [] : self::historyEntries($record)),
             ]),
             Section::make(__('volunteers.admin.standing'))->columnSpan(['default' => 3, 'lg' => 1])->schema([
-                TextEntry::make('status')->label(__('membership.admin.status'))->badge()
+                TextEntry::make('status')->label(__('people.admin.status'))->badge()
                     ->formatStateUsing(fn (VolunteerStatus $state): string => $state->label())->color(fn (VolunteerStatus $state): string => $state->color()),
                 TextEntry::make('created_at')->label(__('volunteers.admin.signed_up'))->formatStateUsing(CalendarDate::format(withTime: true)),
-                TextEntry::make('source')->label(__('members.field.source'))->formatStateUsing(fn (string $state): string => __("volunteers.source.{$state}")),
+                TextEntry::make('source')->label(__('people.field.source'))->formatStateUsing(fn (string $state): string => __("volunteers.source.{$state}")),
             ]),
         ]);
     }
@@ -175,11 +175,11 @@ class VolunteerResource extends Resource
     {
         $notes = $record->notes()->with('user')->get();
         if ($notes->isEmpty()) {
-            return [TextEntry::make('no_history')->hiddenLabel()->state(__('membership.admin.no_history'))];
+            return [TextEntry::make('no_history')->hiddenLabel()->state(__('people.admin.no_history'))];
         }
 
         return $notes->values()->map(fn (PersonNote $note, int $i): TextEntry => TextEntry::make("note_{$i}")
-            ->label((string) CalendarDate::format(withTime: true)($note->created_at).' · '.($note->user->name ?? __('members.admin.system')).' · '.__("membership.note.kind.{$note->kind}"))
+            ->label((string) CalendarDate::format(withTime: true)($note->created_at).' · '.($note->user->name ?? __('people.admin.system')).' · '.__("people.note.kind.{$note->kind}"))
             ->state($note->body ?? '—')
             ->extraAttributes(['class' => 'whitespace-pre-line']))->all();
     }

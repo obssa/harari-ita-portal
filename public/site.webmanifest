@@ -1,0 +1,13 @@
+{
+    "name": "Harari Regional State Innovation and Technology Agency",
+    "short_name": "Innovation Agency",
+    "start_url": "/",
+    "display": "browser",
+    "background_color": "#F7F2E9",
+    "theme_color": "#0F5E63",
+    "icons": [
+        {"src": "/brand/icon-192.png", "sizes": "192x192", "type": "image/png"},
+        {"src": "/brand/icon-512.png", "sizes": "512x512", "type": "image/png"},
+        {"src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml"}
+    ]
+}

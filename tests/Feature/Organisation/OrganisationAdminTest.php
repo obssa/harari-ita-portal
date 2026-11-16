@@ -49,7 +49,7 @@ function makeLeader(string $name, LeaderBody $body = LeaderBody::Management, arr
 }
 
 it('keeps the office tree free of loops and within four levels', function () {
-    $branch = makeOffice('Sample branch office', OfficeType::Directorate);
+    $branch = makeOffice('Sample directorate', OfficeType::Directorate);
     $regional = makeOffice('Sample woreda', OfficeType::RegionalOffice, $branch);
     $kebele = makeOffice('Sample kebele', OfficeType::Team, $regional);
     $basic = makeOffice('Sample basic organisation', OfficeType::Partner, $kebele);
@@ -59,7 +59,7 @@ it('keeps the office tree free of loops and within four levels', function () {
         ->and(fn () => app(SaveOffice::class)->handle($branch, [
             'type' => 'directorate',
             'parent_id' => $kebele->id,
-            'translations' => ['en' => ['name' => 'Sample branch office']],
+            'translations' => ['en' => ['name' => 'Sample directorate']],
         ], staff(SystemRole::CommunicationsEditor)))->toThrow(ValidationException::class);
 });
 

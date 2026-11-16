@@ -11,7 +11,8 @@ use Throwable;
 /**
  * Search and sharing metadata for every public page (PLAN.md §11 SEO):
  * Open Graph and Twitter cards in the page's language, and JSON-LD — the
- * party as an organisation on every page plus whatever the page adds
+ * Agency as a government organisation of the Harari Regional State on every
+ * page plus whatever the page adds
  * (NewsArticle, BreadcrumbList ...).
  */
 final class Seo extends Component
@@ -79,12 +80,14 @@ final class Seo extends Component
     public static function organisation(): array
     {
         $node = [
-            '@type' => 'PoliticalParty',
+            '@type' => 'GovernmentOrganization',
             '@id' => url('/').'#organization',
             'name' => __('site.name'),
             'alternateName' => __('site.office'),
             'url' => url('/'),
-            'logo' => url('/favicon.svg'),
+            'logo' => url('/brand/icon-512.png'),
+            'areaServed' => ['@type' => 'AdministrativeArea', 'name' => __('site.region')],
+            'parentOrganization' => ['@type' => 'GovernmentOrganization', 'name' => __('site.parent')],
         ];
 
         try {

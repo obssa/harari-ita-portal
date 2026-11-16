@@ -4,7 +4,7 @@
     $text = trim((string) $post->text);
     $brand = \App\Support\SocialLinks::PLATFORMS[$source->platform->value] ?? ['', '#475569', '#334155'];
 @endphp
-{{-- ADR-0072: a post gathered from one of the party's pages, in the site's card style with the platform's mark. --}}
+{{-- ADR-0072: a post gathered from one of the Agency's pages, in the site's card style with the platform's mark. --}}
 <article {{ $attributes->class('group relative flex flex-col overflow-hidden rounded-card border border-line bg-surface shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md') }}>
     @if ($post->image)
         <div class="relative overflow-hidden">

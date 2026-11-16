@@ -24,7 +24,7 @@ final class SaveMediaContact
         $text = fn (string $field): string => trim((string) preg_replace('/\s+/u', ' ', (string) ($data[$field] ?? '')));
         $name = $text('name');
         if ($name === '' || mb_strlen($name) > 120) {
-            $errors['data.name'] = __('membership.validation.name');
+            $errors['data.name'] = __('people.validation.name');
         }
         $outlet = $text('outlet');
         if ($outlet === '' || mb_strlen($outlet) > 120) {

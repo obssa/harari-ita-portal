@@ -2,14 +2,13 @@
     "ci": {
         "collect": {
             "url": [
-                "https://hararipp.orcamind.dev/en",
-                "https://hararipp.orcamind.dev/am",
-                "https://hararipp.orcamind.dev/am/news/ameraru-yehizib-ageligay-bemehon-yetetalebetin-adera-liweta-yigebal-ato-oridin-bediri",
-                "https://hararipp.orcamind.dev/en/events/sample-community-consultation-meeting",
-                "https://hararipp.orcamind.dev/en/documents/sample-party-programme",
-                "https://hararipp.orcamind.dev/en/news",
-                "https://hararipp.orcamind.dev/en/documents",
-                "https://hararipp.orcamind.dev/en/offices"
+                "https://hita.orcamind.dev/en",
+                "https://hita.orcamind.dev/am",
+                "https://hita.orcamind.dev/en/news",
+                "https://hita.orcamind.dev/en/events",
+                "https://hita.orcamind.dev/en/documents",
+                "https://hita.orcamind.dev/en/about/offices",
+                "https://hita.orcamind.dev/en/about/leadership"
             ],
             "numberOfRuns": 3,
             "settings": {

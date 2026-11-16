@@ -51,7 +51,7 @@ function emailCampaign(User $actor, array $audience = ['type' => 'subscribers'],
     return app(SaveCampaign::class)->handle(new Campaign, [
         'name' => 'Sample campaign', 'channel' => Campaign::EMAIL, 'audience' => $audience,
         'content' => $content ?: [
-            'en' => ['subject' => 'Sample news this week', 'body' => "Sample **news** for readers.\n\n[Read more](https://hararipp.orcamind.dev/en/news)"],
+            'en' => ['subject' => 'Sample news this week', 'body' => "Sample **news** for readers.\n\n[Read more](https://hita.orcamind.dev/en/news)"],
             'am' => ['subject' => 'የናሙና ዜና', 'body' => 'የናሙና ዜና ለአንባቢዎች።'],
         ],
     ], $actor);

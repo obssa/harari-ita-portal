@@ -88,7 +88,7 @@ final class SaveVolunteer
         $errors = [];
         $name = trim((string) preg_replace('/\s+/u', ' ', (string) ($input['name'] ?? '')));
         if ($name === '' || mb_strlen($name) > 120) {
-            $errors["{$prefix}name"] = __('membership.validation.name');
+            $errors["{$prefix}name"] = __('people.validation.name');
         }
 
         $phone = null;
@@ -105,7 +105,7 @@ final class SaveVolunteer
 
         $office = filled($input['office_id'] ?? null) ? (string) $input['office_id'] : null;
         if ($office !== null && ! Office::query()->whereKey($office)->whereIn('type', OfficeType::reachableValues())->exists()) {
-            $errors["{$prefix}office_id"] = __('membership.validation.office');
+            $errors["{$prefix}office_id"] = __('people.validation.office');
         }
 
         $lists = [];

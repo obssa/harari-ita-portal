@@ -44,9 +44,9 @@ class PressDistributionsRelationManager extends RelationManager
             ->modifyQueryUsing(fn ($query) => $query->with(['contact', 'sender']))
             ->columns([
                 TextColumn::make('outlet')->label(__('press.media.outlet'))->state(fn (PressDistribution $record): string => $record->contact->outlet),
-                TextColumn::make('contact_name')->label(__('membership.field.name'))->state(fn (PressDistribution $record): string => $record->contact->name),
+                TextColumn::make('contact_name')->label(__('people.field.name'))->state(fn (PressDistribution $record): string => $record->contact->name),
                 TextColumn::make('locale')->label(__('newsletter.field.language'))->formatStateUsing(fn (string $state): string => Locales::nativeName($state)),
-                TextColumn::make('status')->label(__('membership.admin.status'))->badge()
+                TextColumn::make('status')->label(__('people.admin.status'))->badge()
                     ->formatStateUsing(fn (string $state): string => __("campaigns.report.status.{$state}"))
                     ->color(fn (string $state): string => match ($state) {
                         PressDistribution::SENT => 'success',

@@ -56,7 +56,7 @@ class MediaContactResource extends Resource
     {
         return $schema->columns(1)->components([
             Section::make(__('press.media.section'))->columns(2)->schema([
-                TextInput::make('name')->label(__('membership.field.name'))->required()->maxLength(120),
+                TextInput::make('name')->label(__('people.field.name'))->required()->maxLength(120),
                 TextInput::make('outlet')->label(__('press.media.outlet'))->required()->maxLength(120),
                 TextInput::make('position')->label(__('press.media.position'))->maxLength(120),
                 TextInput::make('email')->label(__('newsletter.field.email'))->email()->required()->maxLength(190),
@@ -75,7 +75,7 @@ class MediaContactResource extends Resource
             ->defaultSort('outlet')
             ->columns([
                 TextColumn::make('outlet')->label(__('press.media.outlet'))->searchable()->sortable(),
-                TextColumn::make('contact_name')->label(__('membership.field.name'))->state(fn (MediaContact $record): string => $record->name),
+                TextColumn::make('contact_name')->label(__('people.field.name'))->state(fn (MediaContact $record): string => $record->name),
                 TextColumn::make('contact_email')->label(__('newsletter.field.email'))->state(fn (MediaContact $record): string => $record->email)->copyable(),
                 TextColumn::make('languages')->label(__('press.media.languages'))->badge()->formatStateUsing(fn (string $state): string => Locales::nativeName($state)),
                 TextColumn::make('opted_out_at')->label(__('press.media.status'))->badge()

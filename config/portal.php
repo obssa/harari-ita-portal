@@ -8,7 +8,7 @@ return [
 
     /*
     | Used when neither the visitor's cookie nor their browser names a
-    | supported language (PLAN.md §3). Amharic until the party decides.
+    | supported language (PLAN.md §3). Amharic until the Agency decides.
     */
     'default_locale' => env('PORTAL_DEFAULT_LOCALE', 'am'),
 
@@ -44,7 +44,7 @@ return [
     /*
     | Each language named in its own script for the language switcher
     | (PLAN.md §12). These are the same in every locale, so they are data,
-    | not translations. The Harari name awaits confirmation by the party.
+    | not translations. The Harari name awaits confirmation by the Agency.
     */
     'locale_names' => [
         'en' => 'English',

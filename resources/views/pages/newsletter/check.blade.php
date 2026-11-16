@@ -14,7 +14,7 @@
                 <form method="post" action="{{ route('newsletter.verify') }}" class="mt-6 space-y-6" novalidate>
                     @csrf
                     <div>
-                        <label for="code" class="font-medium">{{ __('membership.field.code') }}</label>
+                        <label for="code" class="font-medium">{{ __('people.field.code') }}</label>
                         <input id="code" name="code" type="text" required maxlength="10" autocomplete="one-time-code" inputmode="numeric" dir="ltr"
                                @error('code') aria-invalid="true" aria-describedby="code-error" @enderror class="{{ $field }} max-w-48 font-mono text-xl tracking-widest">
                         @error('code')<p id="code-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror

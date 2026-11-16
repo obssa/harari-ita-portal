@@ -4,7 +4,7 @@
     $url = route('news.show', ['locale' => $shown->locale, 'slug' => $shown->slug]);
     $other = $shown->locale !== app()->getLocale();
 @endphp
-{{-- ADR-0065: every story card has the same parts in the same places: picture (or the party's placeholder), labels, title, summary, date. --}}
+{{-- ADR-0065: every story card has the same parts in the same places: picture (or the placeholder), labels, title, summary, date. --}}
 <article lang="{{ $shown->locale }}" {{ $attributes->class([
     'reveal group relative flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-line bg-surface transition duration-200 hover:-translate-y-0.5 hover:border-gold-500 hover:shadow-xl',
 ]) }}>

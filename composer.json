@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "obssa/harari-pp-portal",
+    "name": "obssa/harari-ita-portal",
     "type": "project",
-    "description": "Harari Region Prosperity Party portal: four-language public site and admin back-office.",
+    "description": "Harari Regional State Innovation and Technology Agency portal: four-language public site and admin back-office.",
     "keywords": [
         "laravel",
         "filament",

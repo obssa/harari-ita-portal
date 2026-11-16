@@ -116,12 +116,12 @@ it('keeps the social links and homepage an editor already set', function () {
     $settings->social_links = ['telegram' => 'https://t.me/sample_channel'];
     $settings->save();
 
-    app(LoadContentPack::class)->handle(samplePack(['settings' => ['social_links' => ['telegram' => 'https://t.me/hrprosperityparty', 'facebook' => 'https://facebook.com/sample']]]));
+    app(LoadContentPack::class)->handle(samplePack(['settings' => ['social_links' => ['telegram' => 'https://t.me/sample_agency', 'facebook' => 'https://facebook.com/sample']]]));
 
     expect(app(SiteSettings::class)->social_links)->toBe(['telegram' => 'https://t.me/sample_channel', 'facebook' => 'https://facebook.com/sample']);
 });
 
-it('adds the party\'s channel to the social hub once and never brings it back after an editor removed it', function () {
+it('adds the Agency\'s channel to the social hub once and never brings it back after an editor removed it', function () {
     staff(SystemRole::SuperAdmin, mfa: false);
     $path = samplePack(['social_sources' => [
         ['key' => 'social.telegram.sample', 'platform' => 'telegram', 'handle' => 'sample_channel', 'name' => 'Sample channel', 'interval_minutes' => 5],
@@ -151,7 +151,7 @@ it('leaves a channel an editor already added to the social hub', function () {
         ->and(SocialSource::query()->sole()->name)->toBe('Added by an editor');
 });
 
-it('corrects a name and a phrase once, as the branch office asked, and then leaves them to editors', function () {
+it('corrects a name and a phrase once, as the Agency asked, and then leaves them to editors', function () {
     staff(SystemRole::SuperAdmin, mfa: false);
     $body = fn (string $text): array => ['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => $text]]]]];
     app(LoadContentPack::class)->handle(samplePack([
@@ -159,14 +159,14 @@ it('corrects a name and a phrase once, as the branch office asked, and then leav
         'pages' => [['key' => 'page.sample', 'translations' => ['en' => ['title' => 'Sample page', 'slug' => 'sample-page', 'body' => $body('It is headed by Sample Person.')]]]],
     ]));
     $corrections = samplePack(['updates' => [
-        ['key' => 'leader.sample#name', 'target' => 'leader.sample', 'rename' => ['en' => ['name' => 'H.E Sample Person Full', 'position' => 'Head of the sample party']]],
+        ['key' => 'leader.sample#name', 'target' => 'leader.sample', 'rename' => ['en' => ['name' => 'H.E Sample Person Full', 'position' => 'Head of the sample agency']]],
         ['key' => 'page.sample#name', 'target' => 'page.sample', 'replace' => ['en' => [['Sample Person', 'H.E Sample Person Full']]]],
     ]]);
 
     expect(app(LoadContentPack::class)->handle($corrections))->toBe(['updates' => 2]);
     $leader = Leader::query()->firstOrFail();
     expect($leader->translation('en')?->name)->toBe('H.E Sample Person Full')
-        ->and($leader->translation('en')?->position)->toBe('Head of the sample party')
+        ->and($leader->translation('en')?->position)->toBe('Head of the sample agency')
         ->and($leader->translation('en')?->slug)->toBe('sample-person');
     $this->get('/en/sample-page')->assertOk()->assertSee('It is headed by H.E Sample Person Full.');
 
@@ -206,13 +206,14 @@ it('corrects a phrase once wherever the site shows it, then leaves it to editors
         ->and(Leader::query()->firstOrFail()->translation('en')?->name)->toBe('H.E Sample Wayyesa');
 });
 
-it('publishes the stories imported from the branch before it was trusted, once, with their dates', function () {
+it('publishes the stories imported from the Agency\'s channel before it was trusted, once, with their dates', function () {
     staff(SystemRole::SuperAdmin, mfa: false);
-    $source = ContentSource::query()->where('handle', 'hrprosperityparty')->firstOrFail();
+    sampleImportSources();
+    $source = ContentSource::query()->where('handle', 'sample_agency')->firstOrFail();
     $post = new Post(['type' => 'news', 'source_locale' => 'am']);
-    $post->forceFill(['source_url' => 'https://t.me/hrprosperityparty/1', 'source_name' => $source->name])->save();
+    $post->forceFill(['source_url' => 'https://t.me/sample_agency/1', 'source_name' => $source->name])->save();
     $post->putTranslation('am', ['title' => 'የናሙና ዜና', 'status' => ContentStatus::Draft]);
-    ContentImport::query()->create(['content_source_id' => $source->id, 'external_id' => 'hrprosperityparty/1', 'message_at' => '2026-10-01 09:00:00', 'status' => ContentImport::IMPORTED, 'post_id' => $post->id]);
+    ContentImport::query()->create(['content_source_id' => $source->id, 'external_id' => 'sample_agency/1', 'message_at' => '2026-10-01 09:00:00', 'status' => ContentImport::IMPORTED, 'post_id' => $post->id]);
 
     expect(app(LoadContentPack::class)->handle(samplePack([])))->toBe(['stories' => 1]);
     $translation = $post->fresh()?->translation('am', fallback: false);

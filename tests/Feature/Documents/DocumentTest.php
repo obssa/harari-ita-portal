@@ -113,18 +113,18 @@ it('shows a document with its viewer, version, related documents and the file of
     $related = makeDocument(['en' => ['title' => 'Sample related speech', 'published' => true]], DocumentType::Speech);
     $document = makeDocument([
         'am' => ['title' => 'የናሙና ፕሮግራም', 'file_id' => $old->id, 'published' => true],
-        'en' => ['title' => 'Sample party programme', 'summary' => 'Sample summary', 'published' => true],
+        'en' => ['title' => 'Sample digital strategy', 'summary' => 'Sample summary', 'published' => true],
     ], DocumentType::Programme, ['related' => [$related->id], 'issued_on' => '2026-03-10']);
     app(SaveDocument::class)->handle($document, ['type' => 'programme', 'related' => [$related->id], 'translations' => [
         'am' => ['title' => 'የናሙና ፕሮግራም', 'file_id' => $amharic->id, 'version_note' => 'የተሻሻለ', 'published' => true],
-        'en' => ['title' => 'Sample party programme', 'summary' => 'Sample summary', 'published' => true],
+        'en' => ['title' => 'Sample digital strategy', 'summary' => 'Sample summary', 'published' => true],
     ]], staff(SystemRole::CommunicationsEditor));
 
-    $this->get('/en/documents/sample-party-programme')->assertOk()
+    $this->get('/en/documents/sample-digital-strategy')->assertOk()
         ->assertSee('Sample summary')
         ->assertSee(route('media.file', ['uuid' => $amharic->uuid, 'name' => $amharic->file_name]), escape: false)
         ->assertSee(__('documents.file_in', ['language' => 'አማርኛ'], 'en'))
-        ->assertSee(route('documents.download', ['locale' => 'en', 'slug' => 'sample-party-programme']), escape: false)
+        ->assertSee(route('documents.download', ['locale' => 'en', 'slug' => 'sample-digital-strategy']), escape: false)
         ->assertSee(__('documents.version', ['number' => 2], 'en'))
         ->assertSee(__('documents.earlier_versions', [], 'en'))
         ->assertSee('Sample related speech')

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * A post shared to one of the party's Facebook pages or Telegram channels
+ * A post shared to one of the Agency's Facebook pages or Telegram channels
  * (ADR-0059), with what was sent and what came back.
  *
  * @property int $id

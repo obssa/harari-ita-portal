@@ -41,10 +41,10 @@ it('understands YouTube, Facebook and Telegram addresses', function (string $url
     ['https://youtu.be/abcdefghijk', 'youtube', 'abcdefghijk'],
     ['https://www.youtube.com/live/abcdefghijk?si=x', 'youtube', 'abcdefghijk'],
     ['https://m.facebook.com/watch/?v=123', 'facebook', null],
-    ['https://t.me/hrprosperityparty/23917', 'telegram', null],
+    ['https://t.me/sample_agency/23917', 'telegram', null],
     ['http://youtu.be/abcdefghijk', null, null],
     ['https://example.org/video', null, null],
-    ['https://t.me/hrprosperityparty', null, null],
+    ['https://t.me/sample_agency', null, null],
 ]);
 
 it('saves videos, copying the YouTube picture into the library once', function () {
@@ -90,11 +90,11 @@ it('lists published videos by playlist and plays YouTube with the privacy-enhanc
 });
 
 it('links Facebook and Telegram videos instead of embedding them', function () {
-    makeVideo(['en' => ['title' => 'Sample Telegram clip', 'published' => true]], 'https://t.me/hrprosperityparty/23917');
+    makeVideo(['en' => ['title' => 'Sample Telegram clip', 'published' => true]], 'https://t.me/sample_agency/23917');
 
     $this->get('/en/videos/sample-telegram-clip')
         ->assertOk()
-        ->assertSee('href="https://t.me/hrprosperityparty/23917"', escape: false)
+        ->assertSee('href="https://t.me/sample_agency/23917"', escape: false)
         ->assertSee(__('video.watch_on', ['provider' => __('video.provider.telegram', [], 'en')], 'en'))
         ->assertDontSee('<iframe', escape: false);
 });

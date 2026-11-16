@@ -144,10 +144,10 @@ it('stores SVGs sanitised and makes no copies of them', function () {
 
 it('stores documents unchanged', function () {
     $source = TestFiles::docx();
-    $media = upload($source, 'Party programme.docx');
+    $media = upload($source, 'Sample strategy.docx');
 
     expect($media->kind)->toBe(MediaKind::Document)
-        ->and($media->file_name)->toBe('party-programme.docx')
+        ->and($media->file_name)->toBe('sample-strategy.docx')
         ->and(Storage::disk('media')->get($media->getPathRelativeToRoot()))->toBe(file_get_contents($source));
 });
 

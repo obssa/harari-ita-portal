@@ -103,11 +103,11 @@ it('keeps a saved key when its field is left empty, and removes it on request', 
     $settings->save();
 
     livewire(ManageIntegrations::class)
-        ->fillForm(['sms_sender_id' => 'HarariPP'])
+        ->fillForm(['sms_sender_id' => 'HarariITA'])
         ->call('save')
         ->assertHasNoFormErrors();
     expect(app(IntegrationSettings::class)->refresh()->youtube_api_key)->toBe('yt-key')
-        ->and(app(IntegrationSettings::class)->sms_sender_id)->toBe('HarariPP');
+        ->and(app(IntegrationSettings::class)->sms_sender_id)->toBe('HarariITA');
 
     livewire(ManageIntegrations::class)
         ->fillForm(['remove_secrets' => ['youtube_api_key']])

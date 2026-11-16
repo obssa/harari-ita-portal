@@ -1,6 +1,6 @@
 @props(['type' => null, 'lead' => false])
 @php
-    // ADR-0065: a story without a photo still gets a picture, in its type's colour, with the party's mark.
+    // ADR-0065: a story without a photo still gets a picture, in its type's colour, with the Agency's mark.
     $ground = match ($type?->tone()) {
         'accent' => 'from-accent-700 to-accent-900',
         'magenta' => 'from-magenta-600 to-magenta-700',

@@ -1,5 +1,5 @@
 @props(['url', 'preview' => null])
-{{-- ADR-0073: the party's Telegram channel beside its Facebook page: the channel's name and what it carries,
+{{-- ADR-0073: the Agency's Telegram channel beside its Facebook page: the channel's name and what it carries,
      with Join and a way to read it in the browser. Its posts are in the wall below. --}}
 <article {{ $attributes->class('relative isolate flex flex-col overflow-hidden rounded-card border border-line bg-surface shadow-sm') }}>
     <header class="flex items-center gap-3 bg-[#16719F] px-4 py-3 text-white">

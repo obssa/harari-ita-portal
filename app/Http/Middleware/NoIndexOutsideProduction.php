@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Keeps every non-production environment (staging at hararipp.orcamind.dev,
+ * Keeps every non-production environment (staging at hita.orcamind.dev,
  * local, testing) out of search engines, so test content is never indexed.
  */
 final class NoIndexOutsideProduction

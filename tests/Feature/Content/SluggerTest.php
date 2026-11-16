@@ -12,7 +12,7 @@ it('writes Ethiopic titles in readable Latin letters', function (string $title, 
     ['የሴቶች ሊግ', 'yesetoch-lig'],
     ['እንኳን ደስ አላችሁ።', 'inikwan-des-alachihu'],
     ['ቋንቋ', 'qwaniqwa'],
-    ['Paartii Badhaadhinaa Hararii', 'paartii-badhaadhinaa-hararii'],
+    ['Ejansii Kalaqaa Hararii', 'ejansii-kalaqaa-hararii'],
     ['Town Hall Meeting!', 'town-hall-meeting'],
 ]);
 

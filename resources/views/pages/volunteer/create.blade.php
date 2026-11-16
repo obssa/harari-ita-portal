@@ -17,19 +17,19 @@
                 @csrf
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div class="sm:col-span-2">
-                        <label for="name" class="font-medium">{{ __('membership.field.name') }}</label>
+                        <label for="name" class="font-medium">{{ __('people.field.name') }}</label>
                         <input id="name" name="name" type="text" value="{{ old('name') }}" required maxlength="120" autocomplete="name"
                                @error('name') aria-invalid="true" aria-describedby="name-error" @enderror class="{{ $field }}">
                         @error('name')<p id="name-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                     </div>
                     <div>
-                        <label for="phone" class="font-medium">{{ __('membership.field.phone') }}</label>
+                        <label for="phone" class="font-medium">{{ __('people.field.phone') }}</label>
                         <input id="phone" name="phone" type="tel" value="{{ old('phone') }}" required maxlength="20" autocomplete="tel" inputmode="tel" dir="ltr"
                                @error('phone') aria-invalid="true" aria-describedby="phone-error" @enderror class="{{ $field }}">
                         @error('phone')<p id="phone-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                     </div>
                     <div>
-                        <label for="email" class="font-medium">{{ __('membership.field.email') }}</label>
+                        <label for="email" class="font-medium">{{ __('people.field.email') }}</label>
                         <input id="email" name="email" type="email" value="{{ old('email') }}" maxlength="190" autocomplete="email" dir="ltr"
                                @error('email') aria-invalid="true" aria-describedby="email-error" @enderror class="{{ $field }}">
                         @error('email')<p id="email-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
@@ -37,7 +37,7 @@
                     <div class="sm:col-span-2">
                         <label for="office_id" class="font-medium">{{ __('volunteers.field.office_id') }}</label>
                         <select id="office_id" name="office_id" @error('office_id') aria-invalid="true" aria-describedby="office_id-error" @enderror class="{{ $field }}">
-                            <option value="">{{ $offices->isEmpty() ? __('membership.none_listed') : '—' }}</option>
+                            <option value="">{{ $offices->isEmpty() ? __('people.none_listed') : '—' }}</option>
                             @foreach ($offices as $id => $label)
                                 <option value="{{ $id }}" @selected(old('office_id') === $id)>{{ $label }}</option>
                             @endforeach
@@ -72,7 +72,7 @@
                     <label class="flex items-start gap-3">
                         <input type="checkbox" name="consent" value="1" @checked(old('consent')) required class="mt-1 size-5 rounded border-line text-primary-600"
                                @error('consent') aria-invalid="true" aria-describedby="consent-error" @enderror>
-                        <span>{{ __('volunteers.form.consent') }} <a href="{{ route('page.show', ['path' => 'privacy']) }}" class="text-link underline underline-offset-4">{{ __('membership.privacy_link') }}</a></span>
+                        <span>{{ __('volunteers.form.consent') }} <a href="{{ route('page.show', ['path' => 'privacy']) }}" class="text-link underline underline-offset-4">{{ __('people.privacy_link') }}</a></span>
                     </label>
                     @error('consent')<p id="consent-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                 </div>

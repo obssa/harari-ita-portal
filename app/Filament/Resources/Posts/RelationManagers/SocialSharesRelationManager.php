@@ -45,7 +45,7 @@ class SocialSharesRelationManager extends RelationManager
                     ->formatStateUsing(fn (SocialShare $record): string => $record->platform->label()),
                 TextColumn::make('account')->label(__('social.share.column.account')),
                 TextColumn::make('locale')->label(__('newsletter.field.language'))->formatStateUsing(fn (string $state): string => Locales::nativeName($state)),
-                TextColumn::make('status')->label(__('membership.admin.status'))->badge()
+                TextColumn::make('status')->label(__('people.admin.status'))->badge()
                     ->formatStateUsing(fn (string $state): string => __("social.share.status.{$state}"))
                     ->color(fn (string $state): string => match ($state) {
                         SocialShare::SENT => 'success',

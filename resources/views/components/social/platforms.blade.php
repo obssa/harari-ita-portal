@@ -1,5 +1,5 @@
 @props(['links', 'stacked' => false])
-{{-- ADR-0072: one card per page of the party, the platform's mark in its own colour, the page's name and what to do. --}}
+{{-- ADR-0072: one card per page of the Agency, the platform's mark in its own colour, the page's name and what to do. --}}
 @php $columns = [1 => 'sm:grid-cols-1', 2 => 'sm:grid-cols-2', 3 => 'sm:grid-cols-2 lg:grid-cols-3'][count($links)] ?? 'sm:grid-cols-2 lg:grid-cols-4'; @endphp
 <ul {{ $attributes->class(['grid gap-3', $columns => ! $stacked]) }}>
     @foreach ($links as $platform => $link)

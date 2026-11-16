@@ -4,7 +4,7 @@
  * these tokens generate (bg-primary-600, text-accent-700, rounded-card ...).
  */
 @theme {
-    /* Prosperity Blue from the logo (ADR-0062); 600 is the brand colour (#0B6CA8, 5.6:1 on white),
+    /* The brand blue until the phase 1 tokens (DESIGN.md §1); 600 is the brand colour (#0B6CA8, 5.6:1 on white),
        900 the night blue of heroes and figure bands. */
     --color-primary-50: #eef6fb;
     --color-primary-100: #dcedf7;
@@ -18,7 +18,7 @@
     --color-primary-900: #083a5c;
     --color-primary-950: #05253b;
 
-    /* Prosperity Gold from the logo: calls to action and highlights, always with ink text. */
+    /* Gold accent: calls to action and highlights, always with ink text. */
     --color-gold-50: #fff6d6;
     --color-gold-100: #ffedad;
     --color-gold-200: #ffe07a;

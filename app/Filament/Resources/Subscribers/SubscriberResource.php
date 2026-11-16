@@ -82,7 +82,7 @@ class SubscriberResource extends Resource
                     ->state(fn (Subscriber $record): string => $record->email !== null ? self::maskEmail($record->email) : '—'),
                 TextColumn::make('masked_phone')->label(__('newsletter.field.phone'))->fontFamily('mono')
                     ->state(fn (Subscriber $record): string => $record->phone !== null ? PhoneNumber::mask($record->phone) : '—'),
-                TextColumn::make('state')->label(__('membership.admin.status'))->badge()
+                TextColumn::make('state')->label(__('people.admin.status'))->badge()
                     ->state(fn (Subscriber $record): string => self::state($record))
                     ->formatStateUsing(fn (string $state): string => __("newsletter.state.{$state}"))
                     ->color(fn (string $state): string => match ($state) {
@@ -98,7 +98,7 @@ class SubscriberResource extends Resource
                 TextColumn::make('created_at')->label(__('volunteers.admin.signed_up'))->formatStateUsing(CalendarDate::format())->sortable(),
             ])
             ->filters([
-                SelectFilter::make('state')->label(__('membership.admin.status'))
+                SelectFilter::make('state')->label(__('people.admin.status'))
                     ->options(['confirmed' => __('newsletter.state.confirmed'), 'pending' => __('newsletter.state.pending'), 'unsubscribed' => __('newsletter.state.unsubscribed')])
                     ->query(fn (Builder $query, array $data): Builder => match ($data['value'] ?? null) {
                         'confirmed' => $query->whereNull('unsubscribed_at')->where(fn (Builder $q) => $q->whereNotNull('email_confirmed_at')->orWhereNotNull('phone_confirmed_at')),
@@ -129,7 +129,7 @@ class SubscriberResource extends Resource
                 TextEntry::make('phone_confirmed_at')->label(__('newsletter.admin.phone_confirmed'))->formatStateUsing(CalendarDate::format(withTime: true))->placeholder('—'),
             ]),
             Section::make(__('newsletter.admin.choices'))->schema([
-                TextEntry::make('state')->label(__('membership.admin.status'))->badge()
+                TextEntry::make('state')->label(__('people.admin.status'))->badge()
                     ->state(fn (Subscriber $record): string => __('newsletter.state.'.self::state($record))),
                 TextEntry::make('channels')->label(__('newsletter.field.channels'))->state(fn (Subscriber $record): string => $list(SubscriptionOptions::channels())($record->channels)),
                 TextEntry::make('topics')->label(__('newsletter.field.topics'))->state(fn (Subscriber $record): string => $list(SubscriptionOptions::topics())($record->topics)),

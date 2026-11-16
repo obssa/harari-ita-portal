@@ -62,14 +62,14 @@ const BRANCH_STORY = "Sample council meeting reviews the first quarter\n\nThe sa
 function fakeChannels(?string $branch = null, ?string $office = null): void
 {
     Http::fake([
-        't.me/s/hrprosperityparty*' => Http::response($branch ?? telegramPage('hrprosperityparty', [
+        't.me/s/sample_agency*' => Http::response($branch ?? telegramPage('sample_agency', [
             ['id' => 101, 'at' => '2026-10-15T10:00:00+00:00', 'text' => BRANCH_STORY],
             ['id' => 102, 'at' => '2026-10-15T10:00:08+00:00', 'photos' => ['https://cdn4.telesco.pe/file/one.jpg', 'https://cdn4.telesco.pe/file/two.jpg', 'https://evil.example.org/x.jpg']],
             ['id' => 103, 'at' => '2026-10-15T11:00:00+00:00', 'text' => "Waltajjiin hojii naannoo kanaa irratti geggeeffame\n\nKun fakkeenya qofa fi hojii bara kanaa ilaala."],
             ['id' => 104, 'at' => '2026-10-15T15:00:00+00:00', 'photos' => ['https://cdn4.telesco.pe/file/three.jpg']],
             ['id' => 999, 'at' => '2026-10-15T16:00:00+00:00', 'text' => 'Another channel', 'channel' => 'someoneelse'],
         ])),
-        't.me/s/HarariGovernmentCommunication*' => Http::response($office ?? telegramPage('HarariGovernmentCommunication', [
+        't.me/s/sample_office*' => Http::response($office ?? telegramPage('sample_office', [
             ['id' => 501, 'at' => '2026-10-15T12:00:00+00:00', 'text' => BRANCH_STORY],
             ['id' => 502, 'at' => '2026-10-15T13:00:00+00:00', 'text' => "Sample road works report from the office\n\nWork continues on the sample road.", 'video' => true],
         ])),
@@ -77,21 +77,23 @@ function fakeChannels(?string $branch = null, ?string $office = null): void
     ]);
 }
 
+beforeEach(fn () => sampleImportSources());
+
 it('reads messages, their text, photos and videos from the preview page', function () {
     fakeChannels();
-    $messages = app(TelegramChannelReader::class)->page('hrprosperityparty');
+    $messages = app(TelegramChannelReader::class)->page('sample_agency');
 
     expect(array_map(fn ($m) => $m->id, $messages))->toBe([101, 102, 103, 104])
         ->and($messages[0]->text)->toBe(BRANCH_STORY)
         ->and($messages[1]->photos)->toBe(['https://cdn4.telesco.pe/file/one.jpg', 'https://cdn4.telesco.pe/file/two.jpg'])
-        ->and($messages[0]->url())->toBe('https://t.me/hrprosperityparty/101');
+        ->and($messages[0]->url())->toBe('https://t.me/sample_agency/101');
 
     expect(fn () => app(TelegramChannelReader::class)->page('../etc'))->toThrow(RuntimeException::class);
 });
 
 it('joins albums to the story posted with them and leaves lone albums out', function () {
     fakeChannels();
-    $groups = MessageGroups::build(app(TelegramChannelReader::class)->page('hrprosperityparty'));
+    $groups = MessageGroups::build(app(TelegramChannelReader::class)->page('sample_agency'));
 
     expect($groups['stories'])->toHaveCount(2)
         ->and($groups['stories'][0]['media'][0]->id)->toBe(102)
@@ -114,63 +116,63 @@ it('imports new stories with their source and photos, once; the branch publishes
     fakeChannels();
     $report = app(RunImport::class)->handle();
 
-    expect($report['hrprosperityparty'])->toMatchArray(['imported' => 2, 'duplicates' => 0, 'skipped' => 1, 'error' => null])
-        ->and($report['HarariGovernmentCommunication'])->toMatchArray(['imported' => 1, 'duplicates' => 1]);
+    expect($report['sample_agency'])->toMatchArray(['imported' => 2, 'duplicates' => 0, 'skipped' => 1, 'error' => null])
+        ->and($report['sample_office'])->toMatchArray(['imported' => 1, 'duplicates' => 1]);
 
-    $post = Post::query()->where('source_url', 'https://t.me/hrprosperityparty/101')->firstOrFail();
+    $post = Post::query()->where('source_url', 'https://t.me/sample_agency/101')->firstOrFail();
     $translation = $post->translation('en', fallback: false);
     expect($translation?->title)->toBe('Sample council meeting reviews the first quarter')
         ->and($translation?->status)->toBe(ContentStatus::Published)
         ->and($translation?->published_at?->toIso8601String())->toBe('2026-10-15T10:00:00+00:00')
-        ->and($post->source_name)->toBe('Prosperity Party Harari Region Branch')
+        ->and($post->source_name)->toBe('Sample Agency Channel')
         ->and($post->source_published_at?->toIso8601String())->toBe('2026-10-15T10:00:00+00:00')
-        ->and($post->featuredImage?->credit)->toBe('Prosperity Party Harari Region Branch')
+        ->and($post->featuredImage?->credit)->toBe('Sample Agency Channel')
         ->and(collect($translation?->body['content'] ?? [])->firstWhere('type', 'customBlock')['attrs']['config']['media_ids'] ?? [])->toHaveCount(1)
         ->and(Media::query()->count())->toBe(2);
 
-    expect(Post::query()->where('source_url', 'https://t.me/hrprosperityparty/103')->firstOrFail()->source_locale)->toBe('om')
-        ->and(ContentImport::query()->where('external_id', 'HarariGovernmentCommunication/501')->value('status'))->toBe(ContentImport::DUPLICATE)
-        ->and(ContentSource::query()->where('handle', 'hrprosperityparty')->value('cursor'))->toBe(104);
+    expect(Post::query()->where('source_url', 'https://t.me/sample_agency/103')->firstOrFail()->source_locale)->toBe('om')
+        ->and(ContentImport::query()->where('external_id', 'sample_office/501')->value('status'))->toBe(ContentImport::DUPLICATE)
+        ->and(ContentSource::query()->where('handle', 'sample_agency')->value('cursor'))->toBe(104);
 
     // ADR-0063: the communication office's stories still wait for a person.
-    $office = Post::query()->where('source_url', 'https://t.me/HarariGovernmentCommunication/502')->firstOrFail();
+    $office = Post::query()->where('source_url', 'https://t.me/sample_office/502')->firstOrFail();
     expect($office->translations()->firstOrFail()->status)->toBe(ContentStatus::Draft);
 
     $again = app(RunImport::class)->handle();
-    expect($again['hrprosperityparty']['imported'])->toBe(0)->and(Post::query()->count())->toBe(3);
+    expect($again['sample_agency']['imported'])->toBe(0)->and(Post::query()->count())->toBe(3);
 });
 
 it('skips a story the same channel posts again', function () {
-    fakeChannels(office: telegramPage('HarariGovernmentCommunication', [
+    fakeChannels(office: telegramPage('sample_office', [
         ['id' => 601, 'at' => '2026-10-16T09:00:00+00:00', 'text' => "Sample health services story\n\nThe sample office reports progress on health services this year."],
         ['id' => 602, 'at' => '2026-10-16T13:00:00+00:00', 'text' => "Sample health services story\n\nThe sample office reports progress on health services this year."],
     ]));
 
     $report = app(RunImport::class)->handle();
 
-    expect($report['HarariGovernmentCommunication'])->toMatchArray(['imported' => 1, 'duplicates' => 1])
-        ->and(ContentImport::query()->where('external_id', 'HarariGovernmentCommunication/602')->value('status'))->toBe(ContentImport::DUPLICATE);
+    expect($report['sample_office'])->toMatchArray(['imported' => 1, 'duplicates' => 1])
+        ->and(ContentImport::query()->where('external_id', 'sample_office/602')->value('status'))->toBe(ContentImport::DUPLICATE);
 });
 
 it('keeps the error of a failing source without stopping the others', function () {
     Http::fake([
-        't.me/s/hrprosperityparty*' => Http::response('down', 502),
-        't.me/s/HarariGovernmentCommunication*' => Http::response(telegramPage('HarariGovernmentCommunication', [
+        't.me/s/sample_agency*' => Http::response('down', 502),
+        't.me/s/sample_office*' => Http::response(telegramPage('sample_office', [
             ['id' => 7, 'at' => '2026-10-15T12:00:00+00:00', 'text' => 'Sample office note'],
         ])),
     ]);
 
     $report = app(RunImport::class)->handle();
 
-    expect($report['hrprosperityparty']['error'])->toContain('502')
-        ->and(ContentSource::query()->where('handle', 'hrprosperityparty')->value('last_error'))->toContain('502')
-        ->and($report['HarariGovernmentCommunication']['imported'])->toBe(1);
+    expect($report['sample_agency']['error'])->toContain('502')
+        ->and(ContentSource::query()->where('handle', 'sample_agency')->value('last_error'))->toContain('502')
+        ->and($report['sample_office']['imported'])->toBe(1);
 });
 
 it('runs from the command line and on a schedule', function () {
     fakeChannels();
 
-    $this->artisan('content:import', ['--source' => 'hrprosperityparty'])->assertSuccessful();
+    $this->artisan('content:import', ['--source' => 'sample_agency'])->assertSuccessful();
     $this->artisan('content:import', ['--source' => 'unknown'])->assertFailed();
     $this->artisan('schedule:list')->expectsOutputToContain('content:import');
 
@@ -182,9 +184,9 @@ it('lets admins manage sources and import now, and keeps sources from publishers
     $this->actingAs(staff(SystemRole::CommunicationsEditor))->get('/admin/content-sources')->assertForbidden();
 
     $this->actingAs(staff(SystemRole::Admin));
-    $this->get('/admin/content-sources')->assertOk()->assertSee('Harari Government Communication Affairs Office');
+    $this->get('/admin/content-sources')->assertOk()->assertSee('Sample Office Channel');
 
-    $source = ContentSource::query()->where('handle', 'hrprosperityparty')->firstOrFail();
+    $source = ContentSource::query()->where('handle', 'sample_agency')->firstOrFail();
     livewire(ManageContentSources::class)->callTableAction('import', $source)->assertHasNoTableActionErrors();
 
     expect(Post::query()->count())->toBe(2);
@@ -193,12 +195,12 @@ it('lets admins manage sources and import now, and keeps sources from publishers
 it('shows the source under a published imported story', function () {
     fakeChannels();
     app(RunImport::class)->handle();
-    $post = Post::query()->where('source_url', 'https://t.me/hrprosperityparty/101')->firstOrFail();
+    $post = Post::query()->where('source_url', 'https://t.me/sample_agency/101')->firstOrFail();
 
     $this->get('/en/news/'.$post->translation('en')?->slug)
         ->assertOk()
-        ->assertSee('href="https://t.me/hrprosperityparty/101"', escape: false)
-        ->assertSee('Prosperity Party Harari Region Branch');
+        ->assertSee('href="https://t.me/sample_agency/101"', escape: false)
+        ->assertSee('Sample Agency Channel');
 });
 
 it('recognises Harari text in Ethiopic script', function () {
@@ -210,16 +212,16 @@ it('recognises Harari text in Ethiopic script', function () {
 it('publishes imported drafts on request, moving Harari stories and leaving chosen ones as drafts', function () {
     staff(SystemRole::SuperAdmin);
     ContentSource::query()->update(['auto_publish' => false]);
-    fakeChannels(branch: telegramPage('hrprosperityparty', [
+    fakeChannels(branch: telegramPage('sample_agency', [
         ['id' => 301, 'at' => '2026-10-15T10:00:00+00:00', 'text' => "የናሙና ዜና ርዕስ\n\nየናሙና ዜና ጽሑፍ።"],
         ['id' => 302, 'at' => '2026-10-15T10:00:05+00:00', 'photos' => ['https://cdn4.telesco.pe/file/one.jpg']],
         ['id' => 303, 'at' => '2026-10-15T11:00:00+00:00', 'text' => "ሌላ የናሙና ዜና\n\nየናሙና ጽሑፍ።"],
         ['id' => 304, 'at' => '2026-10-15T12:00:00+00:00', 'text' => "ሦስተኛ የናሙና ዜና\n\nየናሙና ጽሑፍ።"],
-    ]), office: telegramPage('HarariGovernmentCommunication', []));
+    ]), office: telegramPage('sample_office', []));
     app(RunImport::class)->handle();
 
-    $harari = Post::query()->where('source_url', 'https://t.me/hrprosperityparty/301')->firstOrFail();
-    $skipped = Post::query()->where('source_url', 'https://t.me/hrprosperityparty/304')->firstOrFail();
+    $harari = Post::query()->where('source_url', 'https://t.me/sample_agency/301')->firstOrFail();
+    $skipped = Post::query()->where('source_url', 'https://t.me/sample_agency/304')->firstOrFail();
 
     $this->artisan('portal:publish-imported', ['--dry-run' => true])->expectsOutputToContain('would publish')->assertSuccessful();
     expect(Post::query()->whereHas('translations', fn ($q) => $q->where('status', 'published'))->count())->toBe(0);
@@ -231,7 +233,7 @@ it('publishes imported drafts on request, moving Harari stories and leaving chos
         ->and($harari->translation('am', fallback: false))->toBeNull()
         ->and($harari->source_locale)->toBe('har')
         ->and($harari->featuredImage?->alt)->toHaveKey('har')
-        ->and(Post::query()->where('source_url', 'https://t.me/hrprosperityparty/303')->firstOrFail()->translation('am', fallback: false)?->status)->toBe(ContentStatus::Published)
+        ->and(Post::query()->where('source_url', 'https://t.me/sample_agency/303')->firstOrFail()->translation('am', fallback: false)?->status)->toBe(ContentStatus::Published)
         ->and($skipped->translation('am', fallback: false)?->status)->toBe(ContentStatus::Draft);
 
     $this->get('/har/news/'.$harari->translation('har')?->slug)->assertOk()->assertSee('የናሙና ዜና ርዕስ');

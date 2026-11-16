@@ -8,7 +8,7 @@ use RuntimeException;
 
 /**
  * A large language model (Anthropic or OpenAI) asked for a formal
- * translation suitable for a political party, with the approved glossary
+ * translation suitable for a government agency, with the approved glossary
  * terms (ADR-0035). The answer must be a JSON list of the same length.
  */
 final class LlmTranslationProvider implements TranslationProvider
@@ -73,9 +73,9 @@ final class LlmTranslationProvider implements TranslationProvider
     public static function instructions(string $from, string $to, array $glossary): string
     {
         $lines = [
-            'You translate the website of the Harari regional branch of the Prosperity Party (Ethiopia).',
+            'You translate the website of the Harari Regional State Innovation and Technology Agency (Ethiopia).',
             'Translate every string of the JSON list you receive from '.Locales::nativeName($from)." ({$from}) into ".Locales::nativeName($to)." ({$to}).",
-            'Use a formal, respectful register suitable for an official political party website. Keep names of people and places.',
+            'Use a formal, plain register suitable for an official government website, with the established Ethiopian terms for technology. Keep names of people and places.',
             'Tokens such as ⟦0⟧ stand for parts that must not change: keep every token exactly once and unchanged.',
             'Answer with a JSON list of strings only, in the same order and of the same length, with no other text.',
         ];

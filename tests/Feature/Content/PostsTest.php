@@ -199,7 +199,7 @@ it('renders the body blocks to safe HTML', function () {
 });
 
 it('counts Ethiopic and Latin words', function () {
-    expect(BodyRenderer::wordCount(body('የሐረሪ ክልል ብልጽግና ፓርቲ', 'Two words')))->toBe(6)
+    expect(BodyRenderer::wordCount(body('የሐረሪ ክልል ኢኖቬሽን ኤጀንሲ', 'Two words')))->toBe(6)
         ->and(BodyRenderer::wordCount(null))->toBe(0)
         ->and(BodyRenderer::isEmpty(['type' => 'doc', 'content' => []]))->toBeTrue();
 });

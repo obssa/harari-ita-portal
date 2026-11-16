@@ -130,7 +130,7 @@ def self_test() -> int:
     cases = {
         "<p>{{ __('site.name') }}</p>": [],
         "<p>Hello world</p>": ["Hello world"],
-        '<img src="x.png" alt="Party logo">': ['alt="Party logo"'],
+        '<img src="x.png" alt="Agency logo">': ['alt="Agency logo"'],
         '<img alt="{{ $media->altFor() }}">': [],
         "{{-- a comment with words --}}<span>·</span>": [],
         "@props(['title' => 'Default title'])\n<div></div>": [],

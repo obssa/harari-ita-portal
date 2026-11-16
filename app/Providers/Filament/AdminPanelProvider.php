@@ -49,7 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->profile(isSimple: false)
             ->colors([
-                // Prosperity Blue taken from the party's logo (ADR-0062).
+                // The brand colour until the phase 1 tokens (docs/DESIGN.md §1).
                 'primary' => Color::hex('#0B6CA8'),
             ])
             ->favicon('/favicon-96.png')
@@ -63,7 +63,7 @@ class AdminPanelProvider extends PanelProvider
             // Authenticator-app MFA for everyone who wants it; required for the
             // roles in config('portal.mfa_required_roles') by our middleware.
             ->multiFactorAuthentication(
-                [AppAuthentication::make()->recoverable()->brandName('Harari PP')],
+                [AppAuthentication::make()->recoverable()->brandName((string) config('app.name'))],
                 isRequired: true,
             )
             ->multiFactorAuthenticationRequiredMiddlewareName(RequireMfaForPrivilegedRoles::class)

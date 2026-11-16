@@ -24,7 +24,7 @@
         }
     }
 @endphp
-{{-- ADR-0070: the party's campaign banner, rebuilt in HTML: the heading in outline, a slanted photo strip,
+{{-- ADR-0070: a campaign banner, rebuilt in HTML: the heading in outline, a slanted photo strip,
      the orange band and a row with the button, the site, the social pages and the slogan. --}}
 <div class="relative isolate flex w-full overflow-hidden bg-white text-ink-brand {{ $height }}">
     <div aria-hidden="true" class="absolute inset-y-0 end-0 -z-10 hidden w-[24%] bg-linear-to-b from-[#ee8a3d] via-[#e5553a] to-[#d42f38] [clip-path:polygon(30%_0,100%_0,100%_100%,62%_100%)] lg:block"></div>

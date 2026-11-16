@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -30,8 +29,6 @@ return new class extends Migration
         Schema::table('content_sources', function (Blueprint $table) {
             $table->boolean('auto_publish')->default(false)->after('enabled');
         });
-
-        DB::table('content_sources')->where('handle', 'hrprosperityparty')->update(['auto_publish' => true]);
     }
 
     public function down(): void

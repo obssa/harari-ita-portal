@@ -24,7 +24,7 @@ $disks = ['backups'];
 if (filled(env('BACKUP_OFFSITE_DISK'))) {
     $disks[] = (string) env('BACKUP_OFFSITE_DISK');
 }
-$name = env('BACKUP_NAME', 'harari-pp-portal');
+$name = env('BACKUP_NAME', 'harari-ita-portal');
 
 return [
 

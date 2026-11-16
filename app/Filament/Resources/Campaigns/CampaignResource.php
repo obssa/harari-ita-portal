@@ -126,7 +126,7 @@ class CampaignResource extends Resource
                     ->formatStateUsing(fn (string $state): string => __("newsletter.channel.{$state}")),
                 TextColumn::make('audience_type')->label(__('campaigns.field.audience'))
                     ->state(fn (Campaign $record): string => __('campaigns.audience.'.($record->audience['type'] ?? 'subscribers'))),
-                TextColumn::make('status')->label(__('membership.admin.status'))->badge()
+                TextColumn::make('status')->label(__('people.admin.status'))->badge()
                     ->formatStateUsing(fn (CampaignStatus $state): string => $state->label())->color(fn (CampaignStatus $state): string => $state->color()),
                 TextColumn::make('when')->label(__('campaigns.field.when'))
                     ->state(fn (Campaign $record) => $record->started_at ?? $record->scheduled_at)->formatStateUsing(CalendarDate::format(withTime: true))->placeholder('—'),
@@ -134,7 +134,7 @@ class CampaignResource extends Resource
                     ->state(fn (Campaign $record): string => $record->deliveries_count > 0 ? "{$record->sent_count} / {$record->deliveries_count}" : '—'),
             ])
             ->filters([
-                SelectFilter::make('status')->label(__('membership.admin.status'))
+                SelectFilter::make('status')->label(__('people.admin.status'))
                     ->options(collect(CampaignStatus::cases())->mapWithKeys(fn (CampaignStatus $s): array => [$s->value => $s->label()])->all()),
                 SelectFilter::make('channel')->label(__('campaigns.field.channel'))
                     ->options([Campaign::EMAIL => __('newsletter.channel.email'), Campaign::SMS => __('newsletter.channel.sms')]),
@@ -164,7 +164,7 @@ class CampaignResource extends Resource
                     ->visible(fn (Campaign $record): bool => in_array($record->status, [CampaignStatus::Sending, CampaignStatus::Sent, CampaignStatus::Cancelled], true))
                     ->schema(fn (?Campaign $record): array => $record === null ? [] : self::reportEntries($record)),
                 Section::make(__('campaigns.admin.section.campaign'))->schema([
-                    TextEntry::make('status')->label(__('membership.admin.status'))->badge()
+                    TextEntry::make('status')->label(__('people.admin.status'))->badge()
                         ->formatStateUsing(fn (CampaignStatus $state): string => $state->label())->color(fn (CampaignStatus $state): string => $state->color()),
                     TextEntry::make('channel')->label(__('campaigns.field.channel'))->formatStateUsing(fn (string $state): string => __("newsletter.channel.{$state}")),
                     TextEntry::make('audience_summary')->label(__('campaigns.field.audience'))

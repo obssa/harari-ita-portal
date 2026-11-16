@@ -20,13 +20,13 @@ function livePost(string $title, string $locale = 'en'): Post
 
 beforeEach(fn () => Storage::fake('public'));
 
-it('describes the party and the page for search engines and sharing', function () {
+it('describes the Agency and the page for search engines and sharing', function () {
     $html = (string) $this->get('/en')->getContent();
 
     expect($html)->toContain('<meta property="og:title"', '<meta property="og:locale" content="en_US">')
         ->toContain('<meta property="og:locale:alternate" content="am_ET">')
         ->toContain('<script type="application/ld+json" nonce="')
-        ->toContain('"@type":"PoliticalParty"')
+        ->toContain('"@type":"GovernmentOrganization"')
         ->toContain('<meta property="og:image" content="');
 });
 

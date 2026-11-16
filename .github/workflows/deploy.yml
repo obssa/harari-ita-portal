@@ -1,6 +1,6 @@
 name: Deploy
 
-# main -> CI green -> build release -> https://hararipp.orcamind.dev (staging)
+# main -> CI green -> build release -> https://hita.orcamind.dev (staging)
 #
 # No commits are created (the repository owner stays the sole author, ADR-0003).
 # The job is skipped until the repository variable DEPLOY_ENABLED is "true".
@@ -85,14 +85,14 @@ jobs:
     timeout-minutes: 20
     environment:
       name: staging
-      url: ${{ vars.DEPLOY_URL || 'https://hararipp.orcamind.dev' }}
+      url: ${{ vars.DEPLOY_URL || 'https://hita.orcamind.dev' }}
     env:
       SSH_HOST: ${{ secrets.DEPLOY_HOST }}
       SSH_USER: ${{ secrets.DEPLOY_USER }}
       SSH_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
       APP_DIR: ${{ vars.DEPLOY_PATH }}
       PHP_BIN: ${{ vars.DEPLOY_PHP_BIN || 'php' }}
-      URL: ${{ vars.DEPLOY_URL || 'https://hararipp.orcamind.dev' }}
+      URL: ${{ vars.DEPLOY_URL || 'https://hita.orcamind.dev' }}
     steps:
       - uses: actions/checkout@v7
         with:

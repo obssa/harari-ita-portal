@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Runs on the CI runner against the live URL after a release.
-# Usage: smoke.sh https://hararipp.orcamind.dev [expect-noindex]
+# Usage: smoke.sh https://hita.orcamind.dev [expect-noindex]
 set -euo pipefail
 BASE="${1:?base URL required}"
 EXPECT_NOINDEX="${2:-yes}"

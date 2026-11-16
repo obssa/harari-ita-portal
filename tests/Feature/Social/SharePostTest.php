@@ -38,7 +38,7 @@ function shareablePost(array $publish = ['en', 'am']): Post
 }
 
 /**
- * The branch office's page and channel as social sources.
+ * The Agency's page and channel as social sources.
  *
  * @return array{0: SocialSource, 1: SocialSource}
  */

@@ -18,7 +18,7 @@ use RuntimeException;
  */
 final class TelegramChannelReader
 {
-    public const USER_AGENT = 'Mozilla/5.0 (compatible; HarariPPPortal/1.0; +https://hararipp.orcamind.dev)';
+    public const USER_AGENT = 'Mozilla/5.0 (compatible; HitaPortal/1.0; +https://hita.orcamind.dev)';
 
     private const PHOTO_HOST = '#^https://cdn\d*\.telesco\.pe/file/[A-Za-z0-9_\-./]+$#';
 

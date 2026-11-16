@@ -3,7 +3,7 @@
     $url = route('news.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
     $first = $index === 0;
 @endphp
-{{-- ADR-0070: a featured story as a slide: its photo behind night blue (the party's plates when it has none). --}}
+{{-- ADR-0070: a featured story as a slide: its photo behind night blue (the plates when it has none). --}}
 <div lang="{{ $translation->locale }}" class="relative isolate flex w-full items-end overflow-hidden bg-primary-900 text-white lg:items-center {{ $height }}">
     @if ($post->featuredImage)
         <x-picture :media="$post->featuredImage" preset="landscape" sizes="100vw" :loading="$first ? 'eager' : 'lazy'" :fetchpriority="$first ? 'high' : null"

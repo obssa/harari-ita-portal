@@ -195,16 +195,17 @@ it('reports a failing social account once, not on every attempt', function () {
 
 it('tells reviewers about new drafts and administrators about a failing import channel', function () {
     Notification::fake();
+    sampleImportSources();
     $editor = staff(SystemRole::Editor);
     $admin = staff(SystemRole::Admin);
     $page = '<html><body><section class="tgme_channel_history"><div class="tgme_widget_message_wrap js-widget_message_wrap">'
-        .'<div class="tgme_widget_message js-widget_message" data-post="HarariGovernmentCommunication/7"><div class="tgme_widget_message_bubble">'
+        .'<div class="tgme_widget_message js-widget_message" data-post="sample_office/7"><div class="tgme_widget_message_bubble">'
         .'<div class="tgme_widget_message_text js-message_text" dir="auto">Sample office note</div>'
         .'<div class="tgme_widget_message_footer"><a class="tgme_widget_message_date" href="#"><time datetime="2026-10-15T12:00:00+00:00" class="time">12:00</time></a></div>'
         .'</div></div></div></section></body></html>';
     Http::fake([
-        't.me/s/hrprosperityparty*' => Http::response('down', 502),
-        't.me/s/HarariGovernmentCommunication*' => Http::response($page),
+        't.me/s/sample_agency*' => Http::response('down', 502),
+        't.me/s/sample_office*' => Http::response($page),
     ]);
 
     app(RunImport::class)->handle();

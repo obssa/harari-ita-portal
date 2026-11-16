@@ -23,7 +23,7 @@ class ListSubscribers extends ListRecords
     {
         return [
             Action::make('export')
-                ->label(__('membership.admin.export'))
+                ->label(__('people.admin.export'))
                 ->icon(Heroicon::OutlinedArrowDownTray)
                 ->color('gray')
                 ->visible(fn (): bool => CurrentUser::get()->can('subscribers.export'))

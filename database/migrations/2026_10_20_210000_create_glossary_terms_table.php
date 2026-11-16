@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * Approved terms per language (PLAN.md §10 `glossary_terms`, ADR-0034):
- * the party's own words for its names, bodies and ideas.
+ * the Agency's own words for its names, units and ideas.
  */
 return new class extends Migration
 {

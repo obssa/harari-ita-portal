@@ -61,7 +61,7 @@ class AssignmentsRelationManager extends RelationManager
                 TextColumn::make('event_title')->label(__('volunteers.assignment.event'))
                     ->state(fn (VolunteerAssignment $record): ?string => $record->event?->title())->placeholder('—'),
                 TextColumn::make('on_date')->label(__('volunteers.assignment.on_date'))->formatStateUsing(CalendarDate::format())->placeholder('—'),
-                TextColumn::make('status')->label(__('membership.admin.status'))->badge()
+                TextColumn::make('status')->label(__('people.admin.status'))->badge()
                     ->formatStateUsing(fn (AssignmentStatus $state): string => $state->label())->color(fn (AssignmentStatus $state): string => $state->color()),
                 TextColumn::make('hours')->label(__('volunteers.assignment.hours'))->placeholder('—'),
             ])
@@ -107,7 +107,7 @@ class AssignmentsRelationManager extends RelationManager
                     ->mapWithKeys(fn (Event $event): array => [$event->id => $event->starts_at->toDateString().' · '.$event->title()])->all()),
             TextInput::make('task')->label(__('volunteers.assignment.task'))->maxLength(120)->helperText(__('volunteers.assignment.task_help')),
             DatePicker::make('on_date')->label(__('volunteers.assignment.on_date')),
-            Select::make('status')->label(__('membership.admin.status'))->options(AssignmentStatus::options())->default(AssignmentStatus::Planned->value)->required(),
+            Select::make('status')->label(__('people.admin.status'))->options(AssignmentStatus::options())->default(AssignmentStatus::Planned->value)->required(),
             TextInput::make('hours')->label(__('volunteers.assignment.hours'))->numeric()->minValue(0)->maxValue(999)->step(0.25),
         ];
     }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * Sharing images for pages without a photo (PLAN.md §11: auto-generated OG
- * images with title and logo): 1200×630 PNG in the party colours with the
+ * images with title and logo): 1200×630 PNG in the site's colours with the
  * title in Latin or Ethiopic letters. Made once per title and kept on the
  * public disk.
  */
@@ -42,7 +42,7 @@ final class OgImage
     {
         $image = imagecreatetruecolor(self::WIDTH, self::HEIGHT);
 
-        // Party blue, a little darker towards the bottom, with the Harar accent bar.
+        // The brand colour, a little darker towards the bottom, with the Harar accent bar.
         for ($y = 0; $y < self::HEIGHT; $y++) {
             $t = $y / self::HEIGHT;
             $colour = (int) imagecolorallocate($image, (int) (49 - 12 * $t), (int) (81 - 24 * $t), (int) (237 - 36 * $t));

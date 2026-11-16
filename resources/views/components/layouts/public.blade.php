@@ -15,10 +15,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ? $title.' · ' : '' }}{{ __('site.name') }}</title>
     <meta name="description" content="{{ $description ?? __('site.description') }}">
-    <meta name="theme-color" content="#083a5c">
+    <meta name="theme-color" content="#0F5E63">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
-    <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="preload" href="/fonts/portal/inter-latin-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
     @if ($ethiopic)
         <link rel="preload" href="/fonts/portal/noto-sans-ethiopic-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
@@ -55,7 +56,7 @@
         </div>
     </div>
 
-    {{-- ADR-0074: one clean row: the party's mark and name, then search, the call to join and (below desktop) the menu.
+    {{-- ADR-0074: one clean row: the Agency's mark and name, then search and (below desktop) the menu.
          On phones the row stays pinned at the top while reading. --}}
     <header class="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur-md supports-[backdrop-filter]:bg-surface/80 lg:relative lg:bg-surface lg:backdrop-blur-none">
         <div class="mx-auto flex h-16 max-w-page items-center justify-between gap-3 px-4 sm:px-6 lg:h-[4.75rem]">

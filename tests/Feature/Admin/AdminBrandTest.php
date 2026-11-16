@@ -2,7 +2,7 @@
 
 use App\Domain\Access\Enums\SystemRole;
 
-it('brands the admin with the party logo, its colours and self-hosted fonts', function () {
+it('brands the admin with the logo, its colours and self-hosted fonts', function () {
     $html = (string) $this->get('/admin/login')->assertOk()->getContent();
 
     expect($html)->toContain('/brand/admin.css?v=', 'hpp-brand', '/brand/logo-128.png', __('admin.brand.sub'))

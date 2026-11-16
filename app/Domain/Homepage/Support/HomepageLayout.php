@@ -174,7 +174,7 @@ final class HomepageLayout
     }
 
     /**
-     * The party on social media (ADR-0071 to ADR-0073): its pages, the
+     * The Agency on social media (ADR-0071 to ADR-0073): its pages, the
      * Facebook page's header through Facebook's plugin, the Telegram channel,
      * and the latest posts the server read from all of them.
      *

@@ -27,28 +27,28 @@ class ViewVolunteer extends ViewRecord
         return [
             EditAction::make()->visible($canManage),
             Action::make('status')
-                ->label(__('members.admin.change_status'))
+                ->label(__('people.admin.change_status'))
                 ->icon(Heroicon::OutlinedAdjustmentsHorizontal)
                 ->color('gray')
                 ->visible($canManage)
                 ->fillForm(fn (): array => ['status' => $this->volunteer()->status->value])
                 ->schema([
-                    Select::make('status')->label(__('membership.admin.status'))->options(VolunteerStatus::options())->required(),
+                    Select::make('status')->label(__('people.admin.status'))->options(VolunteerStatus::options())->required(),
                     Textarea::make('reason')->label(__('volunteers.admin.status_note'))->rows(3)->maxLength(1000),
                 ])
                 ->action(function (array $data): void {
                     app(ManageVolunteer::class)->changeStatus($this->volunteer(), VolunteerStatus::from((string) $data['status']), (string) ($data['reason'] ?? ''), CurrentUser::get());
-                    Notification::make()->success()->title(__('members.admin.status_changed'))->send();
+                    Notification::make()->success()->title(__('people.admin.status_changed'))->send();
                     $this->refreshFormData(['status']);
                 }),
             Action::make('note')
-                ->label(__('membership.admin.note'))
+                ->label(__('people.admin.note'))
                 ->icon(Heroicon::OutlinedChatBubbleLeftEllipsis)
                 ->color('gray')
-                ->schema([Textarea::make('body')->label(__('membership.admin.note_text'))->helperText(__('volunteers.admin.note_help'))->required()->rows(5)->maxLength(2000)])
+                ->schema([Textarea::make('body')->label(__('people.admin.note_text'))->helperText(__('volunteers.admin.note_help'))->required()->rows(5)->maxLength(2000)])
                 ->action(function (array $data): void {
                     app(ManageVolunteer::class)->note($this->volunteer(), (string) $data['body'], CurrentUser::get());
-                    Notification::make()->success()->title(__('membership.admin.noted'))->send();
+                    Notification::make()->success()->title(__('people.admin.noted'))->send();
                 }),
         ];
     }

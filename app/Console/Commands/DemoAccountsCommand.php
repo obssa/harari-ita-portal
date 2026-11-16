@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
  */
 final class DemoAccountsCommand extends Command
 {
-    public const DOMAIN = 'demo.hararipp.test';
+    public const DOMAIN = 'demo.hita.test';
 
     protected $signature = 'portal:demo-accounts {--remove : Delete the sample accounts instead}';
 

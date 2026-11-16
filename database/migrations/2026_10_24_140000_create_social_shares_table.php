@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Posts shared from the admin to the party's Facebook pages and Telegram
+     * Posts shared from the admin to the Agency's Facebook pages and Telegram
      * channels (ADR-0059), one row per account, with the outcome.
      */
     public function up(): void

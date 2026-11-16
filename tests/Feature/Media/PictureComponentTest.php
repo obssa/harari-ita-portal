@@ -47,9 +47,9 @@ it('uses the given alt text and priority for the main image', function () {
     $media = app(UploadMedia::class)->handle(TestFiles::svg('<rect width="1" height="1"/>'), 'logo.svg');
 
     $html = Blade::render(
-        '<x-picture :media="$media" alt="Party logo" loading="eager" fetchpriority="high" />',
+        '<x-picture :media="$media" alt="Agency logo" loading="eager" fetchpriority="high" />',
         ['media' => $media],
     );
 
-    expect($html)->toContain('alt="Party logo"', 'loading="eager"', 'fetchpriority="high"', '/media/'.$media->uuid.'/logo.svg');
+    expect($html)->toContain('alt="Agency logo"', 'loading="eager"', 'fetchpriority="high"', '/media/'.$media->uuid.'/logo.svg');
 });

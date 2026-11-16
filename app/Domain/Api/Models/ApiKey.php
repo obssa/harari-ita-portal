@@ -11,7 +11,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * A key an outside app (the branch office's mobile app, an office kiosk)
+ * A key an outside app (the Agency's mobile app, an office kiosk)
  * uses to read the public API (ADR-0056). Only a keyed hash is stored; the
  * key itself is shown once, when it is issued.
  *

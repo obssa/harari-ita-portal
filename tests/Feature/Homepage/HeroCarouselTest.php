@@ -116,22 +116,22 @@ it('sends buttons only to site pages, profiles and safe addresses', function () 
 it('draws the banner and the portrait layouts', function () {
     $picture = slidePicture();
     heroSlide(['layout' => 'banner', 'image_id' => $picture->id, 'content' => ['en' => [
-        'title' => 'Prosperity Party', 'highlight' => 'ብልፅግና', 'text' => 'Sample tagline.', 'note' => 'Sample slogan ahead',
+        'title' => 'Sample Agency', 'highlight' => 'ናሙና', 'text' => 'Sample tagline.', 'note' => 'Sample slogan ahead',
     ]], 'buttons' => [['kind' => 'route', 'route' => 'volunteer.create', 'label' => ['en' => 'Join now']]]]);
     heroSlide(['layout' => 'portrait', 'image_id' => $picture->id, 'content' => ['en' => [
         'kicker' => 'Sample kicker', 'title' => 'Sample message on a firm foundation', 'highlight' => 'on a firm foundation',
-        'note' => "H.E Sample Person\nHead of the sample party",
+        'note' => "H.E Sample Person\nHead of the sample agency",
     ]]]);
 
     $this->get('/en')->assertOk()
-        ->assertSee('<span class="sr-only">Prosperity Party ብልፅግና</span>', escape: false)
-        ->assertSee('>PROSPERITY</text>', escape: false)
+        ->assertSee('<span class="sr-only">Sample Agency ናሙና</span>', escape: false)
+        ->assertSee('>SAMPLE</text>', escape: false)
         ->assertSee('Sample tagline.')
         ->assertSee('<span class="sr-only">Sample slogan ahead</span>', escape: false)
         ->assertSee('>ahead</span>', escape: false)
         ->assertSee('clip-path:polygon(0_0,81%_0,100%_100%,19%_100%)', escape: false)
         ->assertSee('Sample message <span class="text-gold-400">on a firm foundation</span>', escape: false)
-        ->assertSeeInOrder(['H.E Sample Person', 'Head of the sample party'])
+        ->assertSeeInOrder(['H.E Sample Person', 'Head of the sample agency'])
         ->assertSee('Sample slide picture');
 });
 

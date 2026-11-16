@@ -124,7 +124,7 @@ final class SampleContentCommand extends Command
         app(SaveDocument::class)->handle(new Document, [
             'type' => 'programme', 'year' => (int) date('Y'),
             'translations' => self::translations(
-                ['en' => 'Party programme', 'am' => 'የፓርቲ ፕሮግራም', 'om' => 'Sagantaa paartii'],
+                ['en' => 'Sample digital strategy', 'am' => 'የናሙና ዲጂታል ስትራቴጂ', 'om' => 'Tarsiimoo dijitaalaa fakkeenyaa'],
                 ['en' => ['file_id' => $file->id, 'summary' => 'A sample document to test the library. It is not an official document.']],
             ),
         ], $actor);

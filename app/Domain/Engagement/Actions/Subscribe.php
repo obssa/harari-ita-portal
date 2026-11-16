@@ -139,7 +139,7 @@ final class Subscribe
                 $subscriber->forceFill(['code_attempts' => $subscriber->code_attempts + 1])->save();
             }
 
-            throw ValidationException::withMessages(['code' => __('membership.validation.code')]);
+            throw ValidationException::withMessages(['code' => __('people.validation.code')]);
         }
 
         // ADR-0077: a code sent to a new number switches the subscriber to it, unless another subscription uses it.

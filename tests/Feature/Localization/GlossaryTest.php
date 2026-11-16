@@ -11,27 +11,27 @@ use App\Filament\Resources\GlossaryTerms\Pages\ManageGlossaryTerms;
 use function Pest\Livewire\livewire;
 
 it('finds approved terms as whole words and checks the translation uses them', function () {
-    GlossaryTerm::query()->create(['terms' => ['en' => 'Sample Party', 'am' => 'ናሙና ፓርቲ', 'om' => 'Paartii Fakkeenyaa'], 'notes' => 'Never shortened']);
+    GlossaryTerm::query()->create(['terms' => ['en' => 'Sample Agency', 'am' => 'ናሙና ኤጀንሲ', 'om' => 'Ejansii Fakkeenyaa'], 'notes' => 'Never shortened']);
 
     $glossary = app(Glossary::class);
-    expect($glossary->check('About the Sample Party office', 'ስለ ናሙና ፓርቲ ጽሕፈት ቤት', 'am'))->toBe([
-        ['en' => 'Sample Party', 'term' => 'ናሙና ፓርቲ', 'notes' => 'Never shortened', 'followed' => true],
+    expect($glossary->check('About the Sample Agency office', 'ስለ ናሙና ኤጀንሲ ጽሕፈት ቤት', 'am'))->toBe([
+        ['en' => 'Sample Agency', 'term' => 'ናሙና ኤጀንሲ', 'notes' => 'Never shortened', 'followed' => true],
     ])
-        ->and($glossary->breaks('About the sample party office', 'Waa\'ee waajjira paartii', 'om'))->toBeTrue()
-        ->and($glossary->check('Sample Partying', 'x', 'am'))->toBe([])
+        ->and($glossary->breaks('About the sample agency office', 'Waa\'ee waajjira ejansii', 'om'))->toBeTrue()
+        ->and($glossary->check('Sample Agencying', 'x', 'am'))->toBe([])
         // No Harari term yet: nothing to break.
-        ->and($glossary->breaks('Sample Party', 'anything', 'har'))->toBeFalse();
+        ->and($glossary->breaks('Sample Agency', 'anything', 'har'))->toBeFalse();
 });
 
 it('flags translated strings that miss a glossary term in the grid', function () {
     $admin = staff(SystemRole::SuperAdmin);
-    app(EditUiTranslation::class)->handle('nav.home', 'en', 'Sample Party home', $admin);
+    app(EditUiTranslation::class)->handle('nav.home', 'en', 'Sample Agency home', $admin);
     app(EditUiTranslation::class)->handle('nav.home', 'om', 'Fuula jalqabaa', $admin);
-    GlossaryTerm::query()->create(['terms' => ['en' => 'Sample Party', 'om' => 'Paartii Fakkeenyaa']]);
+    GlossaryTerm::query()->create(['terms' => ['en' => 'Sample Agency', 'om' => 'Ejansii Fakkeenyaa']]);
 
     expect(app(TranslationRows::class)->for('om')['nav.home']['status'])->toBe(TranslationRows::GLOSSARY);
 
-    app(EditUiTranslation::class)->handle('nav.home', 'om', 'Fuula Paartii Fakkeenyaa', $admin);
+    app(EditUiTranslation::class)->handle('nav.home', 'om', 'Fuula Ejansii Fakkeenyaa', $admin);
     expect(app(TranslationRows::class)->for('om')['nav.home']['status'])->toBe(TranslationRows::TRANSLATED);
 });
 

@@ -20,7 +20,7 @@ use Filament\Support\Icons\Heroicon;
 use UnitEnum;
 
 /**
- * The press kit (PLAN.md §4, ADR-0029): the short description of the party
+ * The press kit (PLAN.md §4, ADR-0029): the short description of the Agency
  * office in each language, the media contact, the logos to download and the
  * press enquiry form. Portraits come from the leadership directory.
  */

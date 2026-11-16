@@ -95,12 +95,12 @@ it('lets those who manage social media add accounts and moderate posts, and keep
         ->callAction('create', data: ['platform' => 'telegram', 'handle' => 'not valid!', 'name' => 'Sample'])
         ->assertHasActionErrors(['handle']);
     livewire(ManageSocialSources::class)
-        ->callAction('create', data: ['platform' => 'telegram', 'handle' => 'hrprosperityparty', 'name' => 'Sample branch', 'interval_minutes' => 30, 'enabled' => true])
+        ->callAction('create', data: ['platform' => 'telegram', 'handle' => 'sample_agency', 'name' => 'Sample branch', 'interval_minutes' => 30, 'enabled' => true])
         ->assertHasNoActionErrors();
     $source = SocialSource::query()->firstOrFail();
-    expect($source->url())->toBe('https://t.me/hrprosperityparty');
+    expect($source->url())->toBe('https://t.me/sample_agency');
 
-    $post = $source->posts()->create(['external_id' => '1', 'posted_at' => now(), 'text' => 'Sample post', 'permalink' => 'https://t.me/hrprosperityparty/1']);
+    $post = $source->posts()->create(['external_id' => '1', 'posted_at' => now(), 'text' => 'Sample post', 'permalink' => 'https://t.me/sample_agency/1']);
     livewire(ListSocialPosts::class)
         ->assertCanSeeTableRecords([$post])
         ->callAction(TestAction::make('hide')->table($post))

@@ -6,7 +6,7 @@ use App\Settings\SiteSettings;
 use Throwable;
 
 /**
- * The party's pages on social media (ADR-0072), as set under Settings → Site,
+ * The Agency's pages on social media (ADR-0072), as set under Settings → Site,
  * the same way everywhere they are shown: in a fixed order, with the
  * platform's name, a short handle, its brand colour for the icon and a
  * darker shade that carries white text at 4.5:1.

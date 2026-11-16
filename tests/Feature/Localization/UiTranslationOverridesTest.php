@@ -13,7 +13,7 @@ it('uses a string edited in the admin over the shipped file', function () {
     freshTranslator();
 
     expect(__('site.office', [], 'am'))->toBe('የተስተካከለ ጽሑፍ')
-        ->and(__('site.office', [], 'en'))->toBe('Harari Regional Branch Office');
+        ->and(__('site.office', [], 'en'))->toBe('Innovation and Technology Agency');
 });
 
 it('shows a Harari string as soon as a translator saves it', function () {
@@ -27,8 +27,8 @@ it('ignores empty edits and never borrows another language for a row', function 
     UiTranslation::query()->create(['key' => 'site.office', 'text' => ['am' => '', 'en' => 'Edited English']]);
     freshTranslator();
 
-    expect(__('site.office', [], 'am'))->toBe('የሐረሪ ክልል ቅርንጫፍ ጽሕፈት ቤት')
-        ->and(__('site.office', [], 'om'))->toBe('Waajjira Damee Naannoo Hararii');
+    expect(__('site.office', [], 'am'))->toBe('ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ')
+        ->and(__('site.office', [], 'om'))->toBe('Ejansii Kalaqaa fi Teeknooloojii');
 });
 
 it('refreshes the cached strings when a translation changes', function () {
@@ -42,7 +42,7 @@ it('refreshes the cached strings when a translation changes', function () {
 
     $row->update(['text' => []]);
     freshTranslator();
-    expect(__('site.office', [], 'am'))->toBe('የሐረሪ ክልል ቅርንጫፍ ጽሕፈት ቤት');
+    expect(__('site.office', [], 'am'))->toBe('ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ');
 });
 
 it('audits translation edits', function () {

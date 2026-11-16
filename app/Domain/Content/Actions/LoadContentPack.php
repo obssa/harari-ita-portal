@@ -190,7 +190,7 @@ final class LoadContentPack
     /**
      * Later additions to records the pack loaded (ADR-0065): a photo, a page
      * template, a pillar colour, a body. Each fills only what is still empty,
-     * once, so an editor's choice always stays. Corrections the branch office
+     * once, so an editor's choice always stays. Corrections the Agency
      * asked for (ADR-0069) are the exception: `rename` sets a person's name
      * and title, `replace` swaps a phrase in the record's text, each once.
      *
@@ -339,7 +339,7 @@ final class LoadContentPack
     }
 
     /**
-     * A correction the branch office asked for after the pack was loaded
+     * A correction the Agency asked for after the pack was loaded
      * (ADR-0075): phrases swapped, once by key, wherever the site shows them:
      * people, pages, offices, pillars, stories, carousel slides and picture
      * descriptions (or the kinds the correction names).
@@ -486,7 +486,7 @@ final class LoadContentPack
     }
 
     /**
-     * A page of the party the social hub reads (ADR-0072), added once unless
+     * A page of the Agency's the social hub reads (ADR-0072), added once unless
      * an editor already added it; the schedule fetches its posts.
      *
      * @param  array<string, mixed>  $item

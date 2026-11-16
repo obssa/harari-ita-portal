@@ -93,7 +93,7 @@ it('restores a backup into a database with one command, after asking', function 
     expect(drillTables())->toContain('migrations', 'users', 'posts')
         ->and(DB::connection('drill')->table('migrations')->count())->toBe(DB::table('migrations')->count());
 
-    $this->artisan('portal:restore-database', ['backup' => 'harari-pp-portal/missing.zip', '--force' => true])->assertFailed();
+    $this->artisan('portal:restore-database', ['backup' => 'harari-ita-portal/missing.zip', '--force' => true])->assertFailed();
 });
 
 it('refuses a backup it cannot read', function () {

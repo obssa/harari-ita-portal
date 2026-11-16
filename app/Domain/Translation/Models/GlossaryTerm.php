@@ -8,7 +8,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * One approved term in every language (ADR-0034), e.g. the party's name or
+ * One approved term in every language (ADR-0034), e.g. the Agency's name or
  * "Medemer", with notes on how to use it.
  *
  * @property int $id

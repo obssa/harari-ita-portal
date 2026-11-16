@@ -29,7 +29,7 @@ final class ManageVolunteer
         }
         $reason = trim((string) $reason);
         if (mb_strlen($reason) > 1000) {
-            throw ValidationException::withMessages(['reason' => __('membership.validation.reason')]);
+            throw ValidationException::withMessages(['reason' => __('people.validation.reason')]);
         }
 
         $from = $volunteer->status;
@@ -43,7 +43,7 @@ final class ManageVolunteer
         $this->authorise($volunteer, $actor, 'volunteers.view');
         $text = trim($text);
         if ($text === '' || mb_strlen($text) > 2000) {
-            throw ValidationException::withMessages(['note' => __('membership.validation.note')]);
+            throw ValidationException::withMessages(['note' => __('people.validation.note')]);
         }
         $volunteer->notes()->create(['user_id' => $actor->id, 'kind' => PersonNote::NOTE, 'body' => $text]);
     }
@@ -77,7 +77,7 @@ final class ManageVolunteer
         try {
             $onDate = filled($data['on_date'] ?? null) ? CarbonImmutable::parse((string) $data['on_date'])->toDateString() : $event?->starts_at->toDateString();
         } catch (Throwable) {
-            $errors['on_date'] = __('membership.validation.birth_date');
+            $errors['on_date'] = __('people.validation.birth_date');
             $onDate = null;
         }
         if ($errors !== []) {

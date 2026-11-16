@@ -14,7 +14,7 @@ use Illuminate\Console\Command;
 final class RestoreDatabaseCommand extends Command
 {
     protected $signature = 'portal:restore-database
-        {backup? : Backup path on the backups disk, e.g. harari-pp-portal/2026-10-20-23-00-00.zip (default: the newest)}
+        {backup? : Backup path on the backups disk, e.g. harari-ita-portal/2026-10-20-23-00-00.zip (default: the newest)}
         {--connection= : Database connection to restore into (default: the live one)}
         {--force : Do not ask}';
 

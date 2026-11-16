@@ -68,7 +68,7 @@
                 $codes = $follow->filter(fn (array $item): bool => (bool) $item['qr']);
             @endphp
             @if ($socialLinks !== [] || $facebookFeed !== null || $codes->isNotEmpty())
-                {{-- ADR-0072: the party's pages, its Facebook page and the codes to scan, beside the gathered posts. --}}
+                {{-- ADR-0072: the Agency's pages, its Facebook page and the codes to scan, beside the gathered posts. --}}
                 <aside aria-labelledby="social-follow" class="space-y-6">
                     <h2 id="social-follow" class="heading-3">{{ __('footer.follow') }}</h2>
                     @if ($socialLinks !== [])

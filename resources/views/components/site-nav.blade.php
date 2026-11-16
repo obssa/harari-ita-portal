@@ -1,6 +1,6 @@
 @if ($variant === 'drawer')
     {{-- ADR-0074: phones and tablets: one round button opens a sheet under the header with search, the sections
-         (each opens in place), the call to join, the member portal and the party's pages. No script needed. --}}
+         (each opens in place), and the Agency's pages. No script needed. --}}
     <details name="site-nav" class="group/menu">
         <summary class="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-full bg-ink-brand text-white transition-colors hover:bg-primary-900 dark:bg-white/10 dark:ring-1 dark:ring-white/25 dark:hover:bg-white/20 group-open/menu:bg-gold-500 group-open/menu:text-ink-brand group-open/menu:ring-0 [&::-webkit-details-marker]:hidden">
             <svg aria-hidden="true" class="size-5 group-open/menu:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h16"/></svg>

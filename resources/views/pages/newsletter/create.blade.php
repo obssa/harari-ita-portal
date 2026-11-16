@@ -79,7 +79,7 @@
                     <label class="flex items-start gap-3">
                         <input type="checkbox" name="consent" value="1" @checked(old('consent')) required class="mt-1 size-5 rounded border-line text-primary-600"
                                @error('consent') aria-invalid="true" aria-describedby="consent-error" @enderror>
-                        <span>{{ __('newsletter.field.consent') }} <a href="{{ route('page.show', ['path' => 'privacy']) }}" class="text-link underline underline-offset-4">{{ __('membership.privacy_link') }}</a></span>
+                        <span>{{ __('newsletter.field.consent') }} <a href="{{ route('page.show', ['path' => 'privacy']) }}" class="text-link underline underline-offset-4">{{ __('people.privacy_link') }}</a></span>
                     </label>
                     @error('consent')<p id="consent-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                 </div>

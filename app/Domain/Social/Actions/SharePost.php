@@ -20,7 +20,7 @@ use RuntimeException;
 use Throwable;
 
 /**
- * Shares a published post to the party's own Facebook pages and Telegram
+ * Shares a published post to the Agency's own Facebook pages and Telegram
  * channels from the admin (PLAN.md §13 Phase 8, ADR-0059), by staff with
  * `social.share`: in one language,
  * with the post's link, through the queue. Facebook uses the page's token

@@ -72,11 +72,11 @@ it('hides placeholders from the service and drops answers that lose them', funct
 
 it('asks an AI model with the approved terms and reads its list', function () {
     useMachine('llm');
-    GlossaryTerm::query()->create(['terms' => ['en' => 'Sample Party', 'om' => 'Paartii Fakkeenyaa']]);
-    Http::fake(['api.anthropic.com/*' => Http::response(['content' => [['type' => 'text', 'text' => "```json\n[\"Fuula Paartii Fakkeenyaa\"]\n```"]]])]);
+    GlossaryTerm::query()->create(['terms' => ['en' => 'Sample Agency', 'om' => 'Ejansii Fakkeenyaa']]);
+    Http::fake(['api.anthropic.com/*' => Http::response(['content' => [['type' => 'text', 'text' => "```json\n[\"Fuula Ejansii Fakkeenyaa\"]\n```"]]])]);
 
-    expect(app(MachineTranslator::class)->translate(['Sample Party home'], 'en', 'om'))->toBe(['Fuula Paartii Fakkeenyaa']);
-    Http::assertSent(fn (Request $request): bool => str_contains((string) $request['system'], 'Sample Party → Paartii Fakkeenyaa')
+    expect(app(MachineTranslator::class)->translate(['Sample Agency home'], 'en', 'om'))->toBe(['Fuula Ejansii Fakkeenyaa']);
+    Http::assertSent(fn (Request $request): bool => str_contains((string) $request['system'], 'Sample Agency → Ejansii Fakkeenyaa')
         && $request['model'] === 'claude-sonnet-5-5' && $request->header('x-api-key') === ['sample-llm-key']);
 });
 

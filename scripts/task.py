@@ -2,7 +2,7 @@
 """Cross-platform task runner (Windows has no `make`).
 
 Every PHP command runs inside the php:8.3 test container from compose.test.yml.
-The website itself is never served locally; it runs on hararipp.orcamind.dev.
+The website itself is never served locally; it runs on hita.orcamind.dev.
 
 Usage:
     python scripts/task.py doctor

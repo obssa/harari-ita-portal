@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 /**
  * URL slugs for every language (PLAN.md §6): Ethiopic titles are written in
- * Latin letters with a simple, readable transliteration (ብልጽግና → biltsigina),
+ * Latin letters with a simple, readable transliteration (ሐረር ጁጎል → harer-jugol),
  * then cleaned like any slug. Editors can always type their own slug.
  */
 final class Slugger

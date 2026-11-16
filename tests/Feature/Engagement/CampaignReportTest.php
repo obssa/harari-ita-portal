@@ -30,8 +30,8 @@ function sentCampaign(User $sender): Campaign
     $campaign = app(SaveCampaign::class)->handle(new Campaign, [
         'name' => 'Sample report campaign', 'channel' => Campaign::EMAIL, 'audience' => ['type' => 'subscribers'],
         'content' => [
-            'en' => ['subject' => 'Sample subject', 'body' => 'Read [the story](https://hararipp.orcamind.dev/en/news/sample) and [the events](https://example.org/events?a=1&b=2).'],
-            'am' => ['subject' => 'የናሙና ርዕስ', 'body' => 'ናሙና [ዜና](https://hararipp.orcamind.dev/am/news)'],
+            'en' => ['subject' => 'Sample subject', 'body' => 'Read [the story](https://hita.orcamind.dev/en/news/sample) and [the events](https://example.org/events?a=1&b=2).'],
+            'am' => ['subject' => 'የናሙና ርዕስ', 'body' => 'ናሙና [ዜና](https://hita.orcamind.dev/am/news)'],
         ],
     ], $sender);
     app(SendCampaign::class)->start($campaign, $sender);
@@ -51,7 +51,7 @@ it('counts clicks through the portal\'s own links and sends people on to the add
         ->not->toContain('https://example.org/events')->not->toContain('/o/');
 
     $this->get("/en/c/{$delivery->token}/1")->assertRedirect('https://example.org/events?a=1&b=2')->assertCookieMissing(config('session.cookie'));
-    $this->get("/en/c/{$delivery->token}/0")->assertRedirect('https://hararipp.orcamind.dev/en/news/sample');
+    $this->get("/en/c/{$delivery->token}/0")->assertRedirect('https://hita.orcamind.dev/en/news/sample');
     $this->get("/en/c/{$delivery->token}/7")->assertNotFound();
     $this->get('/en/c/aaaaaaaaaaaa/0')->assertNotFound();
 

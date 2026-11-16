@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -50,23 +49,6 @@ return new class extends Migration
             $table->string('source_name', 160)->nullable();
             $table->timestamp('source_published_at')->nullable();
         });
-
-        // The two public channels named in docs/content/sources.md.
-        $now = now();
-        foreach (DB::table('sites')->pluck('id') as $siteId) {
-            DB::table('content_sources')->insertOrIgnore([
-                [
-                    'site_id' => $siteId, 'platform' => 'telegram', 'handle' => 'hrprosperityparty',
-                    'name' => 'Prosperity Party Harari Region Branch', 'priority' => 1, 'default_locale' => 'am',
-                    'enabled' => true, 'created_at' => $now, 'updated_at' => $now,
-                ],
-                [
-                    'site_id' => $siteId, 'platform' => 'telegram', 'handle' => 'HarariGovernmentCommunication',
-                    'name' => 'Harari Government Communication Affairs Office', 'priority' => 2, 'default_locale' => 'am',
-                    'enabled' => true, 'created_at' => $now, 'updated_at' => $now,
-                ],
-            ]);
-        }
     }
 
     public function down(): void
