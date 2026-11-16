@@ -15,7 +15,7 @@ staging stays noindex. Tick each item when received and note where it is stored.
 - [ ] Office address, map location, hours, phone and hotline, official email, social media accounts
 
 ## Services and operations
-- [ ] Services the Agency provides or supports. For each: who it is for, documents needed, steps, fees, time, the responsible directorate, and any online link
+- [ ] Services the Agency provides or supports. For each: who it is for, documents needed, steps, fees, time, the responsible directorate, and any online link. A proposed starting list of 16 services is in `docs/proposed-services.md` (ADR-0019): confirm, correct or delete each
 - [ ] IT support scope: which offices are served, ticket categories, target response and resolve times (SLA)
 - [ ] Systems to show on the status page (names, owners)
 - [ ] ICT standards and guidelines that may be published

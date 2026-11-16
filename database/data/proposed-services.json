@@ -1,0 +1,926 @@
+{
+    "_about": "Services proposed for the Agency (docs/proposed-services.md, ADR-0019). Loaded by `php artisan portal:proposed-services`; each is marked Proposed until the Agency confirms it. Harari is left empty (CLAUDE.md).",
+    "categories": {
+        "digital-government": {
+            "en": "Digital government",
+            "am": "ዲጂታል መንግሥት",
+            "om": "Mootummaa dijitaalaa"
+        },
+        "infrastructure": {
+            "en": "ICT infrastructure and support",
+            "am": "የአይሲቲ መሠረተ ልማትና ድጋፍ",
+            "om": "Bu'uura misoomaa ICT fi deeggarsa"
+        },
+        "data": {
+            "en": "Data and hosting",
+            "am": "መረጃና ሆስቲንግ",
+            "om": "Daataa fi kuusaa"
+        },
+        "skills": {
+            "en": "Digital skills",
+            "am": "ዲጂታል ክህሎት",
+            "om": "Dandeettii dijitaalaa"
+        },
+        "innovation": {
+            "en": "Innovation and startups",
+            "am": "ኢኖቬሽንና ጀማሪ ኩባንያዎች",
+            "om": "Kalaqaa fi jalqabbiiwwan daldalaa"
+        },
+        "trust": {
+            "en": "Cyber-awareness and trust",
+            "am": "የሳይበር ግንዛቤና እምነት",
+            "om": "Hubannoo saayibarii fi amanamummaa"
+        }
+    },
+    "services": [
+        {
+            "category": "digital-government",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 10,
+            "featured": true,
+            "en": {
+                "title": "Official email accounts for public offices",
+                "summary": "Official email accounts on the regional government's domain for public offices and their staff.",
+                "eligibility": "Regional public offices, for their staff.",
+                "documents": [
+                    "A request letter signed by the head of the office",
+                    "The list of staff who need an account, with their positions"
+                ],
+                "steps": [
+                    "Send the request letter to the Agency",
+                    "The Agency checks the request and creates the accounts",
+                    "Staff receive their account details and a short guide"
+                ]
+            },
+            "am": {
+                "title": "ለመንግሥት መሥሪያ ቤቶች ይፋዊ የኢሜይል አካውንት",
+                "summary": "በክልሉ መንግሥት ዶሜይን ላይ ለመንግሥት መሥሪያ ቤቶችና ለሠራተኞቻቸው ይፋዊ የኢሜይል አካውንቶች።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች ለሠራተኞቻቸው።",
+                "documents": [
+                    "በመሥሪያ ቤቱ ኃላፊ የተፈረመ የጥያቄ ደብዳቤ",
+                    "አካውንት የሚያስፈልጋቸው ሠራተኞች ዝርዝር ከኃላፊነታቸው ጋር"
+                ],
+                "steps": [
+                    "የጥያቄ ደብዳቤውን ለኤጀንሲው ይላኩ",
+                    "ኤጀንሲው ጥያቄውን አይቶ አካውንቶቹን ይፈጥራል",
+                    "ሠራተኞች የአካውንት መረጃና አጭር መመሪያ ይቀበላሉ"
+                ]
+            },
+            "om": {
+                "title": "Herrega imeelii seeraa waajjiraalee mootummaaf",
+                "summary": "Herrega imeelii seeraa domeenii mootummaa naannichaa irratti waajjiraalee mootummaatii fi hojjettoota isaaniitiif.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa, hojjettoota isaaniitiif.",
+                "documents": [
+                    "Xalayaa gaaffii itti gaafatamaa waajjirichaatiin mallattaa'e",
+                    "Tarree hojjettoota herregni isaan barbaachisu, gahee isaanii waliin"
+                ],
+                "steps": [
+                    "Xalayaa gaaffii Ejjansichaaf ergaa",
+                    "Ejjansichi gaaffii ilaalee herregoota uuma",
+                    "Hojjettoonni odeeffannoo herregaa fi qajeelfama gabaabaa argatu"
+                ]
+            }
+        },
+        {
+            "category": "digital-government",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 20,
+            "featured": true,
+            "en": {
+                "title": "A website for a public office",
+                "summary": "A website for a regional public office: design, hosting on government servers and a domain name, with training for the staff who keep it up to date.",
+                "eligibility": "Regional public offices.",
+                "documents": [
+                    "A request letter from the head of the office",
+                    "The content to publish (about the office, its services, its contacts)",
+                    "The name of the staff member responsible for the website"
+                ],
+                "steps": [
+                    "Send the request",
+                    "Agree the structure and content with the Agency",
+                    "The Agency builds and hosts the site",
+                    "Your staff are trained to keep it up to date"
+                ]
+            },
+            "am": {
+                "title": "ለመንግሥት መሥሪያ ቤት ድረ ገጽ",
+                "summary": "ለክልሉ የመንግሥት መሥሪያ ቤት ድረ ገጽ፦ ዲዛይን፣ በመንግሥት ሰርቨሮች ላይ ሆስቲንግና የዶሜይን ስም፣ እንዲሁም ድረ ገጹን ለሚያስተዳድሩ ሠራተኞች ሥልጠና።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "ከመሥሪያ ቤቱ ኃላፊ የጥያቄ ደብዳቤ",
+                    "የሚታተመው ይዘት (ስለ መሥሪያ ቤቱ፣ አገልግሎቶቹና አድራሻው)",
+                    "ለድረ ገጹ ኃላፊ የሚሆነው ሠራተኛ ስም"
+                ],
+                "steps": [
+                    "ጥያቄውን ይላኩ",
+                    "የድረ ገጹን አወቃቀርና ይዘት ከኤጀንሲው ጋር ይስማሙ",
+                    "ኤጀንሲው ድረ ገጹን ሠርቶ ያስተናግዳል",
+                    "ሠራተኞችዎ ድረ ገጹን ማሻሻል ይሠለጥናሉ"
+                ]
+            },
+            "om": {
+                "title": "Marsariitii waajjira mootummaaf",
+                "summary": "Marsariitii waajjira mootummaa naannichaatiif: dizaayinii, sarvarii mootummaa irratti kuusuu fi maqaa domeenii, akkasumas leenjii hojjettoota marsariiticha haaromsaniif.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa.",
+                "documents": [
+                    "Xalayaa gaaffii itti gaafatamaa waajjirichaa irraa",
+                    "Qabiyyee maxxanfamu (waa'ee waajjirichaa, tajaajiloota isaa fi quunnamtii)",
+                    "Maqaa hojjetaa marsariitichaaf itti gaafatamu"
+                ],
+                "steps": [
+                    "Gaaffii ergaa",
+                    "Caasaa fi qabiyyee marsariitii Ejjansicha waliin walii galaa",
+                    "Ejjansichi marsariitii ijaaree kuusa",
+                    "Hojjettoonni keessan haaromsuu irratti leenjifamu"
+                ]
+            }
+        },
+        {
+            "category": "digital-government",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 30,
+            "featured": true,
+            "en": {
+                "title": "Digitising a public service",
+                "summary": "Turning a paper-based public service into an online service, or one offered on the national Mesob one-stop platform: a review of the process, system design and launch.",
+                "eligibility": "Regional public offices that want to digitise their services.",
+                "documents": [
+                    "A description of the current service and its forms",
+                    "The legal basis or directive of the service",
+                    "A contact person in the office"
+                ],
+                "steps": [
+                    "Request a review of the service",
+                    "Map the process together with the Agency",
+                    "Design, build and test the digital service",
+                    "Launch it and train the staff"
+                ]
+            },
+            "am": {
+                "title": "የመንግሥት አገልግሎትን ዲጂታል ማድረግ",
+                "summary": "በወረቀት የሚሰጥ የመንግሥት አገልግሎትን ወደ ኦንላይን ወይም በብሔራዊው የመሶብ የአንድ ማዕከል ፕላትፎርም ላይ ወደሚሰጥ አገልግሎት መቀየር፦ የአሠራር ግምገማ፣ የሲስተም ዲዛይንና ማስጀመር።",
+                "eligibility": "አገልግሎታቸውን ዲጂታል ማድረግ የሚፈልጉ የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "የአሁኑ አገልግሎትና ቅጾቹ መግለጫ",
+                    "የአገልግሎቱ ሕጋዊ መሠረት ወይም መመሪያ",
+                    "በመሥሪያ ቤቱ የሚገኝ አስተባባሪ"
+                ],
+                "steps": [
+                    "የአገልግሎቱን ግምገማ ይጠይቁ",
+                    "ከኤጀንሲው ጋር የአሠራር ካርታ በጋራ ያዘጋጁ",
+                    "የዲጂታል አገልግሎቱ ዲዛይን፣ ግንባታና ሙከራ",
+                    "ማስጀመርና የሠራተኞች ሥልጠና"
+                ]
+            },
+            "om": {
+                "title": "Tajaajila mootummaa dijitaalessuu",
+                "summary": "Tajaajila mootummaa waraqaan kennamu gara tajaajila interneetaa, ykn tajaajila waltajjii iddoo tokkoo Mesob biyyoolessaa irratti kennamutti jijjiiruu: sakatta'iinsa adeemsaa, dizaayinii sirnaa fi eegaluu.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa tajaajila isaanii dijitaalessuu barbaadan.",
+                "documents": [
+                    "Ibsa tajaajila ammaa fi unkaalee isaa",
+                    "Bu'uura seeraa ykn qajeelfama tajaajilichaa",
+                    "Nama qunnamtii waajjiricha keessaa"
+                ],
+                "steps": [
+                    "Sakatta'iinsa tajaajilichaa gaafadhaa",
+                    "Ejjansicha waliin kaartaa adeemsaa qopheessaa",
+                    "Dizaayinii, ijaarsaa fi qorannoo tajaajila dijitaalaa",
+                    "Eegaluu fi leenjii hojjettootaa"
+                ]
+            }
+        },
+        {
+            "category": "digital-government",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 35,
+            "featured": false,
+            "en": {
+                "title": "AI and automation for public services",
+                "summary": "Help for public offices to find where artificial intelligence and automation can improve a service (for example handling documents, or answering common questions in local languages), and to pilot it safely, in line with the national AI policy and with national institutions such as the Ethiopian Artificial Intelligence Institute.",
+                "eligibility": "Regional public offices.",
+                "documents": [
+                    "A description of the service or task to improve",
+                    "Examples of the documents or data involved (without personal data)"
+                ],
+                "steps": [
+                    "Describe the service or task",
+                    "Assess the use, the data and the risks together",
+                    "A small pilot with clear measures",
+                    "A decision to scale up, with staff training"
+                ]
+            },
+            "am": {
+                "title": "ለመንግሥት አገልግሎቶች ሰው ሠራሽ አስተውሎትና አውቶሜሽን",
+                "summary": "የመንግሥት መሥሪያ ቤቶች ሰው ሠራሽ አስተውሎትና አውቶሜሽን አገልግሎትን የት ሊያሻሽሉ እንደሚችሉ እንዲለዩ (ለምሳሌ ሰነዶችን ማስተናገድ ወይም በአካባቢ ቋንቋዎች ተደጋጋሚ ጥያቄዎችን መመለስ) እና በደህንነት እንዲሞክሩ ድጋፍ፤ ከብሔራዊ የሰው ሠራሽ አስተውሎት ፖሊሲ ጋር በሚጣጣም መንገድና እንደ ኢትዮጵያ አርቴፊሻል ኢንተለጀንስ ኢንስቲትዩት ካሉ ብሔራዊ ተቋማት ጋር።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "ሊሻሻል የሚፈለገው አገልግሎት ወይም ሥራ መግለጫ",
+                    "የሚመለከታቸው ሰነዶች ወይም መረጃዎች ምሳሌ (ያለ ግላዊ መረጃ)"
+                ],
+                "steps": [
+                    "አገልግሎቱን ወይም ሥራውን ይግለጹ",
+                    "የአጠቃቀሙ፣ የመረጃውና የስጋቶቹ የጋራ ግምገማ",
+                    "ግልጽ መለኪያዎች ያሉት አነስተኛ ሙከራ",
+                    "ከሠራተኞች ሥልጠና ጋር የማስፋት ውሳኔ"
+                ]
+            },
+            "om": {
+                "title": "Sammuu namtolchee fi ofumaan-hojjechiisuu tajaajila mootummaatiif",
+                "summary": "Waajjiraaleen mootummaa bakka sammuun namtolchee fi ofumaan-hojjechiisuun tajaajila fooyyessuu danda'an (fkn. sanadoota hojjechuu, ykn gaaffilee irra deddeebi'an afaanota naannoon deebisuu) akka adda baasanii fi nageenyaan akka yaalan deeggaruu; imaammata AI biyyoolessaa waliin kan walsimuu fi dhaabbilee biyyoolessaa kan akka Inistiitiyuutii Sammuu Namtolchee Itoophiyaa waliin.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa.",
+                "documents": [
+                    "Ibsa tajaajilaa ykn hojii fooyya'uu qabu",
+                    "Fakkeenya sanadootaa ykn daataa ilaallatan (daataa dhuunfaa malee)"
+                ],
+                "steps": [
+                    "Tajaajila ykn hojii ibsaa",
+                    "Sakatta'iinsa waloo itti fayyadamaa, daataa fi balaa",
+                    "Yaalii xiqqaa safartuu ifaa qabu",
+                    "Murtoo babal'isuu, leenjii hojjettootaa waliin"
+                ]
+            }
+        },
+        {
+            "category": "digital-government",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 40,
+            "featured": false,
+            "en": {
+                "title": "Software and systems for public offices",
+                "summary": "Analysis, design and development of the software systems public offices need, or advice when they buy them.",
+                "eligibility": "Regional public offices.",
+                "documents": [
+                    "A short description of the need"
+                ],
+                "steps": [
+                    "Send the need with a short description",
+                    "Analyse the requirements with the Agency",
+                    "Agree the solution and the timeline",
+                    "Development, testing and handover"
+                ]
+            },
+            "am": {
+                "title": "ለመንግሥት መሥሪያ ቤቶች ሶፍትዌርና ሲስተም ማበልጸግ",
+                "summary": "የመንግሥት መሥሪያ ቤቶች የሚያስፈልጓቸውን የሶፍትዌር ሲስተሞች ትንተና፣ ዲዛይንና ማበልጸግ፣ ወይም ሲገዙ ምክር።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "ፍላጎቱን የሚገልጽ አጭር ማብራሪያ"
+                ],
+                "steps": [
+                    "ፍላጎቱን ከአጭር መግለጫ ጋር ይላኩ",
+                    "ከኤጀንሲው ጋር የፍላጎት ትንተና",
+                    "በመፍትሔውና በጊዜ ሰሌዳው ላይ ስምምነት",
+                    "ማበልጸግ፣ ሙከራና ርክክብ"
+                ]
+            },
+            "om": {
+                "title": "Sooftiweerii fi sirnoota waajjiraalee mootummaaf",
+                "summary": "Xiinxala, dizaayinii fi misooma sirnoota sooftiweerii waajjiraaleen mootummaa barbaadan, ykn gorsa yeroo bitan.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa.",
+                "documents": [
+                    "Ibsa gabaabaa fedhichaa"
+                ],
+                "steps": [
+                    "Fedhii ibsa gabaabaa waliin ergaa",
+                    "Ejjansicha waliin xiinxala fedhii",
+                    "Furmaataa fi karoora yeroo irratti walii galuu",
+                    "Misooma, qorannoo fi dabarsuu"
+                ]
+            }
+        },
+        {
+            "category": "infrastructure",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 50,
+            "featured": false,
+            "en": {
+                "title": "Network installation for public offices",
+                "summary": "Design and installation of local networks (cabling, switches, wireless) and connection to the government network.",
+                "eligibility": "Regional public offices.",
+                "documents": [
+                    "A request letter",
+                    "The floor plan, or a description of the rooms to connect"
+                ],
+                "steps": [
+                    "Send the request",
+                    "The Agency's technicians survey the site",
+                    "Network design and list of materials",
+                    "Installation and testing"
+                ]
+            },
+            "am": {
+                "title": "ለመንግሥት መሥሪያ ቤቶች የኔትወርክ ዝርጋታ",
+                "summary": "የአካባቢ ኔትወርክ (ኬብል፣ ስዊችና ዋየርለስ) ዲዛይንና ዝርጋታ እንዲሁም ከመንግሥት ኔትወርክ ጋር ማገናኘት።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "የጥያቄ ደብዳቤ",
+                    "የሕንፃው ፕላን ወይም የሚገናኙት ክፍሎች መግለጫ"
+                ],
+                "steps": [
+                    "ጥያቄውን ይላኩ",
+                    "የኤጀንሲው ቴክኒሻኖች የቦታ ቅኝት ያደርጋሉ",
+                    "የኔትወርክ ዲዛይንና የዕቃዎች ዝርዝር",
+                    "ዝርጋታና ሙከራ"
+                ]
+            },
+            "om": {
+                "title": "Diriirsa neetworkii waajjiraalee mootummaaf",
+                "summary": "Dizaayinii fi diriirsa neetworkii naannoo (keebilii, swiichii fi wayarlesii) akkasumas neetworkii mootummaa waliin walqabsiisuu.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa.",
+                "documents": [
+                    "Xalayaa gaaffii",
+                    "Pilaanii gamoo ykn ibsa kutaalee walqabatan"
+                ],
+                "steps": [
+                    "Gaaffii ergaa",
+                    "Teeknishaanonni Ejjansichaa iddoo sakatta'u",
+                    "Dizaayinii neetworkii fi tarree meeshaalee",
+                    "Diriirsaa fi qorannoo"
+                ]
+            }
+        },
+        {
+            "category": "infrastructure",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 60,
+            "featured": true,
+            "en": {
+                "title": "Maintenance and repair of IT equipment",
+                "summary": "Diagnosis, maintenance and repair of the computers, printers and network equipment of public offices.",
+                "eligibility": "Regional public offices.",
+                "documents": [
+                    "The equipment, with a short description of the fault"
+                ],
+                "steps": [
+                    "Report the problem through IT support, or bring the equipment",
+                    "Technicians diagnose the fault",
+                    "Repair, or a report if parts are needed",
+                    "The equipment is returned and recorded"
+                ]
+            },
+            "am": {
+                "title": "የአይቲ መሣሪያዎች ጥገና",
+                "summary": "የመንግሥት መሥሪያ ቤቶች ኮምፒውተሮች፣ ፕሪንተሮችና የኔትወርክ መሣሪያዎች የብልሽት ምርመራ፣ እንክብካቤና ጥገና።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "መሣሪያውና የብልሽቱ አጭር መግለጫ"
+                ],
+                "steps": [
+                    "ችግሩን በአይቲ ድጋፍ በኩል ያሳውቁ ወይም መሣሪያውን ያምጡ",
+                    "ቴክኒሻኖች ብልሽቱን ይመረምራሉ",
+                    "ጥገና፣ ወይም መለዋወጫ ካስፈለገ ሪፖርት",
+                    "መሣሪያው ተመላሽ ሆኖ ይመዘገባል"
+                ]
+            },
+            "om": {
+                "title": "Suphaa meeshaalee IT",
+                "summary": "Qorannoo hir'inaa, kunuunsaa fi suphaa kompiitaraa, maxxansituu fi meeshaalee neetworkii waajjiraalee mootummaa.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa.",
+                "documents": [
+                    "Meeshicha fi ibsa gabaabaa hir'inaa"
+                ],
+                "steps": [
+                    "Rakkoo deeggarsa IT-tiin beeksisaa ykn meeshicha fidaa",
+                    "Teeknishaanonni hir'ina qoratu",
+                    "Suphaa, ykn yoo meeshaan bakka bu'u barbaachise gabaasa",
+                    "Meeshaan deebi'ee galmaa'a"
+                ]
+            }
+        },
+        {
+            "category": "infrastructure",
+            "channels": [
+                "in_person"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 70,
+            "featured": false,
+            "en": {
+                "title": "ICT equipment specifications and procurement evaluation",
+                "summary": "Technical specifications for computers, network and other ICT equipment before purchase, and the technical evaluation of bids and deliveries.",
+                "eligibility": "Regional public offices that buy ICT equipment.",
+                "documents": [
+                    "The planned purchase (items, quantities and use)",
+                    "For an evaluation: the bid documents or the delivered items"
+                ],
+                "steps": [
+                    "Send the planned purchase",
+                    "The Agency prepares or reviews the technical specification",
+                    "Technical evaluation of the bids",
+                    "Inspection of the delivered equipment"
+                ]
+            },
+            "am": {
+                "title": "የአይሲቲ ዕቃዎች ዝርዝር መግለጫና የግዥ ግምገማ",
+                "summary": "ከግዥ በፊት ለኮምፒውተሮች፣ ለኔትወርክና ለሌሎች የአይሲቲ ዕቃዎች ቴክኒካዊ ዝርዝር መግለጫ ማዘጋጀት፣ እንዲሁም የጨረታ ሰነዶችንና የገቡ ዕቃዎችን ቴክኒካዊ ግምገማ።",
+                "eligibility": "የአይሲቲ ዕቃዎችን የሚገዙ የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "የታቀደው ግዥ (ዕቃዎች፣ ብዛትና አጠቃቀም)",
+                    "ለግምገማ፦ የጨረታ ሰነዶች ወይም የገቡት ዕቃዎች"
+                ],
+                "steps": [
+                    "የታቀደውን ግዥ ይላኩ",
+                    "ኤጀንሲው ቴክኒካዊ ዝርዝሩን ያዘጋጃል ወይም ይገመግማል",
+                    "የጨረታዎች ቴክኒካዊ ግምገማ",
+                    "የገቡ ዕቃዎች ፍተሻ"
+                ]
+            },
+            "om": {
+                "title": "Ibsa teeknikaa meeshaalee ICT fi madaallii bittaa",
+                "summary": "Bittaa dura ibsa teeknikaa kompiitaraaf, neetworkii fi meeshaalee ICT biroo qopheessuu, akkasumas madaallii teeknikaa sanadoota caalbaasii fi meeshaalee galan.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa meeshaalee ICT bitan.",
+                "documents": [
+                    "Bittaa karoorfame (meeshaalee, baay'ina fi itti fayyadama)",
+                    "Madaalliif: sanadoota caalbaasii ykn meeshaalee galan"
+                ],
+                "steps": [
+                    "Bittaa karoorfame ergaa",
+                    "Ejjansichi ibsa teeknikaa qopheessa ykn sakatta'a",
+                    "Madaallii teeknikaa caalbaasii",
+                    "Sakatta'iinsa meeshaalee galanii"
+                ]
+            }
+        },
+        {
+            "category": "data",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 80,
+            "featured": false,
+            "en": {
+                "title": "Hosting systems and data",
+                "summary": "Hosting public offices' websites, systems and backups on government servers, with security updates and monitoring.",
+                "eligibility": "Regional public offices.",
+                "documents": [
+                    "The system's technical requirements"
+                ],
+                "steps": [
+                    "Send the request with the system's requirements",
+                    "Technical and security review",
+                    "Set-up of the hosting",
+                    "Handover, with monitoring and backups"
+                ]
+            },
+            "am": {
+                "title": "የሲስተሞችና የመረጃ ሆስቲንግ",
+                "summary": "የመንግሥት መሥሪያ ቤቶችን ድረ ገጾች፣ ሲስተሞችና ምትኬዎች በመንግሥት ሰርቨሮች ላይ ማስተናገድ፣ ከደህንነት ማሻሻያዎችና ክትትል ጋር።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "የሲስተሙ ቴክኒካዊ ፍላጎቶች"
+                ],
+                "steps": [
+                    "ጥያቄውን ከሲስተሙ ፍላጎቶች ጋር ይላኩ",
+                    "ቴክኒካዊና የደህንነት ግምገማ",
+                    "የሆስቲንግ ዝግጅት",
+                    "ከክትትልና ከምትኬ ጋር ርክክብ"
+                ]
+            },
+            "om": {
+                "title": "Kuusaa sirnootaa fi daataa",
+                "summary": "Marsariitota, sirnoota fi kuusaa duubaa (backup) waajjiraalee mootummaa sarvarii mootummaa irratti kuusuu, fooyya'iinsa nageenyaa fi hordoffii waliin.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa.",
+                "documents": [
+                    "Fedhiiwwan teeknikaa sirnichaa"
+                ],
+                "steps": [
+                    "Gaaffii fedhiiwwan sirnichaa waliin ergaa",
+                    "Sakatta'iinsa teeknikaa fi nageenyaa",
+                    "Qophii kuusaa",
+                    "Dabarsuu, hordoffii fi kuusaa duubaa waliin"
+                ]
+            }
+        },
+        {
+            "category": "data",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government"
+            ],
+            "rank": 90,
+            "featured": false,
+            "en": {
+                "title": "Support to prepare and publish open data",
+                "summary": "Help for public offices to prepare, describe and publish their data as open data, and to report digital indicators.",
+                "eligibility": "Regional public offices.",
+                "documents": [
+                    "The datasets you plan to publish (tables or files)"
+                ],
+                "steps": [
+                    "Send the datasets you want to publish",
+                    "Review content, privacy and format with the Agency",
+                    "Publication on the open data portal",
+                    "Regular updates"
+                ]
+            },
+            "am": {
+                "title": "የመረጃ ዝግጅትና ክፍት መረጃ ማሳተም ድጋፍ",
+                "summary": "የመንግሥት መሥሪያ ቤቶች መረጃዎቻቸውን አዘጋጅተው፣ ገልጸውና እንደ ክፍት መረጃ እንዲያሳትሙ እንዲሁም የዲጂታል አመላካቾችን እንዲያቀርቡ ድጋፍ።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች።",
+                "documents": [
+                    "ሊታተሙ የታሰቡት መረጃዎች (ሰንጠረዦች ወይም ፋይሎች)"
+                ],
+                "steps": [
+                    "ሊያሳትሙ የሚፈልጓቸውን መረጃዎች ይላኩ",
+                    "ከኤጀንሲው ጋር የይዘት፣ የግላዊነትና የቅርጸት ግምገማ",
+                    "በክፍት መረጃ ፖርታሉ ላይ ማሳተም",
+                    "መደበኛ ማሻሻያዎች"
+                ]
+            },
+            "om": {
+                "title": "Deeggarsa qophii fi maxxansa daataa banaa",
+                "summary": "Waajjiraaleen mootummaa daataa isaanii qopheessanii, ibsanii fi akka daataa banaatti akka maxxansan, akkasumas agarsiistota dijitaalaa akka gabaasan deeggaruu.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa.",
+                "documents": [
+                    "Daataa maxxanfamuuf karoorfame (gabatee ykn faayilii)"
+                ],
+                "steps": [
+                    "Daataa maxxansuu barbaaddan ergaa",
+                    "Ejjansicha waliin sakatta'iinsa qabiyyee, dhuunfaa fi bifaa",
+                    "Poortaala daataa banaa irratti maxxansuu",
+                    "Haaromsa idilee"
+                ]
+            }
+        },
+        {
+            "category": "skills",
+            "channels": [
+                "in_person"
+            ],
+            "audiences": [
+                "residents",
+                "government"
+            ],
+            "rank": 100,
+            "featured": true,
+            "en": {
+                "title": "Digital literacy training",
+                "summary": "Basic computer, internet and online-service skills for civil servants, young people, women and other residents.",
+                "eligibility": "Residents of the region and civil servants.",
+                "documents": [
+                    "For a group: a request letter with the number of participants"
+                ],
+                "steps": [
+                    "Register, or send a group request",
+                    "You are placed in a training round",
+                    "Attend the sessions",
+                    "Receive a certificate of participation"
+                ]
+            },
+            "am": {
+                "title": "የዲጂታል ዕውቀት ሥልጠና",
+                "summary": "ለመንግሥት ሠራተኞች፣ ለወጣቶች፣ ለሴቶችና ለሌሎች ነዋሪዎች መሠረታዊ የኮምፒውተር፣ የኢንተርኔትና የኦንላይን አገልግሎት አጠቃቀም ክህሎት።",
+                "eligibility": "የክልሉ ነዋሪዎችና የመንግሥት ሠራተኞች።",
+                "documents": [
+                    "ለቡድን፦ የተሳታፊዎችን ብዛት የሚገልጽ የጥያቄ ደብዳቤ"
+                ],
+                "steps": [
+                    "ይመዝገቡ ወይም የቡድን ጥያቄ ይላኩ",
+                    "በሥልጠና ዙር ይመደባሉ",
+                    "በሥልጠናው ይሳተፉ",
+                    "የተሳትፎ ምስክር ወረቀት ይቀበሉ"
+                ]
+            },
+            "om": {
+                "title": "Leenjii beekumsa dijitaalaa",
+                "summary": "Dandeettii bu'uuraa kompiitaraa, interneetii fi tajaajila interneetaa itti fayyadamuu hojjettoota mootummaa, dargaggoota, dubartootaa fi jiraattota birootiif.",
+                "eligibility": "Jiraattota naannichaa fi hojjettoota mootummaa.",
+                "documents": [
+                    "Gareef: xalayaa gaaffii baay'ina hirmaattotaa ibsu"
+                ],
+                "steps": [
+                    "Galmaa'aa ykn gaaffii garee ergaa",
+                    "Marsaa leenjii keessatti ramadamtu",
+                    "Leenjii irratti hirmaadhaa",
+                    "Waraqaa ragaa hirmaannaa argadhaa"
+                ]
+            }
+        },
+        {
+            "category": "skills",
+            "channels": [
+                "in_person"
+            ],
+            "audiences": [
+                "residents"
+            ],
+            "rank": 105,
+            "featured": true,
+            "en": {
+                "title": "AI clubs and youth technology camps",
+                "summary": "Artificial intelligence and coding clubs in schools, and holiday technology camps for teenagers, following the model the Ethiopian Artificial Intelligence Institute runs in other regions.",
+                "eligibility": "Secondary schools and young people in the region; camps by age group.",
+                "documents": [
+                    "For a school club: a request letter from the school",
+                    "For a camp: a parent's or guardian's consent"
+                ],
+                "steps": [
+                    "The school asks for a club, or a young person registers for a camp",
+                    "Selection, and grouping by level",
+                    "Sessions with mentors (machine learning, programming, robotics)",
+                    "A showcase of the participants' projects"
+                ]
+            },
+            "am": {
+                "title": "የሰው ሠራሽ አስተውሎት ክለቦችና የወጣቶች የቴክኖሎጂ ካምፖች",
+                "summary": "በትምህርት ቤቶች የሰው ሠራሽ አስተውሎትና የፕሮግራሚንግ ክለቦች፣ እንዲሁም ለታዳጊዎች የዕረፍት ጊዜ የቴክኖሎጂ ካምፖች፤ የኢትዮጵያ አርቴፊሻል ኢንተለጀንስ ኢንስቲትዩት በሌሎች ክልሎች በሚያካሂደው አሠራር መሠረት።",
+                "eligibility": "በክልሉ ያሉ የሁለተኛ ደረጃ ትምህርት ቤቶችና ወጣቶች፤ ካምፖች በዕድሜ ቡድን ይዘጋጃሉ።",
+                "documents": [
+                    "ለትምህርት ቤት ክለብ፦ ከትምህርት ቤቱ የጥያቄ ደብዳቤ",
+                    "ለካምፕ፦ የወላጅ ወይም የአሳዳጊ ፈቃድ"
+                ],
+                "steps": [
+                    "ትምህርት ቤቱ ክለብ ይጠይቃል ወይም ወጣቱ ለካምፕ ይመዘገባል",
+                    "ምርጫና በደረጃ መመደብ",
+                    "ከአማካሪዎች ጋር ሥልጠና (ማሽን ለርኒንግ፣ ፕሮግራሚንግ፣ ሮቦቲክስ)",
+                    "የተሳታፊዎች ፕሮጀክቶች ትርኢት"
+                ]
+            },
+            "om": {
+                "title": "Kilabota AI fi kaampii teeknooloojii dargaggootaa",
+                "summary": "Kilabota sammuu namtolchee fi koodii mana barumsaa keessatti, akkasumas kaampii teeknooloojii yeroo boqonnaa dargaggootaaf, akkaataa Inistiitiyuutiin Sammuu Namtolchee Itoophiyaa naannolee biroo keessatti hojjetuun.",
+                "eligibility": "Mana barumsaa sadarkaa lammaffaa fi dargaggoota naannichaa; kaampiin garee umuriitiin qophaa'a.",
+                "documents": [
+                    "Kilaba mana barumsaatiif: xalayaa gaaffii mana barumsichaa irraa",
+                    "Kaampiif: hayyama maatii ykn guddisaa"
+                ],
+                "steps": [
+                    "Manni barumsaa kilaba gaafata, ykn dargaggoon kaampiif galmaa'a",
+                    "Filannoo fi sadarkaan ramaduu",
+                    "Leenjii gorsitoota waliin (machine learning, koodii, roobootiksii)",
+                    "Agarsiisa pirojektoota hirmaattotaa"
+                ]
+            }
+        },
+        {
+            "category": "skills",
+            "channels": [
+                "in_person"
+            ],
+            "audiences": [
+                "residents",
+                "government",
+                "startups"
+            ],
+            "rank": 110,
+            "featured": false,
+            "en": {
+                "title": "Training in emerging technologies (AI, IoT, cybersecurity)",
+                "summary": "Short courses in artificial intelligence, the internet of things, cybersecurity, software development and other emerging technologies.",
+                "eligibility": "Civil servants, graduates, students and innovators who meet each course's entry level.",
+                "documents": [
+                    "A copy of your education certificate (if the course asks for it)"
+                ],
+                "steps": [
+                    "Choose a course and register",
+                    "Take the entry assessment if the course has one",
+                    "Attend the course and complete the practical work",
+                    "Receive a certificate"
+                ]
+            },
+            "am": {
+                "title": "በአዳዲስ ቴክኖሎጂዎች ሥልጠና (ሰው ሠራሽ አስተውሎት፣ IoT፣ ሳይበር ደህንነት)",
+                "summary": "በሰው ሠራሽ አስተውሎት፣ በነገሮች ኢንተርኔት (IoT)፣ በሳይበር ደህንነት፣ በሶፍትዌር ልማትና በሌሎች አዳዲስ ቴክኖሎጂዎች አጫጭር ኮርሶች።",
+                "eligibility": "የእያንዳንዱን ኮርስ የመግቢያ ደረጃ የሚያሟሉ የመንግሥት ሠራተኞች፣ ተመራቂዎች፣ ተማሪዎችና የፈጠራ ባለሙያዎች።",
+                "documents": [
+                    "የትምህርት ማስረጃ ቅጂ (ኮርሱ ከጠየቀ)"
+                ],
+                "steps": [
+                    "ኮርስ መርጠው ይመዝገቡ",
+                    "ኮርሱ የመግቢያ ምዘና ካለው ይውሰዱ",
+                    "ኮርሱን ተከታትለው ተግባራዊ ሥራውን ያጠናቅቁ",
+                    "የምስክር ወረቀት ይቀበሉ"
+                ]
+            },
+            "om": {
+                "title": "Leenjii teeknooloojiiwwan haaraa (AI, IoT, nageenya saayibarii)",
+                "summary": "Koorsiiwwan gabaabaa sammuu namtolchee (AI), interneetii wantootaa (IoT), nageenya saayibarii, misooma sooftiweeriitii fi teeknooloojiiwwan haaraa biroo.",
+                "eligibility": "Hojjettoota mootummaa, eebbifamtoota, barattootaa fi kalaqxota sadarkaa seensa koorsii tokkoon tokkoon guutan.",
+                "documents": [
+                    "Garagalcha ragaa barnootaa (yoo koorsichi gaafate)"
+                ],
+                "steps": [
+                    "Koorsii filadhaa galmaa'aa",
+                    "Yoo koorsichi qormaata seensaa qabaate fudhadhaa",
+                    "Koorsii hordofaatii hojii shaakalaa xumuraa",
+                    "Waraqaa ragaa argadhaa"
+                ]
+            }
+        },
+        {
+            "category": "innovation",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "startups",
+                "residents"
+            ],
+            "rank": 120,
+            "featured": true,
+            "en": {
+                "title": "Support for startups and innovators",
+                "summary": "Advice, mentoring and incubation for innovators and startups, and an orientation on startup labelling under the national Startup Proclamation (the label itself is given by the Ministry of Innovation and Technology). AI startups are also pointed to national programmes such as the Ethiopian Artificial Intelligence Institute's incubation centre.",
+                "eligibility": "Innovators, students and startups in the region.",
+                "documents": [
+                    "A short description of the idea or the business",
+                    "The founders' contacts"
+                ],
+                "steps": [
+                    "Present your idea or business",
+                    "First meeting with the innovation team",
+                    "A mentoring or incubation plan",
+                    "Follow-up, and links to finance and partners"
+                ]
+            },
+            "am": {
+                "title": "ለጀማሪ ኩባንያዎችና ለፈጠራ ባለሙያዎች ድጋፍ",
+                "summary": "ለፈጠራ ባለሙያዎችና ለጀማሪ ኩባንያዎች ምክር፣ የማማከርና የማቀፊያ (incubation) ድጋፍ፣ እንዲሁም በብሔራዊ የጀማሪ ኩባንያዎች አዋጅ መሠረት ስለሚሰጠው መለያ ገለጻ (መለያውን የሚሰጠው የኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር ነው)። የሰው ሠራሽ አስተውሎት ጀማሪ ኩባንያዎች እንደ ኢትዮጵያ አርቴፊሻል ኢንተለጀንስ ኢንስቲትዩት የማቀፊያ ማዕከል ወዳሉ ብሔራዊ ፕሮግራሞችም ይመራሉ።",
+                "eligibility": "በክልሉ ያሉ የፈጠራ ባለሙያዎች፣ ተማሪዎችና ጀማሪ ኩባንያዎች።",
+                "documents": [
+                    "የሐሳቡ ወይም የንግዱ አጭር መግለጫ",
+                    "የመሥራቾች አድራሻ"
+                ],
+                "steps": [
+                    "ሐሳብዎን ወይም ንግድዎን ያቅርቡ",
+                    "ከኢኖቬሽን ቡድኑ ጋር የመጀመሪያ ውይይት",
+                    "የማማከር ወይም የማቀፊያ ዕቅድ",
+                    "ክትትልና ከፋይናንስና ከአጋሮች ጋር ትስስር"
+                ]
+            },
+            "om": {
+                "title": "Deeggarsa jalqabbiiwwan daldalaa fi kalaqxootaaf",
+                "summary": "Gorsa, deeggarsa leenjisummaa (mentoring) fi inkubeeshinii kalaqxotaa fi jalqabbiiwwan daldalaatiif, akkasumas ibsa mallattoo jalqabbii daldalaa Labsii Jalqabbiiwwan Daldalaa biyyoolessaa jalatti kennamu (mallattoo kan kennu Ministeera Kalaqaa fi Teeknooloojii dha). Jalqabbiiwwan daldalaa AI gara sagantaalee biyyoolessaa kan akka giddugala inkubeeshinii Inistiitiyuutii Sammuu Namtolchee Itoophiyaattis ni qajeelfamu.",
+                "eligibility": "Kalaqxota, barattootaa fi jalqabbiiwwan daldalaa naannicha keessa jiran.",
+                "documents": [
+                    "Ibsa gabaabaa yaadaa ykn daldalaa",
+                    "Teessoo hundeessitootaa"
+                ],
+                "steps": [
+                    "Yaada ykn daldala keessan dhiyeessaa",
+                    "Garee kalaqaa waliin marii jalqabaa",
+                    "Karoora leenjisummaa ykn inkubeeshinii",
+                    "Hordoffii fi walitti hidhamiinsa faayinaansii fi michootaa"
+                ]
+            }
+        },
+        {
+            "category": "innovation",
+            "channels": [
+                "in_person"
+            ],
+            "audiences": [
+                "residents",
+                "startups"
+            ],
+            "rank": 130,
+            "featured": false,
+            "en": {
+                "title": "Registering and showcasing innovations",
+                "summary": "Registering innovations and technologies made in the region, and giving them a chance to be shown at exhibitions and to the offices that could use them.",
+                "eligibility": "Individuals, teams and institutions in the region with an innovation or technology.",
+                "documents": [
+                    "A description of the innovation, with photos or a video"
+                ],
+                "steps": [
+                    "Register the innovation",
+                    "Review by the innovation team",
+                    "An invitation to show it at an exhibition or to pilot it with an office"
+                ]
+            },
+            "am": {
+                "title": "የፈጠራ ሥራዎች ምዝገባና ማስተዋወቅ",
+                "summary": "በክልሉ የተሠሩ የፈጠራ ሥራዎችንና ቴክኖሎጂዎችን መመዝገብ፣ በኤግዚቢሽኖች ላይ እንዲቀርቡና ሊጠቀሙባቸው ከሚችሉ መሥሪያ ቤቶች ጋር እንዲተሳሰሩ ዕድል መፍጠር።",
+                "eligibility": "በክልሉ የፈጠራ ሥራ ወይም ቴክኖሎጂ ያላቸው ግለሰቦች፣ ቡድኖችና ተቋማት።",
+                "documents": [
+                    "የፈጠራ ሥራው መግለጫ ከፎቶዎች ወይም ከቪዲዮ ጋር"
+                ],
+                "steps": [
+                    "የፈጠራ ሥራውን ያስመዝግቡ",
+                    "የኢኖቬሽን ቡድኑ ግምገማ",
+                    "በኤግዚቢሽን ለማቅረብ ወይም ከመሥሪያ ቤት ጋር ለመሞከር ግብዣ"
+                ]
+            },
+            "om": {
+                "title": "Galmeessaa fi beeksisa kalaqaa",
+                "summary": "Kalaqaa fi teeknooloojiiwwan naannicha keessatti hojjetaman galmeessuu, agarsiisa irratti akka dhiyaatanii fi waajjiraalee itti fayyadamuu danda'an waliin akka walqunnaman carraa uumuu.",
+                "eligibility": "Namoota dhuunfaa, gareewwanii fi dhaabbilee naannicha keessatti kalaqa ykn teeknooloojii qaban.",
+                "documents": [
+                    "Ibsa kalaqichaa suuraa ykn viidiyoo waliin"
+                ],
+                "steps": [
+                    "Kalaqicha galmeessisaa",
+                    "Sakatta'iinsa garee kalaqaa",
+                    "Agarsiisa irratti dhiyeessuuf ykn waajjira waliin yaaluuf affeerraa"
+                ]
+            }
+        },
+        {
+            "category": "trust",
+            "channels": [
+                "in_person",
+                "phone"
+            ],
+            "audiences": [
+                "government",
+                "residents"
+            ],
+            "rank": 140,
+            "featured": false,
+            "en": {
+                "title": "Cybersecurity awareness for public offices",
+                "summary": "Awareness sessions, guides and basic security checks so that public offices and residents use digital services safely. National cyber incidents are reported to INSA.",
+                "eligibility": "Regional public offices, schools and community groups.",
+                "documents": [
+                    "The number of participants and a suitable date"
+                ],
+                "steps": [
+                    "Request a session for your office",
+                    "Agree the date and the audience",
+                    "The session, with practical guidance",
+                    "A follow-up checklist for the office"
+                ]
+            },
+            "am": {
+                "title": "ለመንግሥት መሥሪያ ቤቶች የሳይበር ደህንነት ግንዛቤ",
+                "summary": "የመንግሥት መሥሪያ ቤቶችና ነዋሪዎች ዲጂታል አገልግሎቶችን በደህንነት እንዲጠቀሙ የግንዛቤ ማስጨበጫ፣ መመሪያዎችና መሠረታዊ የደህንነት ፍተሻዎች። ብሔራዊ የሳይበር ጥቃቶች ለኢንሳ (INSA) ሪፖርት ይደረጋሉ።",
+                "eligibility": "የክልሉ የመንግሥት መሥሪያ ቤቶች፣ ትምህርት ቤቶችና የማኅበረሰብ ቡድኖች።",
+                "documents": [
+                    "የተሳታፊዎች ብዛትና የሚመች ቀን"
+                ],
+                "steps": [
+                    "ለመሥሪያ ቤትዎ የግንዛቤ መድረክ ይጠይቁ",
+                    "በቀኑና በተሳታፊዎቹ ላይ ይስማሙ",
+                    "መድረኩና ተግባራዊ መመሪያ",
+                    "ለመሥሪያ ቤቱ የክትትል ማረጋገጫ ዝርዝር"
+                ]
+            },
+            "om": {
+                "title": "Hubannoo nageenya saayibarii waajjiraalee mootummaaf",
+                "summary": "Waajjiraaleen mootummaa fi jiraattonni tajaajiloota dijitaalaa nageenyaan akka itti fayyadamaniif marii hubannoo, qajeelfamootaa fi sakatta'iinsa nageenyaa bu'uuraa. Haleellaan saayibarii biyyoolessaa INSA-tti gabaafama.",
+                "eligibility": "Waajjiraalee mootummaa naannichaa, mana barumsaa fi gareewwan hawaasaa.",
+                "documents": [
+                    "Baay'ina hirmaattotaa fi guyyaa mijatu"
+                ],
+                "steps": [
+                    "Waajjira keessaniif marii hubannoo gaafadhaa",
+                    "Guyyaa fi hirmaattota irratti walii galaa",
+                    "Marii fi qajeelfama shaakalaa",
+                    "Tarree mirkaneeffannoo hordoffii waajjirichaaf"
+                ]
+            }
+        }
+    ]
+}

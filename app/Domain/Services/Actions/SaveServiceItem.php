@@ -77,6 +77,7 @@ final class SaveServiceItem
                 'audiences' => $audiences,
                 'external_url' => $url,
                 'featured' => (bool) ($data['featured'] ?? false),
+                'proposed' => (bool) ($data['proposed'] ?? false),
                 'rank' => max(0, (int) ($data['rank'] ?? 0)),
                 'reviewed_at' => filled($data['reviewed_at'] ?? null) ? CarbonImmutable::parse((string) $data['reviewed_at'])->startOfDay() : null,
             ]);

@@ -308,3 +308,21 @@ stage it moved to and the public words per language).
   open tickets by SLA state and the active incidents.
 - Short texts (system names, titles, updates) are stored per language in JSON columns, not translation tables:
   they are written in a hurry, have no slug or publishing of their own, and fall back like the interface.
+
+## ADR-0019 — Proposed services (2026-11-17)
+
+**Decision.** A service can be marked **Proposed**: suggested for the Agency but not yet confirmed. On the site it
+carries a "Proposed" label on its card and a notice on its page saying that the details may change; in the admin it
+has its own column and filter. Staff untick it once the Agency confirms the service and fills in its office, fees and
+times.
+
+A starting catalogue of 16 services in six categories (digital government, ICT infrastructure and support, data and
+hosting, digital skills, innovation and startups, cyber-awareness), grounded in what the Harari regional innovation
+and technology office is described as doing, in the national programmes and in the work of the Ethiopian
+Artificial Intelligence Institute (Mesob, AI clubs and camps, AI startup incubation), is kept in
+`database/data/proposed-services.json` with its reasoning in `docs/proposed-services.md`.
+`portal:proposed-services` loads it as drafts (or published with `--publish`, refused in production) and removes
+the items still unconfirmed with `--remove`.
+
+**Why.** Ramin asked for the services the Agency should offer to be added. The project rule is never to state the
+Agency's facts without the Agency; the mark keeps the proposal useful on staging without presenting it as fact.

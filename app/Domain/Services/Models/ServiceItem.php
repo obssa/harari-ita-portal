@@ -30,6 +30,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?list<string> $channels
  * @property ?string $external_url
  * @property bool $featured
+ * @property bool $proposed suggested for the Agency, not yet confirmed (ADR-0019)
  * @property int $rank
  * @property ?CarbonImmutable $reviewed_at
  * @property-read ?Category $category
@@ -47,9 +48,9 @@ class ServiceItem extends Model implements TranslatableModel
     use SoftDeletes;
     use TracksEditors;
 
-    protected $fillable = ['category_id', 'office_id', 'audiences', 'channels', 'external_url', 'featured', 'rank', 'reviewed_at'];
+    protected $fillable = ['category_id', 'office_id', 'audiences', 'channels', 'external_url', 'featured', 'proposed', 'rank', 'reviewed_at'];
 
-    protected $attributes = ['featured' => false, 'rank' => 0];
+    protected $attributes = ['featured' => false, 'proposed' => false, 'rank' => 0];
 
     protected function casts(): array
     {
@@ -57,6 +58,7 @@ class ServiceItem extends Model implements TranslatableModel
             'audiences' => 'array',
             'channels' => 'array',
             'featured' => 'boolean',
+            'proposed' => 'boolean',
             'rank' => 'integer',
             'reviewed_at' => 'immutable_date',
         ];
@@ -70,7 +72,7 @@ class ServiceItem extends Model implements TranslatableModel
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName('services')
-            ->logOnly(['category_id', 'office_id', 'audiences', 'channels', 'external_url', 'featured', 'rank', 'reviewed_at'])
+            ->logOnly(['category_id', 'office_id', 'audiences', 'channels', 'external_url', 'featured', 'proposed', 'rank', 'reviewed_at'])
             ->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 

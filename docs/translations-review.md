@@ -23,3 +23,9 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | online (a way to use a service) / in person / by phone | በኦንላይን / በአካል / በስልክ | Interneetaan / Qaamaan / Bilbilaan | `services.channel.*` | "Online" is borrowed in Amharic; check the Agency's usage |
 | public offices (as users of a service) | የመንግሥት መሥሪያ ቤቶች | waajjiraalee mootummaa | `services.audience.government` | |
 | service desk | የአገልግሎት ዴስክ | deeskii tajaajilaa | `services.request_help_text` | |
+| proposed (service not yet confirmed) | የቀረበ ሐሳብ | yaada dhiyaate | `services.proposed` | Label on proposed services (ADR-0019) |
+| mentoring / incubation | ማማከር / ማቀፊያ (incubation) | leenjisummaa (mentoring) / inkubeeshinii | proposed services | Borrowed terms kept in brackets |
+| artificial intelligence / internet of things | ሰው ሠራሽ አስተውሎት / የነገሮች ኢንተርኔት | sammuu namtolchee / interneetii wantootaa | proposed services | Check MInT's usage |
+| digital literacy | የዲጂታል ዕውቀት | beekumsa dijitaalaa | proposed services | |
+| Ethiopian Artificial Intelligence Institute | የኢትዮጵያ አርቴፊሻል ኢንተለጀንስ ኢንስቲትዩት | Inistiitiyuutii Sammuu Namtolchee Itoophiyaa | proposed services | Check the institute's own Amharic and Afaan Oromo names |
+| automation | አውቶሜሽን | ofumaan-hojjechiisuu | proposed services | |

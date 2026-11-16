@@ -11,7 +11,9 @@
 <article {{ $attributes->class('group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
     <div class="flex items-start justify-between gap-3">
         <p class="kicker">{{ $category ?? __('services.title') }}</p>
-        @if ($service->isOnline())
+        @if ($service->proposed)
+            <span class="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-saffron-50 px-2 py-0.5 font-mono text-[0.7rem] tracking-wide text-saffron-800 uppercase ring-1 ring-saffron-200 ring-inset dark:bg-saffron-950 dark:text-saffron-200 dark:ring-saffron-800">{{ __('services.proposed') }}</span>
+        @elseif ($service->isOnline())
             <span class="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-cyan-50 px-2 py-0.5 font-mono text-[0.7rem] tracking-wide text-cyan-800 uppercase ring-1 ring-cyan-200 ring-inset dark:bg-cyan-950 dark:text-cyan-200 dark:ring-cyan-800">
                 <span aria-hidden="true" class="size-1.5 rounded-full bg-cyan-500"></span>{{ ServiceChannel::Online->label() }}
             </span>

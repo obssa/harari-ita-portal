@@ -138,6 +138,7 @@ class ServiceItemResource extends Resource
                     ->searchable()
                     ->options(fn (): array => Office::query()->with('translations')->orderBy('type')->orderBy('sort')->get()
                         ->mapWithKeys(fn (Office $office): array => [$office->id => $office->name()])->all()),
+                Toggle::make('proposed')->label(__('admin.services.field.proposed'))->helperText(__('admin.services.help.proposed')),
                 Toggle::make('featured')->label(__('admin.services.field.featured'))->helperText(__('admin.services.help.featured')),
                 TextInput::make('rank')->label(__('admin.services.field.rank'))->numeric()->integer()->minValue(0)->default(0),
                 DatePicker::make('reviewed_at')->label(__('admin.services.field.reviewed_at'))->native(false)->maxDate(now()),
@@ -159,6 +160,7 @@ class ServiceItemResource extends Resource
                     ->label(__('admin.services.field.channels'))
                     ->state(fn (ServiceItem $record): array => array_map(fn (ServiceChannel $c): string => $c->label(), $record->channelList()))
                     ->badge(),
+                IconColumn::make('proposed')->label(__('admin.services.field.proposed'))->boolean(),
                 IconColumn::make('featured')->label(__('admin.services.field.featured'))->boolean(),
                 TextColumn::make('reviewed_at')->label(__('admin.services.field.reviewed_at'))->date()->placeholder('—'),
                 DirectoryFields::languagesColumn(),
@@ -168,6 +170,7 @@ class ServiceItemResource extends Resource
                     ->label(__('admin.services.field.office'))
                     ->options(fn (): array => Office::query()->with('translations')->get()->mapWithKeys(fn (Office $o): array => [$o->id => $o->name()])->all()),
                 SelectFilter::make('category_id')->label(__('admin.services.field.category'))->options(fn (): array => self::categoryOptions()),
+                SelectFilter::make('proposed')->label(__('admin.services.field.proposed'))->options(['1' => __('admin.services.filter.proposed'), '0' => __('admin.services.filter.confirmed')]),
                 TrashedFilter::make(),
             ])
             ->recordActions([ViewOnSite::row(), EditAction::make(), DeleteAction::make(), RestoreAction::make()]);
