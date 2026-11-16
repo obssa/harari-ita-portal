@@ -5,7 +5,7 @@
             <x-picture :media="$video->thumbnail" preset="landscape" sizes="(min-width: 64rem) 25vw, (min-width: 40rem) 50vw, 100vw" class="aspect-video w-full object-cover" />
         @endif
         <span aria-hidden="true" class="absolute inset-0 flex items-center justify-center">
-            <span class="flex size-14 items-center justify-center rounded-full bg-black/70 text-2xl text-white group-hover:bg-primary-700">▶</span>
+            <span class="flex size-14 items-center justify-center rounded-control bg-night-950/80 text-2xl text-white ring-1 ring-white/20 transition-colors group-hover:bg-saffron-500 group-hover:text-ink-brand">▶</span>
         </span>
         @if ($video->isLiveNow())
             <span class="absolute start-2 top-2 rounded-control bg-danger-600 px-2 py-0.5 text-xs font-semibold uppercase text-white">{{ __('video.live_now') }}</span>

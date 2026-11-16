@@ -8,7 +8,7 @@
             @endif
             <label for="search-page-q" class="sr-only">{{ __('search.label') }}</label>
             <input id="search-page-q" type="search" name="q" value="{{ $query }}" maxlength="100" required minlength="2"
-                   placeholder="{{ __('search.placeholder') }}" class="min-w-0 flex-1 rounded-full border-0 bg-white px-5 py-3 text-base text-ink-brand placeholder:text-ink-muted focus:outline-none focus:ring-3 focus:ring-saffron-400">
+                   placeholder="{{ __('search.placeholder') }}" class="min-w-0 flex-1 rounded-control border border-night-line bg-night-950 px-5 py-3 font-display text-base text-night-ink placeholder:text-night-muted focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none">
             <x-ui.button type="submit" variant="action" size="lg">{{ __('search.button') }}</x-ui.button>
         </form>
     </x-page-hero>

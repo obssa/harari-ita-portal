@@ -4,7 +4,7 @@
     $closed = $document->isClosed();
 @endphp
 <article {{ $attributes->class('group relative flex gap-4 rounded-card border border-line bg-surface p-4') }} lang="{{ $translation->locale }}">
-    <span aria-hidden="true" class="grid size-12 shrink-0 place-items-center rounded-control bg-primary-50 text-xs font-bold uppercase text-primary-700 dark:bg-primary-950 dark:text-primary-200">{{ $file ? pathinfo($file->file_name, PATHINFO_EXTENSION) : '—' }}</span>
+    <span aria-hidden="true" class="grid size-12 shrink-0 place-items-center rounded-control bg-night-900 font-mono text-xs uppercase text-cyan-300">{{ $file ? pathinfo($file->file_name, PATHINFO_EXTENSION) : '—' }}</span>
     <div class="min-w-0">
         <p class="flex flex-wrap items-center gap-2 text-xs">
             <x-ui.badge>{{ $document->type->label() }}</x-ui.badge>

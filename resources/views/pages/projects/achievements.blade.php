@@ -70,7 +70,7 @@
                                     @php $share = $item['total'] > 0 ? round($item['counts'][$status->value] / $item['total'] * 100) : 0; @endphp
                                     <li>
                                         <span class="flex justify-between"><span>{{ $status->label() }}</span><span class="tabular-nums">{{ $item['counts'][$status->value] }}</span></span>
-                                        <span aria-hidden="true" class="mt-1 block h-2 overflow-hidden rounded-full bg-surface-muted"><span class="block h-full rounded-full bg-primary-600" style="width: {{ $share }}%"></span></span>
+                                        <span aria-hidden="true" class="mt-1 block h-2 overflow-hidden rounded-sm bg-surface-muted ring-1 ring-line ring-inset"><span class="block h-full rounded-sm bg-cyan-600 dark:bg-cyan-400" style="width: {{ $share }}%"></span></span>
                                     </li>
                                 @endforeach
                             </ul>
