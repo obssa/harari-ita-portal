@@ -25,7 +25,11 @@
                 <p class="animate-rise mt-6 max-w-xl text-lg text-night-muted [--rise-delay:200ms] sm:text-xl">{{ __('site.description') }}</p>
                 <p class="animate-rise mt-10 flex flex-wrap gap-3 [--rise-delay:300ms]">
                     <x-ui.button :href="\Illuminate\Support\Facades\Route::has('support.create') ? route('support.create') : route('contact')" variant="action" size="lg">{{ __('nav.cta_support') }}</x-ui.button>
-                    <x-ui.button :href="route('pillars.index')" variant="light" size="lg">{{ __('homepage.hero.pillars') }}</x-ui.button>
+                    @if (\Illuminate\Support\Facades\Route::has('services.index'))
+                        <x-ui.button :href="route('services.index')" variant="light" size="lg">{{ __('homepage.hero.services') }}</x-ui.button>
+                    @else
+                        <x-ui.button :href="route('pillars.index')" variant="light" size="lg">{{ __('homepage.hero.pillars') }}</x-ui.button>
+                    @endif
                 </p>
                 <dl class="animate-rise mt-12 grid max-w-sm grid-cols-2 divide-x divide-night-line border-y border-night-line font-mono text-xs [--rise-delay:400ms] rtl:divide-x-reverse">
                     <div class="flex flex-col py-3 pe-3"><dt class="text-night-muted uppercase">{{ __('homepage.hero.languages') }}</dt><dd class="order-first font-display text-2xl text-saffron-400">4</dd></div>

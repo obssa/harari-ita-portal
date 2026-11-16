@@ -121,7 +121,7 @@ class FormSubmission extends Model
             for ($i = 0; $i < 8; $i++) {
                 $code .= self::REFERENCE_ALPHABET[random_int(0, strlen(self::REFERENCE_ALPHABET) - 1)];
             }
-            $reference = 'HPP-'.substr($code, 0, 4).'-'.substr($code, 4);
+            $reference = 'MSG-'.substr($code, 0, 4).'-'.substr($code, 4);
         } while (self::query()->where('reference', $reference)->exists());
 
         return $reference;
@@ -131,7 +131,7 @@ class FormSubmission extends Model
     public static function normaliseReference(string $typed): string
     {
         $plain = strtoupper((string) preg_replace('/[^A-Za-z0-9]/', '', $typed));
-        if (str_starts_with($plain, 'HPP')) {
+        if (str_starts_with($plain, 'MSG')) {
             $plain = substr($plain, 3);
         }
 
@@ -139,7 +139,7 @@ class FormSubmission extends Model
             return '';
         }
 
-        return 'HPP-'.substr($plain, 0, 4).'-'.substr($plain, 4);
+        return 'MSG-'.substr($plain, 0, 4).'-'.substr($plain, 4);
     }
 
     public function isOverdue(): bool

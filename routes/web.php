@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Support\Models\Ticket;
 use App\Domain\Translation\Support\Locales;
 use App\Http\Controllers\Public\CampaignLinkController;
 use App\Http\Controllers\Public\DocumentController;
@@ -24,10 +25,13 @@ use App\Http\Controllers\Public\ProjectController;
 use App\Http\Controllers\Public\RedirectToPreferredLocale;
 use App\Http\Controllers\Public\RobotsController;
 use App\Http\Controllers\Public\SearchController;
+use App\Http\Controllers\Public\ServiceController;
 use App\Http\Controllers\Public\SitemapController;
 use App\Http\Controllers\Public\SlidePreviewController;
 use App\Http\Controllers\Public\SocialController;
+use App\Http\Controllers\Public\StatusController;
 use App\Http\Controllers\Public\StructureController;
+use App\Http\Controllers\Public\SupportController;
 use App\Http\Controllers\Public\VideoController;
 use App\Http\Controllers\Public\VolunteerController;
 use App\Http\Controllers\TelegramWebhookController;
@@ -153,7 +157,17 @@ Route::prefix('{locale}')
         Route::get('forms/{slug}', [FormController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('forms.show');
         Route::post('forms/{slug}', [FormController::class, 'submit'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->middleware('throttle:forms')->name('forms.submit');
         Route::get('tickets', [FormController::class, 'lookup'])->middleware(['throttle:search', NoStore::class])->name('tickets.lookup');
-        Route::get('tickets/{reference}', [FormController::class, 'ticket'])->where('reference', 'HPP-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}')->middleware(['throttle:search', NoStore::class])->name('tickets.show');
+        Route::get('tickets/{reference}', [FormController::class, 'ticket'])->where('reference', 'MSG-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}')->middleware(['throttle:search', NoStore::class])->name('tickets.show');
+
+        // ADR-0017 of this project: request IT support and follow it with the reference plus the contact given.
+        Route::get('support/new', [SupportController::class, 'create'])->middleware(NoStore::class)->name('support.create');
+        Route::post('support/new', [SupportController::class, 'store'])->middleware('throttle:forms')->name('support.store');
+        Route::get('support/track', [SupportController::class, 'lookup'])->middleware(NoStore::class)->name('support.lookup');
+        Route::post('support/track', [SupportController::class, 'verify'])->middleware('throttle:verification')->name('support.verify');
+        Route::get('support/track/{reference}', [SupportController::class, 'show'])->where('reference', Ticket::REFERENCE_PATTERN)->middleware(['throttle:search', NoStore::class])->name('support.track');
+        Route::post('support/track/{reference}/reply', [SupportController::class, 'reply'])->where('reference', Ticket::REFERENCE_PATTERN)->middleware('throttle:forms')->name('support.reply');
+        Route::post('support/track/{reference}/rate', [SupportController::class, 'rate'])->where('reference', Ticket::REFERENCE_PATTERN)->middleware('throttle:forms')->name('support.rate');
+        Route::get('support/track/{reference}/files/{key}', [SupportController::class, 'file'])->where(['reference' => Ticket::REFERENCE_PATTERN, 'key' => 't\d|m\d+-\d'])->middleware(['throttle:search', NoStore::class])->name('support.file');
 
         // ADR-0048: volunteers sign up.
         Route::get('volunteer', [VolunteerController::class, 'create'])->middleware(NoStore::class)->name('volunteer.create');
@@ -190,6 +204,13 @@ Route::prefix('{locale}')
         Route::get('about/structure', StructureController::class)->name('structure');
         Route::get('about/offices', [OfficeController::class, 'index'])->name('offices.index');
         Route::get('about/offices/{slug}', [OfficeController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('offices.show');
+        // The service status page and its feeds (ADR-0018).
+        Route::get('status', [StatusController::class, 'index'])->name('status');
+        Route::get('status.json', [StatusController::class, 'json'])->name('status.json');
+        Route::get('status.rss', [StatusController::class, 'rss'])->name('status.rss');
+        // The services catalogue (ADR-0016).
+        Route::get('services', [ServiceController::class, 'index'])->name('services.index');
+        Route::get('services/{slug}', [ServiceController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('services.show');
         Route::get('pillars', [PillarController::class, 'index'])->name('pillars.index');
         Route::get('pillars/{slug}', [PillarController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('pillars.show');
         Route::get('events', [EventController::class, 'index'])->name('events.index');

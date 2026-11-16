@@ -227,6 +227,7 @@ class PrivacyRequests extends Page implements HasTable
             Grid::make(['default' => 2, 'md' => 3])->schema([
                 TextEntry::make('registrations')->label(__('privacy.found.registrations'))->state($counts['registrations']),
                 TextEntry::make('submissions')->label(__('privacy.found.submissions'))->state($counts['submissions']),
+                TextEntry::make('tickets')->label(__('privacy.found.tickets'))->state($counts['tickets']),
                 TextEntry::make('volunteers')->label(__('privacy.found.volunteers'))->state($counts['volunteers']),
                 TextEntry::make('subscribers')->label(__('privacy.found.subscribers'))->state($counts['subscribers']),
                 TextEntry::make('media_contacts')->label(__('privacy.found.media_contacts'))->state($counts['media_contacts']),

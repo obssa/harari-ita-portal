@@ -94,6 +94,23 @@ return [
     'submission_retention_days' => (int) env('PORTAL_SUBMISSION_RETENTION_DAYS', 730),
 
     /*
+    | IT support (ADR-0017 of this project): the working hours the SLA timers count in (Addis Ababa time,
+    | Monday to Friday), the default targets in working hours when no SLA policy is set for a category and
+    | priority, and the days a closed ticket is kept before it is deleted.
+    */
+    'support' => [
+        'day_starts' => env('PORTAL_SUPPORT_DAY_STARTS', '08:30'),
+        'day_ends' => env('PORTAL_SUPPORT_DAY_ENDS', '17:30'),
+        'sla' => [
+            'urgent' => ['response' => 1, 'resolve' => 8],
+            'high' => ['response' => 4, 'resolve' => 24],
+            'normal' => ['response' => 8, 'resolve' => 40],
+            'low' => ['response' => 16, 'resolve' => 80],
+        ],
+        'retention_days' => (int) env('PORTAL_SUPPORT_RETENTION_DAYS', 730),
+    ],
+
+    /*
     | Campaign sending limits per minute (ADR-0052), to stay within what the mail
     | and SMS accounts accept.
     */

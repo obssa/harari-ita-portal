@@ -99,7 +99,7 @@ it('lets the edge cache keep HEAD answers too', function () {
 });
 
 it('never stores pages with a person\'s own details', function () {
-    foreach (['/en/tickets', '/en/tickets/HPP-2222-2222', '/en/events/ticket/'.str_repeat('a', 40)] as $path) {
+    foreach (['/en/tickets', '/en/tickets/MSG-2222-2222', '/en/events/ticket/'.str_repeat('a', 40)] as $path) {
         expect($this->get($path)->headers->get('Cache-Control'))->toContain('no-store', 'private');
     }
 });

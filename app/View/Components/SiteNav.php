@@ -82,7 +82,15 @@ final class SiteNav extends Component
                 $link('nav.pillars', route('pillars.index'), 'pillars.*', 'pillars.description'),
             ]),
         ];
-        foreach (['services', 'innovation', 'academy'] as $module) {
+        if (Route::has('services.index')) {
+            $items[] = $section('nav.services', 'nav.services_desc', route('services.index'), null, array_values(array_filter([
+                $link('nav.services_catalogue', route('services.index'), 'services.*', 'nav.services_catalogue_hint'),
+                Route::has('support.create') ? $link('nav.support_new', route('support.create'), 'support.create', 'nav.support_new_hint') : null,
+                Route::has('support.lookup') ? $link('nav.support_track', route('support.lookup'), 'support.lookup', 'nav.support_track_hint') : null,
+                Route::has('status') ? $link('nav.status', route('status'), 'status', 'nav.status_hint') : null,
+            ])));
+        }
+        foreach (['innovation', 'academy'] as $module) {
             if (Route::has("{$module}.index")) {
                 $items[] = $link("nav.{$module}", route("{$module}.index"), "{$module}.*");
             }

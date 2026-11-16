@@ -38,6 +38,8 @@ Schedule::command('events:purge-registrations')->dailyAt('03:30');
 
 // ADR-0041: resolved tickets, old notices and failed jobs are removed after their retention period.
 Schedule::command('forms:purge-submissions')->dailyAt('03:40');
+// ADR-0017: support tickets closed longer ago than their retention period.
+Schedule::command('support:purge-tickets')->dailyAt('03:41');
 Schedule::command('portal:purge-sign-ups')->dailyAt('03:42');
 Schedule::command('notifications:prune')->dailyAt('03:45');
 Schedule::command('queue:prune-failed', ['--hours' => 720])->dailyAt('03:50');

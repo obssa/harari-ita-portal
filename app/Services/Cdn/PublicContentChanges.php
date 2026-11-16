@@ -37,8 +37,13 @@ use App\Domain\Projects\Models\Project;
 use App\Domain\Projects\Models\ProjectTranslation;
 use App\Domain\Projects\Models\Statistic;
 use App\Domain\Projects\Models\StatisticTranslation;
+use App\Domain\Services\Models\ServiceItem;
+use App\Domain\Services\Models\ServiceItemTranslation;
 use App\Domain\Social\Models\SocialPost;
 use App\Domain\Social\Models\SocialSource;
+use App\Domain\Status\Models\Incident;
+use App\Domain\Status\Models\IncidentUpdate;
+use App\Domain\Status\Models\StatusComponent;
 use App\Domain\Translation\Models\UiTranslation;
 use App\Settings\CarouselSettings;
 use App\Settings\PressKitSettings;
@@ -59,7 +64,7 @@ final class PublicContentChanges
         Document::class, DocumentTranslation::class, DocumentVersion::class, Event::class, EventTranslation::class,
         Form::class, FormTranslation::class, HeroSlide::class, HomepageSection::class, Gallery::class, GalleryItem::class,
         GalleryTranslation::class, Media::class, Video::class, VideoTranslation::class, Leader::class,
-        LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class,
+        LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class, ServiceItem::class, ServiceItemTranslation::class, StatusComponent::class, Incident::class, IncidentUpdate::class,
         Project::class, ProjectTranslation::class, Statistic::class, StatisticTranslation::class,
         SocialPost::class, SocialSource::class, UiTranslation::class,
     ];

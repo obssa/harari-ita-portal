@@ -10,6 +10,8 @@ use App\Domain\People\Models\PersonNote;
 use App\Domain\Press\Models\MediaContact;
 use App\Domain\Privacy\Models\PrivacyRequest;
 use App\Domain\Privacy\Support\PersonalDataSearch;
+use App\Domain\Support\Models\Ticket;
+use App\Domain\Support\Models\TicketMessage;
 use App\Domain\Volunteers\Models\Volunteer;
 use App\Domain\Volunteers\Models\VolunteerAssignment;
 use App\Models\User;
@@ -30,6 +32,7 @@ final class ExportPersonalData
     {
         $registrations = $search->registrations();
         $submissions = $search->submissions();
+        $tickets = $search->tickets();
         $failed = $search->failedSignIns();
         $volunteers = $search->volunteers();
         $subscribers = $search->subscribers();
@@ -64,6 +67,25 @@ final class ExportPersonalData
                     ->filter(fn (SubmissionNote $n): bool => in_array($n->kind, [SubmissionNote::REPLY, SubmissionNote::NOTE], true))
                     ->map(fn (SubmissionNote $n): array => ['kind' => $n->kind, 'at' => $n->created_at->toIso8601String(), 'text' => $n->body])
                     ->values()->all(),
+            ])->values()->all(),
+            'support_tickets' => $tickets->map(fn (Ticket $t): array => [
+                'reference' => $t->reference,
+                'sent_at' => $t->created_at->toIso8601String(),
+                'status' => $t->status->value,
+                'requester_type' => $t->requester_type->value,
+                'requester_office' => $t->requester_office,
+                'name' => $t->name,
+                'email' => $t->email,
+                'phone' => $t->phone,
+                'subject' => $t->subject,
+                'description' => $t->description,
+                'attachments' => array_map(fn (array $file): string => $file['name'], $t->files ?? []),
+                'messages' => $t->messages
+                    ->reject(fn (TicketMessage $m): bool => $m->internal)
+                    ->map(fn (TicketMessage $m): array => ['from' => $m->from_requester ? 'you' : 'service_desk', 'at' => $m->created_at->toIso8601String(), 'text' => $m->body])
+                    ->values()->all(),
+                'rating' => $t->satisfaction,
+                'rating_note' => $t->satisfaction_note,
             ])->values()->all(),
             'volunteering' => $volunteers->map(fn (Volunteer $v): array => [
                 'signed_up_at' => $v->created_at->toIso8601String(),

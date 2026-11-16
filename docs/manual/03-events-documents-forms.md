@@ -92,7 +92,7 @@ support agents and publishers, each for the offices their role covers (**Inbox a
 4. Under **Who answers**, choose the office, an address to tell about new messages, and within how many
    working days to answer. Switch on **Show on the contact page** for the contact form.
 
-Each message becomes a ticket with a reference such as `HPP-7K3D-9Q2M`. The sender receives it by email
+Each message becomes a ticket with a reference such as `MSG-7K3D-9Q2M`. The sender receives it by email
 and can follow the status at `/{language}/tickets`. That page never shows what they wrote.
 
 ### Answer a ticket

@@ -13,6 +13,7 @@ use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Projects\Models\Project;
+use App\Domain\Services\Models\ServiceItem;
 use App\Domain\Translation\Support\Locales;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
@@ -34,6 +35,7 @@ final class PublicLinks
         Video::class => 'videos.show',
         Leader::class => 'leaders.show',
         Office::class => 'offices.show',
+        ServiceItem::class => 'services.show',
         Pillar::class => 'pillars.show',
         Form::class => 'forms.show',
     ];

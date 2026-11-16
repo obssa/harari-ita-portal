@@ -2,6 +2,22 @@
 
 All notable changes to the Agency's portal. Newest first.
 
+## Unreleased — phase 2: services, IT support and service status
+
+- **Services catalogue** at `/services`: search and filters (category, audience, how to use it), a page per
+  service with who can use it, what to bring, the steps, fees, typical time, the responsible office, "Start
+  online" for e-services and questions and answers; government-service data for search engines (ADR-0016).
+- **IT support**: requests from public offices and residents at `/support/new` with attachments, followed at
+  `/support/track` with the reference plus the email or phone given; staff answer, note, hand over and resolve on
+  a list or a board, with response and resolution targets in working hours; the requester rates the help
+  (ADR-0017).
+- **Service status** at `/status` with RSS and JSON feeds: systems, incidents, planned maintenance and the last
+  30 days (ADR-0018). A "Service desk" dashboard widget shows tickets by target and active incidents.
+- The homepage gains **Top services**, "Find a service" in the hero and live figures (services online, requests
+  resolved this month); the menu gains a Services section.
+- Contact-form references start with `MSG-` instead of the source project's prefix.
+- Manual: chapter 8, services, IT support and status.
+
 ## Unreleased — phase 1: design system and public shell ("Jugol Circuit")
 
 - The Agency's official logo (stacked and horizontal) builds every brand file: emblem, lockups, wordmark, dark

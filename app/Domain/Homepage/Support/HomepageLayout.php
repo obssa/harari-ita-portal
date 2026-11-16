@@ -17,10 +17,14 @@ use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Organisation\Queries\PublicDirectory;
 use App\Domain\Projects\Models\Project;
+use App\Domain\Services\Enums\ServiceChannel;
+use App\Domain\Services\Models\ServiceItem;
 use App\Domain\Social\Models\SocialPost;
 use App\Domain\Social\Queries\SocialFeed;
+use App\Domain\Support\Models\Ticket;
 use App\Settings\CarouselSettings;
 use App\Support\SocialLinks;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection as SupportCollection;
@@ -113,7 +117,9 @@ final class HomepageLayout
             SectionKey::Leadership => $this->leadership($section, $locale),
             SectionKey::LatestNews => $this->nonEmpty($this->posts->take($locale, $limit)),
             SectionKey::Press => $this->nonEmpty($this->posts->take($locale, $limit, ['types' => [PostType::PressRelease, PostType::Statement]])),
-            SectionKey::Counters => $this->items($section, $locale, 'label', ['value']),
+            SectionKey::Services => $this->nonEmpty(PublicDirectory::visible(ServiceItem::query(), $locale)
+                ->with(['office.translations', 'category.translations'])->orderByDesc('featured')->orderBy('rank')->limit($limit)->get()),
+            SectionKey::Counters => $this->counters($section, $locale),
             SectionKey::Values => $this->items($section, $locale, 'title', [], ['text']),
             SectionKey::Pillars => $this->pillars($locale, $limit),
             SectionKey::Gallery => $this->gallery($locale, $limit),
@@ -342,8 +348,38 @@ final class HomepageLayout
     }
 
     /**
-     * @param  SupportCollection<int, Post>  $posts
-     * @return SupportCollection<int, Post>|null
+     * The figures editors entered, then the live ones the portal counts itself (PLAN.md §4: every number from the
+     * database): services that can be used online and support requests resolved this month. A live figure shows
+     * once it is above zero.
+     *
+     * @return list<array<string, string>>|null
+     */
+    private function counters(HomepageSection $section, string $locale): ?array
+    {
+        $items = $this->items($section, $locale, 'label', ['value']) ?? [];
+
+        try {
+            $online = PublicDirectory::visible(ServiceItem::query(), $locale)
+                ->whereJsonContains('channels', ServiceChannel::Online->value)->whereNotNull('external_url')->count();
+            $resolved = Ticket::query()->whereNotNull('resolved_at')->where('resolved_at', '>=', CarbonImmutable::now()->startOfMonth())->count();
+        } catch (QueryException) {
+            $online = $resolved = 0;
+        }
+        if ($online > 0) {
+            $items[] = ['label' => __('homepage.live.services_online', [], $locale), 'value' => (string) $online];
+        }
+        if ($resolved > 0) {
+            $items[] = ['label' => __('homepage.live.tickets_resolved', [], $locale), 'value' => (string) $resolved];
+        }
+
+        return $items === [] ? null : array_slice($items, 0, SectionKey::Counters->maxItems());
+    }
+
+    /**
+     * @template TItem
+     *
+     * @param  SupportCollection<int, TItem>  $posts
+     * @return SupportCollection<int, TItem>|null
      */
     private function nonEmpty(SupportCollection $posts): ?SupportCollection
     {

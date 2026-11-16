@@ -6,6 +6,7 @@ use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Press\Models\MediaContact;
+use App\Domain\Support\Models\Ticket;
 use App\Domain\Volunteers\Models\Volunteer;
 use App\Models\User;
 use App\Support\PhoneNumber;
@@ -80,6 +81,25 @@ final class PersonalDataSearch
     }
 
     /**
+     * Support tickets the person sent (ADR-0017).
+     *
+     * @return Collection<int, Ticket>
+     */
+    public function tickets(): Collection
+    {
+        if (! $this->isValid()) {
+            return new Collection;
+        }
+
+        return Ticket::query()
+            ->whereNull('erased_at')
+            ->where(fn (Builder $q) => $this->byHashes($q))
+            ->with('messages')
+            ->orderBy('created_at')
+            ->get();
+    }
+
+    /**
      * @return Collection<int, Volunteer>
      */
     public function volunteers(): Collection
@@ -139,13 +159,14 @@ final class PersonalDataSearch
     }
 
     /**
-     * @return array{registrations: int, submissions: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
+     * @return array{registrations: int, submissions: int, tickets: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
      */
     public function counts(): array
     {
         return [
             'registrations' => $this->registrations()->count(),
             'submissions' => $this->submissions()->count(),
+            'tickets' => $this->tickets()->count(),
             'volunteers' => $this->volunteers()->count(),
             'subscribers' => $this->subscribers()->count(),
             'media_contacts' => $this->mediaContacts()->count(),
@@ -159,7 +180,7 @@ final class PersonalDataSearch
     {
         $counts = $this->counts();
 
-        return $counts['registrations'] + $counts['submissions'] + $counts['volunteers'] + $counts['subscribers'] + $counts['media_contacts'] + $counts['failed_sign_ins'];
+        return $counts['registrations'] + $counts['submissions'] + $counts['tickets'] + $counts['volunteers'] + $counts['subscribers'] + $counts['media_contacts'] + $counts['failed_sign_ins'];
     }
 
     /**

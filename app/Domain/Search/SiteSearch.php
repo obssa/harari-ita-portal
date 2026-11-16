@@ -13,6 +13,7 @@ use App\Domain\Organisation\Models\OfficeTranslation;
 use App\Domain\Organisation\Models\PillarTranslation;
 use App\Domain\Projects\Models\ProjectTranslation;
 use App\Domain\Search\Support\SearchText;
+use App\Domain\Services\Models\ServiceItemTranslation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -24,11 +25,12 @@ use Illuminate\Support\Collection;
  */
 final class SiteSearch
 {
-    /** @var array<string, array{model: class-string<PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|PillarTranslation|EventTranslation|DocumentTranslation|ProjectTranslation>, parent: string, order: string, public_access?: bool}> */
+    /** @var array<string, array{model: class-string<PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|PillarTranslation|EventTranslation|DocumentTranslation|ProjectTranslation|ServiceItemTranslation>, parent: string, order: string, public_access?: bool}> */
     public const KINDS = [
         'news' => ['model' => PostTranslation::class, 'parent' => 'post', 'order' => 'published_at'],
         'pages' => ['model' => PageTranslation::class, 'parent' => 'page', 'order' => 'title'],
         'people' => ['model' => LeaderTranslation::class, 'parent' => 'leader', 'order' => 'name'],
+        'services' => ['model' => ServiceItemTranslation::class, 'parent' => 'serviceItem', 'order' => 'title'],
         'offices' => ['model' => OfficeTranslation::class, 'parent' => 'office', 'order' => 'name'],
         'pillars' => ['model' => PillarTranslation::class, 'parent' => 'pillar', 'order' => 'name'],
         'events' => ['model' => EventTranslation::class, 'parent' => 'event', 'order' => 'title'],
@@ -121,6 +123,13 @@ final class SiteSearch
                 'title' => $translation->name,
                 'summary' => $translation->summary,
                 'label' => $translation->office->type->label(),
+                'locale' => $locale,
+            ],
+            $translation instanceof ServiceItemTranslation => [
+                'url' => route('services.show', ['locale' => $locale, 'slug' => $slug]),
+                'title' => $translation->title,
+                'summary' => $translation->summary,
+                'label' => __('search.kind.services'),
                 'locale' => $locale,
             ],
             $translation instanceof ProjectTranslation => [

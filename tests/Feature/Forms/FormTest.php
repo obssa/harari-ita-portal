@@ -95,7 +95,7 @@ it('turns a sent form into an encrypted ticket with a random reference and an an
 
     $submission = submitSample($form, ['areasfield' => ['2', '0']]);
 
-    expect($submission->reference)->toMatch('/^HPP-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}$/')
+    expect($submission->reference)->toMatch('/^MSG-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}$/')
         ->and($submission->office_id)->toBe($office->id)
         ->and($submission->status)->toBe(SubmissionStatus::New)
         ->and($submission->answers['topicfield'])->toBe(['index' => 1, 'text' => 'Water'])
@@ -186,8 +186,8 @@ it('takes the form on its page, turns robots away and shows the ticket status', 
 
     $this->get('/en/tickets?reference='.strtolower($submission->reference))
         ->assertRedirect(route('tickets.show', ['locale' => 'en', 'reference' => $submission->reference]));
-    $this->get('/en/tickets?reference=HPP-2222-2222')->assertOk()->assertSee(__('forms.lookup_not_found', [], 'en'));
-    $this->get('/en/tickets/HPP-2222-2222')->assertNotFound();
+    $this->get('/en/tickets?reference=MSG-2222-2222')->assertOk()->assertSee(__('forms.lookup_not_found', [], 'en'));
+    $this->get('/en/tickets/MSG-2222-2222')->assertNotFound();
 });
 
 it('shows the contact page with its form, the hotline and the offices', function () {

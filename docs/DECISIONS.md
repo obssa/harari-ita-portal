@@ -248,3 +248,63 @@ on the server) carries HinTA's look:
   Stat cards carry a top bar in teal, orange, ruby and cyan.
 - The sign-in page is night with the hexagon field and an orange edge on the card.
 - The class prefix changes from the source project's `hpp-` to `hinta-`.
+
+## ADR-0016 — The services catalogue (2026-11-17)
+
+**Decision.** `App\Domain\Services` holds `ServiceItem` (category, responsible office, audiences, channels, the
+https link to an external e-service, featured and rank for the homepage, the last review date) and
+`ServiceItemTranslation` per language (title, slug, summary, who can use it, documents and steps written one per
+line, fees, typical time, details, a FAQ of up to 12 questions, per-language status and search text).
+
+- Categories reuse the content categories with the type `service`; they are managed under Categories.
+- A service needs at least one channel; an online service needs its https link. Service owners scoped to a
+  directorate file and change only that directorate's services (`OfficeScope`).
+- Public `/services` searches titles and summaries and filters by category, audience and channel; a service page
+  reads in the order people need it (who, what to bring, steps, details, questions) with the facts in a card and
+  "Start online" opening the e-service in a new tab. `GovernmentService` JSON-LD, site search, sitemap and the
+  edge-cache purge include services. The "Services" menu item appears with the route.
+
+## ADR-0017 — IT support tickets (2026-11-17)
+
+**Decision.** `App\Domain\Support` handles IT support requests from public offices and residents.
+
+- **Ticket** with a random reference `SUP-XXXX-XXXX` (the forms inbox uses `MSG-`), requester type and office,
+  category, priority, status (new, in progress, waiting for the requester, resolved, closed), the channel it came
+  by, the handling directorate, the assignee and an optional related service. The requester's name, email, phone,
+  the subject, the description and the rating note are encrypted; keyed hashes of the email and phone let privacy
+  requests find them. **TicketMessage** holds replies, internal notes and the requester's answers (encrypted).
+- **SLA in working hours** (Monday to Friday, 08:30–17:30 Addis Ababa, configurable; public holidays not yet
+  counted out). `SlaPolicy` rows by priority and optionally category; without one the defaults in
+  `config/portal.php` apply (urgent 1/8, high 4/24, normal 8/40, low 16/80 hours for first answer/resolution).
+  A ticket is on time, due soon (two working hours left), overdue, or met. A new priority or category moves the
+  targets, counted again from when the ticket came in. The first public reply stops the response clock.
+- **Public**: `/support/new` (Turnstile, the spam guard, the forms rate limit, consent with the retention period,
+  up to three PDF/JPEG/PNG attachments of 5 MB; images are re-encoded, PDFs kept as sent, on the private disk).
+  `/support/track` needs the reference **and** the email or phone given; it says which one is wrong and shows
+  nothing from either alone; once proved, the session remembers the ticket. The requester reads replies (never
+  internal notes), writes back (which reopens a resolved ticket), and rates the help from 1 to 5, which closes it.
+- **Staff**: the ticket list (open, mine, overdue filters), a board by status, the ticket page with reply, note,
+  resolve and handling actions; staff record tickets taken by phone, email or at the desk. Scoping by directorate
+  (`tickets.view`, `tickets.reply`, `tickets.assign`; SLA targets with `tickets.manage`). Requesters are told by
+  email, or by SMS without an email; staff by the notification centre.
+- **Privacy**: closed (or resolved and never rated) tickets are deleted 730 days later (`support:purge-tickets`,
+  every site); privacy requests find, export and erase them, keeping only the handling record.
+
+## ADR-0018 — The service status page (2026-11-17)
+
+**Decision.** `App\Domain\Status` lists the systems the Agency runs (`StatusComponent`, named per language,
+optionally tied to a service, with an order and a visible flag) and the incidents and planned maintenance on them
+(`Incident` with a kind, titles per language, an impact, a stage and start/resolve times; `IncidentUpdate` with the
+stage it moved to and the public words per language).
+
+- A system's state is not stored: it is the worst impact among the incidents active on it now (operational,
+  maintenance, slow or limited, partly down, down). Planned maintenance is "upcoming" until its start time and
+  then shows by itself; no scheduled job is needed.
+- Opening an incident needs its first public update; "Post an update" moves the stage, and "resolved" ends it.
+- Public `/status` shows the overall state in words and colour, each system, what is happening now, planned
+  maintenance and the last 30 days; `/status.json` and `/status.rss` carry the same. Pages are cached for a minute
+  and purged at the edge when anything on them changes.
+- Staff need `status.view` to see and `status.manage` to change it. The dashboard's "Service desk" widget shows
+  open tickets by SLA state and the active incidents.
+- Short texts (system names, titles, updates) are stored per language in JSON columns, not translation tables:
+  they are written in a hurry, have no slug or publishing of their own, and fall back like the interface.

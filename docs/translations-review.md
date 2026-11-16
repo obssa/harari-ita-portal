@@ -20,3 +20,6 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | Service Desk Agent, Data Steward, Judge | የአገልግሎት ዴስክ ባለሙያ, የመረጃ ጠባቂ, ዳኛ | Ogeessa Deeskii Tajaajilaa, Eegduu Daataa, Abbaa Murtii Dorgommii | `access.role.*` | Role names in the admin |
 | online safety awareness | የኦንላይን ደህንነት ግንዛቤ | hubannoo nageenya toora interneetii | `volunteers.skill.cyber_awareness` | INSA's terms may differ |
 | Building a digital Harari Region | ዲጂታል ሐረሪ ክልልን እንገነባለን | Naannoo Hararii dijitaalaa ni ijaarra | `homepage.hero.title` | Working promise line for the hero until the Agency gives its own |
+| online (a way to use a service) / in person / by phone | በኦንላይን / በአካል / በስልክ | Interneetaan / Qaamaan / Bilbilaan | `services.channel.*` | "Online" is borrowed in Amharic; check the Agency's usage |
+| public offices (as users of a service) | የመንግሥት መሥሪያ ቤቶች | waajjiraalee mootummaa | `services.audience.government` | |
+| service desk | የአገልግሎት ዴስክ | deeskii tajaajilaa | `services.request_help_text` | |

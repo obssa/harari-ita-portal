@@ -43,7 +43,10 @@ class Category extends Model implements TranslatableModel
     /** Project sectors for projects and achievements (ADR-0027). */
     public const TYPE_SECTOR = 'sector';
 
-    public const TYPES = [self::TYPE_POST, self::TYPE_VIDEO, self::TYPE_SECTOR];
+    /** Service categories for the catalogue (ADR-0016 of this project). */
+    public const TYPE_SERVICE = 'service';
+
+    public const TYPES = [self::TYPE_POST, self::TYPE_VIDEO, self::TYPE_SECTOR, self::TYPE_SERVICE];
 
     protected $fillable = ['type', 'parent_id', 'sort'];
 

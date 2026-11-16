@@ -14,6 +14,7 @@ use App\Filament\Widgets\MediaStorage;
 use App\Filament\Widgets\QueueHealth;
 use App\Filament\Widgets\QuickActions;
 use App\Filament\Widgets\SearchInsights;
+use App\Filament\Widgets\ServiceDesk;
 use App\Filament\Widgets\SubscriberGrowth;
 use App\Filament\Widgets\TopPages;
 use App\Filament\Widgets\TrafficOverview;
@@ -42,6 +43,7 @@ final class DashboardRegistry
         Announcements::class,
         KpiStrip::class,
         AttentionNeeded::class,
+        ServiceDesk::class,
         QuickActions::class,
         SubscriberGrowth::class,
         CampaignResults::class,

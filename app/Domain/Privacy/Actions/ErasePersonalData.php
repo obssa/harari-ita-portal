@@ -10,6 +10,9 @@ use App\Domain\Forms\Models\SubmissionNote;
 use App\Domain\People\Models\PersonNote;
 use App\Domain\Privacy\Models\PrivacyRequest;
 use App\Domain\Privacy\Support\PersonalDataSearch;
+use App\Domain\Support\Actions\StoreAttachments;
+use App\Domain\Support\Models\Ticket;
+use App\Domain\Support\Models\TicketMessage;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
 use App\Models\User;
@@ -32,24 +35,28 @@ final class ErasePersonalData
     public const ERASED = '—';
 
     /**
-     * @return array{registrations: int, submissions: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
+     * @return array{registrations: int, submissions: int, tickets: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
      */
     public function handle(PersonalDataSearch $search, User $actor): array
     {
         $counts = $search->counts();
         $registrations = $search->registrations();
         $submissions = $search->submissions();
+        $tickets = $search->tickets();
         $failed = $search->failedSignIns();
         $volunteers = $search->volunteers();
         $subscribers = $search->subscribers();
         $mediaContacts = $search->mediaContacts();
 
-        DB::transaction(function () use ($registrations, $submissions, $failed, $volunteers, $subscribers, $mediaContacts): void {
+        DB::transaction(function () use ($registrations, $submissions, $tickets, $failed, $volunteers, $subscribers, $mediaContacts): void {
             foreach ($registrations as $registration) {
                 $this->registration($registration);
             }
             foreach ($submissions as $submission) {
                 $this->submission($submission);
+            }
+            foreach ($tickets as $ticket) {
+                $this->ticket($ticket);
             }
             foreach ($volunteers as $volunteer) {
                 $this->volunteer($volunteer);
@@ -103,6 +110,25 @@ final class ErasePersonalData
             'email_hash' => null,
             'message' => null,
             'status' => VolunteerStatus::Inactive,
+            'erased_at' => now(),
+        ])->saveQuietly();
+    }
+
+    /** ADR-0017: the requester's details, words and files go; the handling record (dates, SLA, rating) stays. */
+    private function ticket(Ticket $ticket): void
+    {
+        StoreAttachments::deleteFolder($ticket->id);
+        $ticket->messages()->each(fn (TicketMessage $message) => $message->forceFill(['body' => self::ERASED, 'files' => null])->saveQuietly());
+        $ticket->forceFill([
+            'name' => null,
+            'email' => null,
+            'phone' => null,
+            'email_hash' => null,
+            'phone_hash' => null,
+            'subject' => self::ERASED,
+            'description' => self::ERASED,
+            'satisfaction_note' => null,
+            'files' => null,
             'erased_at' => now(),
         ])->saveQuietly();
     }
