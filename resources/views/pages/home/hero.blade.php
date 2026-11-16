@@ -29,7 +29,7 @@
             <div class="mx-auto max-w-page px-4 py-20 sm:px-6 sm:py-28 lg:py-36">
                 <div class="max-w-3xl">
                     <p class="animate-rise inline-flex items-center gap-3 rounded-full bg-white/10 py-1.5 ps-1.5 pe-4 text-xs font-bold tracking-wider text-gold-300 uppercase ring-1 ring-white/20 backdrop-blur">
-                        <img src="/brand/logo-128.png" alt="" width="32" height="32" class="size-8 rounded-full bg-white">
+                        <img src="/brand/logo-128.png" alt="" width="32" height="32" class="size-8">
                         {{ __('site.office') }}
                     </p>
                     <p class="heading-display animate-rise mt-6 text-white [--rise-delay:120ms]">{{ __('site.name') }}</p>

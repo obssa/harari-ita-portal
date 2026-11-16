@@ -14,7 +14,7 @@
     @include('pages.home._plate', ['class' => 'absolute -start-10 -top-12 size-32 opacity-20'])
     <span class="relative flex flex-col items-center gap-4">
         <span @class(['flex items-center justify-center rounded-full bg-white shadow-xl ring-4 ring-white/25', 'size-16' => ! $lead, 'size-28' => $lead])>
-            <img src="{{ $lead ? '/brand/logo-256.png' : '/brand/logo-128.png' }}" alt="" width="112" height="112" @class(['rounded-full', 'size-14' => ! $lead, 'size-24' => $lead])>
+            <img src="{{ $lead ? '/brand/logo-256.png' : '/brand/logo-128.png' }}" alt="" width="112" height="112" @class(['size-14' => ! $lead, 'size-24' => $lead])>
         </span>
         @if ($lead)
             <span @class(['text-sm font-extrabold tracking-[0.18em] uppercase', 'text-ink-brand/80' => $type?->tone() === 'gold', 'text-white/90' => $type?->tone() !== 'gold'])>{{ __('site.name') }}</span>

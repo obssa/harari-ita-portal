@@ -15,9 +15,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ? $title.' · ' : '' }}{{ __('site.name') }}</title>
     <meta name="description" content="{{ $description ?? __('site.description') }}">
-    <meta name="theme-color" content="#0F5E63">
+    <meta name="theme-color" content="#0B4A5C">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="preload" href="/fonts/portal/inter-latin-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
@@ -61,7 +61,7 @@
     <header class="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur-md supports-[backdrop-filter]:bg-surface/80 lg:relative lg:bg-surface lg:backdrop-blur-none">
         <div class="mx-auto flex h-16 max-w-page items-center justify-between gap-3 px-4 sm:px-6 lg:h-[4.75rem]">
             <a href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif class="flex min-w-0 items-center gap-3 rounded-control no-underline">
-                <img src="/brand/logo-128.png" alt="" width="56" height="56" class="size-11 shrink-0 rounded-full bg-white ring-1 ring-line lg:size-[3.25rem]">
+                <img src="/brand/logo-128.png" alt="" width="56" height="56" class="size-11 shrink-0 lg:size-[3.25rem]">
                 <span class="min-w-0 leading-tight">
                     <span class="block max-w-[10.5rem] text-[0.95rem] leading-[1.15] font-extrabold tracking-tight text-ink sm:max-w-none sm:text-lg">{{ __('site.name') }}</span>
                     <span class="hidden truncate text-[13px] text-ink-muted sm:block">{{ __('site.office') }}</span>

@@ -1,13 +1,12 @@
 {
     "name": "Harari Regional State Innovation and Technology Agency",
-    "short_name": "Innovation Agency",
+    "short_name": "HinTA",
     "start_url": "/",
     "display": "browser",
-    "background_color": "#F7F2E9",
-    "theme_color": "#0F5E63",
+    "background_color": "#F6F3EC",
+    "theme_color": "#0B4A5C",
     "icons": [
         {"src": "/brand/icon-192.png", "sizes": "192x192", "type": "image/png"},
-        {"src": "/brand/icon-512.png", "sizes": "512x512", "type": "image/png"},
-        {"src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml"}
+        {"src": "/brand/icon-512.png", "sizes": "512x512", "type": "image/png"}
     ]
 }

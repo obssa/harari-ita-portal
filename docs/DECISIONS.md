@@ -93,3 +93,24 @@ the day the screens ship.
 
 **Consequences.** Staging stays `noindex`. Replacing the mark, the names and the samples is a content task
 once INPUTS arrive, not a code change.
+
+## ADR-0006 — The official logo and short name (2026-11-16)
+
+**Context.** The Agency's logo arrived as two PNG images: a stacked version and a horizontal one. Both carry the
+round emblem (the Harar gate with a signal, an orange curve, a field of hexagons), the wordmark **HinTA** and the
+names "የሐረሪ ክልል ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ" and "Harari Regional State Innovation and Technology Agency".
+
+**Decision.**
+
+- The originals are kept in `resources/brand/`; `scripts/brand/build_brand.py` cuts every file the site uses
+  from them: the emblem alone for favicons, app icons and small places; the horizontal lockup where there is
+  room for a row; the stacked lockup for square places; the wordmark alone; and light-lettered twins of the
+  lockups and wordmark for dark surfaces. Only the white around the logo and inside the letters is made
+  transparent; the white inside the emblem stays.
+- The emblem is never put on a white disc or clipped round: its orange curve runs past the circle.
+- The site's Amharic name follows the logo (without "መንግሥት"); the short name **HinTA** is `site.short`.
+- The logo's colours anchor the palette (DESIGN.md §1): deep teal `#0B4A5C`, emblem teal `#105D6F`–`#156F82`,
+  orange `#E8912D`, cyan `#1296AB`, red `#B8323E`, plaster `#F6F3EC`, slate `#3E5F69`.
+
+**Consequences.** ADR-0005's placeholder mark is retired. When the Agency sends an SVG or a larger original,
+replace the sources and run the script; nothing else changes.

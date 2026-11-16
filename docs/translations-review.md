@@ -5,7 +5,8 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 
 | Term (en) | Amharic (am) | Afaan Oromo (om) | Where | Note |
 |---|---|---|---|---|
-| Harari Regional State Innovation and Technology Agency | የሐረሪ ክልል መንግሥት ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ | Ejansii Kalaqaa fi Teeknooloojii Mootummaa Naannoo Hararii | `site.name` | Working name until the official names arrive (INPUTS) |
+| Harari Regional State Innovation and Technology Agency | የሐረሪ ክልል ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ | Ejansii Kalaqaa fi Teeknooloojii Mootummaa Naannoo Hararii | `site.name` | English and Amharic as on the official logo; the Afaan Oromo is a working translation |
+| HinTA | HinTA | HinTA | `site.short` | The short name on the logo |
 | Innovation and Technology Agency | ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ | Ejansii Kalaqaa fi Teeknooloojii | `site.office`, SMS | Short form |
 | Harari Regional State | የሐረሪ ክልል መንግሥት | Mootummaa Naannoo Hararii | `site.parent` | |
 | pillar | ምሰሶ | utubaa | `pillars.*` | The five pillars of PLAN §1 |

@@ -15,7 +15,7 @@
     <div class="mx-auto grid max-w-page gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
         <section aria-labelledby="footer-about" class="lg:col-span-2">
             <div class="flex items-center gap-3">
-                <span class="flex size-16 shrink-0 items-center justify-center rounded-full bg-white"><img src="/brand/logo-128.png" alt="" width="60" height="60" class="size-15 rounded-full"></span>
+                <img src="/brand/logo-128.png" alt="" width="64" height="64" class="size-16 shrink-0">
                 <div>
                     <h2 id="footer-about" class="text-lg font-extrabold text-white">{{ __('site.name') }}</h2>
                     <p class="text-white/70">{{ __('site.office') }}</p>

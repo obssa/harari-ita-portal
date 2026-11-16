@@ -4,8 +4,8 @@ Nothing on this list is guessed. Until an item arrives, the site shows clearly l
 staging stays noindex. Tick each item when received and note where it is stored.
 
 ## Identity
-- [ ] Official name in English, Amharic, Afaan Oromo and Harari (and the short name or acronym, if any)
-- [ ] Logo (SVG preferred), the colour and mono versions, any brand guidelines, and the regional government emblem rules
+- [~] Official name: English and Amharic and the short name **HinTA** received with the logo (2026-11-16, ADR-0006); Afaan Oromo and Harari still needed
+- [~] Logo: received 2026-11-16 as two PNGs (stacked and horizontal, `resources/brand/*.source.png`, files built by `scripts/brand/build_brand.py`); still wanted: the SVG or high-resolution original, a one-colour version, brand guidelines and the regional government emblem rules
 - [ ] Mission, vision and values (official wording)
 - [ ] Mandate: the establishing regulation or proclamation (number and date) and the powers and duties
 

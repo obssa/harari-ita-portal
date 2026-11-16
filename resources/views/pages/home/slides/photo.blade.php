@@ -36,7 +36,7 @@
         <div @class(['max-w-3xl', 'mx-auto text-center' => $center])>
             @if ($kicker !== '')
                 <p lang="{{ $kickerLang }}" class="animate-rise inline-flex items-center gap-3 rounded-full bg-white/10 py-1.5 ps-1.5 pe-4 text-xs font-bold tracking-wider text-gold-300 uppercase ring-1 ring-white/20 backdrop-blur">
-                    <img src="/brand/logo-128.png" alt="" width="32" height="32" class="size-8 rounded-full bg-white">
+                    <img src="/brand/logo-128.png" alt="" width="32" height="32" class="size-8">
                     {{ $kicker }}
                 </p>
             @endif
