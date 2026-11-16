@@ -38,7 +38,7 @@
                 </select>
             </div>
             <div class="flex gap-3">
-                <button type="submit" class="rounded-control bg-primary-600 px-4 py-2 font-semibold text-white hover:bg-primary-700">{{ __('documents.apply') }}</button>
+                <button type="submit" class="rounded-control bg-primary-700 px-4 py-2 font-semibold text-white hover:bg-primary-800">{{ __('documents.apply') }}</button>
                 @if (array_filter($filters))
                     <a href="{{ route('documents.index') }}" class="self-center text-sm text-link underline-offset-4 hover:underline">{{ __('documents.clear') }}</a>
                 @endif

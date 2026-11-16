@@ -44,7 +44,7 @@
                         </select>
                     </div>
                 @endif
-                <button type="submit" class="rounded-control bg-primary-600 px-4 py-2 font-semibold text-white hover:bg-primary-700">{{ __('documents.apply') }}</button>
+                <button type="submit" class="rounded-control bg-primary-700 px-4 py-2 font-semibold text-white hover:bg-primary-800">{{ __('documents.apply') }}</button>
             </form>
         @endif
 

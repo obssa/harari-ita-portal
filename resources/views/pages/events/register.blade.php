@@ -1,7 +1,7 @@
 @use('App\Domain\Events\Models\Event')
 @php
     $open = in_array($state, [Event::REGISTRATION_OPEN, Event::REGISTRATION_WAITLIST], true);
-    $field = 'mt-1 block w-full rounded-control border border-line bg-surface px-3 py-2 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600/30';
+    $field = 'mt-1 block w-full rounded-control border border-line bg-surface px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/30';
 @endphp
 <x-layouts.public :title="__('events.registration.title', ['event' => $translation->title])" :description="$translation->summary" :alternates="$alternates">
     <div class="mx-auto max-w-page px-4 py-10 sm:px-6">
@@ -71,7 +71,7 @@
 
                         <x-forms.protection :turnstile-key="$turnstileKey" />
 
-                        <button type="submit" class="inline-flex items-center rounded-control bg-primary-600 px-5 py-2.5 font-semibold text-white hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+                        <button type="submit" class="inline-flex items-center rounded-control bg-primary-700 px-5 py-2.5 font-semibold text-white hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
                             {{ $state === Event::REGISTRATION_WAITLIST ? __('events.registration.join_waitlist') : __('events.registration.submit') }}
                         </button>
                     </form>

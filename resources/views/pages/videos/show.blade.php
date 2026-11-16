@@ -53,7 +53,7 @@
                             <span class="block aspect-video"></span>
                         @endif
                         <span class="absolute inset-0 flex items-center justify-center">
-                            <span class="rounded-control bg-black/75 px-4 py-2 font-medium text-white group-hover:bg-primary-700">{{ __('video.watch_on', ['provider' => __("video.provider.{$video->provider}")]) }}</span>
+                            <span class="rounded-control bg-black/75 px-4 py-2 font-medium text-white group-hover:bg-primary-800">{{ __('video.watch_on', ['provider' => __("video.provider.{$video->provider}")]) }}</span>
                         </span>
                     </a>
                 @endif

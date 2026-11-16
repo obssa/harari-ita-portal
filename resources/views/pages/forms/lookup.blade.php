@@ -9,7 +9,7 @@
                        @if ($notFound) aria-invalid="true" aria-describedby="reference-error" @endif
                        class="mt-1 block w-full rounded-control border border-line bg-surface px-3 py-2 uppercase tracking-wider">
             </div>
-            <button type="submit" class="rounded-control bg-primary-600 px-4 py-2 font-semibold text-white hover:bg-primary-700">{{ __('forms.lookup_button') }}</button>
+            <button type="submit" class="rounded-control bg-primary-700 px-4 py-2 font-semibold text-white hover:bg-primary-800">{{ __('forms.lookup_button') }}</button>
         </form>
         @if ($notFound)
             <p id="reference-error" role="alert" class="mt-3 text-sm text-danger-600">{{ __('forms.lookup_not_found') }}</p>

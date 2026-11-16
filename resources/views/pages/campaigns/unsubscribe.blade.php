@@ -7,7 +7,7 @@
             @else
                 <p class="mt-4 text-lg">{{ __('campaigns.unsubscribe.ask') }}</p>
                 <form method="post" action="{{ route('campaigns.unsubscribe.post', ['token' => $token]) }}" class="mt-6">
-                    <button type="submit" class="inline-flex items-center rounded-control bg-primary-600 px-5 py-2.5 font-semibold text-white hover:bg-primary-700">{{ __('campaigns.unsubscribe.button') }}</button>
+                    <button type="submit" class="inline-flex items-center rounded-control bg-primary-700 px-5 py-2.5 font-semibold text-white hover:bg-primary-800">{{ __('campaigns.unsubscribe.button') }}</button>
                 </form>
             @endif
         </div>

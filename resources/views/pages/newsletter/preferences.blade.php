@@ -2,7 +2,7 @@
 @use('App\Domain\Translation\Support\Locales')
 @use('App\Support\PhoneNumber')
 @php
-    $button = 'inline-flex items-center rounded-control bg-primary-600 px-5 py-2.5 font-semibold text-white hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600';
+    $button = 'inline-flex items-center rounded-control bg-primary-700 px-5 py-2.5 font-semibold text-white hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600';
     $secondary = 'inline-flex items-center rounded-control border border-line bg-surface px-5 py-2.5 font-semibold hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600';
     $unsubscribed = $subscriber->unsubscribed_at !== null;
     $contacts = array_filter(['email' => $subscriber->email, 'sms' => $subscriber->phone ? PhoneNumber::mask($subscriber->phone) : null]);

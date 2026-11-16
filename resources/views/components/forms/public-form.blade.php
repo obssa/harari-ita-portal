@@ -2,7 +2,7 @@
 @use('App\Domain\Forms\Support\FormField')
 @php
     $locale = app()->getLocale();
-    $field = 'mt-1 block w-full rounded-control border border-line bg-surface px-3 py-2 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600/30';
+    $field = 'mt-1 block w-full rounded-control border border-line bg-surface px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/30';
     $optional = $form->anonymous_allowed;
 @endphp
 <form method="post" action="{{ route('forms.submit', ['locale' => $translation->locale, 'slug' => $translation->slug]) }}" @if ($form->hasFileQuestions()) enctype="multipart/form-data" @endif
@@ -115,5 +115,5 @@
 
     <p class="text-sm text-ink-muted">{{ __('forms.privacy') }}</p>
 
-    <button type="submit" class="inline-flex items-center rounded-control bg-primary-600 px-5 py-2.5 font-semibold text-white hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">{{ __('forms.send') }}</button>
+    <button type="submit" class="inline-flex items-center rounded-control bg-primary-700 px-5 py-2.5 font-semibold text-white hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">{{ __('forms.send') }}</button>
 </form>

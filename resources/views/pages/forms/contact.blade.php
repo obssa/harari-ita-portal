@@ -6,7 +6,7 @@
     $hours = $settings->office_hours[$locale] ?? $settings->office_hours['am'] ?? $settings->office_hours['en'] ?? null;
 @endphp
 <x-layouts.public :title="__('forms.contact_title')" :description="__('forms.contact_description')">
-    <x-page-hero :title="__('forms.contact_title')" :lead="__('forms.contact_description')" />
+    <x-page-hero :title="__('forms.contact_title')" :lead="__('forms.contact_description')" tone="night" />
     <div class="mx-auto max-w-page px-4 pt-2 pb-12 sm:px-6">
 
         <div class="mt-8 grid gap-10 lg:grid-cols-3">
@@ -28,8 +28,8 @@
                             @foreach ($offices as $office)
                                 @php $shown = PublicDirectory::shown($office, $locale); @endphp
                                 @continue($shown === null)
-                                <li class="rounded-card border border-line bg-surface p-4" lang="{{ $shown->locale }}">
-                                    <h3 class="font-semibold"><a href="{{ route('offices.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}" class="underline-offset-4 hover:underline">{{ $shown->getAttribute('name') }}</a></h3>
+                                <li class="rounded-card border border-line bg-surface p-4 transition-colors hover:border-cyan-500" lang="{{ $shown->locale }}">
+                                    <h3 class="font-display font-semibold tracking-tight"><a href="{{ route('offices.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}" class="underline-offset-4 hover:underline">{{ $shown->getAttribute('name') }}</a></h3>
                                     @if (filled($shown->getAttribute('address')))
                                         <p class="mt-1 whitespace-pre-line text-sm text-ink-muted">{{ $shown->getAttribute('address') }}</p>
                                     @endif
@@ -44,36 +44,38 @@
                 @endif
             </div>
 
-            <aside class="space-y-6 text-sm" aria-label="{{ __('footer.contact') }}">
+            {{-- ADR-0012: the Agency's own contact details on a night card, labels in mono. --}}
+            <aside class="relative isolate h-fit space-y-6 self-start overflow-hidden rounded-card border border-night-line bg-night-900 p-6 text-sm text-night-ink [&_.text-link]:text-cyan-300" aria-label="{{ __('footer.contact') }}">
+                <x-hex-field id="contact-hex" fade="top" class="absolute inset-x-0 top-0 -z-10 h-40 w-full text-cyan-500/20" />
                 <dl class="space-y-3">
                     @if (filled($address))
                         <div>
-                            <dt class="font-semibold">{{ __('forms.address') }}</dt>
-                            <dd class="mt-0.5 whitespace-pre-line text-ink-muted">{{ $address }}</dd>
+                            <dt class="font-mono text-[11px] tracking-wider text-cyan-300 uppercase">{{ __('forms.address') }}</dt>
+                            <dd class="mt-0.5 whitespace-pre-line text-night-muted">{{ $address }}</dd>
                         </div>
                     @endif
                     @if ($settings->hotline)
                         <div>
-                            <dt class="font-semibold">{{ __('footer.hotline') }}</dt>
+                            <dt class="font-mono text-[11px] tracking-wider text-cyan-300 uppercase">{{ __('footer.hotline') }}</dt>
                             <dd class="mt-0.5"><a href="tel:{{ $tel($settings->hotline) }}" class="text-lg font-semibold text-link hover:underline" dir="ltr">{{ $settings->hotline }}</a></dd>
                         </div>
                     @endif
                     @if ($settings->contact_phone)
                         <div>
-                            <dt class="font-semibold">{{ __('footer.phone') }}</dt>
+                            <dt class="font-mono text-[11px] tracking-wider text-cyan-300 uppercase">{{ __('footer.phone') }}</dt>
                             <dd class="mt-0.5"><a href="tel:{{ $tel($settings->contact_phone) }}" class="text-link hover:underline" dir="ltr">{{ $settings->contact_phone }}</a></dd>
                         </div>
                     @endif
                     @if ($settings->contact_email)
                         <div>
-                            <dt class="font-semibold">{{ __('forms.email') }}</dt>
+                            <dt class="font-mono text-[11px] tracking-wider text-cyan-300 uppercase">{{ __('forms.email') }}</dt>
                             <dd class="mt-0.5"><a href="mailto:{{ $settings->contact_email }}" class="text-link hover:underline" dir="ltr">{{ $settings->contact_email }}</a></dd>
                         </div>
                     @endif
                     @if (filled($hours))
                         <div>
-                            <dt class="font-semibold">{{ __('forms.hours') }}</dt>
-                            <dd class="mt-0.5 whitespace-pre-line text-ink-muted">{{ $hours }}</dd>
+                            <dt class="font-mono text-[11px] tracking-wider text-cyan-300 uppercase">{{ __('forms.hours') }}</dt>
+                            <dd class="mt-0.5 whitespace-pre-line text-night-muted">{{ $hours }}</dd>
                         </div>
                     @endif
                 </dl>
@@ -81,7 +83,7 @@
                 @php $socialLinks = \App\Support\SocialLinks::all(); @endphp
                 @if ($socialLinks !== [])
                     <div>
-                        <h2 class="font-semibold">{{ __('footer.follow') }}</h2>
+                        <h2 class="kicker [--color-eyebrow:var(--color-cyan-300)]">{{ __('footer.follow') }}</h2>
                         <x-social.platforms :links="$socialLinks" stacked class="mt-3" />
                     </div>
                 @endif

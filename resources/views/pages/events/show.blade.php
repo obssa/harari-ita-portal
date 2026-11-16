@@ -131,7 +131,7 @@
                             @else
                                 <p class="mt-1 text-sm text-ink-muted">{{ $event->capacity !== null ? __('events.registration.limited') : __('events.registration.free') }}
                                     {{ __('events.registration.closes', ['date' => app(\App\Services\Calendar\EthiopianCalendar::class)->format($event->registrationClosesAt(), withTime: true)]) }}</p>
-                                <a href="{{ route('events.register', ['slug' => $translation->slug]) }}" class="mt-3 inline-flex rounded-control bg-primary-600 px-4 py-2 font-semibold text-white hover:bg-primary-700">{{ __('events.registration.cta') }}</a>
+                                <a href="{{ route('events.register', ['slug' => $translation->slug]) }}" class="mt-3 inline-flex rounded-control bg-primary-700 px-4 py-2 font-semibold text-white hover:bg-primary-800">{{ __('events.registration.cta') }}</a>
                             @endif
                         </div>
                     @endif

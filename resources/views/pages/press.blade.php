@@ -89,7 +89,7 @@
                         <p class="mt-1"><a href="mailto:{{ $settings->contact_email }}" class="text-link hover:underline" dir="ltr">{{ $settings->contact_email }}</a></p>
                     @endif
                     @if ($form)
-                        <a href="{{ route('forms.show', ['locale' => $form->locale, 'slug' => $form->slug]) }}" class="mt-4 inline-flex rounded-control bg-primary-600 px-4 py-2 font-semibold text-white hover:bg-primary-700">{{ __('press.enquiry') }}</a>
+                        <a href="{{ route('forms.show', ['locale' => $form->locale, 'slug' => $form->slug]) }}" class="mt-4 inline-flex rounded-control bg-primary-700 px-4 py-2 font-semibold text-white hover:bg-primary-800">{{ __('press.enquiry') }}</a>
                     @endif
                     @if (! $contactName && ! $settings->contact_phone && ! $settings->contact_email && ! $form)
                         <p class="mt-2 text-ink-muted"><a href="{{ route('contact') }}" class="text-link hover:underline">{{ __('press.contact_page') }}</a></p>

@@ -63,7 +63,7 @@
                     @if ($media)
                         <div class="rounded-card border border-line bg-surface p-4">
                             <a href="{{ route('documents.download', ['slug' => $translation->slug]) }}" rel="nofollow"
-                               class="inline-flex w-full justify-center rounded-control bg-primary-600 px-4 py-2.5 font-semibold text-white hover:bg-primary-700">{{ __('documents.download') }}</a>
+                               class="inline-flex w-full justify-center rounded-control bg-primary-700 px-4 py-2.5 font-semibold text-white hover:bg-primary-800">{{ __('documents.download') }}</a>
                             <p class="mt-2 text-center text-sm text-ink-muted">
                                 {{ strtoupper(pathinfo($media->file_name, PATHINFO_EXTENSION)) }} · {{ \Illuminate\Support\Number::fileSize($media->size, precision: 1) }}
                                 · {{ __('documents.version', ['number' => $file->version]) }}

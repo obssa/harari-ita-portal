@@ -13,7 +13,7 @@
                     <form method="get" action="{{ route('search') }}" role="search" class="flex gap-2">
                         <label for="drawer-search" class="sr-only">{{ __('search.label') }}</label>
                         <input id="drawer-search" type="search" name="q" maxlength="100" minlength="2" required placeholder="{{ __('search.short') }}"
-                               class="min-w-0 flex-1 rounded-control border border-line bg-surface-muted px-4 py-2.5 text-base focus:border-primary-600 focus:ring-2 focus:ring-primary-600/30 focus:outline-none">
+                               class="min-w-0 flex-1 rounded-control border border-line bg-surface-muted px-4 py-2.5 text-base focus:border-cyan-600 focus:ring-2 focus:ring-cyan-500/30 focus:outline-none">
                         <button type="submit" class="inline-flex size-11 shrink-0 items-center justify-center rounded-control bg-primary-700 text-white hover:bg-primary-800">
                             <svg aria-hidden="true" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
                             <span class="sr-only">{{ __('search.button') }}</span>
