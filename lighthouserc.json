@@ -8,7 +8,10 @@
                 "https://hita.orcamind.dev/en/events",
                 "https://hita.orcamind.dev/en/documents",
                 "https://hita.orcamind.dev/en/about/offices",
-                "https://hita.orcamind.dev/en/about/leadership"
+                "https://hita.orcamind.dev/en/about/leadership",
+                "https://hita.orcamind.dev/en/services",
+                "https://hita.orcamind.dev/en/status",
+                "https://hita.orcamind.dev/en/support/new"
             ],
             "numberOfRuns": 3,
             "settings": {

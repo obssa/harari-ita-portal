@@ -27,23 +27,21 @@ public pages in the HinTA look and Pest tests in the same commit.
 
 | # | Step | Commit |
 |---|---|---|
-| 2.0 | **Plan and clean-up**: this file; the forms inbox's references drop the source project's `HPP-` prefix for `MSG-` (staging held none) | |
-| 2.1 | **Services**: `ServiceCategory`, `ServiceItem` + `ServiceItemTranslation` (title, slug, summary, eligibility, documents, steps, fees, time, FAQ, per-locale status), channels, audience, office, external link, featured and rank; Filament resource with a tab per language; policy on `services.*` | |
-| 2.2 | **Services, public**: catalogue with search and filters, detail page (stepper for the steps, channel badges, office card, online link, related services, FAQ, last reviewed), `GovernmentService` JSON-LD, search index and sitemap; the "Services" menu appears | |
-| 2.3 | **Support, model and staff side**: `Ticket` (reference, requester type, office, category, priority, status, channel, encrypted contact with hashes, SLA due times, first response and resolution times, satisfaction), `TicketMessage` (public reply or internal note, attachments), `SlaPolicy`; Filament resource, a board by status, SLA badges (on time, due soon, breached), assignment within the directorate scope | |
-| 2.4 | **Support, public**: `/support/new` and `/support/track`, confirmation and update emails, replies by the requester from the tracking page, the satisfaction rating, rate limits, purge after the retention period, data-subject export and erasure | |
-| 2.5 | **Status**: `StatusComponent`, `Incident`, `IncidentUpdate`; Filament resources; `/status`, JSON feed and RSS; the dashboard widgets (open tickets by SLA state, active incidents) | |
-| 2.6 | **Home and navigation**: "Find a service" in the hero, top services on the homepage, live figures (services online, tickets resolved this month) in the KPI strip, "Report an IT problem" in the utility bar | |
-| 2.7 | **Gate**: the PLAN.md §13 acceptance run on staging with sample data clearly marked as samples; axe and Lighthouse; manual chapter; report | |
+| 2.0 | **Plan and clean-up**: this file; the forms inbox's references drop the source project's `HPP-` prefix for `MSG-` (staging held none) | `a436805` |
+| 2.1 | **Services**: categories reuse the content categories (type `service`), `ServiceItem` + `ServiceItemTranslation` (title, slug, summary, eligibility, documents, steps, fees, time, FAQ, per-locale status), channels, audience, office, external link, featured and rank; Filament resource with a tab per language; policy on `services.*` | `a436805` |
+| 2.2 | **Services, public**: catalogue with search and filters, detail page (stepper for the steps, channel badges, office card, online link, related services, FAQ, last reviewed), `GovernmentService` JSON-LD, search index and sitemap; the "Services" menu appears | `a436805` |
+| 2.3 | **Support, model and staff side**: `Ticket` (reference, requester type, office, category, priority, status, channel, encrypted contact with hashes, SLA due times, first response and resolution times, satisfaction), `TicketMessage` (public reply or internal note, attachments), `SlaPolicy`; Filament resource, a board by status, SLA badges (on time, due soon, breached), assignment within the directorate scope | `a436805` |
+| 2.4 | **Support, public**: `/support/new` and `/support/track`, confirmation and update emails, replies by the requester from the tracking page, the satisfaction rating, rate limits, purge after the retention period, data-subject export and erasure | `a436805`, `ac9f90f` |
+| 2.5 | **Status**: `StatusComponent`, `Incident`, `IncidentUpdate`; Filament resources; `/status`, JSON feed and RSS; the dashboard widgets (open tickets by SLA state, active incidents) | `a436805` |
+| 2.6 | **Home and navigation**: "Find a service" in the hero, top services on the homepage, live figures (services online, tickets resolved this month) in the KPI strip; the header's "Request support" button serves as the way to report an IT problem (no separate utility-bar link) | `a436805` |
+| 2.7 | **Gate**: the PLAN.md §13 acceptance run on staging with sample data clearly marked as samples; axe and Lighthouse; manual chapter; report |this report |
 
 Each step ends with lint clean, `lang:missing` 0 for am and om, the hard-coded strings check, the affected tests
 green, CI green, deployed to staging and checked there.
 
-## Decisions to record
+## Decisions recorded
 
-- ADR-0016: services catalogue model and JSON-LD.
-- ADR-0017: support tickets (reference format, SLA in working hours, tracking, retention).
-- ADR-0018: status page, incident impact levels and feeds.
+ADR-0016 (services catalogue), ADR-0017 (IT support tickets), ADR-0018 (service status page).
 
 ## Open questions (for Ramin / the Agency)
 
@@ -60,6 +58,42 @@ green, CI green, deployed to staging and checked there.
 The forms inbox's public status page (`/tickets/MSG-…`) still answers on the reference alone; ADR-0003 asks for the
 reference plus the contact given, as `/support/track` does. Fixed in the same phase: both now work the same way.
 
-## Report
+## Report (2026-11-17)
 
-(Written at the end of the phase.)
+**Done.** The three PLAN.md §13 checks pass, in the tests and live on staging:
+
+1. **A service published in four languages.** On staging, `portal:sample-services` added "[Sample] Email account
+   for a public office" in English, Amharic, Afaan Oromo and Harari. It shows in the catalogue, on its own page
+   (who can use it, documents, numbered steps, fees, time, questions, "Start online"), on the homepage as a top
+   service and in search.
+2. **A ticket filed, tracked and closed with SLA timers.** The tests file tickets through the public form (with an
+   attachment, re-encoded), answer, wait for the requester, reopen on their reply, resolve, rate and close them,
+   with response and resolution targets in working hours (due soon, overdue, met) and a target that moves with the
+   priority. On staging, the sample ticket `SUP-23MQ-NLTC` showed only the form to an unproved visitor, said
+   "This is not the email address or phone number given with this request" for a wrong contact, and opened with the
+   right one (typed in lower case); its first answer is due the next working day at 16:30.
+3. **An incident shown on `/status`.** The sample incident puts "[Sample] Email" in "slow or limited" while the
+   website stays operational; the overall line says so; RSS and JSON carry it. The tests resolve it into the history
+   and show planned maintenance as upcoming until it starts.
+
+Also in this phase: the forms inbox's references use `MSG-`, and its status page now needs the reference plus the
+contact given, like support tracking (ADR-0003); the "Service desk" dashboard widget; the Services menu section;
+live figures on the homepage; manual chapter 8.
+
+**Gate.**
+- Lint (Pint, Larastan) clean; `lang:missing` 0 for am and om (2,861 strings); hard-coded strings check passes.
+- CI green on `ac9f90f` (lint, the full test suite, browser tests with axe, assets); deployed to staging.
+- Lighthouse on staging (mobile, representative runs): performance 93–98, accessibility 100, best practices 96.
+  `/services`, `/status` and `/support/new` join the Lighthouse list from now on.
+- Screenshots in `docs/phases/02-screens/`.
+- CI caught what local runs had not: the security architecture test forbids `tempnam` and `assert`; both were
+  replaced.
+
+**Not done / for later.**
+- The manual chapter is in English only; its Amharic version waits for the Agency's review of the English.
+- Public holidays are not counted out of the SLA clock yet (as for the forms inbox); the Agency's holiday list is
+  needed (INPUTS).
+- The real services, SLA targets, working hours and status systems come from the Agency (open questions above).
+  The `[Sample]` content stays on staging until then; `php artisan portal:sample-services --remove` deletes it.
+
+**Next.** Phase 3: innovation (startups, programmes and applications, challenges and judging).
