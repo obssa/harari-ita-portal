@@ -63,10 +63,10 @@ it('creates every section once with sensible defaults', function () {
     expect(HomepageSection::query()->count())->toBe(count(SectionKey::cases()))
         ->and($sections->firstWhere('key', SectionKey::Ticker)?->enabled)->toBeFalse()
         ->and($sections->firstWhere('key', SectionKey::LatestNews)?->enabled)->toBeTrue()
-        ->and($sections->firstWhere('key', SectionKey::Values)?->setting('items'))->toHaveCount(count(HomepageLayout::DEFAULT_VALUES));
+        ->and($sections->firstWhere('key', SectionKey::Values)?->setting('items'))->toBe([]);
 });
 
-it('shows a welcome, the latest news, press and the core values on a fresh site', function () {
+it('shows a welcome, the latest news and press on a fresh site, and no values until the Agency gives its own', function () {
     homePost(['en' => ['title' => 'Sample council session news']]);
     homePost(['en' => ['title' => 'Sample statement on the budget']], ['type' => 'statement']);
 
@@ -78,9 +78,8 @@ it('shows a welcome, the latest news, press and the core values on a fresh site'
             'Sample council session news',
             __('homepage.section.press', [], 'en'),
             'Sample statement on the budget',
-            __('homepage.section.values', [], 'en'),
-            __('homepage.value.medemer', [], 'en'),
         ])
+        ->assertDontSee(__('homepage.section.values', [], 'en'))
         ->assertDontSee(__('homepage.section.ticker', [], 'en'));
 });
 
@@ -106,20 +105,20 @@ it('reorders, switches off and limits sections, and hides them per language', fu
     }
 
     arrangeHomepage([
-        'latest_news' => ['limit' => 2, 'titles' => ['en' => 'From the branch']],
+        'latest_news' => ['limit' => 2, 'titles' => ['en' => 'From the Agency']],
         'press' => ['enabled' => false],
-        'values' => ['locales' => ['en', 'am']],
+        'values' => ['locales' => ['en', 'am'], 'value_items' => [['title' => ['en' => 'Sample value', 'am' => 'ናሙና እሴት'], 'text' => []]]],
     ], ['values', 'latest_news']);
 
     $html = (string) $this->get('/en')
         ->assertOk()
-        ->assertSeeInOrder([__('homepage.value.medemer', [], 'en'), 'From the branch'])
+        ->assertSeeInOrder(['Sample value', 'From the Agency'])
         ->assertDontSee(__('homepage.section.press', [], 'en'))
         ->getContent();
     expect(substr_count($html, '>Sample item '))->toBe(2);
 
-    $this->get('/am')->assertSee(__('homepage.value.medemer', [], 'am'));
-    $this->get('/om')->assertDontSee(__('homepage.value.medemer', [], 'om'));
+    $this->get('/am')->assertSee('ናሙና እሴት');
+    $this->get('/om')->assertDontSee('Sample value');
 });
 
 it('shows the ticker, leadership message, counters, pillars and partner links once set up', function () {

@@ -34,9 +34,6 @@ use Illuminate\Support\Collection as SupportCollection;
  */
 final class HomepageLayout
 {
-    /** Core values offered when the section is first created (PLAN.md §4 item 8). */
-    public const DEFAULT_VALUES = ['medemer', 'unity', 'democracy', 'sovereignty', 'inclusiveness', 'patriotism', 'solidarity'];
-
     public function __construct(private readonly PublicPosts $posts) {}
 
     /**
@@ -72,24 +69,14 @@ final class HomepageLayout
     }
 
     /**
+     * The settings a section starts with. The values section starts empty: the Agency's own values come from
+     * it (docs/INPUTS.md) and are entered in the admin; until then the section stays off the page.
+     *
      * @return array<string, mixed>
      */
     public static function defaultSettings(SectionKey $key): array
     {
-        if ($key !== SectionKey::Values) {
-            return [];
-        }
-
-        $items = [];
-        foreach (self::DEFAULT_VALUES as $value) {
-            $title = [];
-            foreach (['en', 'am', 'om'] as $locale) {
-                $title[$locale] = __("homepage.value.{$value}", [], $locale);
-            }
-            $items[] = ['title' => $title, 'text' => []];
-        }
-
-        return ['items' => $items];
+        return $key === SectionKey::Values ? ['items' => []] : [];
     }
 
     /**
