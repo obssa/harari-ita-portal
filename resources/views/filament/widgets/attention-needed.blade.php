@@ -2,13 +2,13 @@
     <x-filament::section :heading="$this::title()" icon="heroicon-o-bell-alert">
         @php $items = $this->items(); @endphp
         @if ($items === [])
-            <p class="hpp-empty">{{ __('dashboard.attention.none') }}</p>
+            <p class="hinta-empty">{{ __('dashboard.attention.none') }}</p>
         @else
-            <ul class="hpp-list">
+            <ul class="hinta-list">
                 @foreach ($items as $item)
-                    <li class="hpp-row">
+                    <li class="hinta-row">
                         @if ($item['url'])
-                            <a href="{{ $item['url'] }}" class="hpp-link">{{ $item['label'] }}</a>
+                            <a href="{{ $item['url'] }}" class="hinta-link">{{ $item['label'] }}</a>
                         @else
                             <span>{{ $item['label'] }}</span>
                         @endif

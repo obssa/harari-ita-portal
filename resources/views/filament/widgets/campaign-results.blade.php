@@ -2,9 +2,9 @@
     <x-filament::section :heading="$this::title()" icon="heroicon-o-megaphone">
         @php $rows = $this->rows(); @endphp
         @if ($rows === [])
-            <p class="hpp-empty">{{ __('campaigns.dashboard.none') }}</p>
+            <p class="hinta-empty">{{ __('campaigns.dashboard.none') }}</p>
         @else
-            <table class="hpp-table">
+            <table class="hinta-table">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('campaigns.field.name') }}</th>
@@ -17,8 +17,8 @@
                     @foreach ($rows as $row)
                         <tr>
                             <td style="padding: .25rem 0">
-                                <a href="{{ \App\Filament\Resources\Campaigns\CampaignResource::getUrl('view', ['record' => $row['campaign']]) }}" class="hpp-link">{{ $row['campaign']->name }}</a>
-                                <span class="hpp-muted">· {{ __('newsletter.channel.'.$row['campaign']->channel) }}</span>
+                                <a href="{{ \App\Filament\Resources\Campaigns\CampaignResource::getUrl('view', ['record' => $row['campaign']]) }}" class="hinta-link">{{ $row['campaign']->name }}</a>
+                                <span class="hinta-muted">· {{ __('newsletter.channel.'.$row['campaign']->channel) }}</span>
                             </td>
                             <td>{{ $row['sent'] }}</td>
                             <td>{{ $row['campaign']->channel === 'email' ? $row['clicked'].'%' : '—' }}</td>

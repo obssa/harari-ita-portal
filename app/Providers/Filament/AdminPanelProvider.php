@@ -49,11 +49,11 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->profile(isSimple: false)
             ->colors([
-                // The brand colour until the phase 1 tokens (docs/DESIGN.md §1).
+                // HinTA teal 700 (resources/css/tokens.css, ADR-0007/0015).
                 'primary' => Color::hex('#105D6F'),
             ])
             ->favicon('/favicon-96.png?v=2')
-            // ADR-0064: the public site's brand in the admin; fonts served from this site.
+            // ADR-0015: HinTA's brand in the admin; fonts served from this site.
             ->brandLogo(fn (): View => view('filament.brand'))
             ->brandLogoHeight('2.5rem')
             ->font('Inter Variable', provider: LocalFontProvider::class)

@@ -1,6 +1,6 @@
 <x-filament-widgets::widget>
     <x-filament::section :heading="$this::title()" icon="heroicon-o-queue-list">
-        <table class="hpp-table">
+        <table class="hinta-table">
             <thead>
                 <tr>
                     <th scope="col">{{ __('dashboard.coverage.language') }}</th>
@@ -13,7 +13,7 @@
             <tbody>
                 @foreach ($this->queue() as $row)
                     <tr>
-                        <th scope="row" lang="{{ $row['locale'] }}"><a href="{{ $row['url'] }}" class="hpp-link">{{ $row['name'] }}</a></th>
+                        <th scope="row" lang="{{ $row['locale'] }}"><a href="{{ $row['url'] }}" class="hinta-link">{{ $row['name'] }}</a></th>
                         <td>{{ \Illuminate\Support\Number::format($row['missing']) }}</td>
                         <td>{{ \Illuminate\Support\Number::format($row['changed']) }}</td>
                         <td>{{ \Illuminate\Support\Number::format($row['machine']) }}</td>

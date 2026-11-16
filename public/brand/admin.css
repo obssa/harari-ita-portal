@@ -1,5 +1,5 @@
 /*
- * Admin brand (ADR-0064): the public site's colours on Filament's hook classes.
+ * Admin brand (ADR-0015): HinTA's colours, type and hexagon field on Filament's hook classes.
  * Plain CSS, loaded after Filament's own (which sits in cascade layers), so no
  * extra build step is needed on the server.
  */
@@ -24,6 +24,24 @@
         U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
+    font-family: 'Space Grotesk Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 300 700;
+    src: url('/fonts/portal/space-grotesk-latin-wght-v5.woff2') format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+        U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'JetBrains Mono Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 800;
+    src: url('/fonts/portal/jetbrains-mono-latin-wght-v5.woff2') format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+        U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
     font-family: 'Noto Sans Ethiopic Variable';
     font-style: normal;
     font-display: swap;
@@ -33,25 +51,30 @@
 }
 
 :root {
-    --hpp-night: #083a5c;
-    --hpp-night-deep: #05253b;
-    --hpp-blue: #0b6ca8;
-    --hpp-gold: #f5b800;
-    --hpp-magenta: #c2185b;
-    --hpp-terracotta: #b4532a;
-    --hpp-sky: #29a8e0;
-    --hpp-plaster: #f7f2e9;
-    --hpp-plaster-line: #e5dccb;
-    --hpp-ink: #14161a;
-    --hpp-card: #ffffff;
-    --hpp-card-line: #ebe4d6;
-    --hpp-muted: #5b6270;
+    --hinta-night: #0a222b;
+    --hinta-night-deep: #04121a;
+    --hinta-night-line: #1d4a58;
+    --hinta-teal: #105d6f;
+    --hinta-teal-dark: #0b4a5c;
+    --hinta-cyan: #1296ab;
+    --hinta-cyan-light: #5fc6db;
+    --hinta-saffron: #e8912d;
+    --hinta-saffron-light: #ffac54;
+    --hinta-ruby: #b8323e;
+    --hinta-green: #4c8c4a;
+    --hinta-plaster: #fbfaf7;
+    --hinta-ink: #0b1a22;
+    --hinta-card: #ffffff;
+    --hinta-card-line: #dde4e6;
+    --hinta-muted: #3e5f69;
+    --hinta-display: 'Space Grotesk Variable', 'Inter Variable', 'Noto Sans Ethiopic Variable', ui-sans-serif, system-ui, sans-serif;
+    --hinta-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 }
 .dark {
-    --hpp-plaster: #0e1013;
-    --hpp-card: #16191e;
-    --hpp-card-line: #262b33;
-    --hpp-muted: #9aa3af;
+    --hinta-plaster: #06171e;
+    --hinta-card: #0a222b;
+    --hinta-card-line: #1d4a58;
+    --hinta-muted: #a9bec5;
 }
 
 .fi-body,
@@ -63,28 +86,29 @@
     line-height: 1.6;
 }
 
-/* Page ground: warm plaster instead of grey. */
+/* Page ground: the site canvas instead of grey. */
 .fi-body {
-    background-color: var(--hpp-plaster);
+    background-color: var(--hinta-plaster);
 }
 
-/* ---------- Sidebar: night blue, gold for where you are ---------- */
+/* ---------- Sidebar: night, cyan for where you are, the hexagon field at the foot ---------- */
 .fi-sidebar {
     overflow: hidden;
-    background: linear-gradient(180deg, var(--hpp-night) 0%, var(--hpp-night-deep) 100%);
+    background: linear-gradient(180deg, var(--hinta-night) 0%, var(--hinta-night-deep) 100%);
     color: #fff;
 }
 .fi-sidebar::after {
-    /* A faint basket plate at the foot of the sidebar. */
+    /* The logo's hexagon field, fading up from the foot of the sidebar. */
     content: '';
     position: absolute;
-    inset-inline-end: -5rem;
-    bottom: -5rem;
-    width: 15rem;
-    height: 15rem;
+    inset-inline: 0;
+    bottom: 0;
+    height: 16rem;
     pointer-events: none;
-    opacity: 0.12;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='94' fill='none' stroke='%23f5b800' stroke-width='7' stroke-dasharray='12 6'/%3E%3Ccircle cx='100' cy='100' r='80' fill='none' stroke='%23b4532a' stroke-width='9' stroke-dasharray='4 4'/%3E%3Ccircle cx='100' cy='100' r='64' fill='none' stroke='%2329a8e0' stroke-width='9' stroke-dasharray='14 5'/%3E%3Ccircle cx='100' cy='100' r='48' fill='none' stroke='%23c2185b' stroke-width='7' stroke-dasharray='3 5'/%3E%3Ccircle cx='100' cy='100' r='18' fill='%23f5b800'/%3E%3C/svg%3E") center / contain no-repeat;
+    opacity: 0.22;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0 28 8v16l-14 8-14-8V8zM14 32v16' fill='none' stroke='%235fc6db' stroke-width='1'/%3E%3C/svg%3E") repeat;
+    -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 100%);
+    mask-image: linear-gradient(to top, #000 0%, transparent 100%);
 }
 .fi-sidebar-header,
 .fi-sidebar-header-ctn {
@@ -99,7 +123,7 @@
 }
 .fi-sidebar-group-label,
 .fi-sidebar-group-btn .fi-sidebar-group-label {
-    color: var(--hpp-gold);
+    color: var(--hinta-cyan-light);
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.09em;
@@ -131,23 +155,23 @@
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn:where(.dark, .dark *) {
     background-color: rgb(255 255 255 / 0.12);
-    box-shadow: inset 3px 0 0 var(--hpp-gold);
+    box-shadow: inset 3px 0 0 var(--hinta-cyan-light);
 }
 [dir='rtl'] .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
-    box-shadow: inset -3px 0 0 var(--hpp-gold);
+    box-shadow: inset -3px 0 0 var(--hinta-cyan-light);
 }
 .fi-sidebar-item.fi-active .fi-sidebar-item-label {
     color: #fff;
     font-weight: 700;
 }
 .fi-sidebar-item.fi-active .fi-sidebar-item-icon {
-    color: var(--hpp-gold);
+    color: var(--hinta-cyan-light);
 }
 .fi-sidebar-item-grouped-border-part {
     background-color: rgb(255 255 255 / 0.18);
 }
 .fi-sidebar-item.fi-active .fi-sidebar-item-grouped-border-part {
-    background-color: var(--hpp-gold);
+    background-color: var(--hinta-cyan-light);
 }
 .fi-sidebar .fi-badge {
     box-shadow: none;
@@ -163,47 +187,47 @@
 }
 
 /* ---------- Brand block (logo, name) ---------- */
-.hpp-brand {
+.hinta-brand {
     display: inline-flex;
     align-items: center;
     gap: 0.625rem;
     line-height: 1.15;
 }
-.hpp-brand-logo {
+.hinta-brand-logo {
     width: 2.5rem;
     height: 2.5rem;
     flex-shrink: 0;
     border-radius: 9999px;
     background: #fff;
-    box-shadow: 0 0 0 2px rgb(245 184 0 / 0.9);
+    box-shadow: 0 0 0 2px rgb(95 198 219 / 0.9);
 }
-.hpp-brand-text {
+.hinta-brand-text {
     display: flex;
     flex-direction: column;
     min-width: 0;
 }
-.hpp-brand-name {
+.hinta-brand-name {
     font-size: 0.9375rem;
     font-weight: 800;
     letter-spacing: -0.01em;
-    color: var(--hpp-ink);
+    color: var(--hinta-ink);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.hpp-brand-sub {
+.hinta-brand-sub {
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--hpp-terracotta);
+    color: var(--hinta-teal);
 }
-.fi-sidebar .hpp-brand-name,
-.dark .hpp-brand-name {
+.fi-sidebar .hinta-brand-name,
+.dark .hinta-brand-name {
     color: #fff;
 }
-.fi-sidebar .hpp-brand-sub {
-    color: var(--hpp-gold);
+.fi-sidebar .hinta-brand-sub {
+    color: var(--hinta-cyan-light);
 }
 
 /* ---------- Topbar ---------- */
@@ -212,11 +236,11 @@
     background-color: rgb(255 255 255 / 0.85);
     backdrop-filter: saturate(1.4) blur(10px);
     box-shadow: none;
-    border-bottom: 1px solid var(--hpp-card-line);
+    border-bottom: 1px solid var(--hinta-card-line);
 }
 .dark .fi-topbar,
 .dark .fi-topbar-ctn {
-    background-color: rgb(22 25 30 / 0.85);
+    background-color: rgb(10 34 43 / 0.85);
 }
 
 /* ---------- Page header ---------- */
@@ -236,19 +260,19 @@
 .fi-fo-tabs,
 .fi-sc-tabs {
     border-radius: 1rem;
-    background-color: var(--hpp-card);
-    box-shadow: 0 1px 2px rgb(20 22 26 / 0.04), 0 8px 24px -12px rgb(20 22 26 / 0.12);
-    --tw-ring-color: var(--hpp-card-line);
+    background-color: var(--hinta-card);
+    box-shadow: 0 1px 2px rgb(11 26 34 / 0.04), 0 8px 24px -12px rgb(11 26 34 / 0.12);
+    --tw-ring-color: var(--hinta-card-line);
 }
 .fi-section-header-heading {
     font-weight: 700;
     letter-spacing: -0.01em;
 }
 .fi-section-header .fi-icon {
-    color: var(--hpp-terracotta);
+    color: var(--hinta-teal);
 }
 .dark .fi-section-header .fi-icon {
-    color: var(--hpp-gold);
+    color: var(--hinta-cyan-light);
 }
 
 /* Stats: a coloured edge per figure, in the logo's colours. */
@@ -262,20 +286,20 @@
     inset-inline: 0;
     top: 0;
     height: 4px;
-    background: var(--hpp-blue);
+    background: var(--hinta-teal);
 }
 .fi-wi-stats-overview-stat:nth-child(4n + 2)::before {
-    background: var(--hpp-gold);
+    background: var(--hinta-saffron);
 }
 .fi-wi-stats-overview-stat:nth-child(4n + 3)::before {
-    background: var(--hpp-magenta);
+    background: var(--hinta-ruby);
 }
 .fi-wi-stats-overview-stat:nth-child(4n + 4)::before {
-    background: var(--hpp-terracotta);
+    background: var(--hinta-cyan);
 }
 .fi-wi-stats-overview-stat-label {
     font-weight: 600;
-    color: var(--hpp-muted);
+    color: var(--hinta-muted);
 }
 .fi-wi-stats-overview-stat-value {
     font-weight: 800;
@@ -287,11 +311,11 @@
  * lighter shade with dark text from its generated palette, so pin it here.
  */
 .fi-btn.fi-color-primary.fi-bg-color-400 {
-    background-color: var(--hpp-blue);
+    background-color: var(--hinta-teal);
     color: #fff;
 }
 .fi-btn.fi-color-primary.fi-bg-color-400:hover {
-    background-color: #095a8c;
+    background-color: var(--hinta-teal-dark);
     color: #fff;
 }
 .fi-btn.fi-color-primary.fi-bg-color-400 .fi-icon,
@@ -312,18 +336,18 @@
 }
 
 /* ---------- Dashboard welcome band ---------- */
-.hpp-welcome {
+.hinta-welcome {
     position: relative;
     overflow: hidden;
     border-radius: 1.25rem;
     padding: 1.75rem 1.75rem 1.5rem;
     color: #fff;
     background:
-        radial-gradient(120% 140% at 0% 0%, rgb(11 108 168 / 0.55) 0%, transparent 55%),
-        linear-gradient(135deg, var(--hpp-night) 0%, var(--hpp-night-deep) 100%);
-    box-shadow: 0 18px 40px -24px rgb(5 37 59 / 0.8);
+        radial-gradient(120% 140% at 0% 0%, rgb(18 150 171 / 0.35) 0%, transparent 55%),
+        linear-gradient(135deg, var(--hinta-night) 0%, var(--hinta-night-deep) 100%);
+    box-shadow: 0 18px 40px -24px rgb(4 18 26 / 0.8);
 }
-.hpp-welcome-plate {
+.hinta-welcome-plate {
     position: absolute;
     inset-inline-end: -4rem;
     top: -4.5rem;
@@ -332,7 +356,7 @@
     opacity: 0.35;
     pointer-events: none;
 }
-.hpp-welcome-inner {
+.hinta-welcome-inner {
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -340,26 +364,26 @@
     justify-content: space-between;
     gap: 1.25rem;
 }
-.hpp-welcome-kicker {
+.hinta-welcome-kicker {
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: var(--hpp-gold);
+    color: var(--hinta-cyan-light);
 }
-.hpp-welcome-title {
+.hinta-welcome-title {
     margin-top: 0.375rem;
     font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.125rem);
     line-height: 1.15;
     font-weight: 800;
     letter-spacing: -0.03em;
 }
-.hpp-welcome-text {
+.hinta-welcome-text {
     margin-top: 0.5rem;
     max-width: 40rem;
     color: rgb(255 255 255 / 0.8);
 }
-.hpp-welcome-date {
+.hinta-welcome-date {
     margin-top: 0.875rem;
     display: inline-flex;
     align-items: center;
@@ -371,13 +395,13 @@
     background: rgb(255 255 255 / 0.1);
     color: rgb(255 255 255 / 0.9);
 }
-.hpp-welcome-actions {
+.hinta-welcome-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
 }
-.hpp-welcome-site {
+.hinta-welcome-site {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
@@ -385,93 +409,93 @@
     padding: 0.5rem 0.875rem;
     font-size: 0.875rem;
     font-weight: 700;
-    background: var(--hpp-gold);
-    color: var(--hpp-ink);
+    background: var(--hinta-saffron);
+    color: var(--hinta-ink);
 }
-.hpp-welcome-site:hover {
-    background: #ffc933;
+.hinta-welcome-site:hover {
+    background: var(--hinta-saffron-light);
 }
-.hpp-welcome .fi-btn {
+.hinta-welcome .fi-btn {
     background: rgb(255 255 255 / 0.12);
     color: #fff;
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
 }
-.hpp-welcome .fi-btn:hover {
+.hinta-welcome .fi-btn:hover {
     background: rgb(255 255 255 / 0.2);
 }
-.hpp-welcome .fi-btn .fi-icon {
+.hinta-welcome .fi-btn .fi-icon {
     color: #fff;
 }
 
 /* ---------- Widget content (our own widget views) ---------- */
-.hpp-muted {
-    color: var(--hpp-muted);
+.hinta-muted {
+    color: var(--hinta-muted);
 }
-.hpp-empty {
+.hinta-empty {
     font-size: 0.875rem;
-    color: var(--hpp-muted);
+    color: var(--hinta-muted);
 }
-.hpp-num {
+.hinta-num {
     font-variant-numeric: tabular-nums;
 }
-.hpp-link {
+.hinta-link {
     font-weight: 600;
-    color: var(--hpp-blue);
+    color: var(--hinta-teal);
     text-decoration: none;
 }
-.dark .hpp-link {
-    color: #7cc3ec;
+.dark .hinta-link {
+    color: var(--hinta-cyan-light);
 }
-.hpp-link:hover {
+.hinta-link:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
 }
-.hpp-list {
+.hinta-list {
     font-size: 0.875rem;
 }
-.hpp-row {
+.hinta-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
     padding: 0.625rem 0;
-    border-top: 1px solid var(--hpp-card-line);
+    border-top: 1px solid var(--hinta-card-line);
 }
-.hpp-row:first-child {
+.hinta-row:first-child {
     border-top: 0;
     padding-top: 0.125rem;
 }
-.hpp-ellipsis {
+.hinta-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.hpp-table {
+.hinta-table {
     width: 100%;
     font-size: 0.875rem;
     border-collapse: collapse;
 }
-.hpp-table th {
+.hinta-table th {
     padding: 0.5rem;
     text-align: end;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--hpp-muted);
+    color: var(--hinta-muted);
 }
-.hpp-table th:first-child {
+.hinta-table th:first-child {
     padding-inline-start: 0;
     text-align: start;
 }
-.hpp-table td {
+.hinta-table td {
     padding: 0.625rem 0.5rem;
     text-align: end;
     font-variant-numeric: tabular-nums;
-    border-top: 1px solid var(--hpp-card-line);
+    border-top: 1px solid var(--hinta-card-line);
 }
-.hpp-table td:first-child,
-.hpp-table th[scope='row'] {
+.hinta-table td:first-child,
+.hinta-table th[scope='row'] {
     padding-inline-start: 0;
     text-align: start;
     font-weight: 500;
@@ -480,87 +504,87 @@
     font-size: 0.875rem;
     color: inherit;
 }
-.hpp-table tbody tr:hover td,
-.hpp-table tbody tr:hover th {
-    background: rgb(247 242 233 / 0.6);
+.hinta-table tbody tr:hover td,
+.hinta-table tbody tr:hover th {
+    background: rgb(246 243 236 / 0.6);
 }
-.dark .hpp-table tbody tr:hover td,
-.dark .hpp-table tbody tr:hover th {
+.dark .hinta-table tbody tr:hover td,
+.dark .hinta-table tbody tr:hover th {
     background: rgb(255 255 255 / 0.03);
 }
-.hpp-strong {
+.hinta-strong {
     font-weight: 700;
 }
-.hpp-big {
+.hinta-big {
     font-size: 2rem;
     line-height: 1.1;
     font-weight: 800;
     letter-spacing: -0.03em;
     font-variant-numeric: tabular-nums;
 }
-.hpp-subhead {
+.hinta-subhead {
     margin-top: 1rem;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--hpp-muted);
+    color: var(--hinta-muted);
 }
-.hpp-stack {
+.hinta-stack {
     display: grid;
     gap: 0.75rem;
 }
-.hpp-note {
+.hinta-note {
     padding: 0.875rem 1rem;
     border-radius: 0.875rem;
-    background: var(--hpp-plaster);
-    border: 1px solid var(--hpp-card-line);
+    background: var(--hinta-plaster);
+    border: 1px solid var(--hinta-card-line);
 }
-.hpp-note-head {
+.hinta-note-head {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
     font-weight: 700;
 }
-.hpp-note-body {
+.hinta-note-body {
     margin-top: 0.25rem;
     white-space: pre-line;
     font-size: 0.875rem;
-    color: var(--hpp-muted);
+    color: var(--hinta-muted);
 }
-.hpp-chips {
+.hinta-chips {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
 }
-.hpp-tiles {
+.hinta-tiles {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
     gap: 0.625rem;
 }
-.hpp-tile {
+.hinta-tile {
     display: flex;
     align-items: center;
     gap: 0.625rem;
     padding: 0.75rem 0.875rem;
     border-radius: 0.875rem;
-    border: 1px solid var(--hpp-card-line);
-    background: var(--hpp-plaster);
+    border: 1px solid var(--hinta-card-line);
+    background: var(--hinta-plaster);
     font-size: 0.875rem;
     font-weight: 600;
     color: inherit;
     text-decoration: none;
     transition: border-color 150ms, background-color 150ms, transform 150ms;
 }
-.hpp-tile:hover {
-    border-color: var(--hpp-gold);
-    background: var(--hpp-card);
+.hinta-tile:hover {
+    border-color: var(--hinta-cyan-light);
+    background: var(--hinta-card);
     transform: translateY(-1px);
 }
-.hpp-tile-icon {
+.hinta-tile-icon {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
@@ -568,10 +592,10 @@
     width: 2rem;
     height: 2rem;
     border-radius: 0.625rem;
-    background: var(--hpp-night);
-    color: var(--hpp-gold);
+    background: var(--hinta-night);
+    color: var(--hinta-cyan-light);
 }
-.hpp-tile-icon svg {
+.hinta-tile-icon svg {
     width: 1.125rem;
     height: 1.125rem;
 }
@@ -579,13 +603,14 @@
 /* ---------- Sign-in and other simple pages ---------- */
 .fi-simple-layout {
     background:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='94' fill='none' stroke='%23f5b800' stroke-width='7' stroke-dasharray='12 6'/%3E%3Ccircle cx='100' cy='100' r='80' fill='none' stroke='%23b4532a' stroke-width='9' stroke-dasharray='4 4'/%3E%3Ccircle cx='100' cy='100' r='64' fill='none' stroke='%2329a8e0' stroke-width='9' stroke-dasharray='14 5'/%3E%3Ccircle cx='100' cy='100' r='48' fill='none' stroke='%23c2185b' stroke-width='7' stroke-dasharray='3 5'/%3E%3Ccircle cx='100' cy='100' r='18' fill='%23f5b800'/%3E%3C/svg%3E") right -9rem top -9rem / 30rem 30rem no-repeat,
-        radial-gradient(90% 90% at 0% 100%, rgb(11 108 168 / 0.45) 0%, transparent 60%),
-        linear-gradient(160deg, var(--hpp-night) 0%, var(--hpp-night-deep) 100%);
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0 28 8v16l-14 8-14-8V8zM14 32v16' fill='none' stroke='%235fc6db' stroke-opacity='0.16' stroke-width='1'/%3E%3C/svg%3E") repeat,
+        radial-gradient(90% 90% at 0% 100%, rgb(18 150 171 / 0.35) 0%, transparent 60%),
+        linear-gradient(160deg, var(--hinta-night) 0%, var(--hinta-night-deep) 100%);
 }
 .fi-simple-main {
-    border-radius: 1.5rem;
-    background-color: var(--hpp-card);
+    border-radius: 1rem;
+    border-top: 4px solid var(--hinta-saffron);
+    background-color: var(--hinta-card);
     box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.55);
     --tw-ring-color: transparent;
 }
@@ -596,14 +621,49 @@
 .fi-simple-layout .fi-logo {
     margin-inline: auto;
 }
-.fi-simple-layout .hpp-brand-logo {
+.fi-simple-layout .hinta-brand-logo {
     width: 3.25rem;
     height: 3.25rem;
 }
-.fi-simple-layout .hpp-brand-name {
+.fi-simple-layout .hinta-brand-name {
     font-size: 1.0625rem;
-    color: var(--hpp-ink);
+    color: var(--hinta-ink);
 }
-.dark .fi-simple-layout .hpp-brand-name {
+.dark .fi-simple-layout .hinta-brand-name {
     color: #fff;
+}
+
+/* ---------- Type (ADR-0015): display face for headings and figures, mono for labels ---------- */
+.fi-header-heading,
+.fi-section-header-heading,
+.fi-modal-heading,
+.fi-simple-header-heading,
+.hinta-brand-name,
+.hinta-welcome-title,
+.hinta-big,
+.fi-wi-stats-overview-stat-value {
+    font-family: var(--hinta-display);
+    letter-spacing: -0.02em;
+}
+.fi-sidebar-group-label,
+.hinta-brand-sub,
+.hinta-welcome-kicker,
+.hinta-welcome-date,
+.hinta-table th,
+.fi-ta-header-cell-label,
+.fi-wi-stats-overview-stat-label,
+.fi-badge {
+    font-family: var(--hinta-mono);
+}
+.fi-sidebar-group-label,
+.fi-wi-stats-overview-stat-label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.hinta-welcome-date {
+    border-radius: 0.375rem;
+}
+.hinta-brand-logo {
+    background: transparent;
 }

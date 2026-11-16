@@ -2,15 +2,15 @@
     @php $announcements = $this->announcements(); @endphp
     @if ($announcements->isNotEmpty())
         <x-filament::section :heading="$this::title()" icon="heroicon-o-megaphone">
-            <ul class="hpp-stack">
+            <ul class="hinta-stack">
                 @foreach ($announcements as $announcement)
-                    <li class="hpp-note">
-                        <p class="hpp-note-head">
+                    <li class="hinta-note">
+                        <p class="hinta-note-head">
                             <x-filament::badge :color="$announcement->tone === 'warning' ? 'warning' : ($announcement->tone === 'success' ? 'success' : 'info')">{{ __("dashboard.tone.{$announcement->tone}") }}</x-filament::badge>
                             {{ $announcement->title }}
                         </p>
                         @if (filled($announcement->body))
-                            <p class="hpp-note-body">{{ $announcement->body }}</p>
+                            <p class="hinta-note-body">{{ $announcement->body }}</p>
                         @endif
                     </li>
                 @endforeach

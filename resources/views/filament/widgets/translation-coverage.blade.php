@@ -1,6 +1,6 @@
 <x-filament-widgets::widget>
     <x-filament::section :heading="$this::title()" icon="heroicon-o-language">
-        <table class="hpp-table">
+        <table class="hinta-table">
             <thead>
                 <tr>
                     <th scope="col">{{ __('dashboard.coverage.language') }}</th>

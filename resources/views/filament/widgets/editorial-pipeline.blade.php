@@ -2,7 +2,7 @@
     <x-filament::section :heading="$this::title()" icon="heroicon-o-queue-list">
         @php $pipeline = $this->pipeline(); @endphp
         <div style="overflow-x: auto">
-            <table class="hpp-table">
+            <table class="hinta-table">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('dashboard.pipeline.status') }}</th>
@@ -19,7 +19,7 @@
                             @foreach ($row['counts'] as $count)
                                 <td>{{ $count }}</td>
                             @endforeach
-                            <td class="hpp-strong">{{ $row['total'] }}</td>
+                            <td class="hinta-strong">{{ $row['total'] }}</td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -234,3 +234,17 @@ motion). It sits with the hexagon field on `/styleguide`.
 Error pages (403, 404, 419, 429, 500, 503) are always night: the emblem and wordmark, the mono error label, the code
 large in the display face (cyan to orange), the message in each language asked for, the way home in the action
 colour, and the circuit drawn in along the foot. They still need no database and stay noindex.
+
+## ADR-0015 — The admin look (2026-11-16)
+
+**Decision.** Filament keeps its layout; `public/brand/admin.css` (plain CSS loaded after Filament's, no build step
+on the server) carries HinTA's look:
+
+- Primary teal 700 (`#105D6F`) with white text; the sidebar is night with a cyan edge and icon for the current
+  item, mono group labels and the hexagon field fading up from its foot.
+- Headings, figures and the brand name in Space Grotesk, labels and table heads in JetBrains Mono, from the same
+  self-hosted files as the public site.
+- The dashboard welcome band is night with the hexagon cluster; its "view the site" link is the one orange action.
+  Stat cards carry a top bar in teal, orange, ruby and cyan.
+- The sign-in page is night with the hexagon field and an orange edge on the card.
+- The class prefix changes from the source project's `hpp-` to `hinta-`.

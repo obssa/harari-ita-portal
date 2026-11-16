@@ -1,8 +1,8 @@
-{{-- ADR-0064: the round logo and the portal's name, in the sidebar, the top bar and on sign-in. --}}
-<span class="hpp-brand">
-    <img src="/brand/emblem-128.png" alt="" width="40" height="40" class="hpp-brand-logo">
-    <span class="hpp-brand-text">
-        <span class="hpp-brand-name">{{ __('site.name') }}</span>
-        <span class="hpp-brand-sub">{{ __('admin.brand.sub') }}</span>
+{{-- ADR-0015: the emblem and the portal's name, in the sidebar, the top bar and on sign-in. --}}
+<span class="hinta-brand">
+    <img src="/brand/emblem-128.png" alt="" width="40" height="40" class="hinta-brand-logo">
+    <span class="hinta-brand-text">
+        <span class="hinta-brand-name">{{ __('site.name') }}</span>
+        <span class="hinta-brand-sub">{{ __('admin.brand.sub') }}</span>
     </span>
 </span>
