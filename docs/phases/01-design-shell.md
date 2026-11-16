@@ -38,7 +38,7 @@ Ethiopic pages, where headings use Noto Sans Ethiopic).
 | 1.4 | **Header and mega-navigation**, new: lockup, the Agency's site map (About, Services, Innovation, Projects & data, Academy, Opportunities, News & media), search, language, theme, "Request support" as the call to action; items for modules not yet built stay hidden (`Route::has`); the inherited core values removed (`3040b33`) | `7e93292` |
 | 1.5 | **Footer**, new: night band with the hex field, lockup (dark twin), pillar links, quick links, contact, social, newsletter, legal | `23ce228` |
 | 1.6 | **Home**, new: night hero (promise + hex field + orange curve + mono eyebrow), KPI strip (live data only), the five pillar gates as a bento grid, latest news, next events, partners (empty until INPUTS) | `23ce228` |
-| 1.7 | **Inner pages re-skinned**: page heroes (night band, mono breadcrumb), news and story, events, documents, about/structure/offices/leadership, pillars, contact, search, legal pages | |
+| 1.7 | **Inner pages re-skinned**: page heroes (night band, mono breadcrumb), news and story, events, documents, about/structure/offices/leadership, pillars, contact, search, legal pages | `9975849`, `be88972`, `e1e46d9` |
 | 1.8 | **Components on `/styleguide`**: buttons, links, badge, chip, status pill, pillar tag, card, alert, tabs, accordion, stepper, breadcrumb, pagination, form fields, empty state, skeleton, KPI tile, gate card, code block; light and dark | |
 | 1.9 | **Circuit motif and error pages**: circuit line-art abstracted from the Jugol lanes, the hex field, used in heroes, dividers, empty states and the 404/419/429/500/503 pages | |
 | 1.10 | **Admin look**: Filament primary teal, the emblem and HinTA in the sidebar, `public/brand/admin.css` rewritten for the new palette | |

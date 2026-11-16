@@ -5,7 +5,7 @@
     <div class="mx-auto max-w-page px-4 pt-2 pb-16 sm:px-6">
 
         @if ($pillars->isEmpty())
-            <p class="mt-10 rounded-card border border-line bg-surface px-5 py-8 text-center text-ink-muted">{{ __('directory.empty') }}</p>
+            <x-ui.empty-state class="mt-10">{{ __('directory.empty') }}</x-ui.empty-state>
         @else
             {{-- ADR-0012: the pillars as gates, as on the homepage: a hairline card with the arch, a colour node, a mono
                  number and a colour edge that lights on hover. --}}

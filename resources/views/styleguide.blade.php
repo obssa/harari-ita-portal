@@ -68,12 +68,13 @@
                 <x-ui.button variant="accent">Accent</x-ui.button>
                 <x-ui.button variant="secondary">Secondary</x-ui.button>
                 <x-ui.button variant="ghost">Ghost</x-ui.button>
+                <x-ui.button variant="action">Action</x-ui.button>
                 <x-ui.button size="sm">Small</x-ui.button>
                 <x-ui.button size="lg" href="#sg-buttons">Large link</x-ui.button>
                 <x-ui.button disabled>Disabled</x-ui.button>
             </div>
             <div class="mt-4 flex flex-wrap gap-2">
-                @foreach (['primary', 'cyan', 'saffron', 'ruby', 'neutral', 'success', 'warning', 'danger'] as $tone)
+                @foreach (['primary', 'cyan', 'saffron', 'ruby', 'ink', 'neutral', 'success', 'warning', 'danger'] as $tone)
                     <x-ui.badge :tone="$tone">{{ ucfirst($tone) }}</x-ui.badge>
                 @endforeach
             </div>
@@ -96,6 +97,48 @@
                     <x-ui.date-tile :date="now()->setDate(2027, 9, 11)" />
                 </div>
             </div>
+        </section>
+
+        <section aria-labelledby="sg-chips">
+            <h2 id="sg-chips" class="heading-2">Chips and steps</h2>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <x-ui.chip href="#sg-chips" :active="true">All</x-ui.chip>
+                <x-ui.chip href="#sg-chips">News</x-ui.chip>
+                <x-ui.chip href="#sg-chips">Statement</x-ui.chip>
+            </div>
+            <x-ui.stepper class="mt-6" :steps="['Details', 'Documents', 'Review', 'Submitted']" :current="2" />
+        </section>
+
+        <section aria-labelledby="sg-feedback">
+            <h2 id="sg-feedback" class="heading-2">Feedback and status</h2>
+            <div class="mt-4 grid gap-3 lg:grid-cols-2">
+                <x-ui.alert>An information note.</x-ui.alert>
+                <x-ui.alert tone="success" title="Saved">Your request was received.</x-ui.alert>
+                <x-ui.alert tone="warning">The service is slow right now.</x-ui.alert>
+                <x-ui.alert tone="danger" title="Not sent">Check the highlighted fields.</x-ui.alert>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <x-ui.status-pill>Operational</x-ui.status-pill>
+                <x-ui.status-pill state="degraded">Degraded</x-ui.status-pill>
+                <x-ui.status-pill state="down">Outage</x-ui.status-pill>
+                <x-ui.status-pill state="maintenance">Maintenance</x-ui.status-pill>
+            </div>
+            <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                <x-ui.empty-state title="Nothing here yet">Sample empty state with a next step.
+                    <x-slot:action><x-ui.button variant="secondary" size="sm" href="#sg-feedback">Go back</x-ui.button></x-slot:action>
+                </x-ui.empty-state>
+                <x-ui.skeleton />
+            </div>
+        </section>
+
+        <section aria-labelledby="sg-data">
+            <h2 id="sg-data" class="heading-2">Figures and code</h2>
+            <div class="mt-4 grid gap-4 sm:grid-cols-3">
+                <x-ui.kpi label="Sample figure" value="1,234" source="Source: sample data" />
+                <x-ui.kpi label="Sample share" value="56%" source="Source: sample data" />
+                <x-ui.kpi label="Sample count" value="78" />
+            </div>
+            <x-ui.code class="mt-4" label="GET /api/v1/news">curl -s https://example.org/api/v1/news?lang=en</x-ui.code>
         </section>
     </div>
 </x-layouts.public>

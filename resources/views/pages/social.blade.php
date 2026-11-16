@@ -51,7 +51,7 @@
         <div class="mt-8 grid gap-10 lg:grid-cols-3">
             <div class="lg:col-span-2">
                 @if ($posts->isEmpty())
-                    <p class="rounded-card border border-line bg-surface px-5 py-8 text-center text-ink-muted">{{ __('directory.empty') }}</p>
+                    <x-ui.empty-state>{{ __('directory.empty') }}</x-ui.empty-state>
                 @else
                     <ul class="grid gap-6 sm:grid-cols-2">
                         @foreach ($posts as $post)

@@ -64,3 +64,28 @@ it('renders a date tile with the Ethiopian day and month and the Gregorian date'
 
     expect($html)->toContain('datetime="2026-09-11"', '>1<', 'Meskerem', '11 September 2026');
 });
+
+it('renders an empty state with its message and next step', function () {
+    $html = Blade::render('<x-ui.empty-state title="Nothing yet">Sample message<x-slot:action><a href="/en">Back</a></x-slot:action></x-ui.empty-state>');
+
+    expect($html)->toContain('border-dashed', 'Nothing yet', 'Sample message', '<a href="/en">Back</a>');
+});
+
+it('marks the current step and tells screen readers which steps are done', function () {
+    $html = Blade::render('<x-ui.stepper :steps="[\'One\', \'Two\', \'Three\']" :current="1" />');
+
+    expect($html)->toContain('aria-current="step"', __('ui.step_done'), '03')
+        ->and(substr_count($html, 'aria-current="step"'))->toBe(1);
+});
+
+it('gives alerts the right role and status pills a dot', function () {
+    expect(Blade::render('<x-ui.alert tone="danger">Bad</x-ui.alert>'))->toContain('role="alert"', 'border-danger-600')
+        ->and(Blade::render('<x-ui.alert>Note</x-ui.alert>'))->toContain('role="status"')
+        ->and(Blade::render('<x-ui.status-pill state="down">Outage</x-ui.status-pill>'))->toContain('bg-danger-600', 'animate-ping', 'Outage')
+        ->and(Blade::render('<x-ui.status-pill>Fine</x-ui.status-pill>'))->not->toContain('animate-ping');
+});
+
+it('shows a figure with its source and escapes code samples', function () {
+    expect(Blade::render('<x-ui.kpi label="Sample" value="12" source="Source: sample" />'))->toContain('tabular-nums', 'Source: sample')
+        ->and(Blade::render('<x-ui.code label="x">{{ $snippet }}</x-ui.code>', ['snippet' => '<b>1</b>']))->toContain('&lt;b&gt;1&lt;/b&gt;');
+});

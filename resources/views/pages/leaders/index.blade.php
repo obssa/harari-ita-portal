@@ -74,7 +74,7 @@
                 </ul>
             </section>
         @empty
-            <p class="mt-10 rounded-card border border-line bg-surface px-5 py-8 text-center text-ink-muted">{{ __('directory.empty') }}</p>
+            <x-ui.empty-state class="mt-10">{{ __('directory.empty') }}</x-ui.empty-state>
         @endforelse
 
         <section aria-labelledby="leaders-structure" class="reveal relative isolate mt-20 overflow-hidden rounded-card border border-line bg-surface-muted p-8 sm:p-10">

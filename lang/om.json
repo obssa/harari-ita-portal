@@ -2399,6 +2399,7 @@
     "translations.validation.placeholders": "Mallattoolee barreeffama Ingiliffaa akkuma jiranitti eegaa: :placeholders",
     "translations.validation.too_long": "Maaloo qubee 5000 gadi godhaa.",
     "translations.validation.unknown_key": "Ingiliffaan barreeffama furtuu kana qabu hin qabu.",
+    "ui.step_done": "Xumurame",
     "video.admin.field.is_featured": "Viidiyoo torbanii",
     "video.admin.field.is_live": "Tamsaasa kallattii",
     "video.admin.field.live_ends_at": "Kan xumuramu",

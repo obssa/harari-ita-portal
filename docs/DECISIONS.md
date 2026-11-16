@@ -206,3 +206,20 @@ link back to the top.
 
 **Why.** HinTA must read as a technology agency, not a recoloured copy of the source project (its rounded pills,
 gold edges and woven patterns are gone).
+
+## ADR-0013 — Shared feedback, status and data components (2026-11-16)
+
+**Decision.** Phase 1 adds the components the modules will need, each on `/styleguide` in light and dark mode:
+
+- `x-ui.empty-state`: a dashed card with the hexagon mark (its centre open, dashed in orange), the message and an
+  optional next step. It replaces every hand-made "nothing published yet" box.
+- `x-ui.alert`: info, success, warning and danger, with a coloured edge and icon; `role="alert"` only for danger.
+  On dark the ground turns night and the edge keeps the tone.
+- `x-ui.status-pill`: ok, degraded, down and maintenance as a mono pill with a dot; only non-ok states pulse, and
+  never under reduced motion. It is the base of the phase 2 status page.
+- `x-ui.kpi`: a mono label, the value in the display face with tabular numerals and its source. Values come from
+  live data only.
+- `x-ui.stepper`: numbered steps in mono; done steps carry a tick and a screen-reader "Completed", the current one
+  `aria-current="step"`. For applications, enrolments and requests.
+- `x-ui.skeleton` (decorative, the loading region carries `aria-busy`) and `x-ui.code` (escaped snippets on night
+  for the developer and API pages).

@@ -43,7 +43,7 @@
         <div class="mx-auto max-w-page px-4 pt-2 pb-12 sm:px-6">
 
             @if ($total === 0)
-                <p class="mt-10 rounded-card border border-line bg-surface px-5 py-8 text-center text-ink-muted">{{ __('directory.empty') }}</p>
+                <x-ui.empty-state class="mt-10">{{ __('directory.empty') }}</x-ui.empty-state>
             @else
                 <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                     @foreach ($items as $index => $item)

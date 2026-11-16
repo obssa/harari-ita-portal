@@ -14,7 +14,7 @@
         </nav>
 
         @if ($events->isEmpty())
-            <p class="mt-10 rounded-card border border-line bg-surface px-5 py-8 text-center text-ink-muted">{{ $past ? __('directory.empty') : __('events.none_upcoming') }}</p>
+            <x-ui.empty-state class="mt-10">{{ $past ? __('directory.empty') : __('events.none_upcoming') }}</x-ui.empty-state>
         @else
             <ul class="mt-8 grid gap-4 lg:grid-cols-2">
                 @foreach ($events as $event)

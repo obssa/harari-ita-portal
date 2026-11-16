@@ -2399,6 +2399,7 @@
     "translations.validation.placeholders": "Keep the placeholders of the English text exactly: :placeholders",
     "translations.validation.too_long": "Please keep it under 5000 characters.",
     "translations.validation.unknown_key": "English has no text with this key.",
+    "ui.step_done": "Completed",
     "video.admin.field.is_featured": "Video of the week",
     "video.admin.field.is_live": "Live broadcast",
     "video.admin.field.live_ends_at": "Ends",

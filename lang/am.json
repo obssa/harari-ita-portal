@@ -2399,6 +2399,7 @@
     "translations.validation.placeholders": "የእንግሊዝኛውን ጽሑፍ ምልክቶች እንዳሉ ያቆዩ፦ :placeholders",
     "translations.validation.too_long": "እባክዎ ከ5000 ፊደላት በታች ያድርጉት።",
     "translations.validation.unknown_key": "እንግሊዝኛው ይህ ቁልፍ ያለው ጽሑፍ የለውም።",
+    "ui.step_done": "ተጠናቋል",
     "video.admin.field.is_featured": "የሳምንቱ ቪዲዮ",
     "video.admin.field.is_live": "ቀጥታ ስርጭት",
     "video.admin.field.live_ends_at": "የሚያበቃበት",
