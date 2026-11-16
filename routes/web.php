@@ -157,6 +157,7 @@ Route::prefix('{locale}')
         Route::get('forms/{slug}', [FormController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('forms.show');
         Route::post('forms/{slug}', [FormController::class, 'submit'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->middleware('throttle:forms')->name('forms.submit');
         Route::get('tickets', [FormController::class, 'lookup'])->middleware(['throttle:search', NoStore::class])->name('tickets.lookup');
+        Route::post('tickets', [FormController::class, 'verify'])->middleware('throttle:verification')->name('tickets.verify');
         Route::get('tickets/{reference}', [FormController::class, 'ticket'])->where('reference', 'MSG-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}')->middleware(['throttle:search', NoStore::class])->name('tickets.show');
 
         // ADR-0017 of this project: request IT support and follow it with the reference plus the contact given.

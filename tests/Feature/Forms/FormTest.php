@@ -184,10 +184,16 @@ it('takes the form on its page, turns robots away and shows the ticket status', 
         ->assertDontSee('Sample road question')
         ->assertHeader('X-Robots-Tag', 'noindex, nofollow');
 
-    $this->get('/en/tickets?reference='.strtolower($submission->reference))
+    // ADR-0003: another browser needs the reference and the contact given; each field says when it is wrong.
+    $this->flushSession();
+    $this->get(route('tickets.show', ['locale' => 'en', 'reference' => $submission->reference]))->assertOk()
+        ->assertDontSee(SubmissionStatus::New->label())->assertSee(__('forms.lookup_contact', [], 'en'));
+    $this->post('/en/tickets', ['reference' => 'MSG-2222-2222', 'contact' => 'visitor@example.org'])->assertSessionHasErrors(['reference' => __('forms.lookup_not_found', [], 'en')]);
+    $this->post('/en/tickets', ['reference' => $submission->reference, 'contact' => 'other@example.org'])->assertSessionHasErrors(['contact' => __('forms.lookup_contact_mismatch', [], 'en')]);
+    $this->post('/en/tickets', ['reference' => strtolower($submission->reference), 'contact' => 'Visitor@Example.org'])
         ->assertRedirect(route('tickets.show', ['locale' => 'en', 'reference' => $submission->reference]));
-    $this->get('/en/tickets?reference=MSG-2222-2222')->assertOk()->assertSee(__('forms.lookup_not_found', [], 'en'));
-    $this->get('/en/tickets/MSG-2222-2222')->assertNotFound();
+    $this->get(route('tickets.show', ['locale' => 'en', 'reference' => $submission->reference]))->assertSee(SubmissionStatus::New->label());
+    $this->get('/en/tickets/MSG-2222-2222')->assertOk()->assertSee(__('forms.lookup_contact', [], 'en'));
 });
 
 it('shows the contact page with its form, the hotline and the offices', function () {

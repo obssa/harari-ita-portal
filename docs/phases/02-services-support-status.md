@@ -55,10 +55,10 @@ green, CI green, deployed to staging and checked there.
    minus the holidays the forms inbox already uses).
 4. Which systems appear on `/status` (e.g. the website, email, the regional network, named e-services).
 
-## Known gap found on the way
+## Gap found on the way (fixed)
 
 The forms inbox's public status page (`/tickets/MSG-…`) still answers on the reference alone; ADR-0003 asks for the
-reference plus the contact given, as `/support/track` now does. To fix in phase 2.7 or the next phase.
+reference plus the contact given, as `/support/track` does. Fixed in the same phase: both now work the same way.
 
 ## Report
 

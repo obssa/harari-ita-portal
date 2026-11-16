@@ -44,10 +44,9 @@ final class SaveIncident
         if (! $incident->exists && $bodies === []) {
             $errors['data.bodies.en'] = __('status.validation.body');
         }
-        if ($errors !== []) {
+        if ($errors !== [] || $impact === null) {
             throw ValidationException::withMessages($errors);
         }
-        assert($impact instanceof ComponentState);
 
         return DB::transaction(function () use ($incident, $kind, $impact, $titles, $componentIds, $startedAt, $bodies, $actor): Incident {
             $isNew = ! $incident->exists;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Actions\SubmitForm;
 use App\Domain\Forms\Models\Form;
 use App\Domain\Forms\Models\FormSubmission;
@@ -11,12 +12,14 @@ use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Queries\PublicDirectory;
 use App\Http\Controllers\Controller;
 use App\Settings\SiteSettings;
+use App\Support\PhoneNumber;
 use App\Support\SpamGuard;
 use App\Support\Turnstile;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,6 +29,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class FormController extends Controller
 {
+    private const SESSION_KEY = 'forms.verified';
+
     public function show(string $slug, Turnstile $turnstile): View
     {
         [$form, $translation] = $this->find($slug);
@@ -53,6 +58,8 @@ final class FormController extends Controller
             'answers' => (array) $request->input('answers', []),
         ], $uploads, app()->getLocale());
 
+        self::remember($request, $submission);
+
         return redirect()->route('tickets.show', ['reference' => $submission->reference])
             ->with('status', filled($translation->success_message) ? $translation->success_message : __('forms.sent'));
     }
@@ -79,29 +86,71 @@ final class FormController extends Controller
         ]);
     }
 
-    public function lookup(Request $request): View|RedirectResponse
+    /**
+     * ADR-0003 (the status-check rule): a request is followed with its reference plus the email or phone given with
+     * it; the form says which one is wrong and shows nothing from either alone. The sender's own browser remembers
+     * what it sent, so the page opens straight after sending (also for forms that ask for no contact).
+     */
+    public function lookup(Request $request): View
     {
-        $typed = trim((string) $request->query('reference', ''));
-        if ($typed !== '') {
-            $reference = FormSubmission::normaliseReference($typed);
-            if ($reference !== '' && FormSubmission::query()->where('reference', $reference)->exists()) {
-                return redirect()->route('tickets.show', ['reference' => $reference]);
-            }
-        }
-
-        return view('pages.forms.lookup', ['typed' => $typed, 'notFound' => $typed !== '']);
+        return view('pages.forms.lookup', ['typed' => FormSubmission::normaliseReference((string) $request->query('reference', ''))]);
     }
 
-    public function ticket(string $reference): Response
+    public function verify(Request $request): RedirectResponse
     {
-        $submission = FormSubmission::query()->where('reference', $reference)->with('form.translations')->first();
-        abort_if($submission === null, 404);
+        $reference = FormSubmission::normaliseReference((string) $request->input('reference'));
+        $contact = trim((string) $request->input('contact'));
+
+        $errors = [];
+        if ($reference === '') {
+            $errors['reference'] = __('forms.lookup_not_found');
+        }
+        if ($contact === '') {
+            $errors['contact'] = __('forms.lookup_contact_required');
+        }
+        if ($errors !== []) {
+            throw ValidationException::withMessages($errors);
+        }
+
+        $submission = FormSubmission::query()->where('reference', $reference)->whereNull('erased_at')->first();
+        if ($submission === null) {
+            throw ValidationException::withMessages(['reference' => __('forms.lookup_not_found')]);
+        }
+        if ($submission->email_hash === null && $submission->phone_hash === null) {
+            throw ValidationException::withMessages(['contact' => __('forms.lookup_no_contact')]);
+        }
+        $matches = str_contains($contact, '@')
+            ? $submission->email_hash !== null && hash_equals($submission->email_hash, EventRegistration::hash(mb_strtolower($contact)))
+            : ($phone = PhoneNumber::normalise($contact)) !== null && $submission->phone_hash !== null && hash_equals($submission->phone_hash, EventRegistration::hash($phone));
+        if (! $matches) {
+            throw ValidationException::withMessages(['contact' => __('forms.lookup_contact_mismatch')]);
+        }
+
+        self::remember($request, $submission);
+
+        return redirect()->route('tickets.show', ['reference' => $submission->reference]);
+    }
+
+    public function ticket(Request $request, string $reference): Response
+    {
+        $submission = FormSubmission::query()->where('reference', $reference)->whereNull('erased_at')->with('form.translations')->first();
+        if ($submission === null || ! in_array($submission->id, (array) $request->session()->get(self::SESSION_KEY, []), true)) {
+            return response()->view('pages.forms.lookup', ['typed' => $reference])
+                ->header('Cache-Control', 'private, no-store')->header('X-Robots-Tag', 'noindex, nofollow');
+        }
         $translation = PublicDirectory::shown($submission->form, app()->getLocale());
 
         return response()->view('pages.forms.ticket', [
             'submission' => $submission,
             'title' => $translation instanceof FormTranslation ? $translation->title : $submission->form->title(),
         ])->header('Cache-Control', 'private, no-store')->header('X-Robots-Tag', 'noindex, nofollow');
+    }
+
+    private static function remember(Request $request, FormSubmission $submission): void
+    {
+        $ids = (array) $request->session()->get(self::SESSION_KEY, []);
+        $ids[] = $submission->id;
+        $request->session()->put(self::SESSION_KEY, array_slice(array_values(array_unique($ids)), -20));
     }
 
     /**

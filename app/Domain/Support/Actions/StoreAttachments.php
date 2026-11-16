@@ -84,7 +84,7 @@ final class StoreAttachments
 
     private function reencode(string $source, string $extension): string
     {
-        $target = tempnam(sys_get_temp_dir(), 'sup').'.'.$extension;
+        $target = sys_get_temp_dir().'/support-'.Str::random(32).'.'.$extension;
         try {
             $image = Image::useImageDriver(ImageDriver::Gd)->loadFile($source);
             $maxEdge = 3000;
