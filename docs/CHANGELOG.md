@@ -4,6 +4,7 @@ All notable changes to the Agency's portal. Newest first.
 
 ## Unreleased — phase 0: fork and rebrand
 
+- Staging is live at https://hita.orcamind.dev (noindex), deployed from `main` on every green CI run.
 - Started from the Harari PP portal at `6af9413` with a fresh history (ADR-0001).
 - Removed membership, the member portal and app API, donations, members-only documents and Fayda sign-in
   (ADR-0002). Laravel updated to 13.42 for a security advisory.

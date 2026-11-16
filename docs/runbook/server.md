@@ -20,23 +20,25 @@ repository is public); they are in the server `.env`, GitHub secrets, and the ow
 | Rollback snapshot | `~/releases/hita/prev.tar.gz` (code only, written before every deploy) |
 | Backups | `storage/backups/harari-ita-portal/` (mode 700): nightly database and uploads, encrypted with `BACKUP_ARCHIVE_PASSWORD`; see `restore.md` |
 
-Status: **not yet provisioned.** This is phase 0 step 0.7 and needs the owner's go-ahead for every step on the
-server (docs/phases/00-fork.md). The same cPanel account and pattern as the Harari PP staging site are planned.
+Status: **provisioned 2026-11-16** (phase 0 step 0.7, with the owner's go-ahead) on the same cPanel account and
+pattern as the Harari PP staging site; the subdomain itself was added in cPanel by the owner on 2026-11-15. First
+release deployed by GitHub Actions the same day; the first Super Admin has placeholder details (`admin@orcamind.dev`,
+"Site owner") for the owner to change at first sign-in.
 
 ## One-time provisioning checklist
 
 | # | Step | How | Done |
 |---|---|---|---|
-| 1 | Subdomain document root | `uapi SubDomain changedocroot domain=hita.orcamind.dev docroot=hita.orcamind.dev/public` | — |
-| 2 | PHP 8.3 for this domain only | `uapi LangPHP php_set_vhost_versions vhost=hita.orcamind.dev version=alt-php83`; cPanel writes the handler into `public/.htaccess` | — |
-| 3 | PHP extensions | web and CLI checked: pdo_mysql, intl, mbstring, gd (WebP/AVIF), zip, bcmath, exif, sodium, fileinfo, dom, curl, openssl all present, calendar | — |
-| 4 | Database + user | `uapi Mysql create_database / create_user / set_privileges_on_database`, random 40-character password generated on the server | — |
-| 5 | Server `.env` | written on the server from the `.env.example` template, own `APP_KEY`, mode 600; login to the database verified | — |
-| 6 | Deploy key | generated on the owner's PC, public half appended to `~/.ssh/authorized_keys` with `restrict` (file backed up first), private half in the GitHub secret `DEPLOY_SSH_KEY` | — |
-| 7 | Pinned host key | `ssh-keyscan` output compared with the owner's known_hosts, stored as `DEPLOY_KNOWN_HOSTS` | — |
-| 8 | GitHub secrets and variables | secrets `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PORT`, `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS`; variables `DEPLOY_PATH`, `DEPLOY_PHP_BIN`, `DEPLOY_URL`, `DEPLOY_ENABLED=true` | — |
-| 9 | Cron | two lines appended (crontab backed up to `~/backups/` first; other sites' lines untouched) | — |
-| 10 | Cloudflare | DNS record for `hita` proxied; site answers over HTTPS | — |
+| 1 | Subdomain document root | `uapi SubDomain changedocroot domain=hita.orcamind.dev docroot=hita.orcamind.dev/public` | 2026-11-16 |
+| 2 | PHP 8.3 for this domain only | `uapi LangPHP php_set_vhost_versions vhost=hita.orcamind.dev version=alt-php83`; cPanel writes the handler into `public/.htaccess` | 2026-11-16 |
+| 3 | PHP extensions | web and CLI checked: pdo_mysql, intl, mbstring, gd (WebP/AVIF), zip, bcmath, exif, sodium, fileinfo, dom, curl, openssl all present, calendar | 2026-11-16 |
+| 4 | Database + user | `uapi Mysql create_database / create_user / set_privileges_on_database`, random 40-character password generated on the server | 2026-11-16 |
+| 5 | Server `.env` | written on the server from the `.env.example` template, own `APP_KEY`, mode 600; login to the database verified | 2026-11-16 |
+| 6 | Deploy key | generated on the owner's PC, public half appended to `~/.ssh/authorized_keys` with `restrict` (file backed up first), private half in the GitHub secret `DEPLOY_SSH_KEY` | 2026-11-16 |
+| 7 | Pinned host key | `ssh-keyscan` output compared with the owner's known_hosts, stored as `DEPLOY_KNOWN_HOSTS` | 2026-11-16 |
+| 8 | GitHub secrets and variables | secrets `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PORT`, `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS`; variables `DEPLOY_PATH`, `DEPLOY_PHP_BIN`, `DEPLOY_URL`, `DEPLOY_ENABLED=true` | 2026-11-16 |
+| 9 | Cron | two lines appended (crontab backed up to `~/backups/` first; other sites' lines untouched) | 2026-11-16 |
+| 10 | Cloudflare | DNS record for `hita` proxied; site answers over HTTPS | 2026-11-16 |
 
 ### Cron entries
 
