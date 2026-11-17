@@ -1,11 +1,14 @@
 <?php
 
 use App\Domain\Innovation\Models\Application;
+use App\Domain\Innovation\Models\ChallengeTeam;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\Support\Models\Ticket;
 use App\Domain\Translation\Support\Locales;
 use App\Http\Controllers\Public\ApplicationController;
 use App\Http\Controllers\Public\CampaignLinkController;
+use App\Http\Controllers\Public\ChallengeController;
+use App\Http\Controllers\Public\ChallengeTeamController;
 use App\Http\Controllers\Public\DocumentController;
 use App\Http\Controllers\Public\EventController;
 use App\Http\Controllers\Public\EventRegistrationController;
@@ -191,6 +194,14 @@ Route::prefix('{locale}')
         Route::get('innovation/applications/{reference}', [ApplicationController::class, 'show'])->where('reference', Application::REFERENCE_PATTERN)->middleware(['throttle:search', NoStore::class])->name('applications.show');
         Route::post('innovation/applications/{reference}/withdraw', [ApplicationController::class, 'withdraw'])->where('reference', Application::REFERENCE_PATTERN)->middleware('throttle:forms')->name('applications.withdraw');
 
+        // ADR-0022: register a team for a challenge, then send its submission from the team page.
+        Route::get('innovation/challenges/{slug}/register', [ChallengeTeamController::class, 'create'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->middleware(NoStore::class)->name('teams.create');
+        Route::post('innovation/challenges/{slug}/register', [ChallengeTeamController::class, 'store'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->middleware('throttle:forms')->name('teams.store');
+        Route::get('innovation/teams', [ChallengeTeamController::class, 'lookup'])->middleware(NoStore::class)->name('teams.lookup');
+        Route::post('innovation/teams', [ChallengeTeamController::class, 'verify'])->middleware('throttle:verification')->name('teams.verify');
+        Route::get('innovation/teams/{reference}', [ChallengeTeamController::class, 'show'])->where('reference', ChallengeTeam::REFERENCE_PATTERN)->middleware(['throttle:search', NoStore::class])->name('teams.show');
+        Route::post('innovation/teams/{reference}/submission', [ChallengeTeamController::class, 'submit'])->where('reference', ChallengeTeam::REFERENCE_PATTERN)->middleware('throttle:forms')->name('teams.submit');
+
         // ADR-0048: volunteers sign up.
         Route::get('volunteer', [VolunteerController::class, 'create'])->middleware(NoStore::class)->name('volunteer.create');
         Route::post('volunteer', [VolunteerController::class, 'store'])->middleware('throttle:forms')->name('volunteer.store');
@@ -233,6 +244,8 @@ Route::prefix('{locale}')
         // Programmes (ADR-0021).
         Route::get('innovation/programmes', [ProgrammeController::class, 'index'])->name('programmes.index');
         Route::get('innovation/programmes/{slug}', [ProgrammeController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('programmes.show');
+        Route::get('innovation/challenges', [ChallengeController::class, 'index'])->name('challenges.index');
+        Route::get('innovation/challenges/{slug}', [ChallengeController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('challenges.show');
         // The startups directory (ADR-0020).
         Route::get('innovation/startups', [StartupController::class, 'index'])->name('startups.index');
         Route::get('innovation/startups/{slug}', [StartupController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('startups.show');

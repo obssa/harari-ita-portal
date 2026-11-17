@@ -2,6 +2,16 @@
 
 All notable changes to the Agency's portal. Newest first.
 
+## Unreleased — phase 3: innovation
+
+- **Startups directory** at `/innovation/startups`, with "Get listed" requests reviewed by the Agency and a label
+  status the Agency verifies (ADR-0020).
+- **Programmes** with cohorts and applications at `/innovation/programmes`: a three-part form, stages, rubric
+  scoring and decisions the applicant reads with the reference plus their contact (ADR-0021).
+- **Challenges and hackathons** at `/innovation/challenges`: phases with a countdown, prizes, rules and the
+  weighted rubric; teams register, send and change their submission from the team page; judges see only their own
+  assignments, declare conflicts of interest and score; staff publish ranked results (ADR-0022).
+
 ## Unreleased — phase 2: services, IT support and service status
 
 - **Services catalogue** at `/services`: search and filters (category, audience, how to use it), a page per

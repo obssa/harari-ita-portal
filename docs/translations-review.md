@@ -29,3 +29,6 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | digital literacy | የዲጂታል ዕውቀት | beekumsa dijitaalaa | proposed services | |
 | Ethiopian Artificial Intelligence Institute | የኢትዮጵያ አርቴፊሻል ኢንተለጀንስ ኢንስቲትዩት | Inistiitiyuutii Sammuu Namtolchee Itoophiyaa | proposed services | Check the institute's own Amharic and Afaan Oromo names |
 | automation | አውቶሜሽን | ofumaan-hojjechiisuu | proposed services | |
+| challenge (competition) / judging rubric / weight | ውድድር / የዳኝነት መመዘኛዎች / ክብደት | dorgommii / ulaagaalee murtii / ulfaatina | `innovation.challenges.*`, `innovation.admin.rubric*` | |
+| conflict of interest | የጥቅም ግጭት | walitti bu'iinsa fedhii | `innovation.admin.*conflict*` | Check against the civil-service ethics code's wording |
+| submission (of a team's work) | የቀረበ ሥራ | hojii dhiyaate | `innovation.admin.submission*`, `innovation.field.submission_*` | |

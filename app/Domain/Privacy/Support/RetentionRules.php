@@ -19,6 +19,7 @@ final class RetentionRules
             ['data' => __('privacy.retention.submissions'), 'kept' => __('privacy.retention.days_after_resolved', ['days' => (int) config('portal.submission_retention_days')]), 'enforced' => 'forms:purge-submissions'],
             ['data' => __('privacy.retention.tickets'), 'kept' => __('privacy.retention.days_after_closed', ['days' => (int) config('portal.support.retention_days')]), 'enforced' => 'support:purge-tickets'],
             ['data' => __('privacy.retention.applications'), 'kept' => __('privacy.retention.days_after_decision', ['days' => (int) config('portal.innovation.retention_days')]), 'enforced' => 'innovation:purge'],
+            ['data' => __('privacy.retention.teams'), 'kept' => __('privacy.retention.teams_rule', ['days' => (int) config('portal.innovation.retention_days')]), 'enforced' => 'innovation:purge'],
             ['data' => __('privacy.retention.startup_contacts'), 'kept' => __('privacy.retention.startup_contacts_rule', ['days' => (int) config('portal.innovation.retention_days')]), 'enforced' => 'innovation:purge'],
             ['data' => __('privacy.retention.subscribers'), 'kept' => __('privacy.retention.subscribers_rule'), 'enforced' => 'portal:purge-sign-ups'],
             ['data' => __('privacy.retention.volunteers'), 'kept' => __('privacy.retention.volunteers_rule'), 'enforced' => 'portal:purge-sign-ups'],

@@ -96,6 +96,8 @@ final class SiteNav extends Component
                 $link('innovation.startups.apply', route('startups.apply'), 'startups.apply', 'nav.startups_apply_hint'),
                 $link('innovation.programmes.title', route('programmes.index'), 'programmes.*', 'nav.programmes_hint'),
                 $link('innovation.track.application_title', route('applications.lookup'), 'applications.*', 'nav.applications_hint'),
+                $link('innovation.challenges.title', route('challenges.index'), 'challenges.*', 'nav.challenges_hint'),
+                $link('innovation.track.team_title', route('teams.lookup'), 'teams.*', 'nav.teams_hint'),
             ]);
         }
         foreach (['academy'] as $module) {

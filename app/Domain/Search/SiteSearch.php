@@ -8,6 +8,7 @@ use App\Domain\Content\Models\PostTranslation;
 use App\Domain\Content\Queries\PublicPosts;
 use App\Domain\Documents\Models\DocumentTranslation;
 use App\Domain\Events\Models\EventTranslation;
+use App\Domain\Innovation\Models\ChallengeTranslation;
 use App\Domain\Innovation\Models\ProgrammeTranslation;
 use App\Domain\Innovation\Models\StartupTranslation;
 use App\Domain\Organisation\Models\LeaderTranslation;
@@ -27,7 +28,7 @@ use Illuminate\Support\Collection;
  */
 final class SiteSearch
 {
-    /** @var array<string, array{model: class-string<PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|PillarTranslation|EventTranslation|DocumentTranslation|ProjectTranslation|ServiceItemTranslation|StartupTranslation|ProgrammeTranslation>, parent: string, order: string, public_access?: bool}> */
+    /** @var array<string, array{model: class-string<PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|PillarTranslation|EventTranslation|DocumentTranslation|ProjectTranslation|ServiceItemTranslation|StartupTranslation|ProgrammeTranslation|ChallengeTranslation>, parent: string, order: string, public_access?: bool}> */
     public const KINDS = [
         'news' => ['model' => PostTranslation::class, 'parent' => 'post', 'order' => 'published_at'],
         'pages' => ['model' => PageTranslation::class, 'parent' => 'page', 'order' => 'title'],
@@ -35,6 +36,7 @@ final class SiteSearch
         'services' => ['model' => ServiceItemTranslation::class, 'parent' => 'serviceItem', 'order' => 'title'],
         'startups' => ['model' => StartupTranslation::class, 'parent' => 'startup', 'order' => 'name'],
         'programmes' => ['model' => ProgrammeTranslation::class, 'parent' => 'programme', 'order' => 'title'],
+        'challenges' => ['model' => ChallengeTranslation::class, 'parent' => 'challenge', 'order' => 'title'],
         'offices' => ['model' => OfficeTranslation::class, 'parent' => 'office', 'order' => 'name'],
         'pillars' => ['model' => PillarTranslation::class, 'parent' => 'pillar', 'order' => 'name'],
         'events' => ['model' => EventTranslation::class, 'parent' => 'event', 'order' => 'title'],
@@ -127,6 +129,13 @@ final class SiteSearch
                 'title' => $translation->name,
                 'summary' => $translation->summary,
                 'label' => $translation->office->type->label(),
+                'locale' => $locale,
+            ],
+            $translation instanceof ChallengeTranslation => [
+                'url' => route('challenges.show', ['locale' => $locale, 'slug' => $slug]),
+                'title' => $translation->title,
+                'summary' => $translation->summary,
+                'label' => __('search.kind.challenges'),
                 'locale' => $locale,
             ],
             $translation instanceof ProgrammeTranslation => [

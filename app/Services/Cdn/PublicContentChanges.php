@@ -21,6 +21,8 @@ use App\Domain\Forms\Models\Form;
 use App\Domain\Forms\Models\FormTranslation;
 use App\Domain\Homepage\Models\HeroSlide;
 use App\Domain\Homepage\Models\HomepageSection;
+use App\Domain\Innovation\Models\Challenge;
+use App\Domain\Innovation\Models\ChallengeTranslation;
 use App\Domain\Innovation\Models\Cohort;
 use App\Domain\Innovation\Models\Programme;
 use App\Domain\Innovation\Models\ProgrammeTranslation;
@@ -69,7 +71,7 @@ final class PublicContentChanges
         Document::class, DocumentTranslation::class, DocumentVersion::class, Event::class, EventTranslation::class,
         Form::class, FormTranslation::class, HeroSlide::class, HomepageSection::class, Gallery::class, GalleryItem::class,
         GalleryTranslation::class, Media::class, Video::class, VideoTranslation::class, Leader::class,
-        LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class, ServiceItem::class, ServiceItemTranslation::class, StatusComponent::class, Incident::class, IncidentUpdate::class, Startup::class, StartupTranslation::class, Programme::class, ProgrammeTranslation::class, Cohort::class,
+        LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class, ServiceItem::class, ServiceItemTranslation::class, StatusComponent::class, Incident::class, IncidentUpdate::class, Startup::class, StartupTranslation::class, Programme::class, ProgrammeTranslation::class, Cohort::class, Challenge::class, ChallengeTranslation::class,
         Project::class, ProjectTranslation::class, Statistic::class, StatisticTranslation::class,
         SocialPost::class, SocialSource::class, UiTranslation::class,
     ];

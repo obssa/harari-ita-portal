@@ -8,6 +8,7 @@ use App\Domain\Forms\Actions\SubmitForm;
 use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Models\SubmissionNote;
 use App\Domain\Innovation\Models\Application;
+use App\Domain\Innovation\Models\ChallengeTeam;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\People\Models\PersonNote;
 use App\Domain\Privacy\Models\PrivacyRequest;
@@ -37,7 +38,7 @@ final class ErasePersonalData
     public const ERASED = '—';
 
     /**
-     * @return array{registrations: int, submissions: int, tickets: int, applications: int, startups: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
+     * @return array{registrations: int, submissions: int, tickets: int, applications: int, startups: int, teams: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
      */
     public function handle(PersonalDataSearch $search, User $actor): array
     {
@@ -47,12 +48,13 @@ final class ErasePersonalData
         $tickets = $search->tickets();
         $applications = $search->applications();
         $startups = $search->startups();
+        $teams = $search->teams();
         $failed = $search->failedSignIns();
         $volunteers = $search->volunteers();
         $subscribers = $search->subscribers();
         $mediaContacts = $search->mediaContacts();
 
-        DB::transaction(function () use ($registrations, $submissions, $tickets, $applications, $startups, $failed, $volunteers, $subscribers, $mediaContacts): void {
+        DB::transaction(function () use ($registrations, $submissions, $tickets, $applications, $startups, $teams, $failed, $volunteers, $subscribers, $mediaContacts): void {
             foreach ($registrations as $registration) {
                 $this->registration($registration);
             }
@@ -66,6 +68,12 @@ final class ErasePersonalData
             $applications->each(fn (Application $application) => $application->forceFill([
                 'applicant_name' => null, 'applicant_email' => null, 'applicant_phone' => null, 'email_hash' => null,
                 'phone_hash' => null, 'answers' => null, 'decision_note' => null, 'erased_at' => now(),
+            ])->saveQuietly());
+            // ADR-0022: the contact and members go and the team is no longer named in the results; the submission and
+            // the judges' scores stay so the published ranking keeps its places.
+            $teams->each(fn (ChallengeTeam $team) => $team->forceFill([
+                'contact_name' => null, 'contact_email' => null, 'contact_phone' => null, 'email_hash' => null,
+                'phone_hash' => null, 'members' => null, 'show_in_results' => false, 'erased_at' => now(),
             ])->saveQuietly());
             // ADR-0020: the founder's contact goes; a listed startup's public description stays (it is the company's).
             $startups->each(fn (Startup $startup) => $startup->forceFill([

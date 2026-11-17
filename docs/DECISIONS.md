@@ -365,3 +365,44 @@ encrypted contact with keyed hashes) and `StartupTranslation` (name, pitch, prod
   email and follow the application with the reference plus their contact (ADR-0003).
 - Public `/innovation/programmes` and a page per programme with `EducationalOccupationalProgram` JSON-LD; site
   search, sitemap and the edge-cache purge include programmes.
+
+## ADR-0022 — Challenges, teams and judging (2026-11-18)
+
+**Decision.**
+
+- `Challenge` with `ChallengeTranslation` (title, summary, the brief, prizes one per line, rules). Its phase follows
+  from four dates in Addis Ababa time: coming soon, registration open, building (registration closed, submissions
+  open), judging, and results once staff publish them. Submissions cannot close before registration does. The
+  largest team size is set per challenge (1 to 20).
+- The **rubric**: up to eight criteria, each with a stable key, a label per language and a whole-number weight
+  (1 to 100). The public page shows each criterion's share of the total. Once a judge has scored, criteria can be
+  renamed or reweighted but not added or removed, so every score stays comparable.
+- **Teams** register while registration is open: the team name (unique within the challenge), the contact's name,
+  email and optional phone, other members one per line (encrypted, without contact details), whether the team may
+  be named in the results, and consent with the retention period. A random reference `TEM-XXXX-XXXX` plus the
+  contact's email or phone opens the team page (ADR-0003), where the team sends and may change its one submission
+  (a name, a description, up to five `https://` links) until submissions close.
+- **Judging**: staff (`challenges.manage`) assign judges, meaning users with `judging.score`, to every team that
+  has submitted; running it again adds late teams and keeps existing assignments. "My judging" in the admin shows
+  a judge only their own assignments and only the submission, never the contact or members. A judge scores each
+  criterion from 1 to 10, with a comment for staff only, or declares a conflict of interest with a note; the
+  conflict clears any score they gave and cannot be undone. An assignment's total is the weighted mean of its
+  criteria. The team's score is the average of the totals of its judges without a conflict.
+- **Results**: once submissions have closed, staff publish. The teams with a score are ranked (ties go to the
+  earlier submission), scores freeze and the public page shows the ranking with an optional award line per team.
+  A team that did not agree to be named appears by its place only.
+- The public `/innovation/challenges` lists open and upcoming challenges (soonest deadline first) and then judged
+  and past ones. Each challenge page has the phases, a countdown to the next date and `Event` JSON-LD. The
+  countdown is written by the server and corrected each minute by `countdown.js`, because pages are cached at the
+  edge. Site search, the sitemap, the menu and the edge-cache purge include challenges. Saving a team does not
+  purge the cache; saving an award touches the challenge, which does.
+- **Privacy**: the data-subject search, export and erasure cover teams by the contact's hashes. Erasure removes
+  the contact and members and the team's consent to be named; the submission and scores stay so the ranking keeps
+  its places. `innovation:purge` clears the contact and members of teams whose challenge published its results
+  more than `portal.innovation.retention_days` (730) ago, or, without published results, closed its submissions
+  that long ago.
+
+**Why.** Challenge platforms in government innovation agencies follow the same shape: a public brief with dates
+and prizes, team sign-up, one submission, a published rubric, a judging panel bound by conflict-of-interest rules,
+and ranked results. Showing judges only the submission keeps the scoring on the work. Using the average of the
+judges' totals, rather than raw sums, keeps a team fair when a judge steps back for a conflict.

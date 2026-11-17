@@ -7,6 +7,7 @@ use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Models\SubmissionNote;
 use App\Domain\Innovation\Models\Application;
+use App\Domain\Innovation\Models\ChallengeTeam;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\People\Models\PersonNote;
 use App\Domain\Press\Models\MediaContact;
@@ -37,6 +38,7 @@ final class ExportPersonalData
         $tickets = $search->tickets();
         $applications = $search->applications();
         $startups = $search->startups();
+        $teams = $search->teams();
         $failed = $search->failedSignIns();
         $volunteers = $search->volunteers();
         $subscribers = $search->subscribers();
@@ -102,6 +104,21 @@ final class ExportPersonalData
                 'team' => $a->team_name,
                 'answers' => $a->answers,
                 'decision_note' => $a->decision_note,
+            ])->values()->all(),
+            'challenge_teams' => $teams->map(fn (ChallengeTeam $t): array => [
+                'reference' => $t->reference,
+                'challenge' => $t->challenge->title(),
+                'registered_at' => $t->created_at->toIso8601String(),
+                'team' => $t->name,
+                'contact_name' => $t->contact_name,
+                'contact_email' => $t->contact_email,
+                'contact_phone' => $t->contact_phone,
+                'members' => $t->members,
+                'submission_title' => $t->submission_title,
+                'submission_description' => $t->submission_description,
+                'submission_links' => $t->submission_links,
+                'submitted_at' => $t->submitted_at?->toIso8601String(),
+                'rank' => $t->rank,
             ])->values()->all(),
             'startup_listings' => $startups->map(fn (Startup $s): array => [
                 'reference' => $s->reference,
