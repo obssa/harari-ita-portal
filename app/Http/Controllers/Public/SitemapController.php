@@ -14,6 +14,7 @@ use App\Domain\Innovation\Models\Programme;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\Video;
+use App\Domain\OpenData\Models\Dataset;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\Pillar;
@@ -60,7 +61,7 @@ final class SitemapController extends Controller
     private function entries(string $language): array
     {
         $entries = [];
-        foreach (['home', 'news.index', 'leaders.index', 'offices.index', 'services.index', 'startups.index', 'programmes.index', 'challenges.index', 'pillars.index', 'structure', 'gallery.index', 'videos.index', 'events.index', 'documents.index', 'documents.notices', 'projects.index', 'projects.achievements', 'contact', 'press', 'get-involved', 'social'] as $route) {
+        foreach (['home', 'news.index', 'leaders.index', 'offices.index', 'services.index', 'startups.index', 'programmes.index', 'challenges.index', 'pillars.index', 'structure', 'gallery.index', 'videos.index', 'events.index', 'documents.index', 'documents.notices', 'projects.index', 'projects.numbers', 'datasets.index', 'developers', 'contact', 'press', 'get-involved', 'social'] as $route) {
             $alternates = [];
             foreach (Locales::all() as $locale) {
                 $alternates[$locale] = route($route, ['locale' => $locale]);
@@ -122,6 +123,7 @@ final class SitemapController extends Controller
             ...PublicDirectory::sitemap(Startup::query()->listed()->with('translations')->get(), $language, 'startups.show'),
             ...PublicDirectory::sitemap(Programme::query()->with('translations')->get(), $language, 'programmes.show'),
             ...PublicDirectory::sitemap(Challenge::query()->with('translations')->get(), $language, 'challenges.show'),
+            ...PublicDirectory::sitemap(Dataset::query()->with('translations')->get(), $language, 'datasets.show'),
             ...PublicDirectory::sitemap(Pillar::query()->with('translations')->get(), $language, 'pillars.show'),
             ...PublicDirectory::sitemap(Gallery::query()->with('translations')->get(), $language, 'gallery.show'),
             ...PublicDirectory::sitemap(Video::query()->with('translations')->get(), $language, 'videos.show'),

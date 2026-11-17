@@ -60,9 +60,9 @@ dates, budget with a "may be published" switch, progress, a map pin, cover and g
 
 | # | Step | Commit |
 |---|---|---|
-| 4.0 | **Plan**: this file; drop the sample service (the Proposed services cover office email) | |
-| 4.1 | **Projects, model and admin**: pillar, RAG and reason, spend; milestones; KPIs and readings; risks; relation managers; scoping by directorate | |
-| 4.2 | **Projects, public**: portfolio filters (pillar, RAG), locations view, the detail page (RAG badge, milestones timeline, KPIs against targets with chart and table, budget against spend when allowed), JSON-LD | |
+| 4.0 | **Plan**: this file; drop the sample service (the Proposed services cover office email) | `9e76268` |
+| 4.1 | **Projects, model and admin**: pillar, RAG and reason, spend; milestones; KPIs and readings; risks; relation managers; scoping by directorate | `a9838b7` |
+| 4.2 | **Projects, public**: portfolio filters (pillar, RAG), locations view, the detail page (RAG badge, milestones timeline, KPIs against targets with chart and table, budget against spend when allowed), JSON-LD | `a9838b7` |
 | 4.3 | **Open data, model and admin**: datasets, distributions with hardened uploads, the preview and file facts, freshness, licences and frequencies, Data Steward permissions | |
 | 4.4 | **Open data, public**: catalogue with filters and search, dataset page with preview, counted downloads, schema.org `Dataset` | |
 | 4.5 | **DCAT-AP and the API**: the catalogue and per-dataset JSON-LD, `/api/v1/datasets`, the `datasets` scope, the OpenAPI document | |

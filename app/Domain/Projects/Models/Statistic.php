@@ -7,6 +7,7 @@ use App\Domain\Content\Concerns\HasTranslations;
 use App\Domain\Content\Concerns\TracksEditors;
 use App\Domain\Content\Contracts\TranslatableModel;
 use App\Domain\Content\Models\Category;
+use App\Domain\OpenData\Models\Dataset;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property int $id
  * @property ?string $sector_id
  * @property ?string $project_id
+ * @property ?string $dataset_id
  * @property string $value
  * @property ?CarbonImmutable $as_of
  * @property ?string $source_url
@@ -29,6 +31,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property int $sort
  * @property-read ?Category $sector
  * @property-read ?Project $project
+ * @property-read ?Dataset $dataset
  */
 class Statistic extends Model implements TranslatableModel
 {
@@ -40,7 +43,7 @@ class Statistic extends Model implements TranslatableModel
     use LogsActivity;
     use TracksEditors;
 
-    protected $fillable = ['sector_id', 'project_id', 'value', 'as_of', 'source_url', 'on_achievements', 'sort'];
+    protected $fillable = ['sector_id', 'project_id', 'dataset_id', 'value', 'as_of', 'source_url', 'on_achievements', 'sort'];
 
     protected $attributes = ['on_achievements' => true, 'sort' => 0];
 
@@ -72,6 +75,14 @@ class Statistic extends Model implements TranslatableModel
     public function sector(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'sector_id');
+    }
+
+    /**
+     * @return BelongsTo<Dataset, $this>
+     */
+    public function dataset(): BelongsTo
+    {
+        return $this->belongsTo(Dataset::class);
     }
 
     /**

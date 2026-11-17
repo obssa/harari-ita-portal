@@ -12,9 +12,11 @@ use App\Domain\Projects\Enums\RagStatus;
 use App\Domain\Projects\Models\Project;
 use App\Domain\Projects\Models\ProjectTranslation;
 use App\Domain\Projects\Models\Statistic;
+use App\Domain\Projects\Queries\LiveFigures;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 /**
@@ -99,11 +101,21 @@ final class ProjectController extends Controller
         ]);
     }
 
-    public function achievements(): View
+    /** The achievements page became "Digital Harar in numbers" (ADR-0027). */
+    public function achievements(): RedirectResponse
+    {
+        return redirect()->route('projects.numbers', [], 301);
+    }
+
+    /**
+     * Digital Harar in numbers (ADR-0027): figures counted from the portal's records, the projects by status and
+     * pillar, and the sourced statistics, region-wide and by sector.
+     */
+    public function numbers(): View
     {
         $locale = app()->getLocale();
-        $projects = PublicDirectory::visible(Project::query(), $locale)->with(['translations', 'cover', 'sector.translations'])->get();
-        $statistics = Statistic::query()->where('on_achievements', true)->with(['translations', 'sector.translations'])
+        $projects = PublicDirectory::visible(Project::query(), $locale)->with(['translations', 'cover', 'sector.translations', 'pillar.translations'])->get();
+        $statistics = Statistic::query()->where('on_achievements', true)->with(['translations', 'sector.translations', 'dataset.translations'])
             ->orderBy('sort')->orderBy('id')->get();
 
         $sectorIds = $projects->pluck('sector_id')->merge($statistics->pluck('sector_id'))->filter()->unique()->all();
@@ -118,15 +130,41 @@ final class ProjectController extends Controller
                     'counts' => self::counts($own),
                     'total' => $own->count(),
                     'completed' => $own->where('status', ProjectStatus::Completed)->sortByDesc('ends_on')->take(3)->values(),
+                    'chart' => self::statusChart(self::counts($own), ['sector' => $sector->id]),
                 ];
             });
 
-        return view('pages.projects.achievements', [
+        $byPillar = [];
+        foreach ($projects->whereNotNull('pillar_id')->groupBy('pillar_id') as $pillarId => $group) {
+            $pillar = $group->first()?->pillar;
+            if ($pillar !== null) {
+                $byPillar[] = ['label' => $pillar->name($locale), 'value' => $group->count(), 'url' => route('projects.index', ['pillar' => $pillarId])];
+            }
+        }
+
+        return view('pages.projects.numbers', [
+            'live' => LiveFigures::for($locale),
             'regional' => $statistics->whereNull('sector_id')->values(),
-            'counts' => self::counts($projects),
+            'byStatus' => self::statusChart(self::counts($projects)),
+            'byPillar' => $byPillar,
             'total' => $projects->count(),
             'sectors' => $sectors,
         ]);
+    }
+
+    /**
+     * @param  array<string, int>  $counts
+     * @param  array<string, string>  $filters
+     * @return list<array{label: string, value: int, url: string}>
+     */
+    private static function statusChart(array $counts, array $filters = []): array
+    {
+        $items = [];
+        foreach (ProjectStatus::cases() as $status) {
+            $items[] = ['label' => $status->label(), 'value' => $counts[$status->value] ?? 0, 'url' => route('projects.index', [...$filters, 'status' => $status->value])];
+        }
+
+        return $items;
     }
 
     /**

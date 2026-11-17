@@ -42,6 +42,7 @@ enum MediaKind: string
                 'application/vnd.oasis.opendocument.presentation' => 'odp',
                 'text/plain' => 'txt',
                 'text/csv' => 'csv',
+                'application/json' => 'json',
             ],
             self::Video => [
                 'video/mp4' => 'mp4',

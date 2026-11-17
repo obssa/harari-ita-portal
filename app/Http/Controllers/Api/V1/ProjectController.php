@@ -40,7 +40,7 @@ final class ProjectController extends ApiController
 
     public function show(string $key): JsonResponse
     {
-        [$project, $shown] = $this->find(Project::query()->with(['cover', 'sector.translations']), $key);
+        [$project, $shown] = $this->find(Project::query()->with(['cover', 'sector.translations', 'milestones', 'kpis.readings']), $key);
         abort_unless($shown instanceof ProjectTranslation, 404);
 
         return $this->one($this->present->project($project, $shown, full: true));

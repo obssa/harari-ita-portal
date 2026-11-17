@@ -4,6 +4,19 @@ All notable changes to the Agency's portal. Newest first.
 
 ## Unreleased — phase 4: projects and open data
 
+- **Projects** gain a pillar, an on track / at risk / off track status, spend next to the budget, milestones,
+  indicators (KPIs) with dated readings and a staff-only risk register. The portfolio filters by pillar and status
+  and shows where the projects are (ADR-0024).
+- **Open data** at `/data`: datasets with their licence, update frequency and files (CSV, JSON, XLSX, PDF or an
+  API link), a preview of the first rows, counted downloads with no personal data, and an "update overdue" mark
+  (ADR-0025).
+- **DCAT-AP** catalogue at `/data/catalog.jsonld`, the **datasets API** (`/api/v1/datasets`, scope `datasets`) and
+  a **developers** page read from the OpenAPI document (ADR-0026).
+- **Digital Harar in numbers** at `/numbers` replaces the achievements page: live figures counted from the
+  portal, projects by status and pillar, and sourced statistics that may link their dataset (ADR-0027).
+- The homepage gains an **Open data** section; the menu, footer, search and sitemaps include open data.
+- `portal:sample-projects-data` adds and removes a labelled sample project, dataset and statistic.
+- Manual: chapter 10, projects and open data.
 - `portal:sample-services` no longer adds a sample service: the Proposed services already cover office email. The
   `[Sample]` email service was removed from staging.
 

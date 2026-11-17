@@ -32,3 +32,9 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | challenge (competition) / judging rubric / weight | ውድድር / የዳኝነት መመዘኛዎች / ክብደት | dorgommii / ulaagaalee murtii / ulfaatina | `innovation.challenges.*`, `innovation.admin.rubric*` | |
 | conflict of interest | የጥቅም ግጭት | walitti bu'iinsa fedhii | `innovation.admin.*conflict*` | Check against the civil-service ethics code's wording |
 | submission (of a team's work) | የቀረበ ሥራ | hojii dhiyaate | `innovation.admin.submission*`, `innovation.field.submission_*` | |
+| on track / at risk / off track (RAG status) | በዕቅዱ መሠረት / ስጋት ላይ / ከዕቅዱ ወጥቷል | karoora irra jira / balaa keessa jira / karoora irraa bahe | `projects.rag.*` | Check the register a planning office uses |
+| key performance indicator (KPI) / baseline / target | ቁልፍ የአፈጻጸም አመልካች / መነሻ / ግብ | agarsiistuu raawwii ijoo / ka'umsa / galma | `projects.admin.*kpi*`, `projects.kpi_*` | |
+| milestone | ዋና ምዕራፍ | sadarkaa ijoo | `projects.*milestone*` | |
+| dataset / open data / distribution (file) | የመረጃ ስብስብ / ክፍት መረጃ / ፋይል | daataa / daataa banaa / faayilii | `opendata.*` | Om "daataa" is a loanword; check whether the Agency prefers "odeeffannoo" |
+| licence names (CC BY 4.0 …) | kept in English | kept in English | `opendata.licence.*` | Official licence titles are not translated; CC0 is described |
+| Digital Harar in numbers | ዲጂታል ሐረር በቁጥሮች | Harar Dijitaalaa lakkoofsaan | `numbers.title`, `nav.achievements` | |

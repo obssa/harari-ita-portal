@@ -426,3 +426,85 @@ judges' totals, rather than raw sums, keeps a team fair when a judge steps back 
 
 **Why.** The Agency's homepage should answer an innovator's first question, "what can I take part in now?",
 with a date, and should show the ecosystem growing, using the portal's own records as the source.
+
+## ADR-0024 — Projects: pillar, RAG status, milestones, indicators and staff-only risks (2026-11-19)
+
+**Decision.**
+
+- A project gains its **pillar**, a **RAG status** (on track, at risk, off track) with a short reason for staff and
+  the date it was last set, and **spend** next to the budget.
+- **Milestones** (a title per language, due and done dates, in order) are edited with the project. A milestone
+  cannot be done on a future date; one past its due date and not done shows "Overdue" in words.
+- **KPIs** (a name and unit per language, baseline, target, higher or lower is better) have **dated readings**,
+  one per date (a second reading for a date replaces it). Progress is the way from the baseline to the target,
+  0–100. A KPI may name the dataset its readings come from.
+- **Risks** (likelihood × impact, owner, mitigation, next review) are a staff-only register. They, and the RAG
+  reason, never reach a public page, the API or the search index, and their texts are not in the activity log.
+- **What the public sees**: the RAG status only while a project is ongoing; spend only when the budget may be
+  published. The portfolio gains pillar and RAG filters and a **locations** view drawn on the server from the
+  projects' map pins (no map library, nothing loaded from a map service until the reader opens OpenStreetMap).
+- **Scoping**: a Project Manager scoped to a directorate sees, saves and changes only that directorate's
+  projects, with their KPIs and risks. Saving a project now needs `projects.manage`.
+
+**Why.** PLAN.md §4–§5 asks for milestones, KPIs and RAG status. Risks and the reasons behind a status are
+internal working notes; publishing them would discourage honest reporting.
+
+**Changed from the plan.** `public` is not a separate flag: each language's publication already decides what is
+public. The homepage keeps its project cards; the locations view is on the projects page.
+
+## ADR-0025 — Open data: datasets, files, previews and counted downloads (2026-11-19)
+
+**Decision.**
+
+- A **dataset** has a publisher (a directorate), a pillar, a licence (CC BY 4.0 offered first; CC BY-SA 4.0,
+  CC0 1.0, ODC-By 1.0, ODbL 1.0), an update frequency, the period covered, keywords and an **office** contact
+  address (never a person's), with a title, summary, description, method and area covered per language. Only
+  `datasets.publish` publishes a language.
+- Its **distributions** are files from the media library (CSV, JSON, XLSX, PDF; up to ten) or an https link to an
+  API. Saving a file checks it is what it claims and works out its size, SHA-256 checksum, row count, column names
+  and a preview of the first ten rows (CSV and XLSX streamed with OpenSpout; JSON when it is a list of records, up
+  to 20 MB). Column names that look like personal data (names, phones, emails, addresses, ID numbers, birth dates)
+  are flagged to the Data Steward. The flag warns; it does not block.
+- A new or replaced file moves "last updated" to today. The **next update** falls due one period later; an
+  overdue dataset is marked in the admin list (with a filter) and on its public page.
+- **Downloads** go through `/data/{slug}/download/{id}`, which counts and then serves the file with the dataset's
+  name, its media type and `nosniff`. A count is a number per file per day, nothing else: no address, cookie or
+  browser detail is stored. A repeat within the hour (keyed by a hash held in the cache for an hour) and known
+  robots are not counted, so the figures are a floor.
+- Public `/data` (search, filters by pillar, publisher, format and licence) and `/data/{slug}` with the files, the
+  preview table, the facts, "how to cite" and schema.org `Dataset` JSON-LD.
+
+**Why.** PLAN.md §4–§5. Checking the file at upload gives the reader honest facts (size, rows, checksum) and gives
+the Data Steward a last look before personal data is published by mistake.
+
+## ADR-0026 — DCAT-AP catalogue, the datasets API and the developers page (2026-11-19)
+
+**Decision.**
+
+- `/data/catalog.jsonld` publishes every dataset of the language as a DCAT-AP `dcat:Catalog` in JSON-LD: licence,
+  EU frequency and file-type terms, IANA media types, byte size, SPDX checksum, period, area and contact point, so
+  national and international portals can harvest it. It needs no key.
+- `/api/v1/datasets` and `/api/v1/datasets/{key}` sit behind a new `datasets` key scope, are described in the
+  OpenAPI document, and give the column names and preview in the full form. The files themselves download without
+  a key: this is open data. The project API gains pillar, RAG status, spend (where public), milestones and KPIs.
+- `/developers` lists every API address with its scope **read from the OpenAPI document**, so the page cannot
+  drift from the API, and explains how to ask for a key, the limits (per-key rate, paging, ETags), what is open
+  without a key, and a dated changelog.
+
+**Why.** PLAN.md §4 (Developers) and §10. Reading the page from the API's own description keeps one source of truth.
+
+## ADR-0027 — Digital Harar in numbers (2026-11-19)
+
+**Decision.**
+
+- `/numbers` replaces `/achievements` (which now redirects there with 301; menus and the sitemap point to the new
+  address). It opens with **live figures counted from the portal's records** each time the page is built
+  (projects published, services online, support requests resolved in the last 30 days, startups listed, open
+  datasets, dataset downloads), each with what it counts and a link to the records.
+- Then the **projects by status and by pillar** as bar charts that are their own data tables (label, number and a
+  bar from zero in one row), the **statistics** editors enter (each with its source and as-of date, and now
+  optionally its source dataset, linked), and the sector breakdown kept from the achievements page.
+- Charts are drawn on the server (HTML and SVG), with no chart library on public pages (DESIGN.md §5). KPI readings
+  use a small SVG line with a dashed target and a "Show the numbers" table.
+
+**Why.** CLAUDE.md: every published number comes from live data with a source, never typed in.

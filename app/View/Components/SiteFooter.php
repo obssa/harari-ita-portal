@@ -58,6 +58,7 @@ final class SiteFooter extends Component
         $this->explore = [
             ['label' => __('nav.about'), 'url' => route('structure')],
             ['label' => __('projects.title'), 'url' => route('projects.index')],
+            ['label' => __('opendata.title'), 'url' => route('datasets.index')],
             ['label' => __('nav.news'), 'url' => route('news.index')],
             ['label' => __('events.title'), 'url' => route('events.index')],
             ['label' => __('documents.title'), 'url' => route('documents.index')],

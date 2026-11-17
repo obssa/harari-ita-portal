@@ -107,7 +107,9 @@ final class SiteNav extends Component
         }
         $items[] = $section('nav.projects_data', 'nav.projects_data_desc', route('projects.index'), null, [
             $link('projects.title', route('projects.index'), 'projects.index', 'nav.projects_hint'),
-            $link('nav.achievements', route('projects.achievements'), 'projects.achievements', 'nav.achievements_hint'),
+            $link('opendata.title', route('datasets.index'), 'datasets.*', 'nav.open_data_hint'),
+            $link('nav.achievements', route('projects.numbers'), 'projects.numbers', 'nav.achievements_hint'),
+            $link('developers.title', route('developers'), 'developers', 'nav.developers_hint'),
         ]);
         $items[] = $section('nav.media', 'nav.media_desc', route('news.index'), null, [
             $link('nav.news', route('news.index'), 'news.*', 'nav.news_hint'),

@@ -15,6 +15,7 @@ use App\Domain\Innovation\Queries\OpenCalls;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\GalleryItem;
 use App\Domain\Media\Models\Video;
+use App\Domain\OpenData\Models\Dataset;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Organisation\Queries\PublicDirectory;
@@ -122,6 +123,8 @@ final class HomepageLayout
             SectionKey::Services => $this->nonEmpty(PublicDirectory::visible(ServiceItem::query(), $locale)
                 ->with(['office.translations', 'category.translations'])->orderByDesc('featured')->orderBy('rank')->limit($limit)->get()),
             SectionKey::Innovation => $this->innovation($locale, $limit),
+            SectionKey::OpenData => $this->nonEmpty(PublicDirectory::visible(Dataset::query(), $locale)
+                ->with(['translations', 'office.translations', 'distributions'])->orderByDesc('featured')->orderByDesc('data_updated_on')->limit($limit)->get()),
             SectionKey::Counters => $this->counters($section, $locale),
             SectionKey::Values => $this->items($section, $locale, 'title', [], ['text']),
             SectionKey::Pillars => $this->pillars($locale, $limit),

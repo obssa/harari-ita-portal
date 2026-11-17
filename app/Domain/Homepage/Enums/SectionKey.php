@@ -26,6 +26,8 @@ enum SectionKey: string
     case Video = 'video';
     case Events = 'events';
     case Projects = 'projects';
+    /** The newest or featured open datasets (ADR-0025). */
+    case OpenData = 'open_data';
     case Social = 'social';
 
     public function label(?string $locale = null): string
@@ -49,6 +51,7 @@ enum SectionKey: string
             self::Pillars => 4,
             self::Events => 6,
             self::Projects => 6,
+            self::OpenData => 3,
             self::Services => 6,
             self::Innovation => 3,
             self::Social => 12,

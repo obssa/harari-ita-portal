@@ -12,6 +12,7 @@ use App\Domain\Innovation\Models\Programme;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\Video;
+use App\Domain\OpenData\Models\Dataset;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\Pillar;
@@ -34,6 +35,7 @@ final class PublicLinks
         Event::class => 'events.show',
         Document::class => 'documents.show',
         Project::class => 'projects.show',
+        Dataset::class => 'datasets.show',
         Gallery::class => 'gallery.show',
         Video::class => 'videos.show',
         Leader::class => 'leaders.show',

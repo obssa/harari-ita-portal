@@ -4,6 +4,7 @@ namespace App\Domain\Projects\Actions;
 
 use App\Domain\Content\Actions\WriteTranslations;
 use App\Domain\Content\Models\Category;
+use App\Domain\OpenData\Models\Dataset;
 use App\Domain\Projects\Models\Project;
 use App\Domain\Projects\Models\Statistic;
 use App\Domain\Translation\Support\Locales;
@@ -47,6 +48,7 @@ final class SaveStatistic
             $statistic->fill([
                 'sector_id' => filled($data['sector_id'] ?? null) && Category::query()->whereKey($data['sector_id'])->where('type', Category::TYPE_SECTOR)->exists() ? (string) $data['sector_id'] : null,
                 'project_id' => filled($data['project_id'] ?? null) && Project::query()->whereKey($data['project_id'])->exists() ? (string) $data['project_id'] : null,
+                'dataset_id' => filled($data['dataset_id'] ?? null) && Dataset::query()->whereKey($data['dataset_id'])->exists() ? (string) $data['dataset_id'] : null,
                 'value' => round((float) $data['value'], 2),
                 'as_of' => $asOf,
                 'source_url' => $source !== '' ? $source : null,

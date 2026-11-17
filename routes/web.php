@@ -9,6 +9,8 @@ use App\Http\Controllers\Public\ApplicationController;
 use App\Http\Controllers\Public\CampaignLinkController;
 use App\Http\Controllers\Public\ChallengeController;
 use App\Http\Controllers\Public\ChallengeTeamController;
+use App\Http\Controllers\Public\DatasetController;
+use App\Http\Controllers\Public\DevelopersController;
 use App\Http\Controllers\Public\DocumentController;
 use App\Http\Controllers\Public\EventController;
 use App\Http\Controllers\Public\EventRegistrationController;
@@ -266,7 +268,15 @@ Route::prefix('{locale}')
         Route::get('notices', [DocumentController::class, 'notices'])->name('documents.notices');
         Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
         Route::get('projects/{slug}', [ProjectController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('projects.show');
+        Route::get('numbers', [ProjectController::class, 'numbers'])->name('projects.numbers');
         Route::get('achievements', [ProjectController::class, 'achievements'])->name('projects.achievements');
+        Route::get('developers', DevelopersController::class)->name('developers');
+        Route::get('data', [DatasetController::class, 'index'])->name('datasets.index');
+        Route::get('data/catalog.jsonld', [DatasetController::class, 'catalog'])->name('datasets.catalog');
+        Route::get('data/{slug}', [DatasetController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('datasets.show');
+        // Counted, so never answered from the cache.
+        Route::get('data/{slug}/download/{distribution}', [DatasetController::class, 'download'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
+            ->whereNumber('distribution')->withoutMiddleware(CachePublicPages::class)->name('datasets.download');
         Route::get('press', [PressController::class, 'press'])->name('press');
         Route::get('get-involved', [PressController::class, 'getInvolved'])->name('get-involved');
         Route::get('social', [SocialController::class, 'index'])->name('social');

@@ -5,7 +5,7 @@
 @endphp
 <x-layouts.public :title="__('projects.title')" :description="__('projects.description')">
     <x-page-hero :title="__('projects.title')" :lead="__('projects.description')" tone="night" :crumbs="[]">
-        <x-slot:actions><x-ui.button :href="route('projects.achievements')" variant="light" size="sm">{{ __('projects.achievements_link') }}</x-ui.button></x-slot:actions>
+        <x-slot:actions><x-ui.button :href="route('projects.numbers')" variant="light" size="sm">{{ __('projects.achievements_link') }}</x-ui.button></x-slot:actions>
     </x-page-hero>
     <div class="mx-auto max-w-page px-4 pt-2 pb-12 sm:px-6">
 

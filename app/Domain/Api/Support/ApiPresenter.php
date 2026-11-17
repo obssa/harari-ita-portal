@@ -16,12 +16,18 @@ use App\Domain\Documents\Models\DocumentTranslation;
 use App\Domain\Events\Models\Event;
 use App\Domain\Events\Models\EventTranslation;
 use App\Domain\Media\Models\Media;
+use App\Domain\OpenData\Models\Dataset;
+use App\Domain\OpenData\Models\DatasetDistribution;
+use App\Domain\OpenData\Models\DatasetTranslation;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\LeaderTranslation;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\OfficeTranslation;
 use App\Domain\Organisation\Queries\PublicDirectory;
 use App\Domain\Projects\Models\Project;
+use App\Domain\Projects\Models\ProjectKpi;
+use App\Domain\Projects\Models\ProjectKpiReading;
+use App\Domain\Projects\Models\ProjectMilestone;
 use App\Domain\Projects\Models\ProjectTranslation;
 use App\Domain\Translation\Support\Locales;
 use App\Services\Calendar\EthiopianCalendar;
@@ -285,6 +291,9 @@ final class ApiPresenter
             'ends_on' => $project->ends_on?->toDateString(),
             'progress' => $project->progress,
             'budget' => $project->publicBudget(),
+            'spent' => $project->publicSpent(),
+            'pillar_id' => $project->pillar_id,
+            'rag_status' => $project->publicRag()?->value,
             'featured' => $project->featured,
             'latitude' => $project->latitude,
             'longitude' => $project->longitude,
@@ -295,6 +304,74 @@ final class ApiPresenter
         if ($full) {
             $data['body_html'] = BodyRenderer::toHtml($t->body);
             $data['alternates'] = $this->alternates($project, 'projects.show');
+            $data['milestones'] = $project->milestones->map(fn (ProjectMilestone $m): array => [
+                'title' => $m->title($t->locale),
+                'due_on' => $m->due_on?->toDateString(),
+                'done_on' => $m->done_on?->toDateString(),
+                'overdue' => $m->isOverdue(),
+            ])->all();
+            $data['kpis'] = $project->kpis->map(fn (ProjectKpi $k): array => [
+                'name' => $k->name($t->locale),
+                'unit' => $k->unit($t->locale) ?: null,
+                'baseline' => $k->baseline !== null ? (float) $k->baseline : null,
+                'target' => (float) $k->target,
+                'higher_is_better' => $k->higher_is_better,
+                'progress' => $k->readings->isNotEmpty() ? $k->progress((float) $k->readings->last()->value) : null,
+                'readings' => $k->readings->map(fn (ProjectKpiReading $r): array => ['as_of' => $r->as_of->toDateString(), 'value' => (float) $r->value])->all(),
+            ])->all();
+        }
+
+        return $data;
+    }
+
+    /**
+     * A dataset with its files (ADR-0026); the full form adds the description, the column names and the preview.
+     *
+     * @return array<string, mixed>
+     */
+    public function dataset(Dataset $dataset, DatasetTranslation $t, bool $full = false): array
+    {
+        $office = $dataset->office !== null ? PublicDirectory::shown($dataset->office, $t->locale) : null;
+        $data = [
+            'id' => $dataset->id,
+            'lang' => $t->locale,
+            'slug' => $t->slug,
+            'url' => route('datasets.show', ['locale' => $t->locale, 'slug' => $t->slug]),
+            'title' => $t->title,
+            'summary' => $t->summary,
+            'publisher' => $office !== null ? ['id' => (string) $dataset->office_id, 'name' => (string) $office->getAttribute('name')] : null,
+            'pillar_id' => $dataset->pillar_id,
+            'licence' => ['id' => $dataset->licence->value, 'spdx' => $dataset->licence->spdx(), 'url' => $dataset->licence->url()],
+            'frequency' => $dataset->frequency->value,
+            'keywords' => $dataset->keywords ?? [],
+            'temporal_from' => $dataset->temporal_from?->toDateString(),
+            'temporal_to' => $dataset->temporal_to?->toDateString(),
+            'data_updated_on' => $dataset->data_updated_on?->toDateString(),
+            'next_update_due' => $dataset->nextUpdateDue()?->toDateString(),
+            'overdue' => $dataset->isOverdue(),
+            'downloads' => $dataset->download_count,
+            'distributions' => $dataset->distributions->map(fn (DatasetDistribution $d): array => [
+                'id' => $d->id,
+                'format' => $d->format->value,
+                'title' => $d->title($t->locale),
+                'media_type' => $d->format->mediaType(),
+                'download_url' => $d->format->isFile() ? route('datasets.download', ['locale' => $t->locale, 'slug' => $t->slug, 'distribution' => $d->id]) : null,
+                'access_url' => $d->format->isFile() ? null : $d->url,
+                'byte_size' => $d->byte_size,
+                'sha256' => $d->checksum,
+                'rows' => $d->row_count,
+                'downloads' => $d->download_count,
+            ])->all(),
+        ];
+
+        if ($full) {
+            $data['body_html'] = BodyRenderer::toHtml($t->body);
+            $data['methodology'] = $t->methodology;
+            $data['coverage'] = $t->coverage;
+            $data['contact_email'] = $dataset->contact_email;
+            $data['files'] = $dataset->distributions->filter(fn (DatasetDistribution $d): bool => $d->columns !== null)
+                ->map(fn (DatasetDistribution $d): array => ['id' => $d->id, 'columns' => $d->columns ?? [], 'preview' => $d->preview ?? []])->values()->all();
+            $data['alternates'] = $this->alternates($dataset, 'datasets.show');
         }
 
         return $data;

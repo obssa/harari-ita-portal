@@ -34,6 +34,8 @@ use App\Domain\Media\Models\GalleryTranslation;
 use App\Domain\Media\Models\Media;
 use App\Domain\Media\Models\Video;
 use App\Domain\Media\Models\VideoTranslation;
+use App\Domain\OpenData\Models\Dataset;
+use App\Domain\OpenData\Models\DatasetTranslation;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\LeaderTranslation;
 use App\Domain\Organisation\Models\Office;
@@ -72,7 +74,7 @@ final class PublicContentChanges
         Form::class, FormTranslation::class, HeroSlide::class, HomepageSection::class, Gallery::class, GalleryItem::class,
         GalleryTranslation::class, Media::class, Video::class, VideoTranslation::class, Leader::class,
         LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class, ServiceItem::class, ServiceItemTranslation::class, StatusComponent::class, Incident::class, IncidentUpdate::class, Startup::class, StartupTranslation::class, Programme::class, ProgrammeTranslation::class, Cohort::class, Challenge::class, ChallengeTranslation::class,
-        Project::class, ProjectTranslation::class, Statistic::class, StatisticTranslation::class,
+        Project::class, ProjectTranslation::class, Statistic::class, StatisticTranslation::class, Dataset::class, DatasetTranslation::class,
         SocialPost::class, SocialSource::class, UiTranslation::class,
     ];
 

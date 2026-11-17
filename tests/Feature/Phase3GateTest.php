@@ -31,7 +31,7 @@ it('adds labelled sample content and every Phase 3 page renders in the four lang
 
     $urls = [];
     foreach (Locales::all() as $locale) {
-        foreach (['events.index', 'documents.index', 'documents.notices', 'projects.index', 'projects.achievements', 'gallery.index',
+        foreach (['events.index', 'documents.index', 'documents.notices', 'projects.index', 'projects.numbers', 'gallery.index',
             'videos.index', 'videos.live', 'contact', 'press', 'get-involved', 'tickets.lookup'] as $route) {
             $urls[] = route($route, ['locale' => $locale]);
         }

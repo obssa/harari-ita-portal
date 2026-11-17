@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Statistics;
 
+use App\Domain\OpenData\Models\Dataset;
 use App\Domain\Projects\Models\Project;
 use App\Domain\Projects\Models\Statistic;
 use App\Filament\Resources\Projects\ProjectResource;
@@ -49,7 +50,7 @@ class StatisticResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.content');
+        return __('admin.nav.projects_data');
     }
 
     public static function form(Schema $schema): Schema
@@ -74,6 +75,10 @@ class StatisticResource extends Resource
                     Select::make('project_id')->label(__('projects.statistics.field.project'))->searchable()
                         ->options(fn (): array => Project::query()->with('translations')->latest()->limit(300)->get()
                             ->mapWithKeys(fn (Project $p): array => [$p->id => $p->title()])->all()),
+                    Select::make('dataset_id')->label(__('projects.statistics.field.dataset'))->searchable()
+                        ->helperText(__('projects.statistics.help.dataset'))
+                        ->options(fn (): array => Dataset::query()->with('translations')->latest()->limit(300)->get()
+                            ->mapWithKeys(fn (Dataset $d): array => [$d->id => $d->title()])->all()),
                     Toggle::make('on_achievements')->label(__('projects.statistics.field.on_achievements'))->default(true),
                     TextInput::make('sort')->label(__('projects.statistics.field.sort'))->numeric()->integer()->default(0),
                 ]),

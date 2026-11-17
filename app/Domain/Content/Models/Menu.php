@@ -27,7 +27,7 @@ class Menu extends Model
 
     public const LOCATIONS = ['header', 'footer', 'utility'];
 
-    public const TYPES = ['page', 'post', 'news', 'leaders', 'offices', 'pillars', 'structure', 'gallery', 'videos', 'live', 'events', 'documents', 'notices', 'projects', 'achievements', 'contact', 'press', 'get_involved', 'social', 'url'];
+    public const TYPES = ['page', 'post', 'news', 'leaders', 'offices', 'pillars', 'structure', 'gallery', 'videos', 'live', 'events', 'documents', 'notices', 'projects', 'achievements', 'open_data', 'developers', 'contact', 'press', 'get_involved', 'social', 'url'];
 
     /** Items per level, so menus stay usable on phones. */
     public const MAX_ITEMS = 12;
@@ -140,7 +140,9 @@ class Menu extends Model
             'documents' => ['url' => route('documents.index', ['locale' => $locale]), 'external' => false, 'route' => 'documents.index'],
             'notices' => ['url' => route('documents.notices', ['locale' => $locale]), 'external' => false, 'route' => 'documents.notices'],
             'projects' => ['url' => route('projects.index', ['locale' => $locale]), 'external' => false, 'route' => 'projects.index'],
-            'achievements' => ['url' => route('projects.achievements', ['locale' => $locale]), 'external' => false, 'route' => 'projects.achievements'],
+            'achievements' => ['url' => route('projects.numbers', ['locale' => $locale]), 'external' => false, 'route' => 'projects.numbers'],
+            'open_data' => ['url' => route('datasets.index', ['locale' => $locale]), 'external' => false, 'route' => 'datasets.index'],
+            'developers' => ['url' => route('developers', ['locale' => $locale]), 'external' => false, 'route' => 'developers'],
             'contact' => ['url' => route('contact', ['locale' => $locale]), 'external' => false, 'route' => 'contact'],
             'press' => ['url' => route('press', ['locale' => $locale]), 'external' => false, 'route' => 'press'],
             'social' => ['url' => route('social', ['locale' => $locale]), 'external' => false, 'route' => 'social'],

@@ -128,7 +128,7 @@ it('shows a project with its progress, numbers, photos, map and the budget only 
     $this->get('/en/projects/sample-school-building')->assertDontSee('2,500,000');
 });
 
-it('shows achievements by sector with counts, numbers and the regional figures', function () {
+it('shows the numbers page by sector with counts, numbers and the regional figures, and moves the old achievements address there', function () {
     $health = projectSector('Sample health');
     makeProject(['en' => ['title' => 'Sample health centre', 'published' => true]], ['sector_id' => $health->id, 'status' => 'completed', 'ends_on' => '2026-02-01']);
     makeProject(['en' => ['title' => 'Sample clinic upgrade', 'published' => true]], ['sector_id' => $health->id, 'status' => 'ongoing']);
@@ -136,7 +136,8 @@ it('shows achievements by sector with counts, numbers and the regional figures',
     makeStatistic(['en' => ['label' => 'Sample regional members']], 120000);
     makeStatistic(['en' => ['label' => 'Sample hidden number']], 5, ['on_achievements' => false]);
 
-    $this->get('/en/achievements')->assertOk()
+    $this->get('/en/achievements')->assertStatus(301)->assertRedirect('/en/numbers');
+    $this->get('/en/numbers')->assertOk()
         ->assertSee('Sample health')
         ->assertSee('Sample health posts')->assertSee('38')
         ->assertSee(__('projects.regional', [], 'en'))->assertSee('Sample regional members')->assertSee('120,000')
@@ -166,7 +167,7 @@ it('shows projects on the homepage, in search and the sitemaps, and Amharic proj
     $this->get('/en/search?q=irrigation')->assertSee(__('search.kind.projects', [], 'en'))->assertSee('Sample irrigation canal');
     $this->get('/sitemaps/en.xml')
         ->assertSee(url('/en/projects/sample-irrigation-canal'), escape: false)
-        ->assertSee(url('/en/achievements'), escape: false);
+        ->assertSee(url('/en/numbers'), escape: false);
 });
 
 it('lets those who manage projects add projects and statistics in the admin', function () {

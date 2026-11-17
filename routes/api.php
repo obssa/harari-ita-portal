@@ -2,6 +2,7 @@
 
 use App\Domain\Api\Enums\ApiScope;
 use App\Http\Controllers\Api\V1\ContentController;
+use App\Http\Controllers\Api\V1\DatasetController;
 use App\Http\Controllers\Api\V1\DirectoryController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\EventController;
@@ -51,6 +52,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     $scoped(ApiScope::Projects)->group(function () use ($key) {
         Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
         Route::get('projects/{key}', [ProjectController::class, 'show'])->where('key', $key)->name('projects.show');
+    });
+
+    $scoped(ApiScope::Datasets)->group(function () use ($key) {
+        Route::get('datasets', [DatasetController::class, 'index'])->name('datasets.index');
+        Route::get('datasets/{key}', [DatasetController::class, 'show'])->where('key', $key)->name('datasets.show');
     });
 
     $scoped(ApiScope::Search)->group(function () {
