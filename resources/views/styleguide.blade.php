@@ -123,6 +123,14 @@
                 <x-ui.status-pill state="down">Outage</x-ui.status-pill>
                 <x-ui.status-pill state="maintenance">Maintenance</x-ui.status-pill>
             </div>
+            <div class="mt-4 grid gap-4 rounded-card bg-night-900 p-5 sm:grid-cols-2">
+                <div class="flex flex-wrap items-start gap-2">
+                    <x-ui.status-pill tone="night">Operational</x-ui.status-pill>
+                    <x-ui.status-pill state="degraded" tone="night">Degraded</x-ui.status-pill>
+                </div>
+                <x-countdown :until="now()->addDays(3)->addHours(5)" label="Registration closes in" tone="night" />
+            </div>
+            <x-countdown :until="now()->addHours(30)" label="Submissions close in" class="mt-4 max-w-sm" />
             <div class="mt-6 grid gap-4 sm:grid-cols-2">
                 <x-ui.empty-state title="Nothing here yet">Sample empty state with a next step.
                     <x-slot:action><x-ui.button variant="secondary" size="sm" href="#sg-feedback">Go back</x-ui.button></x-slot:action>

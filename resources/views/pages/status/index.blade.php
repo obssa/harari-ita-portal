@@ -19,7 +19,7 @@
             'border-saffron-400/60 bg-saffron-400/10' => $overall === ComponentState::Degraded,
             'border-ruby-500/60 bg-ruby-500/15' => in_array($overall, [ComponentState::PartialOutage, ComponentState::MajorOutage], true),
         ]) role="status">
-            <x-ui.status-pill :state="$overall->pill()" class="border-night-line bg-night-950 text-night-ink">{{ $overall->label() }}</x-ui.status-pill>
+            <x-ui.status-pill :state="$overall->pill()" tone="night">{{ $overall->label() }}</x-ui.status-pill>
             <p class="font-display text-xl font-semibold tracking-tight text-night-ink">{{ __("status.overall.{$overall->value}") }}</p>
         </div>
     </x-page-hero>
