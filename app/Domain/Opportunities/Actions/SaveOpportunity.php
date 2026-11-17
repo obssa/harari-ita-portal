@@ -18,7 +18,7 @@ use Throwable;
 
 /**
  * Saves an opportunity with its languages and documents (ADR-0032). Rules enforced here, whatever the form allowed:
- *  - it closes after it opens; a tender's bids are opened after it opens;
+ *  - it closes after it opens; a tender's bids are opened at or after the deadline;
  *  - positions and the kind of employment belong to vacancies and internships;
  *  - once the log has entries, or the opportunity is cancelled, the deadline changes only through an extension
  *    (ADR-0033), so the record of what bidders were told stays whole;
@@ -61,8 +61,8 @@ final class SaveOpportunity
         } elseif ($opens !== null && $closes <= $opens) {
             $errors['data.closes_at'] = __('opportunities.validation.closes_after_opens');
         }
-        if ($bids !== null && $opens !== null && $bids < $opens) {
-            $errors['data.bid_opening_at'] = __('opportunities.validation.bids_after_opens');
+        if ($bids !== null && $closes !== null && $bids < $closes) {
+            $errors['data.bid_opening_at'] = __('opportunities.validation.bids_after_closes');
         }
 
         $url = trim((string) ($data['apply_url'] ?? ''));

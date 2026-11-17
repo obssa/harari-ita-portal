@@ -19,7 +19,8 @@ use Throwable;
  *  - an addendum (a change to the documents, with an optional document) needs a title;
  *  - a clarification needs the question (title) and its answer (body);
  *  - an extension sets a later deadline: the opportunity takes it, the deadline it replaced is kept on the entry,
- *    the first deadline on the opportunity, and it leaves the archive;
+ *    the first deadline on the opportunity, and it leaves the archive; a tender's bid opening moves by as much, so
+ *    bids are never opened before the new deadline;
  *  - a cancellation needs the reason and closes the opportunity.
  * A cancelled opportunity takes no further entries.
  */
@@ -81,6 +82,9 @@ final class PublishAddendum
                 $addendum->previous_closes_at = $locked->closes_at;
                 $addendum->new_closes_at = $newCloses;
                 $locked->original_closes_at ??= $locked->closes_at;
+                if ($locked->bid_opening_at !== null) {
+                    $locked->bid_opening_at = $locked->bid_opening_at->addSeconds((int) $locked->closes_at->diffInSeconds($newCloses));
+                }
                 $locked->closes_at = $newCloses;
                 $locked->archived_at = null;
             }

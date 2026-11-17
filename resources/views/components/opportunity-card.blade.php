@@ -35,7 +35,7 @@
             <div class="flex flex-wrap gap-x-2">
                 <dt class="sr-only">{{ __('opportunities.time_left') }}</dt>
                 <dd @class(['font-semibold', 'text-warning-800 dark:text-saffron-300' => $state === \App\Domain\Opportunities\Models\Opportunity::STATE_CLOSING, 'text-ink' => $state !== \App\Domain\Opportunities\Models\Opportunity::STATE_CLOSING])>
-                    {{ $left >= 48 ? trans_choice('opportunities.closes_in_days', intdiv($left, 24), ['count' => intdiv($left, 24)]) : trans_choice('opportunities.closes_in_hours', max(1, $left), ['count' => max(1, $left)]) }}
+                    {{ match (true) { $left >= 48 => trans_choice('opportunities.closes_in_days', intdiv($left, 24), ['count' => intdiv($left, 24)]), $left >= 1 => trans_choice('opportunities.closes_in_hours', $left, ['count' => $left]), default => __('opportunities.closes_within_hour') } }}
                 </dd>
             </div>
         @endif

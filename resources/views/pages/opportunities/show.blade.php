@@ -136,7 +136,7 @@
                 </section>
             </div>
 
-            <aside class="space-y-4 lg:sticky lg:top-24 lg:self-start" aria-labelledby="opportunity-facts">
+            <aside class="space-y-4 max-lg:order-first lg:sticky lg:top-24 lg:self-start" aria-labelledby="opportunity-facts">
                 <section class="relative isolate overflow-hidden rounded-card border border-night-line bg-night-900 p-6 text-night-ink">
                     <x-hex-field id="opportunity-hex" fade="top" class="absolute inset-x-0 top-0 -z-10 h-32 w-full text-cyan-500/20" />
                     <h2 id="opportunity-facts" class="kicker [--color-eyebrow:var(--color-cyan-300)]">{{ __('opportunities.facts') }}</h2>

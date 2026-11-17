@@ -60,6 +60,8 @@ it('saves an opportunity with its rules: dates, apply address, job fields and wh
     expect(fn () => $save(['opens_at' => now()->addDays(3)->toDateTimeString(), 'closes_at' => now()->addDay()->toDateTimeString()]))->toThrow(ValidationException::class);
     expect(fn () => $save(['closes_at' => now()->addDay()->toDateTimeString(), 'apply_url' => 'http://example.org/apply']))->toThrow(ValidationException::class);
     expect(fn () => $save(['closes_at' => now()->addDay()->toDateTimeString(), 'apply_email' => 'not-an-address']))->toThrow(ValidationException::class);
+    expect(fn () => app(SaveOpportunity::class)->handle(new Opportunity, ['type' => 'tender', 'closes_at' => now()->addDays(3)->toDateTimeString(), 'bid_opening_at' => now()->addDays(2)->toDateTimeString(),
+        'translations' => ['en' => ['title' => 'Sample early bids', 'published' => true]]], $officer))->toThrow(ValidationException::class);
 
     expect(fn () => sampleOpportunity('Sample other', actor: staff(SystemRole::Editor)))->toThrow(HttpException::class);
     expect(staff(SystemRole::Editor)->can('create', Opportunity::class))->toBeFalse()
@@ -68,8 +70,9 @@ it('saves an opportunity with its rules: dates, apply address, job fields and wh
 
 it('keeps a numbered log: addenda, clarifications, an extension that keeps the first deadline, and a cancellation', function () {
     $officer = staff(SystemRole::ProcurementOfficer);
-    $tender = sampleOpportunity(actor: $officer);
+    $tender = sampleOpportunity(data: ['bid_opening_at' => now()->addDays(14)->addMinutes(30)->toDateTimeString()], actor: $officer);
     $first = $tender->closes_at;
+    $bids = $tender->bid_opening_at;
     $log = app(PublishAddendum::class);
 
     $one = $log->handle($tender, ['kind' => 'addendum', 'titles' => ['en' => 'Sample change to lot 2']], $officer);
@@ -83,7 +86,9 @@ it('keeps a numbered log: addenda, clarifications, an extension that keeps the f
         ->and($tender->closes_at->equalTo($first->addWeek()))->toBeTrue()
         ->and($tender->original_closes_at?->equalTo($first))->toBeTrue()
         ->and($three->previous_closes_at?->equalTo($first))->toBeTrue()
-        ->and($tender->wasExtended())->toBeTrue();
+        ->and($tender->wasExtended())->toBeTrue()
+        // The bid opening moves with the deadline, so bids are never opened before it.
+        ->and($tender->bid_opening_at?->equalTo($bids?->addWeek()))->toBeTrue();
 
     // Once the log has entries, the deadline changes only through an extension.
     expect(fn () => app(SaveOpportunity::class)->handle($tender, ['type' => 'tender', 'closes_at' => $first->addMonth()->toDateTimeString(),

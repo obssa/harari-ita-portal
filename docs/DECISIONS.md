@@ -638,7 +638,8 @@ calendars) and §7 (Academy pages).
   **addendum** (a change to the documents, with an optional library document), **clarification** (the question as
   title and the answer as text, both required), **extension** (a new deadline that must be later than the current
   one and still to come: the opportunity takes it, the entry keeps the deadline it replaced and the opportunity its
-  first deadline, and it leaves the archive) and **cancellation** (a reason is required; the opportunity shows as
+  first deadline, and it leaves the archive; a tender's bid opening moves by as much, so bids are never opened
+  before the new deadline) and **cancellation** (a reason is required; the opportunity shows as
   cancelled and takes no further entries).
 - **Entries are never deleted** (no delete in the policy). Their words or document can be corrected; the entry then
   shows the date of the correction. Its kind, number, date and deadlines stay as published.
