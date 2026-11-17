@@ -94,7 +94,7 @@ final class PublishAddendum
             }
             $addendum->save();
             $locked->updated_by = $actor->id;
-            // Saved even without a change of its own, so the public pages are purged for the new entry (ADR-0039).
+            // Saved even without a change of its own, so the public pages are purged for the new entry (ADR-0039 of the fork).
             $locked->touch();
 
             $opportunity->setRawAttributes($locked->getAttributes(), true);

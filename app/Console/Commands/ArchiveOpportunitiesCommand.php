@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 /**
  * The automatic archive (ADR-0032): every five minutes, each opportunity whose deadline has passed is marked as
- * archived. The pages already read the state from the dates; the save purges the edge cache (ADR-0039), so no cached
+ * archived. The pages already read the state from the dates; the save purges the edge cache (ADR-0039 of the fork), so no cached
  * page goes on showing a closed tender as open.
  */
 final class ArchiveOpportunitiesCommand extends Command
