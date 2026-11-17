@@ -10,6 +10,8 @@ use App\Domain\Events\Models\Event;
 use App\Domain\Forms\Actions\SaveForm;
 use App\Domain\Forms\Models\Form;
 use App\Domain\Forms\Support\FormField;
+use App\Domain\Innovation\Actions\SaveChallenge;
+use App\Domain\Innovation\Models\Challenge;
 use App\Domain\Organisation\Actions\SaveOffice;
 use App\Domain\Organisation\Models\Office;
 use Carbon\CarbonImmutable;
@@ -36,6 +38,16 @@ function browserContent(): void
         'registration_enabled' => true,
         'translations' => ['en' => ['title' => 'Sample browser forum', 'venue' => 'Sample hall', 'published' => true]],
     ], $publisher);
+
+    // ADR-0022: a challenge taking teams, so the challenge page, its countdown and the register form are checked.
+    app(SaveChallenge::class)->handle(new Challenge, [
+        'translations' => ['en' => ['title' => 'Sample browser hackathon', 'summary' => 'A sample challenge for the browser tests.', 'prizes' => 'Sample first prize
+Sample second prize', 'rules' => 'Sample rule.', 'published' => true]],
+        'registration_opens_at' => CarbonImmutable::now()->subDay()->toDateTimeString(),
+        'registration_closes_at' => CarbonImmutable::now()->addWeek()->toDateTimeString(),
+        'submission_closes_at' => CarbonImmutable::now()->addWeeks(2)->toDateTimeString(),
+        'criteria' => [['labels' => ['en' => 'Sample impact'], 'weight' => 2], ['labels' => ['en' => 'Sample design'], 'weight' => 1]],
+    ], staff(SystemRole::InnovationOfficer, mfa: false));
 
     app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'email' => 'office@example.org', 'phone' => '+251911000000',
         'translations' => ['en' => ['name' => 'Sample browser office', 'published' => true]]], $publisher);

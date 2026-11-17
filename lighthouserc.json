@@ -11,7 +11,10 @@
                 "https://hita.orcamind.dev/en/about/leadership",
                 "https://hita.orcamind.dev/en/services",
                 "https://hita.orcamind.dev/en/status",
-                "https://hita.orcamind.dev/en/support/new"
+                "https://hita.orcamind.dev/en/support/new",
+                "https://hita.orcamind.dev/en/innovation/startups",
+                "https://hita.orcamind.dev/en/innovation/programmes",
+                "https://hita.orcamind.dev/en/innovation/challenges"
             ],
             "numberOfRuns": 3,
             "settings": {

@@ -20,6 +20,8 @@ it('has no serious accessibility issues on the main pages', function () {
         '/en/events', '/en/events/sample-browser-forum', '/en/events/sample-browser-forum/register',
         '/en/about/offices', '/en/about/offices/sample-browser-office', '/en/documents', '/en/search?q=sample',
         '/en/contact', '/en/social', '/en/press', '/en/about/structure', '/en/get-involved', '/om/volunteer', '/om/newsletter',
+        '/en/services', '/en/status', '/en/support/new', '/en/innovation/startups', '/en/innovation/startups/apply', '/en/innovation/programmes',
+        '/en/innovation/challenges', '/en/innovation/challenges/sample-browser-hackathon', '/en/innovation/challenges/sample-browser-hackathon/register', '/en/innovation/teams',
     ];
 
     foreach ($pages as $path) {
