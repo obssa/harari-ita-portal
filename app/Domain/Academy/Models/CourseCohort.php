@@ -6,6 +6,7 @@ use App\Domain\Academy\Enums\CourseMode;
 use App\Domain\Academy\Enums\EnrolmentStatus;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Status\Support\LocalisedText;
+use App\Services\Calendar\EthiopianCalendar;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -148,10 +149,10 @@ class CourseCohort extends Model
         return LocalisedText::pick($this->venue_notes, $locale);
     }
 
-    /** When enrolment stops: the chosen time, otherwise the start of the first day. */
+    /** When enrolment stops: the chosen time, otherwise the start of the first day in Ethiopia. */
     public function enrolClosesAt(): CarbonImmutable
     {
-        return $this->enrol_closes_at ?? $this->starts_on->startOfDay();
+        return $this->enrol_closes_at ?? CarbonImmutable::parse($this->starts_on->toDateString(), EthiopianCalendar::timezone());
     }
 
     public function enrolledCount(): int

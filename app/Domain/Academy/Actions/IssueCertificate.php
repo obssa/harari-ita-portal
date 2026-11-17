@@ -60,9 +60,7 @@ final class IssueCertificate
     /** "Sample Learner" → "S. L." */
     public static function initials(string $name): string
     {
-        // Brackets, dots and other signs are not names: "[Sample] Learner" gives "S. L.", not "[. L.".
-        $words = array_filter(array_map(fn (string $word): string => (string) preg_replace('/[^\p{L}\p{M}]/u', '', $word), preg_split('/\s+/u', $name) ?: []));
-        $letters = mb_str_split(Initials::of(implode(' ', $words)));
+        $letters = mb_str_split(Initials::of($name));
 
         return $letters === [] ? '—' : implode(' ', array_map(fn (string $letter): string => $letter.'.', $letters));
     }

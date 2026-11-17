@@ -9,6 +9,7 @@ use App\Domain\Academy\Models\CourseTranslation;
 use App\Domain\Academy\Models\Enrolment;
 use App\Domain\Academy\Support\AttendanceRule;
 use App\Domain\Organisation\Queries\PublicDirectory;
+use App\Domain\Translation\Support\Locales;
 use App\Http\Controllers\Controller;
 use App\Support\SpamGuard;
 use App\Support\Turnstile;
@@ -34,7 +35,14 @@ final class EnrolmentController extends Controller
             'state' => $record->enrolmentState(),
             'placesLeft' => $record->placesLeft(),
             'turnstileKey' => $turnstile->siteKey(),
-            'alternates' => [],
+            // The same cohort's form in each language the course is published in.
+            'alternates' => collect(Locales::all())->mapWithKeys(function (string $locale) use ($course, $record): array {
+                $shown = $course->translation($locale, fallback: false);
+
+                return [$locale => $shown instanceof CourseTranslation && $shown->isLive()
+                    ? route('enrolments.create', ['locale' => $locale, 'slug' => $shown->slug, 'cohort' => $record->id])
+                    : route('academy.index', ['locale' => $locale])];
+            })->all(),
         ]);
     }
 

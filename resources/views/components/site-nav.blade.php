@@ -82,15 +82,15 @@
 @else
     {{-- Desktops (ADR-0009): each section opens a full-width panel under the header: a night card with the
          hexagon field introduces the section, the links follow numbered. name="site-nav" closes the others. --}}
-    <nav aria-label="{{ __('nav.main') }}">
-        <ul class="flex items-center gap-0.5 text-[0.9375rem] font-medium">
+    <nav aria-label="{{ __('nav.main') }}" {{ $attributes }}>
+        <ul class="flex items-center gap-0.5 text-[0.9375rem] font-medium whitespace-nowrap">
             @foreach ($items as $item)
                 <li>
                     @if ($item['children'] !== [])
                         <details name="site-nav" class="group">
                             <summary @class([
                                 'relative inline-flex cursor-pointer list-none items-center gap-1.5 rounded-control px-3 py-2 transition-colors duration-150 [&::-webkit-details-marker]:hidden',
-                                'after:absolute after:inset-x-3 after:-bottom-[0.95rem] after:h-0.5 after:bg-cyan-500 text-primary-700 dark:text-cyan-300' => $item['active'],
+                                'after:absolute after:inset-x-3 after:-bottom-[5px] after:h-0.5 after:bg-cyan-500 text-primary-700 dark:text-cyan-300' => $item['active'],
                                 'text-ink hover:bg-surface-muted group-open:bg-surface-muted' => ! $item['active'],
                             ])>
                                 {{ $item['label'] }}
@@ -133,7 +133,7 @@
                         <a href="{{ $item['url'] }}" @if ($item['active']) aria-current="page" @endif @if ($item['external']) rel="noopener" @endif
                            @class([
                                'relative inline-block rounded-control px-3 py-2 transition-colors duration-150',
-                               'after:absolute after:inset-x-3 after:-bottom-[0.95rem] after:h-0.5 after:bg-cyan-500 text-primary-700 dark:text-cyan-300' => $item['active'],
+                               'after:absolute after:inset-x-3 after:-bottom-[5px] after:h-0.5 after:bg-cyan-500 text-primary-700 dark:text-cyan-300' => $item['active'],
                                'text-ink hover:bg-surface-muted' => ! $item['active'],
                            ])>{{ $item['label'] }}</a>
                     @endif

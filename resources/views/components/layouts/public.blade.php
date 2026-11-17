@@ -66,8 +66,9 @@
         </div>
     </div>
 
-    {{-- ADR-0009: one row: the emblem and wordmark, the main menu (desktops), search, the call to action and
-         (below desktops) the menu button. The row stays pinned at the top while reading. --}}
+    {{-- ADR-0009: the emblem and wordmark, search, the call to action and (below desktops) the menu button; on
+         desktops the main menu has its own row below, so the eight sections fit in every language (Afaan Oromo's
+         labels are the longest) without wrapping. The header stays pinned at the top while reading. --}}
     <header class="sticky top-0 z-30 border-b border-line bg-surface/85 backdrop-blur-xl supports-[backdrop-filter]:bg-surface/75">
         <div class="mx-auto flex h-16 max-w-page items-center gap-4 px-4 sm:px-6 lg:h-[4.5rem]">
             <a href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif class="flex shrink-0 items-center gap-2.5 rounded-control no-underline">
@@ -75,9 +76,8 @@
                 <img src="/brand/wordmark.webp" alt="" width="387" height="112" class="h-6 w-auto dark:hidden lg:h-7">
                 <img src="/brand/wordmark-dark.webp" alt="" width="387" height="112" class="hidden h-6 w-auto dark:block lg:h-7">
                 <span class="sr-only">{{ __('site.name') }}</span>
-                <span aria-hidden="true" class="hidden max-w-[11rem] border-s border-line ps-3 text-xs leading-tight text-ink-muted 2xl:block">{{ __('site.office') }}</span>
+                <span aria-hidden="true" class="hidden max-w-[11rem] border-s border-line ps-3 text-xs leading-tight text-ink-muted xl:block">{{ __('site.office') }}</span>
             </a>
-            <div class="hidden min-w-0 flex-1 justify-center xl:flex"><x-site-nav /></div>
             <div class="ms-auto flex shrink-0 items-center gap-2">
                 @unless (request()->routeIs('search'))
                 <details name="site-nav" class="group/search">
@@ -103,6 +103,9 @@
                 </a>
                 <div class="xl:hidden"><x-site-nav variant="drawer" /></div>
             </div>
+        </div>
+        <div class="hidden border-t border-line xl:block">
+            <div class="mx-auto flex h-12 max-w-page items-center px-4 sm:px-6"><x-site-nav class="-ms-3" /></div>
         </div>
     </header>
 

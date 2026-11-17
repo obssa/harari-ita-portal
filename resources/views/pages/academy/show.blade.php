@@ -141,8 +141,13 @@
                                     </div>
                                 @elseif ($cohort->acceptsEnrolment())
                                     <div>
-                                        <dt class="font-mono text-[11px] tracking-wider text-night-muted uppercase">{{ __('academy.field.enrol_closes_at') }}</dt>
-                                        <dd class="mt-0.5"><x-date :date="$cohort->enrolClosesAt()" :time="true" /></dd>
+                                        @if ($cohort->enrol_closes_at)
+                                            <dt class="font-mono text-[11px] tracking-wider text-night-muted uppercase">{{ __('academy.field.enrol_closes_at') }}</dt>
+                                            <dd class="mt-0.5"><x-date :date="$cohort->enrol_closes_at" :time="true" /></dd>
+                                        @else
+                                            <dt class="font-mono text-[11px] tracking-wider text-night-muted uppercase">{{ __('academy.cohort.last_day') }}</dt>
+                                            <dd class="mt-0.5"><x-date :date="$cohort->starts_on->subDay()" /></dd>
+                                        @endif
                                     </div>
                                 @endif
                                 @if ($left !== null && $state === CourseCohort::STATE_OPEN)

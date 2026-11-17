@@ -85,6 +85,7 @@
     "academy.certificate.title": "የማጠናቀቂያ የምስክር ወረቀት",
     "academy.certificate.verify_at": "ኮዱን ይቃኙ ወይም በ:url ያረጋግጡ",
     "academy.cohort.dates": "ቀናት",
+    "academy.cohort.last_day": "ለመመዝገብ የመጨረሻው ቀን",
     "academy.cohort.none": "እስካሁን የታቀደ ዙር የለም። በቅርቡ ይመለሱ።",
     "academy.cohort.past": "{1} :count ዙር ቀደም ብሎ ተካሂዷል|[2,*] :count ዙሮች ቀደም ብለው ተካሂደዋል",
     "academy.cohort.places_left": "{0} ምንም ቦታ አልቀረም|{1} :count ቦታ ቀርቷል|[2,*] :count ቦታዎች ቀርተዋል",

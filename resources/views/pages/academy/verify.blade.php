@@ -1,7 +1,7 @@
 @php
     $calendar = app(\App\Services\Calendar\EthiopianCalendar::class);
 @endphp
-<x-layouts.public :title="__('academy.verify.title')" :description="__('academy.verify.lead')" :alternates="[]">
+<x-layouts.public :title="__('academy.verify.title')" :description="__('academy.verify.lead')">
     {{-- ADR-0030: check a certificate by its code (or the QR code, which opens this page with the code): valid, revoked
          or not found. A valid certificate shows the holder's initials only. --}}
     <x-page-hero :title="__('academy.verify.title')" :lead="__('academy.verify.lead')" :kicker="__('academy.title')" tone="night"

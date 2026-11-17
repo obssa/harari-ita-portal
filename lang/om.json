@@ -85,6 +85,7 @@
     "academy.certificate.title": "Waraqaa ragaa xumuraa",
     "academy.certificate.verify_at": "Koodicha iskaanii godhaa ykn :url irratti mirkaneessaa",
     "academy.cohort.dates": "Guyyoota",
+    "academy.cohort.last_day": "Guyyaa galmee isa dhumaa",
     "academy.cohort.none": "Hanga ammaatti marsaan karoorfame hin jiru. Dhiyootti deebi'aa ilaalaa.",
     "academy.cohort.past": "{1} Marsaan :count duraan geggeeffameera|[2,*] Marsaawwan :count duraan geggeeffamaniiru",
     "academy.cohort.places_left": "{0} Bakki hafe hin jiru|{1} Bakki :count hafeera|[2,*] Bakki :count hafeera",

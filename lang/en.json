@@ -85,6 +85,7 @@
     "academy.certificate.title": "Certificate of completion",
     "academy.certificate.verify_at": "Scan the code or check it at :url",
     "academy.cohort.dates": "Dates",
+    "academy.cohort.last_day": "Last day to enrol",
     "academy.cohort.none": "No cohort is planned yet. Check back soon.",
     "academy.cohort.past": "{1} :count cohort has already run|[2,*] :count cohorts have already run",
     "academy.cohort.places_left": "{0} No places left|{1} :count place left|[2,*] :count places left",

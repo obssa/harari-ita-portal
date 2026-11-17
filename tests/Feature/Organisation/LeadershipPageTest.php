@@ -38,6 +38,7 @@ it('draws initials without honorifics for people without a photo', function () {
         ->and(Initials::of('H.E Sample Person Name'))->toBe('SP')
         ->and(Initials::of('ክቡር አቶ ናሙና ሰው ስም'))->toBe('ናሰ')
         ->and(Initials::of('Kabajamoo Obbo Fakkii Namaa Maqaa'))->toBe('FN')
+        ->and(Initials::of('[Sample] Learner'))->toBe('SL')
         ->and(Initials::of('Obbo Fakkii Namaa'))->toBe('FN')
         ->and(Initials::of('Sample'))->toBe('S');
 });
