@@ -78,13 +78,13 @@ Phase 6 adds one domain, `App\Domain\Opportunities`, and one post type, the advi
 
 | # | Step | Commit |
 |---|---|---|
-| 6.0 | **Plan**: this file | |
-| 6.1 | **Opportunities model and admin**: types, documents, the addenda log, states, policies, the Opportunities navigation group | |
-| 6.2 | **Public opportunities**: list with archive, detail with the log, countdown, `.ics`, RSS, JSON-LD; `/notices` redirect; auto-archive command | |
-| 6.3 | **Advisories**: the post type, severity and fields, `/advisories` with RSS, the INSA box | |
-| 6.4 | **Campaigns**: drafting a campaign from an advisory or an opportunity; the "advisories" topic | |
-| 6.5 | **Home, menu, footer, search, sitemap, API** | |
-| 6.6 | **Gate**: the §13 acceptance on staging with labelled samples (`portal:sample-opportunities`); axe and Lighthouse; manual chapter; report | |
+| 6.0 | **Plan**: this file | `3ad97a4` |
+| 6.1 | **Opportunities model and admin**: types, documents, the addenda log, states, policies, the Opportunities navigation group | `2af1dbd` |
+| 6.2 | **Public opportunities**: list with archive, detail with the log, countdown, `.ics`, RSS, JSON-LD; `/notices` redirect; auto-archive command | `2af1dbd` |
+| 6.3 | **Advisories**: the post type, severity and fields, `/advisories` with RSS, the INSA box | `2af1dbd` |
+| 6.4 | **Campaigns**: drafting a campaign from an advisory or an opportunity; the "advisories" topic | `2af1dbd` |
+| 6.5 | **Home, menu, footer, search, sitemap, API** | `2af1dbd` |
+| 6.6 | **Gate**: the §13 acceptance on staging with labelled samples (`portal:sample-opportunities`); axe and Lighthouse; manual chapter; report | `6b4d857`, `cef7f52`, this report |
 
 Each step ends with lint clean, `lang:missing` 0 for am and om, the hard-coded strings check, the affected tests
 green, CI green, deployed to staging and checked there.
@@ -109,3 +109,61 @@ green, CI green, deployed to staging and checked there.
 2. **Vacancies:** whether they are published here (or only through the regional civil service), and the wording of eligibility.
 3. **Following a tender:** should bidders be able to follow a tender and receive its addenda by email or text? That collects contact details, so it needs consent and a retention period. It is not in this phase.
 4. **Reporting incidents:** the address to send cyber incidents to. The INSA site is linked; the Agency to confirm (and whether Ethio-CERT's address is preferred).
+
+## Report (2026-11-17)
+
+**Acceptance (PLAN.md §13: a tender with an addendum and auto-archive; an advisory published and sent as a
+campaign).** Checked on staging (https://hita.orcamind.dev) with the labelled samples of
+`portal:sample-opportunities`, in English, Amharic and Afaan Oromo:
+
+1. **A tender with an addendum.** "[Sample] Supply of network equipment for regional offices" (SAMPLE/T/001) shows
+   its log newest first: Extension 3 (a week later, with the deadline it replaced), Clarification 2 (question and
+   answer) and Addendum 1, each numbered and dated in both calendars; a notice that the deadline was extended with
+   the first deadline; the countdown, the bid opening and a calendar file with both dates. Tests cover the rest:
+   entries are never deleted, a correction is dated, the deadline is locked once the log has entries, a cancellation
+   closes it and takes no further entries.
+2. **Auto-archive.** A sample tender set to close at 20:12 (UTC) showed in "Closed and cancelled" a minute later
+   (the state comes from the dates), and the scheduled `opportunities:archive` marked it archived at 20:20:57,
+   which purged the edge cache. The closed sample internship sits in the archive with its outcome.
+3. **An advisory published.** "[Sample] Phishing messages pretending to be the Agency" (Warning) is at
+   `/advisories` in three languages, with the affected systems, the steps in order, the details and the box that
+   sends incidents to INSA and Agency IT problems to the support form; its `/news/...` address redirects there.
+4. **Sent as a campaign.** "Draft an email campaign" made a draft from the advisory's three languages for
+   subscribers of the new "Safety advisories" topic (staging draft #2, not sent, as staging has no real
+   subscribers). A test sends a drafted campaign: it reaches the advisories subscriber and not the news one.
+
+**Checks.**
+
+- Tests: 11 new tests (opportunities, the log, the archive, pages, API, admin, samples; advisories, their pages
+  and campaigns) and the 602 tests of the suites the shared changes touch pass locally; the full suite and the
+  browser test (which now also covers the opportunities and advisories pages) pass in CI. Larastan and Pint clean;
+  `lang:missing` complete for am and om; the hard-coded strings check passes.
+- Accessibility: axe on staging (light and dark) found no serious or critical issue on the opportunities list in
+  English and Amharic, a tender, a vacancy, the advisories list in English and Afaan Oromo, and an advisory.
+- Lighthouse (mobile, representative runs): the opportunities list scores performance 98, a tender and an advisory 97, accessibility 100 and best practices 96 on all three; the English homepage 96 and the Amharic 94. All 26 audited pages pass.
+- Visual check on staging screenshots (`06-screens/`): after an extension the bid opening stayed on the first
+  deadline, before the new one; an extension now moves the bid opening by as much, and a bid opening before the
+  deadline is refused. On phones the deadline box came after the whole log; it now comes first. A tender closing
+  within the hour said "1 hour left"; it now says "Closes within the hour".
+- CI: `npm audit` began failing on a new advisory in `picomatch` (GHSA-fc5q-39xc-vjpf), a build-time dependency of
+  Vite with no fixed release. With the owner's approval CI accepts that one advisory, with a reason and a review
+  date, and still fails on any other high or critical one (ADR-0036).
+
+**Changed from the plan** (recorded in ADR-0032..0036).
+
+- Opportunities sit in the "Get involved" menu section, not a section of their own, so the desktop menu still fits
+  in every language.
+- The bid opening moves with an extension.
+- The `/notices` page is gone; it redirects to `/opportunities`, and its unused strings were removed.
+
+**Staging content.** The `[Sample]` opportunities, the sample advisory and campaign draft stay until real content
+arrives; `php artisan portal:sample-opportunities --remove` deletes them.
+
+**Open questions for the Agency** (also above): the procurement notices (reference format, documents, how bids are
+submitted, award notices); whether vacancies are published here; whether bidders may follow a tender by email or
+text; the address for reporting cyber incidents.
+
+**Deferred.** Following a tender by email or text (needs consent and retention); the dashboard widget for this
+week's deadlines (phase 7); the Amharic manual chapters 8 to 12.
+
+**Next.** Phase 7: the dashboard and reports.
