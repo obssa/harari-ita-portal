@@ -63,7 +63,7 @@
                 <div>
                     <p class="font-mono text-[1cqw] uppercase tracking-[0.2em] text-night-600">{{ __('academy.certificate.code', [], $locale) }}</p>
                     <p class="mt-[0.3cqw] font-mono text-[1.4cqw] font-semibold">{{ $certificate->code }}</p>
-                    <p class="mt-[0.3cqw] max-w-[18cqw] text-[0.95cqw] leading-snug text-night-600">{{ __('academy.certificate.verify_at', ['url' => preg_replace('#^https?://#', '', route('certificates.verify', ['locale' => $locale]))], $locale) }}</p>
+                    <p class="mt-[0.3cqw] ms-auto max-w-[17cqw] text-[0.95cqw] leading-snug text-night-600 [overflow-wrap:anywhere]">{{ __('academy.certificate.verify_at', ['url' => preg_replace('#^https?://#', '', route('certificates.verify', ['locale' => $locale]))], $locale) }}</p>
                 </div>
                 <img src="{{ \App\Support\QrCode::dataUri($verifyUrl) }}" alt="{{ __('academy.certificate.qr_alt', [], $locale) }}" width="160" height="160" class="size-[9cqw] shrink-0">
             </div>

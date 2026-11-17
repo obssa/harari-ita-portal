@@ -16,6 +16,7 @@ use App\Domain\Academy\Models\Instructor;
 use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Organisation\Models\Pillar;
 use App\Models\User;
+use App\Services\Calendar\EthiopianCalendar;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -55,6 +56,8 @@ final class SampleAcademyCommand extends Command
 
         $actor = User::role(SystemRole::SuperAdmin->value)->firstOrFail();
         $today = CarbonImmutable::today();
+        // Session times in Ethiopia, stored in UTC.
+        $at = fn (CarbonImmutable $day, string $time): string => CarbonImmutable::parse($day->toDateString().' '.$time, EthiopianCalendar::timezone())->utc()->toDateTimeString();
 
         $instructor = app(SaveInstructor::class)->handle(new Instructor, [
             'name' => self::MARK.' Instructor',
@@ -107,8 +110,8 @@ final class SampleAcademyCommand extends Command
             'enrol_opens_at' => $today->subDay()->toDateTimeString(), 'capacity' => 25, 'waitlist' => true,
             'instructors' => [$instructor->id],
             'sessions' => array_map(fn (int $day): array => [
-                'starts_at' => $starts->addDays($day)->setTime(9, 0)->toDateTimeString(),
-                'ends_at' => $starts->addDays($day)->setTime(13, 30)->toDateTimeString(),
+                'starts_at' => $at($starts->addDays($day), '09:00'),
+                'ends_at' => $at($starts->addDays($day), '13:30'),
             ], [0, 3, 7, 10]),
         ], $actor);
 
@@ -120,8 +123,8 @@ final class SampleAcademyCommand extends Command
             'enrol_opens_at' => $ran->subMonth()->toDateTimeString(),
             'instructors' => [$instructor->id],
             'sessions' => array_map(fn (int $day): array => [
-                'starts_at' => $ran->addDays($day)->setTime(9, 0)->toDateTimeString(),
-                'ends_at' => $ran->addDays($day)->setTime(13, 30)->toDateTimeString(),
+                'starts_at' => $at($ran->addDays($day), '09:00'),
+                'ends_at' => $at($ran->addDays($day), '13:30'),
             ], [0, 2, 4]),
         ], $actor);
 

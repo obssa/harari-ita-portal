@@ -18,6 +18,7 @@ use App\Filament\Resources\CourseCohorts\RelationManagers\EnrolmentsRelationMana
 use App\Filament\Resources\CourseCohorts\RelationManagers\SessionsRelationManager;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Services\Calendar\EthiopianCalendar;
 use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -104,8 +105,8 @@ class CourseCohortResource extends Resource
                     Repeater::make('sessions')->hiddenLabel()->schema([
                         Hidden::make('id'),
                         Grid::make(2)->schema([
-                            DateTimePicker::make('starts_at')->label(__('academy.field.session_starts'))->seconds(false)->required(),
-                            DateTimePicker::make('ends_at')->label(__('academy.field.session_ends'))->seconds(false)->required()->after('starts_at'),
+                            DateTimePicker::make('starts_at')->label(__('academy.field.session_starts'))->seconds(false)->timezone(EthiopianCalendar::timezone())->required(),
+                            DateTimePicker::make('ends_at')->label(__('academy.field.session_ends'))->seconds(false)->timezone(EthiopianCalendar::timezone())->required()->after('starts_at'),
                         ]),
                         Grid::make(2)->schema(array_map(
                             fn (string $locale): TextInput => TextInput::make("titles.{$locale}")->label(__('academy.field.session_title').' · '.Locales::nativeName($locale))->maxLength(160),
@@ -119,8 +120,8 @@ class CourseCohortResource extends Resource
             ]),
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 1])->schema([
                 Section::make(__('academy.admin.enrolment'))->schema([
-                    DateTimePicker::make('enrol_opens_at')->label(__('academy.field.enrol_opens_at'))->seconds(false)->helperText(__('academy.admin.help.enrol_opens_at')),
-                    DateTimePicker::make('enrol_closes_at')->label(__('academy.field.enrol_closes_at'))->seconds(false)->after('enrol_opens_at')
+                    DateTimePicker::make('enrol_opens_at')->label(__('academy.field.enrol_opens_at'))->seconds(false)->timezone(EthiopianCalendar::timezone())->helperText(__('academy.admin.help.enrol_opens_at')),
+                    DateTimePicker::make('enrol_closes_at')->label(__('academy.field.enrol_closes_at'))->seconds(false)->timezone(EthiopianCalendar::timezone())->after('enrol_opens_at')
                         ->helperText(__('academy.admin.help.enrol_closes_at')),
                     TextInput::make('capacity')->label(__('academy.field.capacity'))->numeric()->minValue(1)->maxValue(10000)->helperText(__('academy.admin.help.capacity')),
                     Toggle::make('waitlist')->label(__('academy.field.waitlist'))->default(true),
