@@ -19,6 +19,8 @@ All notable changes to the Agency's portal. Newest first.
   (`/api/v1/opportunities`).
 - `portal:sample-opportunities` adds and removes labelled sample opportunities and an advisory.
 - Manual: chapter 12, opportunities and advisories.
+- CI accepts one build-time npm advisory with no fixed release (picomatch, GHSA-fc5q-39xc-vjpf) and still fails on
+  any other high or critical one (ADR-0036).
 - The dates of ADR-0020..0031 and the phase 3 to 5 reports were written ahead of the calendar; they now carry the
   day the work was done (2026-11-17).
 

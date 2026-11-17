@@ -683,3 +683,21 @@ A public record of what bidders were told, which cannot be quietly changed, is t
 
 **Why.** PLAN.md §5 ("can also go out as a newsletter campaign") and §13 (phase 6: an advisory published and sent
 as a campaign). A draft keeps a person between publishing and sending.
+
+## ADR-0036 — Accepted npm advisories in CI (2026-11-17)
+
+**Decision.**
+
+- CI's asset job runs `scripts/npm-audit.py` instead of `npm audit --audit-level=high`. It fails on every high or
+  critical advisory except those listed in `scripts/npm-audit-accepted.json`, each with the reason, the date it was
+  accepted and a review date. An accepted advisory that npm no longer reports, or one past its review date, is
+  printed so the entry is removed or looked at again.
+- The weekly security audit (ADR-0038 of the fork) keeps running the plain `npm audit`, so accepted advisories stay
+  visible every Monday.
+- First entry, accepted by the owner on 2026-11-17: GHSA-fc5q-39xc-vjpf, a ReDoS in `picomatch`. It is used only at
+  build time by Vite, its plugins and tinyglobby, on patterns the project writes; nothing of it reaches the server
+  or the browser. Every version is listed as affected (4.0.7, the newest, included), so there was no release to
+  move to and every deploy was blocked. Review by 2026-12-15.
+
+**Why.** A new advisory with no fixed release should not stop every deploy, but the gate must stay closed for
+anything else; a named list with reasons and dates keeps the exception small and visible.

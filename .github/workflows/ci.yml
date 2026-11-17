@@ -137,7 +137,9 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm audit --audit-level=high
+      # ADR-0036: high and critical advisories fail the build, except the few accepted with a reason and a review date.
+      - name: npm security audit
+        run: python3 scripts/npm-audit.py
       - run: npm run build
       - name: Enforce the asset budget (JS < 80 KB gz, CSS < 60 KB gz)
         run: |
