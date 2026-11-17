@@ -7,7 +7,7 @@
     $latest = $kpi->readings->last();
     $progress = $latest !== null ? $kpi->progress((float) $latest->value) : null;
     $met = $latest !== null && ($kpi->higher_is_better ? (float) $latest->value >= (float) $kpi->target : (float) $latest->value <= (float) $kpi->target);
-    $points = $kpi->readings->map(fn ($r): array => ['label' => $calendar->format($r->as_of), 'value' => (float) $r->value])->all();
+    $points = $kpi->readings->map(fn ($r): array => ['label' => $calendar->format($r->as_of), 'short' => $r->as_of->format('Y-m'), 'value' => (float) $r->value])->all();
 @endphp
 <article {{ $attributes->class('flex flex-col rounded-card border border-line bg-surface p-5') }}>
     <h3 class="font-semibold leading-snug">{{ $kpi->name() }}</h3>

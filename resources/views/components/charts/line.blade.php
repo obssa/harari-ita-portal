@@ -1,7 +1,8 @@
 @props(['points', 'title', 'unit' => null, 'target' => null, 'id'])
 @php
     // DESIGN.md §5: a server-drawn SVG line with its numbers in a table; no chart library. Points are
-    // [['label' => string, 'value' => float], ...] in time order. A target, when given, is a dashed line.
+    // [['label' => string, 'value' => float, 'short' => ?string], ...] in time order; the axis uses the short label,
+    // the table the full one (both calendars). A target, when given, is a dashed line.
     $points = array_values($points);
     $values = array_map(fn (array $p): float => (float) $p['value'], $points);
     $all = $target !== null ? [...$values, (float) $target] : $values;
@@ -28,9 +29,9 @@
         @foreach ($values as $i => $value)
             <circle cx="{{ round($x($i), 1) }}" cy="{{ round($y($value), 1) }}" r="3.5" class="fill-surface stroke-cyan-600 dark:stroke-cyan-400" stroke-width="2" />
         @endforeach
-        <text x="{{ $left }}" y="{{ $h - 3 }}" class="fill-ink-muted font-mono text-[9px]">{{ $points[0]['label'] }}</text>
+        <text x="{{ $left }}" y="{{ $h - 3 }}" class="fill-ink-muted font-mono text-[9px]">{{ $points[0]['short'] ?? $points[0]['label'] }}</text>
         @if (count($points) > 1)
-            <text x="{{ $w - $right }}" y="{{ $h - 3 }}" text-anchor="end" class="fill-ink-muted font-mono text-[9px]">{{ $points[count($points) - 1]['label'] }}</text>
+            <text x="{{ $w - $right }}" y="{{ $h - 3 }}" text-anchor="end" class="fill-ink-muted font-mono text-[9px]">{{ $points[count($points) - 1]['short'] ?? $points[count($points) - 1]['label'] }}</text>
         @endif
     </svg>
     <details class="mt-2">

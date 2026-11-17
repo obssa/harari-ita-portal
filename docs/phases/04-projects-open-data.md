@@ -63,13 +63,13 @@ dates, budget with a "may be published" switch, progress, a map pin, cover and g
 | 4.0 | **Plan**: this file; drop the sample service (the Proposed services cover office email) | `9e76268` |
 | 4.1 | **Projects, model and admin**: pillar, RAG and reason, spend; milestones; KPIs and readings; risks; relation managers; scoping by directorate | `a9838b7` |
 | 4.2 | **Projects, public**: portfolio filters (pillar, RAG), locations view, the detail page (RAG badge, milestones timeline, KPIs against targets with chart and table, budget against spend when allowed), JSON-LD | `a9838b7` |
-| 4.3 | **Open data, model and admin**: datasets, distributions with hardened uploads, the preview and file facts, freshness, licences and frequencies, Data Steward permissions | |
-| 4.4 | **Open data, public**: catalogue with filters and search, dataset page with preview, counted downloads, schema.org `Dataset` | |
-| 4.5 | **DCAT-AP and the API**: the catalogue and per-dataset JSON-LD, `/api/v1/datasets`, the `datasets` scope, the OpenAPI document | |
-| 4.6 | **Developers page** | |
-| 4.7 | **Digital Harar in numbers**: live figures, statistics linked to datasets, server-drawn charts with tables; `/achievements` redirects | |
-| 4.8 | **Home, menu, search, sitemap**: open-data highlight, projects' locations, menu links, site search and sitemap entries, cache purge | |
-| 4.9 | **Gate**: the §13 acceptance on staging with labelled samples (`portal:sample-projects-data`); axe and Lighthouse; manual chapter; report | |
+| 4.3 | **Open data, model and admin**: datasets, distributions with hardened uploads, the preview and file facts, freshness, licences and frequencies, Data Steward permissions | `e227dc4` |
+| 4.4 | **Open data, public**: catalogue with filters and search, dataset page with preview, counted downloads, schema.org `Dataset` | `e227dc4` |
+| 4.5 | **DCAT-AP and the API**: the catalogue and per-dataset JSON-LD, `/api/v1/datasets`, the `datasets` scope, the OpenAPI document | `e227dc4` |
+| 4.6 | **Developers page** | `e227dc4` |
+| 4.7 | **Digital Harar in numbers**: live figures, statistics linked to datasets, server-drawn charts with tables; `/achievements` redirects | `e227dc4` |
+| 4.8 | **Home, menu, search, sitemap**: open-data highlight, projects' locations, menu links, site search and sitemap entries, cache purge | `e227dc4` |
+| 4.9 | **Gate**: the §13 acceptance on staging with labelled samples (`portal:sample-projects-data`); axe and Lighthouse; manual chapter; report | `7f2c9ce`, this report |
 
 Each step ends with lint clean, `lang:missing` 0 for am and om, the hard-coded strings check, the affected tests
 green, CI green, deployed to staging and checked there.
@@ -100,6 +100,54 @@ green, CI green, deployed to staging and checked there.
 3. Whether the Agency wants its catalogue harvested by a national portal, and which one.
 4. Who may hold an API key (the default: anyone who asks through the contact form, approved by an Admin).
 
-## Report
+## Report (2026-11-19)
 
-Written at the end of the phase.
+**Acceptance (PLAN.md §13).** Checked on staging (https://hita.orcamind.dev) with the labelled samples of
+`portal:sample-projects-data`, in English, Amharic and Afaan Oromo:
+
+1. **A project with milestones and KPIs.** "[Sample] Public Wi-Fi pilot" shows its status and "At risk", progress,
+   three milestones ("1 of 3 done", one marked Overdue in words), and an indicator with three readings: the
+   latest against the target, 45% of the way from the baseline, and a line chart with its numbers table. Its
+   staff-only risk and RAG reason appear nowhere on the page, the API or search (tests check each). The projects
+   page plots it on the locations view.
+2. **A dataset with preview, API and DCAT-AP.** "[Sample] Public Wi-Fi sessions by month" has a CSV file whose
+   size, checksum, rows and columns were worked out on upload, a five-row preview, the licence (CC BY 4.0),
+   frequency, last and next update, and "how to cite". The download counts without storing who downloaded.
+   `/data/catalog.jsonld` lists it as a `dcat:Dataset` with EU frequency and file-type terms; `/api/v1/datasets`
+   returns it to a key with the `datasets` scope; the developers page lists the address.
+3. **The numbers page from live data.** `/numbers` counts projects, services online, support requests resolved,
+   startups, datasets and downloads from the portal's records, charts projects by status, and shows the sample
+   statistic with its source, date and a link to its source dataset. `/achievements` answers 301 to `/numbers`.
+
+**Checks.**
+
+- Tests: the affected suites pass locally (275 tests in the last run) and the full suite passes in CI; Larastan and
+  Pint clean; `lang:missing` complete for am and om (3,483 strings); the hard-coded strings check passes.
+- Accessibility: axe on staging (light and dark) found two faults, both fixed in `7f2c9ce`: a code block that
+  scrolled sideways could not be reached by keyboard (the dataset citation), and the night countdown took its
+  figure colour from the page (seen on the styleguide). CI's browser test now also covers the projects page, a
+  project, open data, a dataset, `/numbers` and `/developers`, and passes.
+- Lighthouse (mobile, representative runs): the six new pages score performance 98–99, accessibility 100, best
+  practices 96. The English homepage's representative run scored 82 because of one 430 ms blocking spike on the
+  CI runner; its other two runs scored 94 and 96 with no blocking time. To watch on the next runs.
+- Visual check on staging screenshots (`04-screens/`): the indicator chart's axis dates overlapped, and the
+  citation ran off the card; both fixed after `7f2c9ce` (short axis dates; the citation wraps).
+
+**Changed from the plan** (recorded in ADR-0024..0027).
+
+- No separate "public" flag on projects: each language's publication already decides it.
+- The projects' locations are on the projects page, not the homepage, which gains the open-data section instead.
+- The dataset API needs a key like the rest of the API; the files and the DCAT-AP catalogue do not.
+- `/numbers` replaces the achievements page rather than standing beside it.
+
+**Staging content.** The `[Sample]` project, dataset (with its CSV in the media library) and statistic stay until
+real content arrives; `php artisan portal:sample-projects-data --remove` deletes them. Staging has no pillars yet,
+so the "projects by pillar" chart is hidden (it appears once pillars exist).
+
+**Open questions for the Agency** (also above): which datasets, by whom and under which licence; whether budgets
+and spend may be shown; harvesting by a national portal; who may hold an API key.
+
+**Deferred.** The Amharic version of manual chapter 10 (with chapters 8 and 9) after the Agency reviews the
+English; dataset versions (a replaced file keeps no history yet).
+
+**Next.** Phase 5: the digital skills academy.

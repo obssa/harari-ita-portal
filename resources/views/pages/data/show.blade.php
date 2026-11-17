@@ -108,7 +108,7 @@
 
                 <section aria-labelledby="data-cite" class="mt-12">
                     <h2 id="data-cite" class="heading-3">{{ __('opendata.cite') }}</h2>
-                    <x-ui.code class="mt-3" :label="__('opendata.cite_label')">{{ __('opendata.cite_text', ['publisher' => $publisher, 'title' => $translation->title, 'year' => ($dataset->data_updated_on ?? $dataset->created_at)?->year, 'url' => route('datasets.show', ['slug' => $translation->slug])]) }}</x-ui.code>
+                    <x-ui.code class="mt-3" :label="__('opendata.cite_label')" :wrap="true">{{ __('opendata.cite_text', ['publisher' => $publisher, 'title' => $translation->title, 'year' => ($dataset->data_updated_on ?? $dataset->created_at)?->year, 'url' => route('datasets.show', ['slug' => $translation->slug])]) }}</x-ui.code>
                 </section>
             </div>
 
