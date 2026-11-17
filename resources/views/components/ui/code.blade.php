@@ -9,5 +9,6 @@
             <span class="ms-2">{{ $label }}</span>
         </figcaption>
     @endif
-    <pre class="overflow-x-auto p-4 font-mono text-sm leading-relaxed"><code>{{ $slot }}</code></pre>
+    {{-- Focusable so a long line can be scrolled with the keyboard (WCAG 2.1.1). --}}
+    <pre tabindex="0" @if ($label) aria-label="{{ $label }}" @endif class="overflow-x-auto p-4 font-mono text-sm leading-relaxed focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"><code>{{ $slot }}</code></pre>
 </figure>

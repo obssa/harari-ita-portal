@@ -13,7 +13,7 @@
         @foreach ($parts as $unit => $value)
             <div @class(['flex flex-col-reverse rounded-control px-2 py-3 text-center', 'bg-night-950/60 ring-1 ring-night-line' => $night, 'border border-line bg-surface' => ! $night])>
                 <dt @class(['mt-1 font-mono text-[11px] tracking-wider uppercase', 'text-night-muted' => $night, 'text-ink-muted' => ! $night])>{{ __("innovation.countdown.{$unit}") }}</dt>
-                <dd class="font-display text-3xl font-bold tracking-tight tabular-nums" data-part="{{ $unit }}">{{ sprintf('%02d', $value) }}</dd>
+                <dd @class(['font-display text-3xl font-bold tracking-tight tabular-nums', 'text-night-ink' => $night, 'text-ink' => ! $night]) data-part="{{ $unit }}">{{ sprintf('%02d', $value) }}</dd>
             </div>
         @endforeach
     </dl>

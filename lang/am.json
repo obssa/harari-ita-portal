@@ -2748,7 +2748,7 @@
     "projects.kpis": "አመልካቾች",
     "projects.kpis_lead": "ፕሮጀክቱ የሚለካው፣ ግቡ፣ እና የቅርብ ጊዜ ልኬቱ ከቀኑ ጋር።",
     "projects.locations": "ፕሮጀክቶቹ የሚገኙበት",
-    "projects.locations_alt": "የካርታ ቦታ ያላቸው :count ፕሮጀክቶች",
+    "projects.locations_alt": "{1} የካርታ ቦታ ያለው :count ፕሮጀክት|[2,*] የካርታ ቦታ ያላቸው :count ፕሮጀክቶች",
     "projects.locations_kicker": "ካርታ",
     "projects.locations_lead": "የካርታ ቦታ ያለው እያንዳንዱ ፕሮጀክት፣ በሂደት ላይ እያለ እንዴት እንደሚሄድ በቀለም ተለይቶ።",
     "projects.locations_note": "ቦታዎቹ ግምታዊ ናቸው። ፕሮጀክቱን ለመክፈት ምልክቱን ይምረጡ።",

@@ -21,7 +21,7 @@
 @endphp
 <figure {{ $attributes->class('overflow-hidden rounded-card border border-night-line bg-night-950 text-night-ink') }}>
     <svg viewBox="0 0 {{ $w }} {{ $h }}" class="block h-auto w-full" aria-labelledby="locations-title">
-        <title id="locations-title">{{ __('projects.locations_alt', ['count' => count($pins)]) }}</title>
+        <title id="locations-title">{{ trans_choice('projects.locations_alt', count($pins), ['count' => count($pins)]) }}</title>
         <defs>
             <pattern id="locations-grid" width="32" height="32" patternUnits="userSpaceOnUse">
                 <path d="M32 0H0v32" fill="none" stroke="currentColor" stroke-width="1" class="text-night-line" />

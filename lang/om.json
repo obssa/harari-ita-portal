@@ -2748,7 +2748,7 @@
     "projects.kpis": "Agarsiistota",
     "projects.kpis_lead": "Wanta pirojektichi safaru, galma isaa, fi safara dhiyoo guyyaa isaa waliin.",
     "projects.locations": "Bakka pirojektoonni argaman",
-    "projects.locations_alt": "Pirojektoota bakka kaartaa qaban :count",
+    "projects.locations_alt": "{1} Pirojektii bakka kaartaa qabu :count|[2,*] Pirojektoota bakka kaartaa qaban :count",
     "projects.locations_kicker": "Kaartaa",
     "projects.locations_lead": "Pirojektii bakka kaartaa qabu hunda, yeroo hojii irra jiru akkaataa itti deemaa jiruun halluudhaan adda baafame.",
     "projects.locations_note": "Bakkeewwan tilmaamaan. Pirojektii banuuf mallattoo filadhaa.",

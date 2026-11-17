@@ -2748,7 +2748,7 @@
     "projects.kpis": "Indicators",
     "projects.kpis_lead": "What the project measures, its target, and the latest reading with its date.",
     "projects.locations": "Where the projects are",
-    "projects.locations_alt": ":count projects with a map location",
+    "projects.locations_alt": "{1} :count project with a map location|[2,*] :count projects with a map location",
     "projects.locations_kicker": "Map",
     "projects.locations_lead": "Every project with a map location, coloured by how it is going while it runs.",
     "projects.locations_note": "Positions are approximate. Select a pin to open the project.",
