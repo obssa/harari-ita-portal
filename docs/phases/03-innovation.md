@@ -41,7 +41,7 @@ roles (ADR-0004).
 | 3.4 | **Applications**: the multi-step form, stages and rubric scoring in the admin (board by stage), notifications, tracking, purge and privacy hooks |`7f2ef8f` |
 | 3.5 | **Challenges**: model and admin; public challenge page with phases and countdown; team registration and submission | this commit |
 | 3.6 | **Judging**: panels, assignment, conflict-of-interest declarations, scoring screen for judges, ranking, results publication | this commit |
-| 3.7 | **Home, menu and figures**: Innovation menu section, next open call on the homepage, live figures; innovation stories | |
+| 3.7 | **Home, menu and figures**: Innovation menu section, next open call on the homepage, live figures; innovation stories | this commit |
 | 3.8 | **Gate**: the PLAN.md §13 acceptance on staging with labelled samples; axe and Lighthouse; manual chapter; report | |
 
 Each step ends with lint clean, `lang:missing` 0 for am and om, the hard-coded strings check, the affected tests

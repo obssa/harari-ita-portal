@@ -4,10 +4,14 @@ use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Innovation\Actions\ChallengeEntry;
 use App\Domain\Innovation\Actions\JudgeChallenge;
 use App\Domain\Innovation\Actions\SaveChallenge;
+use App\Domain\Innovation\Actions\SaveProgramme;
 use App\Domain\Innovation\Mail\TeamRegisteredMail;
 use App\Domain\Innovation\Models\Challenge;
 use App\Domain\Innovation\Models\ChallengeTeam;
 use App\Domain\Innovation\Models\JudgeAssignment;
+use App\Domain\Innovation\Models\Programme;
+use App\Domain\Innovation\Models\Startup;
+use App\Domain\Innovation\Queries\OpenCalls;
 use App\Domain\Privacy\Actions\ErasePersonalData;
 use App\Domain\Privacy\Support\PersonalDataSearch;
 use App\Filament\Resources\Challenges\Pages\CreateChallenge;
@@ -248,4 +252,50 @@ it('finds, exports and erases a team contact, and the purge clears old teams', f
     $this->travelTo(CarbonImmutable::now()->addDays(800));
     $this->artisan('innovation:purge')->assertSuccessful();
     expect($old->refresh()->contact_email)->toBeNull()->and($old->members)->toBeNull()->and($old->name)->toBe('Sample Team Beta');
+});
+
+it('puts the nearest open call on the homepage with a countdown, and the next one when none is open', function () {
+    $officer = staff(SystemRole::InnovationOfficer);
+    $later = sampleChallenge([
+        'translations' => ['en' => ['title' => 'Sample later challenge', 'published' => true]],
+        'registration_opens_at' => CarbonImmutable::now()->addWeek()->toDateTimeString(),
+        'registration_closes_at' => CarbonImmutable::now()->addWeeks(2)->toDateTimeString(),
+        'submission_closes_at' => CarbonImmutable::now()->addWeeks(3)->toDateTimeString(),
+    ]);
+
+    expect(OpenCalls::for('en'))->toHaveCount(1)
+        ->and(OpenCalls::for('en')[0])->toMatchArray(['kind' => 'challenge', 'title' => 'Sample later challenge', 'open' => false]);
+
+    sampleChallenge();
+    app(SaveProgramme::class)->handle(new Programme, [
+        'kind' => 'incubation',
+        'translations' => ['en' => ['title' => 'Sample incubation call', 'published' => true]],
+        'cohorts' => [['name' => 'Sample cohort', 'opens_at' => CarbonImmutable::now()->subDay()->toDateTimeString(), 'closes_at' => CarbonImmutable::now()->addHours(12)->toDateTimeString()]],
+    ], $officer);
+
+    $calls = OpenCalls::for('en');
+    expect(array_column($calls, 'title'))->toBe(['Sample incubation call', 'Sample open data hackathon'])
+        ->and(array_column($calls, 'open'))->toBe([true, true]);
+
+    $this->get('/en')->assertOk()
+        ->assertSee(__('homepage.section.innovation', [], 'en'))
+        ->assertSeeInOrder(['Sample incubation call', 'data-countdown', 'Sample open data hackathon'], escape: false)
+        ->assertDontSee('Sample later challenge')
+        ->assertSee(__('homepage.live.challenges_open', [], 'en'));
+    expect($later->phase())->toBe(Challenge::PHASE_UPCOMING);
+});
+
+it('adds labelled innovation samples once and removes exactly them', function () {
+    Mail::fake();
+    staff(SystemRole::SuperAdmin);
+    $this->artisan('portal:sample-innovation')->assertSuccessful();
+    $this->artisan('portal:sample-innovation')->assertSuccessful();
+
+    expect(Challenge::query()->count())->toBe(1)->and(Programme::query()->count())->toBe(1)->and(Startup::query()->listed()->count())->toBe(1)
+        ->and(OpenCalls::for('en'))->toHaveCount(2);
+    $this->get('/en/innovation/startups')->assertSee('[Sample] Harar Market Link');
+    Mail::assertNothingQueued();
+
+    $this->artisan('portal:sample-innovation --remove')->assertSuccessful();
+    expect(Challenge::withTrashed()->count())->toBe(0)->and(Programme::withTrashed()->count())->toBe(0)->and(Startup::withTrashed()->count())->toBe(0);
 });

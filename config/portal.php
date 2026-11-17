@@ -116,6 +116,8 @@ return [
     */
     'innovation' => [
         'retention_days' => (int) env('PORTAL_INNOVATION_RETENTION_DAYS', 730),
+        // ADR-0023: news posts with this tag (its English slug) are the innovation stories on the homepage.
+        'stories_tag' => env('PORTAL_INNOVATION_STORIES_TAG', 'innovation'),
     ],
 
     /*

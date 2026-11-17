@@ -406,3 +406,23 @@ encrypted contact with keyed hashes) and `StartupTranslation` (name, pitch, prod
 and prizes, team sign-up, one submission, a published rubric, a judging panel bound by conflict-of-interest rules,
 and ranked results. Showing judges only the submission keeps the scoring on the work. Using the average of the
 judges' totals, rather than raw sums, keeps a team fair when a judge steps back for a conflict.
+
+## ADR-0023 — Innovation on the homepage: open calls, stories and live figures (2026-11-18)
+
+**Decision.**
+
+- A homepage section **Innovation** (on by default; editors may move, rename, hide per language or switch it
+  off). It leads with the call that closes soonest, either a programme cohort taking applications or a challenge
+  taking teams, on night with its countdown. The other open calls (up to three in all) follow. When nothing is
+  open, the section shows the next call to open instead.
+- **Innovation stories** are news posts with the tag whose slug is `innovation` (`PORTAL_INNOVATION_STORIES_TAG`),
+  not a new model: editors write them in the newsroom like any story, and "All innovation stories" opens the news
+  list filtered by that tag. The section is left out when there is neither a call nor a story.
+- **Live figures**, counted, never typed: startups listed in the directory and challenges open to teams in the
+  section, and startups listed in the homepage figures strip next to services online and support requests
+  resolved. Each figure shows once it is above zero.
+- The Innovation menu section links the startups directory, "Get listed", programmes, the application lookup,
+  challenges and the team page.
+
+**Why.** The Agency's homepage should answer an innovator's first question, "what can I take part in now?",
+with a date, and should show the ecosystem growing, using the portal's own records as the source.

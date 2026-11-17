@@ -13,6 +13,8 @@ enum SectionKey: string
     case Hero = 'hero';
     /** The top services (ADR-0016): featured first, then by rank. */
     case Services = 'services';
+    /** Open calls, innovation stories and figures (ADR-0023). */
+    case Innovation = 'innovation';
     case Leadership = 'leadership';
     case LatestNews = 'latest_news';
     case Press = 'press';
@@ -48,6 +50,7 @@ enum SectionKey: string
             self::Events => 6,
             self::Projects => 6,
             self::Services => 6,
+            self::Innovation => 3,
             self::Social => 12,
             self::Partners => 12,
             self::Gallery => 8,

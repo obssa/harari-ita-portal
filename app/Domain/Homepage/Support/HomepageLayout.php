@@ -10,6 +10,8 @@ use App\Domain\Events\Models\Event;
 use App\Domain\Homepage\Enums\SectionKey;
 use App\Domain\Homepage\Models\HeroSlide;
 use App\Domain\Homepage\Models\HomepageSection;
+use App\Domain\Innovation\Models\Startup;
+use App\Domain\Innovation\Queries\OpenCalls;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\GalleryItem;
 use App\Domain\Media\Models\Video;
@@ -119,6 +121,7 @@ final class HomepageLayout
             SectionKey::Press => $this->nonEmpty($this->posts->take($locale, $limit, ['types' => [PostType::PressRelease, PostType::Statement]])),
             SectionKey::Services => $this->nonEmpty(PublicDirectory::visible(ServiceItem::query(), $locale)
                 ->with(['office.translations', 'category.translations'])->orderByDesc('featured')->orderBy('rank')->limit($limit)->get()),
+            SectionKey::Innovation => $this->innovation($locale, $limit),
             SectionKey::Counters => $this->counters($section, $locale),
             SectionKey::Values => $this->items($section, $locale, 'title', [], ['text']),
             SectionKey::Pillars => $this->pillars($locale, $limit),
@@ -348,8 +351,37 @@ final class HomepageLayout
     }
 
     /**
+     * The innovation section (ADR-0023): the calls open now (or the next to open), the latest innovation stories
+     * and two live figures. Shown when there is a call or a story.
+     *
+     * @return array{calls: list<array<string, mixed>>, stories: SupportCollection<int, Post>, startups: int, challenges: int}|null
+     */
+    private function innovation(string $locale, int $limit): ?array
+    {
+        try {
+            $calls = OpenCalls::for($locale, $limit);
+            $startups = PublicDirectory::visible(Startup::query()->listed(), $locale)->count();
+        } catch (QueryException) {
+            return null;
+        }
+        $tag = (string) config('portal.innovation.stories_tag', 'innovation');
+        $stories = $tag === '' ? collect() : $this->posts->take($locale, 3, ['tag' => $tag]);
+        if ($calls === [] && $stories->isEmpty()) {
+            return null;
+        }
+
+        return [
+            'calls' => $calls,
+            'stories' => $stories,
+            'startups' => $startups,
+            'challenges' => count(array_filter($calls, fn (array $call): bool => $call['kind'] === 'challenge' && $call['open'])),
+        ];
+    }
+
+    /**
      * The figures editors entered, then the live ones the portal counts itself (PLAN.md §4: every number from the
-     * database): services that can be used online and support requests resolved this month. A live figure shows
+     * database): services that can be used online, startups listed in the directory and support requests resolved
+     * this month. A live figure shows
      * once it is above zero.
      *
      * @return list<array<string, string>>|null
@@ -361,12 +393,16 @@ final class HomepageLayout
         try {
             $online = PublicDirectory::visible(ServiceItem::query(), $locale)
                 ->whereJsonContains('channels', ServiceChannel::Online->value)->whereNotNull('external_url')->count();
+            $startups = PublicDirectory::visible(Startup::query()->listed(), $locale)->count();
             $resolved = Ticket::query()->whereNotNull('resolved_at')->where('resolved_at', '>=', CarbonImmutable::now()->startOfMonth())->count();
         } catch (QueryException) {
-            $online = $resolved = 0;
+            $online = $resolved = $startups = 0;
         }
         if ($online > 0) {
             $items[] = ['label' => __('homepage.live.services_online', [], $locale), 'value' => (string) $online];
+        }
+        if ($startups > 0) {
+            $items[] = ['label' => __('homepage.live.startups_listed', [], $locale), 'value' => (string) $startups];
         }
         if ($resolved > 0) {
             $items[] = ['label' => __('homepage.live.tickets_resolved', [], $locale), 'value' => (string) $resolved];
