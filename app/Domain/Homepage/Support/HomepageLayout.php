@@ -2,6 +2,7 @@
 
 namespace App\Domain\Homepage\Support;
 
+use App\Domain\Academy\Models\Course;
 use App\Domain\Content\Enums\PostType;
 use App\Domain\Content\Models\Post;
 use App\Domain\Content\Models\Translation;
@@ -25,6 +26,7 @@ use App\Domain\Services\Models\ServiceItem;
 use App\Domain\Social\Models\SocialPost;
 use App\Domain\Social\Queries\SocialFeed;
 use App\Domain\Support\Models\Ticket;
+use App\Http\Controllers\Public\AcademyController;
 use App\Settings\CarouselSettings;
 use App\Support\SocialLinks;
 use Carbon\CarbonImmutable;
@@ -125,6 +127,8 @@ final class HomepageLayout
             SectionKey::Innovation => $this->innovation($locale, $limit),
             SectionKey::OpenData => $this->nonEmpty(PublicDirectory::visible(Dataset::query(), $locale)
                 ->with(['translations', 'office.translations', 'distributions'])->orderByDesc('featured')->orderByDesc('data_updated_on')->limit($limit)->get()),
+            SectionKey::Academy => $this->nonEmpty(AcademyController::calendar(PublicDirectory::visible(Course::query(), $locale)
+                ->with(['translations', 'cohorts' => fn ($q) => $q->with('office.translations')])->get(), $limit)),
             SectionKey::Counters => $this->counters($section, $locale),
             SectionKey::Values => $this->items($section, $locale, 'title', [], ['text']),
             SectionKey::Pillars => $this->pillars($locale, $limit),

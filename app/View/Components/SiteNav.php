@@ -100,11 +100,12 @@ final class SiteNav extends Component
                 $link('innovation.track.team_title', route('teams.lookup'), 'teams.*', 'nav.teams_hint'),
             ]);
         }
-        foreach (['academy'] as $module) {
-            if (Route::has("{$module}.index")) {
-                $items[] = $link("nav.{$module}", route("{$module}.index"), "{$module}.*");
-            }
-        }
+        // ADR-0031: the Academy: the courses, the cohorts calendar and the certificate check.
+        $items[] = $section('nav.academy', 'nav.academy_desc', route('academy.index'), null, [
+            $link('academy.catalogue.title', route('academy.index'), 'courses.*', 'nav.academy_courses_hint'),
+            $link('academy.calendar.title', route('academy.index').'#academy-calendar', 'academy.index', 'nav.academy_calendar_hint'),
+            $link('academy.verify.title', route('certificates.verify'), 'certificates.*', 'nav.academy_verify_hint'),
+        ]);
         $items[] = $section('nav.projects_data', 'nav.projects_data_desc', route('projects.index'), null, [
             $link('projects.title', route('projects.index'), 'projects.index', 'nav.projects_hint'),
             $link('opendata.title', route('datasets.index'), 'datasets.*', 'nav.open_data_hint'),

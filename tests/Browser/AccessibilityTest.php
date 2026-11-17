@@ -6,6 +6,9 @@
 | Serious and critical issues fail the build.
 */
 
+use App\Domain\Academy\Models\Certificate;
+use App\Domain\Academy\Models\CourseCohort;
+
 require_once __DIR__.'/BrowserSupport.php';
 
 beforeEach(function () {
@@ -23,7 +26,11 @@ it('has no serious accessibility issues on the main pages', function () {
         '/en/services', '/en/status', '/en/support/new', '/en/innovation/startups', '/en/innovation/startups/apply', '/en/innovation/programmes',
         '/en/innovation/challenges', '/en/innovation/challenges/sample-browser-hackathon', '/en/innovation/challenges/sample-browser-hackathon/register', '/en/innovation/teams',
         '/en/projects', '/en/projects/sample-browser-project', '/en/data', '/en/data/sample-browser-data', '/en/numbers', '/en/developers',
+        '/en/academy', '/am/academy', '/en/academy/courses/sample-digital-skills-for-office-staff', '/en/academy/certificates/verify',
     ];
+    $open = CourseCohort::query()->whereDate('starts_on', '>', now()->toDateString())->firstOrFail();
+    $pages[] = "/en/academy/courses/sample-digital-skills-for-office-staff/enrol/{$open->id}";
+    $pages[] = Certificate::query()->firstOrFail()->verifyUrl('en');
 
     foreach ($pages as $path) {
         visit($path)

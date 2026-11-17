@@ -42,6 +42,9 @@ Schedule::command('forms:purge-submissions')->dailyAt('03:40');
 Schedule::command('support:purge-tickets')->dailyAt('03:41');
 // ADR-0020, ADR-0021: decided applications and declined listing requests after their retention period.
 Schedule::command('innovation:purge')->dailyAt('03:43');
+// ADR-0029: Academy reminders the day before a cohort starts; learners' details after the retention period.
+Schedule::command('academy:send-reminders')->hourly()->withoutOverlapping();
+Schedule::command('academy:purge')->dailyAt('03:44');
 Schedule::command('portal:purge-sign-ups')->dailyAt('03:42');
 Schedule::command('notifications:prune')->dailyAt('03:45');
 Schedule::command('queue:prune-failed', ['--hours' => 720])->dailyAt('03:50');

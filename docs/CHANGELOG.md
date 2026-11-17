@@ -2,6 +2,23 @@
 
 All notable changes to the Agency's portal. Newest first.
 
+## Unreleased — phase 5: the digital skills academy
+
+- **Courses and cohorts** in the admin (Academy group): level, mode, length, languages, the partner who runs it, the
+  attendance a certificate needs and the signatory; cohorts with dates, venue, enrolment window, places, waiting
+  list, instructors and sessions. Instructors see only the cohorts they teach (ADR-0028).
+- **Enrolment** with a waiting list that moves up by itself, messages by email and text in the learner's language,
+  a reminder the day before, and the learner's private page with their sessions, attendance and certificate
+  (ADR-0029). Retention by `academy:purge`; enrolments are in the privacy search, export and erasure.
+- **Attendance** per session as one checklist, **certificates** issued for a cohort by the attendance rule or one
+  by one, printable A4 sheets with a QR code, and **verification** at `/academy/certificates/verify` that shows
+  initials only (ADR-0030).
+- The public **Academy** at `/academy` (next cohorts in both calendars, the catalogue with filters) and course pages
+  with `Course` JSON-LD and calendar files; an Academy section on the homepage, in the menu, search, sitemaps and
+  `/numbers` (ADR-0031).
+- `portal:sample-academy` adds and removes a labelled sample course, cohorts, learner and certificate.
+- Manual: chapter 11, the Academy.
+
 ## Unreleased — phase 4: projects and open data
 
 - **Projects** gain a pillar, an on track / at risk / off track status, spend next to the budget, milestones,

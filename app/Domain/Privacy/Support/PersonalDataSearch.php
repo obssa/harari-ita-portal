@@ -2,6 +2,7 @@
 
 namespace App\Domain\Privacy\Support;
 
+use App\Domain\Academy\Models\Enrolment;
 use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Models\FormSubmission;
@@ -117,6 +118,20 @@ final class PersonalDataSearch
     }
 
     /**
+     * Enrolments in Academy cohorts (ADR-0029), with their certificates.
+     *
+     * @return Collection<int, Enrolment>
+     */
+    public function enrolments(): Collection
+    {
+        if (! $this->isValid()) {
+            return new Collection;
+        }
+
+        return Enrolment::query()->whereNull('erased_at')->where(fn (Builder $q) => $this->byHashes($q))->with(['cohort.course.translations', 'certificates'])->orderBy('created_at')->get();
+    }
+
+    /**
      * Challenge teams this person registered, as the team's contact (ADR-0022).
      *
      * @return Collection<int, ChallengeTeam>
@@ -204,7 +219,7 @@ final class PersonalDataSearch
     }
 
     /**
-     * @return array{registrations: int, submissions: int, tickets: int, applications: int, startups: int, teams: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
+     * @return array{registrations: int, submissions: int, tickets: int, applications: int, enrolments: int, startups: int, teams: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
      */
     public function counts(): array
     {
@@ -213,6 +228,7 @@ final class PersonalDataSearch
             'submissions' => $this->submissions()->count(),
             'tickets' => $this->tickets()->count(),
             'applications' => $this->applications()->count(),
+            'enrolments' => $this->enrolments()->count(),
             'startups' => $this->startups()->count(),
             'teams' => $this->teams()->count(),
             'volunteers' => $this->volunteers()->count(),
@@ -228,7 +244,7 @@ final class PersonalDataSearch
     {
         $counts = $this->counts();
 
-        return $counts['registrations'] + $counts['submissions'] + $counts['tickets'] + $counts['applications'] + $counts['startups'] + $counts['teams'] + $counts['volunteers'] + $counts['subscribers'] + $counts['media_contacts'] + $counts['failed_sign_ins'];
+        return $counts['registrations'] + $counts['submissions'] + $counts['tickets'] + $counts['applications'] + $counts['enrolments'] + $counts['startups'] + $counts['teams'] + $counts['volunteers'] + $counts['subscribers'] + $counts['media_contacts'] + $counts['failed_sign_ins'];
     }
 
     /**

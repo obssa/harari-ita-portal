@@ -508,3 +508,94 @@ the Data Steward a last look before personal data is published by mistake.
   use a small SVG line with a dashed target and a "Show the numbers" table.
 
 **Why.** CLAUDE.md: every published number comes from live data with a source, never typed in.
+
+## ADR-0028 — The Academy: courses, cohorts, sessions and instructors (2026-11-20)
+
+**Decision.**
+
+- A new domain, `App\Domain\Academy`. A **course** has a level (beginner, intermediate, advanced), its usual mode
+  (in person, online, blended), its length in hours, the languages it is taught in, a pillar, the **partner** who
+  runs it with the Agency (most are run with partners, INPUTS.md), a cover, the attendance a certificate needs
+  (50% to 100%, 80% by default) and the certificate's signatory (empty until the Agency names one). Its words are
+  per language with per-language publication: summary, body, who it is for, what to know first, outcomes and
+  syllabus (one per line).
+- A **cohort** is one run of a course: its own mode, a venue (an office of the directory and/or a note per
+  language), its dates, when enrolment opens and closes (by default open once the course is published and closing
+  when the cohort starts), the places, whether it keeps a waiting list, its instructors and its **sessions** (dated
+  meetings, each with an optional title per language). A session with attendance is kept when removed from the
+  form. A cohort with enrolments is cancelled, not deleted; cancelling tells every learner.
+- **Instructors** have a name, a title per language and, for staff, their account. An instructor appears on public
+  pages only once their consent is recorded (with its date) and they are marked public; otherwise no names show.
+- Scoping: those with `cohorts.manage` see every cohort; instructors (`cohorts.view`, `cohorts.attendance`) see
+  only the cohorts they teach, read-only, and mark attendance there. The admin group is **Academy**.
+
+**Why.** PLAN.md §4, §5, §7. Innovation programmes select people by application; the Academy is open courses,
+first come first served, so it is its own domain rather than a kind of programme.
+
+## ADR-0029 — Enrolment, the learner's link and retention (2026-11-20)
+
+**Decision.**
+
+- Enrolment asks for a name (as it should appear on the certificate), a phone or an email, and consent, with the
+  usual form protection and Turnstile. A full cohort puts the learner on its waiting list when it keeps one; a
+  place given back, or more places, moves the list up first come first served, and each learner moved up is told.
+  One enrolment per phone or email per cohort; trying again sends the same link again without saying more.
+- Every message (enrolled, waiting list, moved up, the reminder the day before, place given back, cohort cancelled,
+  certificate ready) goes by email and text message in the learner's language with their **private link**: a
+  40-character code stored hashed, opening a page that is never cached or indexed. There the learner sees their
+  status, waiting-list position, the sessions with their attendance, the certificate once issued, and may give
+  their place back. A confirmed place carries the sessions as a calendar file. Staff are notified once per cohort
+  with the counts, never names.
+- Names, phones, emails and the link are encrypted at rest; the audit log records status changes only. The privacy
+  search, export and erasure cover enrolments.
+- **Retention (proposed, to confirm with the Agency):** `academy:purge` runs daily; two years
+  (`PORTAL_ACADEMY_RETENTION_DAYS`) after a cohort ends, enrolments without a certificate are deleted with their
+  attendance, and certified ones lose the name, phone, email and link. The certificate keeps the holder's name so
+  it can still be printed by staff and verified.
+
+**Why.** PLAN.md §4 (enrolment with a waiting list), §11 (consent, retention, data-subject rights); the event
+registration pattern already works for an SMS-first audience.
+
+## ADR-0030 — Attendance, certificates and verification (2026-11-20)
+
+**Decision.**
+
+- **Attendance** is marked per session as one checklist of the enrolled learners, from the day of the session.
+  A learner **meets the rule** when they attended at least the course's share of the cohort's sessions.
+- **Certificates** are issued for a whole cohort on or after its last day (everyone who met the rule and has none),
+  or one by one by staff with `certificates.issue` (the dialog warns when the learner is below the rule). Each has
+  a random code `CRT-XXXX-XXXX` (not a number, so they cannot be counted through) and an HMAC **signature** over
+  the code, course, cohort, initials and issue time, so a row changed outside the portal no longer verifies. One
+  certificate stands per enrolment; a revoked one stays on record and a new one can be issued.
+- The **certificate** is an A4 landscape sheet in the Agency's design, printed or saved as PDF from the browser
+  (the learner's page; staff print a whole cohort at once from the cohort). It shows the full name, the course, the
+  cohort's dates in both calendars, the hours, the partner, the signatory when set, the issue date, the code and a
+  QR code of the verification address. No PDF library is added on the server (open question to the Agency).
+- **Verification** at `/academy/certificates/verify` (by code, any case, with or without dashes) or the QR code
+  answers valid, revoked or unknown. A valid certificate shows only the holder's **initials**, the course, the
+  dates and the issue date, as the member-card check did in the PP portal. It is rate limited, never cached and not
+  indexed. Revoking needs `certificates.revoke` and a reason, kept for staff only. An erasure request revokes the
+  person's certificates and removes the name and initials.
+
+**Why.** PLAN.md §4, §13 (enrol, attend, issue, verify by QR); FORK.md §3 (the card verification pattern); CLAUDE.md
+(no stack change without asking).
+
+## ADR-0031 — The Academy on the public site (2026-11-20)
+
+**Decision.**
+
+- `/academy` opens with the certificate check, then the **next cohorts** as a calendar list (Ethiopian date tile and
+  Gregorian date, the mode, the venue and whether it is open), then the **catalogue** with filters for level, mode,
+  language and pillar. The filters apply to the calendar too. The hero counts the learners certified, from live
+  records.
+- `/academy/courses/{slug}`: who it is for, what to know first, outcomes, syllabus, the description and consenting
+  instructors; beside it each upcoming cohort with its dates in both calendars, mode, venue, enrolment window,
+  places left, sessions, a calendar file and the way to enrol or join the waiting list. It carries schema.org
+  `Course` JSON-LD with each upcoming cohort as a `CourseInstance`.
+- The homepage gains an **Academy: next cohorts** section; the menu an Academy section (courses, calendar,
+  certificate check); menus may link the Academy or the certificate check; courses join site search and the
+  sitemaps; `/numbers` gains learners certified and courses offered. A course card and the certificate sheet are on
+  the styleguide.
+
+**Why.** PLAN.md §3, §4 (the Academy and the homepage), DESIGN.md §4 (course card: level, mode, next cohort in both
+calendars) and §7 (Academy pages).

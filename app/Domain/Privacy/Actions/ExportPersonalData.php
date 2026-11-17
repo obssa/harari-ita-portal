@@ -2,6 +2,8 @@
 
 namespace App\Domain\Privacy\Actions;
 
+use App\Domain\Academy\Models\Certificate;
+use App\Domain\Academy\Models\Enrolment;
 use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Models\FormSubmission;
@@ -37,6 +39,7 @@ final class ExportPersonalData
         $submissions = $search->submissions();
         $tickets = $search->tickets();
         $applications = $search->applications();
+        $enrolments = $search->enrolments();
         $startups = $search->startups();
         $teams = $search->teams();
         $failed = $search->failedSignIns();
@@ -104,6 +107,19 @@ final class ExportPersonalData
                 'team' => $a->team_name,
                 'answers' => $a->answers,
                 'decision_note' => $a->decision_note,
+            ])->values()->all(),
+            'academy_enrolments' => $enrolments->map(fn (Enrolment $e): array => [
+                'course' => $e->cohort->course->title(),
+                'cohort' => $e->cohort->name,
+                'enrolled_at' => $e->created_at->toIso8601String(),
+                'status' => $e->status->value,
+                'name' => $e->name,
+                'email' => $e->email,
+                'phone' => $e->phone,
+                'sessions_attended' => $e->attendances()->count(),
+                'certificates' => $e->certificates->map(fn (Certificate $c): array => [
+                    'code' => $c->code, 'issued_at' => $c->issued_at->toIso8601String(), 'revoked' => $c->isRevoked(),
+                ])->values()->all(),
             ])->values()->all(),
             'challenge_teams' => $teams->map(fn (ChallengeTeam $t): array => [
                 'reference' => $t->reference,

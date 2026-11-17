@@ -21,6 +21,7 @@ final class RetentionRules
             ['data' => __('privacy.retention.applications'), 'kept' => __('privacy.retention.days_after_decision', ['days' => (int) config('portal.innovation.retention_days')]), 'enforced' => 'innovation:purge'],
             ['data' => __('privacy.retention.teams'), 'kept' => __('privacy.retention.teams_rule', ['days' => (int) config('portal.innovation.retention_days')]), 'enforced' => 'innovation:purge'],
             ['data' => __('privacy.retention.startup_contacts'), 'kept' => __('privacy.retention.startup_contacts_rule', ['days' => (int) config('portal.innovation.retention_days')]), 'enforced' => 'innovation:purge'],
+            ['data' => __('privacy.retention.enrolments'), 'kept' => __('privacy.retention.enrolments_rule', ['days' => (int) config('portal.academy.retention_days')]), 'enforced' => 'academy:purge'],
             ['data' => __('privacy.retention.subscribers'), 'kept' => __('privacy.retention.subscribers_rule'), 'enforced' => 'portal:purge-sign-ups'],
             ['data' => __('privacy.retention.volunteers'), 'kept' => __('privacy.retention.volunteers_rule'), 'enforced' => 'portal:purge-sign-ups'],
             ['data' => __('privacy.retention.audit'), 'kept' => __('privacy.retention.days', ['days' => (int) config('activitylog.delete_records_older_than_days')]), 'enforced' => 'activitylog:clean'],

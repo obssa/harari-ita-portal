@@ -1,17 +1,21 @@
 <?php
 
+use App\Domain\Academy\Models\Certificate;
 use App\Domain\Innovation\Models\Application;
 use App\Domain\Innovation\Models\ChallengeTeam;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\Support\Models\Ticket;
 use App\Domain\Translation\Support\Locales;
+use App\Http\Controllers\Public\AcademyController;
 use App\Http\Controllers\Public\ApplicationController;
 use App\Http\Controllers\Public\CampaignLinkController;
+use App\Http\Controllers\Public\CertificateController;
 use App\Http\Controllers\Public\ChallengeController;
 use App\Http\Controllers\Public\ChallengeTeamController;
 use App\Http\Controllers\Public\DatasetController;
 use App\Http\Controllers\Public\DevelopersController;
 use App\Http\Controllers\Public\DocumentController;
+use App\Http\Controllers\Public\EnrolmentController;
 use App\Http\Controllers\Public\EventController;
 use App\Http\Controllers\Public\EventRegistrationController;
 use App\Http\Controllers\Public\FeedController;
@@ -217,6 +221,15 @@ Route::prefix('{locale}')
         Route::get('newsletter/confirm/{token}', [NewsletterController::class, 'confirm'])->where('token', '[A-Za-z0-9]{40}')->middleware(NoStore::class)->name('newsletter.confirm');
         Route::get('newsletter/preferences/{token}', [NewsletterController::class, 'preferences'])->where('token', '[A-Za-z0-9]{40}')->middleware(NoStore::class)->name('newsletter.preferences');
         Route::post('newsletter/preferences/{token}', [NewsletterController::class, 'update'])->where('token', '[A-Za-z0-9]{40}')->middleware('throttle:forms')->name('newsletter.update');
+
+        // ADR-0029, ADR-0030: enrol in a cohort, the learner's private page and certificate, and checking a certificate.
+        Route::get('academy/courses/{slug}/enrol/{cohort}', [EnrolmentController::class, 'create'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->whereNumber('cohort')->middleware(NoStore::class)->name('enrolments.create');
+        Route::post('academy/courses/{slug}/enrol/{cohort}', [EnrolmentController::class, 'store'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->whereNumber('cohort')->middleware('throttle:forms')->name('enrolments.store');
+        Route::get('academy/enrolment/{token}', [EnrolmentController::class, 'show'])->where('token', '[A-Za-z0-9]{40}')->middleware(NoStore::class)->name('enrolments.show');
+        Route::post('academy/enrolment/{token}/cancel', [EnrolmentController::class, 'cancel'])->where('token', '[A-Za-z0-9]{40}')->middleware('throttle:forms')->name('enrolments.cancel');
+        Route::get('academy/enrolment/{token}/certificate', [EnrolmentController::class, 'certificate'])->where('token', '[A-Za-z0-9]{40}')->middleware(NoStore::class)->name('enrolments.certificate');
+        Route::get('academy/certificates/verify', [CertificateController::class, 'form'])->middleware(['throttle:search', NoStore::class])->name('certificates.verify');
+        Route::get('academy/certificates/verify/{code}', [CertificateController::class, 'show'])->where('code', Certificate::PATTERN)->middleware(['throttle:search', NoStore::class])->name('certificates.verify.show');
     });
 
 // Every public page lives under its language: /en, /am, /om, /har (PLAN.md §3).
@@ -277,6 +290,10 @@ Route::prefix('{locale}')
         // Counted, so never answered from the cache.
         Route::get('data/{slug}/download/{distribution}', [DatasetController::class, 'download'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
             ->whereNumber('distribution')->withoutMiddleware(CachePublicPages::class)->name('datasets.download');
+        // ADR-0031: the Academy's catalogue and calendar, a course, and a cohort's sessions as a calendar file.
+        Route::get('academy', [AcademyController::class, 'index'])->name('academy.index');
+        Route::get('academy/courses/{slug}', [AcademyController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('courses.show');
+        Route::get('academy/courses/{slug}/cohorts/{cohort}.ics', [AcademyController::class, 'ics'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->whereNumber('cohort')->name('courses.ics');
         Route::get('press', [PressController::class, 'press'])->name('press');
         Route::get('get-involved', [PressController::class, 'getInvolved'])->name('get-involved');
         Route::get('social', [SocialController::class, 'index'])->name('social');

@@ -121,6 +121,14 @@ return [
     ],
 
     /*
+    | Academy (ADR-0029): days after a cohort ends that learners' phone numbers and emails are kept. Names stay only on
+    | issued certificates; enrolments without one are deleted then.
+    */
+    'academy' => [
+        'retention_days' => (int) env('PORTAL_ACADEMY_RETENTION_DAYS', 730),
+    ],
+
+    /*
     | Campaign sending limits per minute (ADR-0052), to stay within what the mail
     | and SMS accounts accept.
     */

@@ -2,6 +2,8 @@
 
 namespace App\Domain\Privacy\Actions;
 
+use App\Domain\Academy\Models\Certificate;
+use App\Domain\Academy\Models\Enrolment;
 use App\Domain\Engagement\Models\Subscriber;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Actions\SubmitForm;
@@ -38,7 +40,7 @@ final class ErasePersonalData
     public const ERASED = '—';
 
     /**
-     * @return array{registrations: int, submissions: int, tickets: int, applications: int, startups: int, teams: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
+     * @return array{registrations: int, submissions: int, tickets: int, applications: int, enrolments: int, startups: int, teams: int, volunteers: int, subscribers: int, media_contacts: int, failed_sign_ins: int, staff_account: int}
      */
     public function handle(PersonalDataSearch $search, User $actor): array
     {
@@ -47,6 +49,7 @@ final class ErasePersonalData
         $submissions = $search->submissions();
         $tickets = $search->tickets();
         $applications = $search->applications();
+        $enrolments = $search->enrolments();
         $startups = $search->startups();
         $teams = $search->teams();
         $failed = $search->failedSignIns();
@@ -54,7 +57,7 @@ final class ErasePersonalData
         $subscribers = $search->subscribers();
         $mediaContacts = $search->mediaContacts();
 
-        DB::transaction(function () use ($registrations, $submissions, $tickets, $applications, $startups, $teams, $failed, $volunteers, $subscribers, $mediaContacts): void {
+        DB::transaction(function () use ($registrations, $submissions, $tickets, $applications, $enrolments, $startups, $teams, $failed, $volunteers, $subscribers, $mediaContacts): void {
             foreach ($registrations as $registration) {
                 $this->registration($registration);
             }
@@ -69,6 +72,11 @@ final class ErasePersonalData
                 'applicant_name' => null, 'applicant_email' => null, 'applicant_phone' => null, 'email_hash' => null,
                 'phone_hash' => null, 'answers' => null, 'decision_note' => null, 'erased_at' => now(),
             ])->saveQuietly());
+            // ADR-0029: the learner's details and link go; attendance stays as anonymous counts. Their certificates are
+            // revoked and lose the name and initials, so verification no longer answers for them.
+            foreach ($enrolments as $enrolment) {
+                $this->enrolment($enrolment);
+            }
             // ADR-0022: the contact and members go and the team is no longer named in the results; the submission and
             // the judges' scores stay so the published ranking keeps its places.
             $teams->each(fn (ChallengeTeam $team) => $team->forceFill([
@@ -115,6 +123,18 @@ final class ErasePersonalData
             'token' => $token,
             'token_hash' => EventRegistration::hash($token),
             'erased_at' => now(),
+        ])->saveQuietly();
+    }
+
+    private function enrolment(Enrolment $enrolment): void
+    {
+        $enrolment->certificates->each(fn (Certificate $certificate) => $certificate->forceFill([
+            'holder_name' => null, 'holder_initials' => null, 'revoked_at' => $certificate->revoked_at ?? now(),
+            'revoke_reason' => $certificate->revoke_reason ?? 'erased',
+        ])->saveQuietly());
+        $enrolment->forceFill([
+            'name' => null, 'phone' => null, 'email' => null, 'phone_hash' => null, 'email_hash' => null, 'token' => null,
+            'token_hash' => Enrolment::hash(Str::random(40)), 'erased_at' => now(),
         ])->saveQuietly();
     }
 

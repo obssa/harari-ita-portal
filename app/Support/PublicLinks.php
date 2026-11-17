@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Domain\Academy\Models\Course;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Post;
 use App\Domain\Documents\Models\Document;
@@ -36,6 +37,7 @@ final class PublicLinks
         Document::class => 'documents.show',
         Project::class => 'projects.show',
         Dataset::class => 'datasets.show',
+        Course::class => 'courses.show',
         Gallery::class => 'gallery.show',
         Video::class => 'videos.show',
         Leader::class => 'leaders.show',

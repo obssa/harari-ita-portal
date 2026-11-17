@@ -1,9 +1,14 @@
 <?php
 
+use App\Domain\Academy\Actions\SaveCohort;
+use App\Domain\Academy\Actions\SaveCourse;
+use App\Domain\Academy\Models\Course;
+use App\Domain\Academy\Models\CourseCohort;
 use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Import\Models\ContentSource;
 use App\Models\User;
 use App\Settings\SecuritySettings;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\BrowserTestCase;
@@ -46,6 +51,41 @@ function staff(SystemRole $role, ?bool $mfa = null, array $attributes = []): Use
     }
 
     return $user->fresh() ?? $user;
+}
+
+/**
+ * A published sample course (ADR-0028), saved by an Academy Coordinator.
+ *
+ * @param  array<string, mixed>  $data
+ */
+function sampleCourse(string $title = 'Sample digital basics', array $data = []): Course
+{
+    return app(SaveCourse::class)->handle(new Course, [
+        'translations' => ['en' => ['title' => $title, 'summary' => 'A sample course for the tests.', 'outcomes' => "Sample outcome one\nSample outcome two", 'syllabus' => "Sample module one\nSample module two", 'published' => true]],
+        'level' => 'beginner', 'mode' => 'in_person', 'duration_hours' => 12, 'languages' => ['en', 'am'],
+        ...$data,
+    ], staff(SystemRole::AcademyCoordinator));
+}
+
+/**
+ * A cohort of a course with three sessions; by default it opened yesterday and starts in a week.
+ *
+ * @param  array<string, mixed>  $data
+ */
+function sampleCohort(Course $course, array $data = []): CourseCohort
+{
+    $starts = CarbonImmutable::today()->addWeek();
+
+    return app(SaveCohort::class)->handle(new CourseCohort, [
+        'course_id' => $course->id, 'name' => 'Sample cohort', 'mode' => 'in_person',
+        'starts_on' => $starts->toDateString(), 'ends_on' => $starts->addDays(2)->toDateString(),
+        'enrol_opens_at' => CarbonImmutable::now()->subDay()->toDateTimeString(),
+        'sessions' => array_map(fn (int $day): array => [
+            'starts_at' => $starts->addDays($day)->setTime(9, 0)->toDateTimeString(),
+            'ends_at' => $starts->addDays($day)->setTime(12, 0)->toDateTimeString(),
+        ], [0, 1, 2]),
+        ...$data,
+    ], staff(SystemRole::AcademyCoordinator));
 }
 
 /**

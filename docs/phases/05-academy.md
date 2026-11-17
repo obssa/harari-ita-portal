@@ -55,7 +55,7 @@ Academy is for courses anyone may join, first come first served. Phase 5 adds on
 
 | # | Step | Commit |
 |---|---|---|
-| 5.0 | **Plan**: this file | |
+| 5.0 | **Plan**: this file | `d192747` |
 | 5.1 | **Model and admin**: courses, cohorts, sessions, instructors; policies with instructor scoping; the Academy navigation group | |
 | 5.2 | **Enrolment**: the public form, waiting list, the learner's page, messages and reminder, giving a place back; enrolments in the admin; privacy and retention | |
 | 5.3 | **Attendance**: the per-session checklist, instructor scoping | |

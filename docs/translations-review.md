@@ -38,3 +38,10 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | dataset / open data / distribution (file) | የመረጃ ስብስብ / ክፍት መረጃ / ፋይል | daataa / daataa banaa / faayilii | `opendata.*` | Om "daataa" is a loanword; check whether the Agency prefers "odeeffannoo" |
 | licence names (CC BY 4.0 …) | kept in English | kept in English | `opendata.licence.*` | Official licence titles are not translated; CC0 is described |
 | Digital Harar in numbers | ዲጂታል ሐረር በቁጥሮች | Harar Dijitaalaa lakkoofsaan | `numbers.title`, `nav.achievements` | |
+| cohort (one run of a course) | ዙር | marsaa | `academy.*cohort*` | Same word as programme cohorts in Innovation |
+| session (one meeting of a cohort) | ክፍለ ጊዜ | yeroo leenjii | `academy.*session*` | Om could also be "sa'aatii leenjii"; check the trainers' usage |
+| certificate (of completion) | የምስክር ወረቀት (የማጠናቀቂያ) | waraqaa ragaa (xumuraa) | `academy.certificate.*`, `academy.admin.certificate*` | Check against the wording on the Agency's existing paper certificates |
+| attendance / enrol / waiting list | መገኘት / መመዝገብ / መጠባበቂያ ዝርዝር | argama / galmaa'uu / tarree eegaa | `academy.*attend*`, `academy.enrol.*` | |
+| blended (in person and online) | ቅይጥ (በአካልና በኦንላይን) | makaa (qaamaa fi toora interneetii) | `academy.mode.blended` | |
+| learner / instructor | ሰልጣኝ / አሰልጣኝ | leenjifamaa / leenjisaa | `academy.admin.learners`, `academy.admin.instructor*` | |
+| revoke (a certificate) | መሻር | haquu | `academy.*revoke*`, `academy.verify.revoked*` | |

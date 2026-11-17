@@ -2,6 +2,18 @@
 
 namespace App\Providers;
 
+use App\Domain\Academy\Models\Certificate;
+use App\Domain\Academy\Models\Course;
+use App\Domain\Academy\Models\CourseCohort;
+use App\Domain\Academy\Models\CourseSession;
+use App\Domain\Academy\Models\Enrolment;
+use App\Domain\Academy\Models\Instructor;
+use App\Domain\Academy\Policies\CertificatePolicy;
+use App\Domain\Academy\Policies\CourseCohortPolicy;
+use App\Domain\Academy\Policies\CoursePolicy;
+use App\Domain\Academy\Policies\CourseSessionPolicy;
+use App\Domain\Academy\Policies\EnrolmentPolicy;
+use App\Domain\Academy\Policies\InstructorPolicy;
 use App\Domain\Access\Listeners\RecordAccessChanges;
 use App\Domain\Access\Listeners\RecordAuthenticationActivity;
 use App\Domain\Access\Models\Role;
@@ -329,6 +341,12 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Project::class, ProjectPolicy::class);
         Gate::policy(Dataset::class, DatasetPolicy::class);
         Gate::policy(DatasetDistribution::class, DatasetDistributionPolicy::class);
+        Gate::policy(Course::class, CoursePolicy::class);
+        Gate::policy(CourseCohort::class, CourseCohortPolicy::class);
+        Gate::policy(CourseSession::class, CourseSessionPolicy::class);
+        Gate::policy(Instructor::class, InstructorPolicy::class);
+        Gate::policy(Enrolment::class, EnrolmentPolicy::class);
+        Gate::policy(Certificate::class, CertificatePolicy::class);
         Gate::policy(ProjectKpi::class, ProjectKpiPolicy::class);
         Gate::policy(ProjectRisk::class, ProjectRiskPolicy::class);
         Gate::policy(Statistic::class, StatisticPolicy::class);

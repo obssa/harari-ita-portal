@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Domain\Academy\Models\Course;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\PageTranslation;
@@ -61,7 +62,7 @@ final class SitemapController extends Controller
     private function entries(string $language): array
     {
         $entries = [];
-        foreach (['home', 'news.index', 'leaders.index', 'offices.index', 'services.index', 'startups.index', 'programmes.index', 'challenges.index', 'pillars.index', 'structure', 'gallery.index', 'videos.index', 'events.index', 'documents.index', 'documents.notices', 'projects.index', 'projects.numbers', 'datasets.index', 'developers', 'contact', 'press', 'get-involved', 'social'] as $route) {
+        foreach (['home', 'news.index', 'leaders.index', 'offices.index', 'services.index', 'startups.index', 'programmes.index', 'challenges.index', 'pillars.index', 'structure', 'gallery.index', 'videos.index', 'events.index', 'documents.index', 'documents.notices', 'projects.index', 'projects.numbers', 'datasets.index', 'developers', 'academy.index', 'contact', 'press', 'get-involved', 'social'] as $route) {
             $alternates = [];
             foreach (Locales::all() as $locale) {
                 $alternates[$locale] = route($route, ['locale' => $locale]);
@@ -124,6 +125,7 @@ final class SitemapController extends Controller
             ...PublicDirectory::sitemap(Programme::query()->with('translations')->get(), $language, 'programmes.show'),
             ...PublicDirectory::sitemap(Challenge::query()->with('translations')->get(), $language, 'challenges.show'),
             ...PublicDirectory::sitemap(Dataset::query()->with('translations')->get(), $language, 'datasets.show'),
+            ...PublicDirectory::sitemap(Course::query()->with('translations')->get(), $language, 'courses.show'),
             ...PublicDirectory::sitemap(Pillar::query()->with('translations')->get(), $language, 'pillars.show'),
             ...PublicDirectory::sitemap(Gallery::query()->with('translations')->get(), $language, 'gallery.show'),
             ...PublicDirectory::sitemap(Video::query()->with('translations')->get(), $language, 'videos.show'),

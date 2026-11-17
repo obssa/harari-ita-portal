@@ -377,3 +377,27 @@
         }
     }
 }
+
+/* ADR-0030: a certificate is one A4 landscape sheet; on screen it keeps the sheet's shape, in print it fills a page. */
+@page certificate {
+    size: A4 landscape;
+    margin: 0;
+}
+
+@layer components {
+    .certificate-sheet {
+        aspect-ratio: 297 / 210;
+    }
+
+    @media print {
+        .certificate-sheet {
+            page: certificate;
+            width: 297mm;
+            height: 210mm;
+            break-after: page;
+            box-shadow: none;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+}

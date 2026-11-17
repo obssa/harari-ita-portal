@@ -2,6 +2,8 @@
 
 namespace App\Domain\Projects\Queries;
 
+use App\Domain\Academy\Models\Certificate;
+use App\Domain\Academy\Models\Course;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\OpenData\Models\Dataset;
 use App\Domain\Organisation\Queries\PublicDirectory;
@@ -33,6 +35,8 @@ final class LiveFigures
                 ['startups', __('numbers.live.startups'), PublicDirectory::visible(Startup::query()->listed(), $locale)->count(), __('numbers.source.startups'), route('startups.index')],
                 ['datasets', __('numbers.live.datasets'), PublicDirectory::visible(Dataset::query(), $locale)->count(), __('numbers.source.datasets'), route('datasets.index')],
                 ['downloads', __('numbers.live.downloads'), (int) PublicDirectory::visible(Dataset::query(), $locale)->sum('download_count'), __('numbers.source.downloads'), route('datasets.index')],
+                ['learners', __('numbers.live.learners'), Certificate::query()->whereNull('revoked_at')->distinct()->count('enrolment_id'), __('numbers.source.learners'), route('academy.index')],
+                ['courses', __('numbers.live.courses'), PublicDirectory::visible(Course::query(), $locale)->count(), __('numbers.source.courses'), route('academy.index')],
             ];
         } catch (QueryException) {
             return [];

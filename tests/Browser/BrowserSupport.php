@@ -25,6 +25,7 @@ use App\Domain\Projects\Actions\SaveProject;
 use App\Domain\Projects\Models\Project;
 use App\Domain\Projects\Models\ProjectKpi;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Artisan;
 use Tests\Support\TestFiles;
 
 /*
@@ -75,6 +76,10 @@ Sample second prize', 'rules' => 'Sample rule.', 'published' => true]],
     $dataset = app(SaveDataset::class)->handle(new Dataset, ['frequency' => 'monthly', 'translations' => ['en' => ['title' => 'Sample browser data', 'summary' => 'A sample dataset for the browser tests.', 'published' => true]]], $steward);
     $csv = app(UploadMedia::class)->handle(TestFiles::text("month,count\n2026-01,4\n2026-02,7\n", 'csv'), 'sample-browser.csv');
     app(SaveDistribution::class)->handle($dataset, new DatasetDistribution, ['format' => 'csv', 'media_id' => $csv->id], $steward);
+
+    // ADR-0028..0031: the labelled Academy samples: a course, a cohort taking enrolments and a certificate.
+    staff(SystemRole::SuperAdmin, mfa: false);
+    Artisan::call('portal:sample-academy');
 
     app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'email' => 'office@example.org', 'phone' => '+251911000000',
         'translations' => ['en' => ['name' => 'Sample browser office', 'published' => true]]], $publisher);

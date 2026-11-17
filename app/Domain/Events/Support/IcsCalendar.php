@@ -60,13 +60,13 @@ final class IcsCalendar
         return implode("\r\n", array_map(self::fold(...), $lines))."\r\n";
     }
 
-    private static function escape(string $text): string
+    public static function escape(string $text): string
     {
         return str_replace(['\\', ';', ',', "\r\n", "\n"], ['\\\\', '\;', '\,', '\n', '\n'], $text);
     }
 
     /** Lines longer than 75 bytes continue on the next line after a space, never inside a character. */
-    private static function fold(string $line): string
+    public static function fold(string $line): string
     {
         $out = '';
         $current = '';

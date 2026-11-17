@@ -189,5 +189,28 @@
             </div>
             <x-project-locations :pins="$sgPins" class="mt-6" />
         </section>
+
+        @php
+            // ADR-0031: an unsaved sample course with a cohort, and a certificate of it (ADR-0030).
+            $sgCourse = new \App\Domain\Academy\Models\Course(['level' => 'beginner', 'mode' => 'blended', 'duration_hours' => 18, 'languages' => ['am', 'en'], 'partner' => 'Sample partner', 'signatory_name' => 'Sample Signatory', 'signatory_titles' => ['en' => 'Sample title']]);
+            $sgCourse->id = '01SAMPLESTYLEGUIDECOURSE00';
+            $sgCourseText = new \App\Domain\Academy\Models\CourseTranslation(['locale' => app()->getLocale(), 'title' => 'Sample digital skills course', 'slug' => 'sample-digital-skills-course', 'summary' => 'A sample course card with its level, mode, length, languages and next cohort.', 'status' => 'published', 'published_at' => now()->subDay()]);
+            $sgCourse->setRelation('translations', new \Illuminate\Database\Eloquent\Collection([$sgCourseText]));
+            $sgCohort = new \App\Domain\Academy\Models\CourseCohort(['name' => 'Sample cohort', 'mode' => 'blended', 'starts_on' => now()->addWeeks(3)->startOfDay(), 'ends_on' => now()->addWeeks(4)->startOfDay(), 'capacity' => 25]);
+            $sgCohort->setRelation('course', $sgCourse);
+            $sgCourse->setRelation('cohorts', new \Illuminate\Database\Eloquent\Collection([$sgCohort]));
+            $sgCertificate = new \App\Domain\Academy\Models\Certificate(['code' => 'CRT-SAMP-LE23', 'holder_name' => 'Sample Learner Name', 'holder_initials' => 'S. L.', 'issued_at' => now()]);
+            $sgCertificate->setRelation('course', $sgCourse);
+            $sgCertificate->setRelation('cohort', $sgCohort);
+            $sgCertificate->setRelation('enrolment', null);
+        @endphp
+        <section aria-labelledby="sg-academy">
+            <h2 id="sg-academy" class="heading-2">Academy: course card, date tile, certificate</h2>
+            <div class="mt-4 grid gap-6 lg:grid-cols-3">
+                <x-course-card :course="$sgCourse" :translation="$sgCourseText" :heading-level="3" />
+                <div class="flex items-start gap-4"><x-ui.date-tile :date="now()->addWeeks(3)" /></div>
+            </div>
+            <x-academy.certificate :certificate="$sgCertificate" class="mt-6" />
+        </section>
     </div>
 </x-layouts.public>

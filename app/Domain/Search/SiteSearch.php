@@ -2,6 +2,7 @@
 
 namespace App\Domain\Search;
 
+use App\Domain\Academy\Models\CourseTranslation;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Models\PageTranslation;
 use App\Domain\Content\Models\PostTranslation;
@@ -29,7 +30,7 @@ use Illuminate\Support\Collection;
  */
 final class SiteSearch
 {
-    /** @var array<string, array{model: class-string<PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|PillarTranslation|EventTranslation|DocumentTranslation|ProjectTranslation|ServiceItemTranslation|StartupTranslation|ProgrammeTranslation|ChallengeTranslation|DatasetTranslation>, parent: string, order: string, public_access?: bool}> */
+    /** @var array<string, array{model: class-string<PostTranslation|PageTranslation|LeaderTranslation|OfficeTranslation|PillarTranslation|EventTranslation|DocumentTranslation|ProjectTranslation|ServiceItemTranslation|StartupTranslation|ProgrammeTranslation|ChallengeTranslation|DatasetTranslation|CourseTranslation>, parent: string, order: string, public_access?: bool}> */
     public const KINDS = [
         'news' => ['model' => PostTranslation::class, 'parent' => 'post', 'order' => 'published_at'],
         'pages' => ['model' => PageTranslation::class, 'parent' => 'page', 'order' => 'title'],
@@ -39,6 +40,7 @@ final class SiteSearch
         'programmes' => ['model' => ProgrammeTranslation::class, 'parent' => 'programme', 'order' => 'title'],
         'challenges' => ['model' => ChallengeTranslation::class, 'parent' => 'challenge', 'order' => 'title'],
         'datasets' => ['model' => DatasetTranslation::class, 'parent' => 'dataset', 'order' => 'title'],
+        'courses' => ['model' => CourseTranslation::class, 'parent' => 'course', 'order' => 'title'],
         'offices' => ['model' => OfficeTranslation::class, 'parent' => 'office', 'order' => 'name'],
         'pillars' => ['model' => PillarTranslation::class, 'parent' => 'pillar', 'order' => 'name'],
         'events' => ['model' => EventTranslation::class, 'parent' => 'event', 'order' => 'title'],
@@ -131,6 +133,13 @@ final class SiteSearch
                 'title' => $translation->name,
                 'summary' => $translation->summary,
                 'label' => $translation->office->type->label(),
+                'locale' => $locale,
+            ],
+            $translation instanceof CourseTranslation => [
+                'url' => route('courses.show', ['locale' => $locale, 'slug' => $slug]),
+                'title' => $translation->title,
+                'summary' => $translation->summary,
+                'label' => __('search.kind.courses'),
                 'locale' => $locale,
             ],
             $translation instanceof DatasetTranslation => [

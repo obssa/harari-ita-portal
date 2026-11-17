@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
 use App\Filament\Support\InitialsAvatarProvider;
+use App\Http\Controllers\Admin\PrintCohortCertificatesController;
 use App\Http\Middleware\RequireMfaForPrivilegedRoles;
 use App\Http\Middleware\RestrictAdminByIp;
 use App\Http\Middleware\SetAdminLocale;
@@ -23,6 +24,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
@@ -80,6 +82,11 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            // ADR-0030: a cohort's certificates on one printable page, for staff who issue them.
+            ->authenticatedRoutes(function (): void {
+                Route::get('academy/cohorts/{cohort}/certificates/print', PrintCohortCertificatesController::class)
+                    ->whereNumber('cohort')->name('academy.certificates.print');
+            })
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

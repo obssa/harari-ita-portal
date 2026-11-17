@@ -2,6 +2,11 @@
 
 namespace App\Services\Cdn;
 
+use App\Domain\Academy\Models\Course;
+use App\Domain\Academy\Models\CourseCohort;
+use App\Domain\Academy\Models\CourseSession;
+use App\Domain\Academy\Models\CourseTranslation;
+use App\Domain\Academy\Models\Instructor;
 use App\Domain\Content\Models\Category;
 use App\Domain\Content\Models\CategoryTranslation;
 use App\Domain\Content\Models\Menu;
@@ -75,6 +80,7 @@ final class PublicContentChanges
         GalleryTranslation::class, Media::class, Video::class, VideoTranslation::class, Leader::class,
         LeaderTranslation::class, Pillar::class, PillarTranslation::class, Office::class, OfficeTranslation::class, ServiceItem::class, ServiceItemTranslation::class, StatusComponent::class, Incident::class, IncidentUpdate::class, Startup::class, StartupTranslation::class, Programme::class, ProgrammeTranslation::class, Cohort::class, Challenge::class, ChallengeTranslation::class,
         Project::class, ProjectTranslation::class, Statistic::class, StatisticTranslation::class, Dataset::class, DatasetTranslation::class,
+        Course::class, CourseTranslation::class, CourseCohort::class, CourseSession::class, Instructor::class,
         SocialPost::class, SocialSource::class, UiTranslation::class,
     ];
 
