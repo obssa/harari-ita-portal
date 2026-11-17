@@ -18,6 +18,8 @@ All notable changes to the Agency's portal. Newest first.
   `/numbers` (ADR-0031).
 - `portal:sample-academy` adds and removes a labelled sample course, cohorts, learner and certificate.
 - Manual: chapter 11, the Academy.
+- On desktops the main menu has its own row under the logo, so all sections fit in every language; Ethiopic pages
+  preload only the Ethiopic font (the Amharic homepage's mobile score went from 89 to 93).
 
 ## Unreleased — phase 4: projects and open data
 

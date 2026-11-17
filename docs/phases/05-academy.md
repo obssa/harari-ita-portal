@@ -56,13 +56,13 @@ Academy is for courses anyone may join, first come first served. Phase 5 adds on
 | # | Step | Commit |
 |---|---|---|
 | 5.0 | **Plan**: this file | `d192747` |
-| 5.1 | **Model and admin**: courses, cohorts, sessions, instructors; policies with instructor scoping; the Academy navigation group | |
-| 5.2 | **Enrolment**: the public form, waiting list, the learner's page, messages and reminder, giving a place back; enrolments in the admin; privacy and retention | |
-| 5.3 | **Attendance**: the per-session checklist, instructor scoping | |
-| 5.4 | **Certificates**: issue (one or a cohort), the printable certificate with QR, verification, revocation, printing a cohort | |
-| 5.5 | **Public academy**: `/academy`, the course page, the cohort calendar and `.ics`, JSON-LD | |
-| 5.6 | **Home, menu, search, sitemap, numbers** | |
-| 5.7 | **Gate**: the §13 acceptance on staging with labelled samples (`portal:sample-academy`); axe and Lighthouse; manual chapter; report | |
+| 5.1 | **Model and admin**: courses, cohorts, sessions, instructors; policies with instructor scoping; the Academy navigation group | `96e2802` |
+| 5.2 | **Enrolment**: the public form, waiting list, the learner's page, messages and reminder, giving a place back; enrolments in the admin; privacy and retention | `96e2802` |
+| 5.3 | **Attendance**: the per-session checklist, instructor scoping | `96e2802` |
+| 5.4 | **Certificates**: issue (one or a cohort), the printable certificate with QR, verification, revocation, printing a cohort | `96e2802` |
+| 5.5 | **Public academy**: `/academy`, the course page, the cohort calendar and `.ics`, JSON-LD | `96e2802` |
+| 5.6 | **Home, menu, search, sitemap, numbers** | `96e2802` |
+| 5.7 | **Gate**: the §13 acceptance on staging with labelled samples (`portal:sample-academy`); axe and Lighthouse; manual chapter; report | `3db8366`, `63074f9`, `014e769`, this report |
 
 Each step ends with lint clean, `lang:missing` 0 for am and om, the hard-coded strings check, the affected tests
 green, CI green, deployed to staging and checked there.
@@ -95,3 +95,62 @@ green, CI green, deployed to staging and checked there.
 3. Certificates are printed or saved as PDF from the browser. Making PDF files on the server would add a PDF
    library: is that wanted?
 4. The retention period for learners' contact details (two years after the cohort is proposed).
+
+## Report (2026-11-20)
+
+**Acceptance (PLAN.md §13: enrol, attend, issue a certificate, verify by QR).** Checked on staging
+(https://hita.orcamind.dev) with the labelled samples of `portal:sample-academy`, in English, Amharic and Afaan Oromo:
+
+1. **Enrol.** "[Sample] Digital skills for office staff" lists "[Sample] Cohort 2" as enrolling, with 25 places, its
+   dates in both calendars, the last day to enrol, four sessions and a calendar file; the enrol form answers in each
+   language. Tests cover the whole flow: first come first served, the waiting list moving up when a place is given
+   back or places are added, one enrolment per phone or email, consent, the window, cancelling a cohort, messages
+   by email and text, and the reminder the day before.
+2. **Attend.** The sample learner of "[Sample] Cohort 1" (which ran last month) was marked present at its three
+   sessions; their private page shows "Attended 3 of 3 (100%)" with each session. Tests check that instructors see
+   and mark only the cohorts they teach, read-only, and that a session to come cannot be marked.
+3. **Issue a certificate.** The learner met the 80% rule and holds a certificate; their page opens it as an A4
+   landscape sheet ready to print or save as PDF, with the course, the dates in both calendars, the hours, the
+   partner, the issue date, the code and the QR code (screenshots in `05-screens/`).
+4. **Verify by QR.** The QR code opens `/academy/certificates/verify/{code}`: "Valid certificate", the initials
+   "S. L.", the course and the dates, never the full name. A typed code in any case and without dashes finds it;
+   an unknown code answers "not found" (404); a revoked one answers "revoked" without the reason (tests). A
+   certificate row changed outside the portal no longer verifies (signature, tested).
+
+**Checks.**
+
+- Tests: 16 Academy tests (183 assertions) and the suites the shared changes touch pass locally; the full suite and
+  the browser test (which now also covers the Academy, a course, the enrol form, the certificate check and a valid
+  certificate) pass in CI. Larastan and Pint clean; `lang:missing` complete for am and om (3,762 strings); the
+  hard-coded strings check passes.
+- Accessibility: axe on staging (light and dark) found no serious or critical issue on the Academy, a course in
+  Amharic, the enrol form, the learner's page, the printable certificate, the certificate check and the homepage.
+- Lighthouse (mobile, representative runs): the Academy pages score performance 98, accessibility 100, best
+  practices 96. The Amharic homepage, which had dropped to 89 on the plan's commit (its hero image waited behind two
+  preloaded fonts), now scores 93: Ethiopic pages preload only the Ethiopic font. The English homepage scores 94.
+  The audit's time limit went from 15 to 25 minutes for the added pages.
+- Visual check on staging screenshots: the desktop menu wrapped once the Academy joined it (Afaan Oromo's labels
+  need about 1,190 px; the row beside the logo has about 800), so the menu now has its own row under the logo row
+  on desktops; initials took the bracket of "[Sample]" ("[. L."), now letters only everywhere; enrolment closed at
+  03:00 Ethiopian time by default, now at the start of the first day in Ethiopia, shown as the last day to enrol;
+  the certificate's check address ran into the QR code, now wraps; cohort times in the admin are in Ethiopia's
+  time zone.
+
+**Changed from the plan** (recorded in ADR-0028..0031).
+
+- Certificates are printed or saved as PDF from the browser; no PDF library was added (open question 3).
+- The calendar on `/academy` follows the catalogue's filters.
+- The desktop menu moved to its own row (a layout change for every page, made for the four languages to fit).
+- A cohort's certificates are issued from its last day; one by one they can be issued from its first day.
+
+**Staging content.** The `[Sample]` course, its two cohorts, the sample instructor and learner and the certificate
+stay until real content arrives; `php artisan portal:sample-academy --remove` deletes them.
+
+**Open questions for the Agency** (also above): the courses and who runs them; the certificate's design, signatory
+and attendance rule; whether certificates should be made as PDF files on the server; how long learners' contact
+details are kept.
+
+**Deferred.** The Amharic version of manual chapter 11 (with chapters 8 to 10) after the Agency reviews the English;
+a CSV export of a cohort's learners; course alumni stories.
+
+**Next.** Phase 6: opportunities and advisories.
