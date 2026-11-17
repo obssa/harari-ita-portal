@@ -11,6 +11,11 @@ All notable changes to the Agency's portal. Newest first.
 - **Challenges and hackathons** at `/innovation/challenges`: phases with a countdown, prizes, rules and the
   weighted rubric; teams register, send and change their submission from the team page; judges see only their own
   assignments, declare conflicts of interest and score; staff publish ranked results (ADR-0022).
+- The homepage gains **Take part in innovation**: the call closing soonest with its countdown, the other open
+  calls, innovation stories and live figures; the figures strip gains startups listed (ADR-0023).
+- Status pills and the form stepper have a night tone; this fixes two contrast faults on night heroes that the
+  wider axe checks found.
+- Manual: chapter 9, innovation.
 
 ## Unreleased — phase 2: services, IT support and service status
 

@@ -42,7 +42,7 @@ roles (ADR-0004).
 | 3.5 | **Challenges**: model and admin; public challenge page with phases and countdown; team registration and submission |`72d01bc` |
 | 3.6 | **Judging**: panels, assignment, conflict-of-interest declarations, scoring screen for judges, ranking, results publication |`72d01bc` |
 | 3.7 | **Home, menu and figures**: Innovation menu section, next open call on the homepage, live figures; innovation stories |`2c74840` |
-| 3.8 | **Gate**: the PLAN.md §13 acceptance on staging with labelled samples; axe and Lighthouse; manual chapter; report | |
+| 3.8 | **Gate**: the PLAN.md §13 acceptance on staging with labelled samples; axe and Lighthouse; manual chapter; report |`be39808`, `eacc2fa`, `4cd1803`, this report |
 
 Each step ends with lint clean, `lang:missing` 0 for am and om, the hard-coded strings check, the affected tests
 green, CI green, deployed to staging and checked there.
@@ -61,6 +61,66 @@ green, CI green, deployed to staging and checked there.
 4. Whether judges are outside experts who need an account with only the Judge role (the default), and how long
    submissions and applications are kept after a programme or challenge ends (default: two years).
 
-## Report
+## Report (2026-11-18)
 
-(Written at the end of the phase.)
+**Done.** The three PLAN.md §13 checks pass, in the tests and on staging:
+
+1. **A startup listed and verified.** The tests take a "Get listed" request (consent, Turnstile, `STU-` reference)
+   through review: it stays off the site until listed, is listed in its languages and has its label claim verified
+   by an officer, with the founder following it by reference plus contact. On staging, `portal:sample-innovation`
+   listed "[Sample] Harar Market Link"; it shows in the directory, the sitemap and the homepage figures.
+2. **An application taken through all its stages.** The tests send an application to an open cohort, then take
+   it through screening, rubric scoring, interview and a decision whose note the applicant reads. They also
+   withdraw one with the reference plus contact. On staging, "[Sample] Incubation programme" has an open cohort,
+   and its apply form and the application lookup are live.
+3. **A challenge judged and its results published.** The tests register teams within the size limit, send and
+   change submissions until submissions close and assign two judges. One judge declares a conflict, which leaves
+   their score out; the average weighted totals (7.00 → 8.00, 9.00) are checked. Results are published ranked, the
+   scores freeze, and a team that did not agree to be named shows by its place only. A judge cannot open another
+   judge's assignment (404) and never sees a team's contact. On staging, "[Sample] Open data hackathon" shows its
+   phases, a countdown, prizes, the rubric shares (50 / 33 / 17 %) and the register form in en, am and om. The team
+   lookup says which field is wrong.
+
+Also in this phase:
+- The homepage section "Take part in innovation": the call closing soonest with its countdown, other open calls,
+  innovation stories (news tagged `innovation`) and live figures (ADR-0023).
+- The Innovation menu section.
+- Data-subject search, export, erasure and the retention purge for applicants, founders and teams.
+- Manual chapter 9.
+- `portal:sample-innovation`.
+
+**Gate.**
+- Lint (Pint, Larastan) clean; `lang:missing` 0 for am and om (3,228 strings); the hard-coded strings check passes.
+- 996 tests. CI is green on `4cd1803`, covering lint, the full suite, the browser tests with axe and the assets, and
+  that commit is deployed to staging.
+- The axe browser checks now cover services, status, IT support and every innovation page (the challenge page and
+  its register form included). They found two contrast faults on night heroes, both fixed with a `tone="night"`
+  option instead of class overrides:
+  - the overall status pill on `/status` (from phase 2);
+  - the current step of the form stepper (on five forms).
+- Before pushing the fix, a separate axe run against staging (14 pages, light and dark) confirmed these were the
+  only serious issues.
+- Lighthouse on staging (mobile, representative runs): performance 91–98, accessibility 100 and best practices 96,
+  on all 13 pages. `/innovation/startups`, `/innovation/programmes` and `/innovation/challenges` join the list.
+- Screenshots in `docs/phases/03-screens/`.
+
+**Changed from the plan above (recorded in the ADRs).**
+- Applications are one page in three parts under the stepper rather than a draft kept between steps, so nothing is
+  lost when a part needs correcting (ADR-0021).
+- A challenge's judging is a set of judge-to-team assignments rather than a separate panel model. A submission is a
+  name, a description and up to five links; there are no file uploads, so the portal does not store team code or
+  binaries (ADR-0022).
+- The second live figure on the homepage is "challenges open to teams" instead of "applications this year":
+  applications are private, while open challenges are what a visitor can act on (ADR-0023).
+
+**Not done / for later.**
+- Alumni of a cohort on the programme page, and a FAQ on challenges: both wait for real programmes and challenges
+  and the participants' consent.
+- The manual chapter is in English only; its Amharic version (with chapter 8's) waits for the Agency's review of
+  the English.
+- The open questions above remain for the Agency: its own programmes and partners, the sector list, what "verified
+  label" means, and who the judges are.
+- The `[Sample]` startup, programme and challenge stay on staging until real content arrives;
+  `php artisan portal:sample-innovation --remove` deletes them.
+
+**Next.** Phase 4: projects and open data.
