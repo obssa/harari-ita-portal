@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Public;
 use App\Domain\Content\Models\Category;
 use App\Domain\Content\Support\BodyRenderer;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Organisation\Queries\PublicDirectory;
 use App\Domain\Projects\Enums\ProjectStatus;
+use App\Domain\Projects\Enums\RagStatus;
 use App\Domain\Projects\Models\Project;
 use App\Domain\Projects\Models\ProjectTranslation;
 use App\Domain\Projects\Models\Statistic;
@@ -28,14 +30,21 @@ final class ProjectController extends Controller
         $status = ProjectStatus::tryFrom((string) $request->query('status', ''));
         $sectorId = (string) $request->query('sector', '');
         $officeId = (string) $request->query('office', '');
+        $pillarId = (string) $request->query('pillar', '');
+        $rag = RagStatus::tryFrom((string) $request->query('rag', ''));
 
         $base = fn (): Builder => PublicDirectory::visible(Project::query(), $locale);
 
-        $projects = $base()
-            ->with(['cover', 'sector.translations', 'office.translations'])
+        $filtered = fn (): Builder => $base()
             ->when($status !== null, fn (Builder $q) => $q->where('status', $status?->value))
             ->when($sectorId !== '', fn (Builder $q) => $q->where('sector_id', $sectorId))
             ->when($officeId !== '', fn (Builder $q) => $q->where('office_id', $officeId))
+            ->when($pillarId !== '', fn (Builder $q) => $q->where('pillar_id', $pillarId))
+            // The RAG status is public only while a project runs (ADR-0024).
+            ->when($rag !== null, fn (Builder $q) => $q->where('status', ProjectStatus::Ongoing->value)->where('rag_status', $rag?->value));
+
+        $projects = $filtered()
+            ->with(['cover', 'sector.translations', 'office.translations', 'pillar.translations'])
             ->orderByDesc('featured')->orderByDesc('starts_on')->orderByDesc('created_at')
             ->paginate(12)
             ->withQueryString();
@@ -47,7 +56,11 @@ final class ProjectController extends Controller
                 ->mapWithKeys(fn (Category $c): array => [$c->id => $c->name($locale)])->sort()->all(),
             'offices' => Office::query()->whereIn('id', $base()->whereNotNull('office_id')->select('office_id'))->with('translations')->get()
                 ->mapWithKeys(fn (Office $o): array => [$o->id => $o->name($locale)])->sort()->all(),
-            'filters' => ['status' => $status?->value, 'sector' => $sectorId ?: null, 'office' => $officeId ?: null],
+            'pillars' => Pillar::query()->whereIn('id', $base()->whereNotNull('pillar_id')->select('pillar_id'))->with('translations')->orderBy('sort')->get()
+                ->mapWithKeys(fn (Pillar $p): array => [$p->id => $p->name($locale)])->all(),
+            'ragOptions' => RagStatus::options(),
+            'filters' => ['status' => $status?->value, 'sector' => $sectorId ?: null, 'office' => $officeId ?: null, 'pillar' => $pillarId ?: null, 'rag' => $rag?->value],
+            'pins' => $this->pins($filtered(), $locale),
         ]);
     }
 
@@ -56,7 +69,10 @@ final class ProjectController extends Controller
         $locale = app()->getLocale();
         /** @var ProjectTranslation|null $translation */
         $translation = ProjectTranslation::query()->where('locale', $locale)->where('slug', $slug)->first();
-        $project = $translation?->project()->with(['translations', 'cover', 'sector.translations', 'office.translations', 'gallery.items.media', 'statistics.translations'])->first();
+        $project = $translation?->project()->with([
+            'translations', 'cover', 'sector.translations', 'office.translations', 'pillar.translations', 'gallery.items.media',
+            'statistics.translations', 'milestones', 'kpis.readings',
+        ])->first();
         abort_if($translation === null || $project === null || ! $translation->isLive(), 404);
 
         $gallery = $project->gallery !== null ? PublicDirectory::shown($project->gallery, $locale) : null;
@@ -111,6 +127,37 @@ final class ProjectController extends Controller
             'total' => $projects->count(),
             'sectors' => $sectors,
         ]);
+    }
+
+    /**
+     * The map pins of the projects that have one, for the locations view (ADR-0024). At most 200, newest first.
+     *
+     * @param  Builder<Project>  $query
+     * @return list<array{title: string, url: string, lat: float, lng: float, tone: string}>
+     */
+    private function pins(Builder $query, string $locale): array
+    {
+        $pins = [];
+        $projects = $query->whereNotNull('latitude')->whereNotNull('longitude')->with('translations')->latest()->limit(200)->get();
+        foreach ($projects as $project) {
+            $shown = PublicDirectory::shown($project, $locale);
+            if ($shown === null || $project->latitude === null || $project->longitude === null) {
+                continue;
+            }
+            $pins[] = [
+                'title' => (string) $shown->getAttribute('title'),
+                'url' => route('projects.show', ['locale' => $shown->locale, 'slug' => $shown->getAttribute('slug')]),
+                'lat' => $project->latitude,
+                'lng' => $project->longitude,
+                'tone' => match ($project->publicRag()) {
+                    RagStatus::Amber => 'saffron',
+                    RagStatus::Red => 'ruby',
+                    default => 'cyan',
+                },
+            ];
+        }
+
+        return $pins;
     }
 
     /**

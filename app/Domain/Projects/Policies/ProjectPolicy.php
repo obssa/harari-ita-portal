@@ -2,12 +2,14 @@
 
 namespace App\Domain\Projects\Policies;
 
+use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Projects\Models\Project;
 use App\Models\User;
 
 /**
  * Projects (PLAN.md §8): `projects.view` to see them in the admin,
- * `projects.manage` to create, publish and remove them.
+ * `projects.manage` to create, publish and remove them. A Project Manager
+ * scoped to a directorate sees and changes only its projects (ADR-0024).
  */
 final class ProjectPolicy
 {
@@ -18,7 +20,8 @@ final class ProjectPolicy
 
     public function view(User $actor, Project $project): bool
     {
-        return $this->viewAny($actor);
+        return OfficeScope::covers($actor, $project->office_id, 'projects.view')
+            || OfficeScope::covers($actor, $project->office_id, 'projects.manage');
     }
 
     public function create(User $actor): bool
@@ -28,12 +31,12 @@ final class ProjectPolicy
 
     public function update(User $actor, Project $project): bool
     {
-        return $actor->can('projects.manage');
+        return OfficeScope::covers($actor, $project->office_id, 'projects.manage');
     }
 
     public function delete(User $actor, Project $project): bool
     {
-        return $actor->can('projects.manage');
+        return OfficeScope::covers($actor, $project->office_id, 'projects.manage');
     }
 
     public function deleteAny(User $actor): bool
@@ -43,7 +46,7 @@ final class ProjectPolicy
 
     public function restore(User $actor, Project $project): bool
     {
-        return $actor->can('projects.manage');
+        return OfficeScope::covers($actor, $project->office_id, 'projects.manage');
     }
 
     public function restoreAny(User $actor): bool

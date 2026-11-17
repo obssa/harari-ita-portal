@@ -6,6 +6,9 @@
     <div class="flex flex-1 flex-col p-4">
         <p class="flex flex-wrap items-center gap-2 text-xs">
             <x-ui.badge :tone="$project->status->tone()">{{ $project->status->label() }}</x-ui.badge>
+            @if ($project->publicRag())
+                <x-ui.badge :tone="$project->publicRag()->tone()">{{ $project->publicRag()->label() }}</x-ui.badge>
+            @endif
             @if ($project->sector)
                 <span class="text-ink-muted">{{ $project->sector->name() }}</span>
             @endif

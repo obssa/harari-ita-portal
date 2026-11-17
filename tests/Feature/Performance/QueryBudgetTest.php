@@ -49,7 +49,7 @@ function budgetRecords(string $kind, int $count, int $from = 0): void
                 'translations' => ['en' => ['name' => "Sample Budget Leader {$i}", 'published' => true]],
             ], $publisher),
             'offices' => app(SaveOffice::class)->handle(new Office, ['type' => 'team', 'parent_id' => $office->id, 'translations' => ['en' => ['name' => "Sample budget kebele {$i}", 'published' => true]]], $publisher),
-            'projects' => app(SaveProject::class)->handle(new Project, ['status' => 'ongoing', 'office_id' => $office->id, 'translations' => ['en' => ['title' => "Sample budget project {$i}", 'published' => true]]], $publisher),
+            'projects' => app(SaveProject::class)->handle(new Project, ['status' => 'ongoing', 'office_id' => $office->id, 'translations' => ['en' => ['title' => "Sample budget project {$i}", 'published' => true]]], staff(SystemRole::ProjectManager)),
         };
     }
 }

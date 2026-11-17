@@ -1,7 +1,7 @@
 @use('App\Domain\Organisation\Queries\PublicDirectory')
 @php
     $locale = app()->getLocale();
-    $select = 'mt-1 block w-full rounded-control border border-line bg-surface px-3 py-2';
+    $select = 'mt-1 block w-full rounded-control border border-line bg-surface px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/30';
 @endphp
 <x-layouts.public :title="__('projects.title')" :description="__('projects.description')">
     <x-page-hero :title="__('projects.title')" :lead="__('projects.description')" tone="night" :crumbs="[]">
@@ -9,9 +9,20 @@
     </x-page-hero>
     <div class="mx-auto max-w-page px-4 pt-2 pb-12 sm:px-6">
 
-        <form method="get" action="{{ route('projects.index') }}" role="search" aria-label="{{ __('projects.filter') }}" class="mt-6 grid gap-4 rounded-card border border-line bg-surface p-4 sm:grid-cols-4 sm:items-end">
+        <form method="get" action="{{ route('projects.index') }}" role="search" aria-label="{{ __('projects.filter') }}" class="mt-8 grid gap-4 rounded-card border border-line bg-surface p-4 sm:grid-cols-2 lg:grid-cols-[repeat(5,minmax(0,1fr))_auto] lg:items-end">
+            @if ($pillars !== [])
+                <div>
+                    <label for="filter-pillar" class="kicker">{{ __('projects.pillar') }}</label>
+                    <select id="filter-pillar" name="pillar" class="{{ $select }}">
+                        <option value="">{{ __('projects.all_pillars') }}</option>
+                        @foreach ($pillars as $id => $name)
+                            <option value="{{ $id }}" @selected($filters['pillar'] === (string) $id)>{{ $name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
             <div>
-                <label for="filter-sector" class="text-sm font-medium">{{ __('projects.filter_sector') }}</label>
+                <label for="filter-sector" class="kicker">{{ __('projects.filter_sector') }}</label>
                 <select id="filter-sector" name="sector" class="{{ $select }}">
                     <option value="">{{ __('projects.all_sectors') }}</option>
                     @foreach ($sectors as $id => $name)
@@ -20,7 +31,7 @@
                 </select>
             </div>
             <div>
-                <label for="filter-status" class="text-sm font-medium">{{ __('projects.filter_status') }}</label>
+                <label for="filter-status" class="kicker">{{ __('projects.filter_status') }}</label>
                 <select id="filter-status" name="status" class="{{ $select }}">
                     <option value="">{{ __('projects.all_statuses') }}</option>
                     @foreach ($statuses as $value => $label)
@@ -29,7 +40,7 @@
                 </select>
             </div>
             <div>
-                <label for="filter-office" class="text-sm font-medium">{{ __('documents.filter_office') }}</label>
+                <label for="filter-office" class="kicker">{{ __('documents.filter_office') }}</label>
                 <select id="filter-office" name="office" class="{{ $select }}">
                     <option value="">{{ __('documents.all_offices') }}</option>
                     @foreach ($offices as $id => $name)
@@ -37,8 +48,17 @@
                     @endforeach
                 </select>
             </div>
+            <div>
+                <label for="filter-rag" class="kicker">{{ __('projects.rag_label') }}</label>
+                <select id="filter-rag" name="rag" class="{{ $select }}">
+                    <option value="">{{ __('projects.all_rag') }}</option>
+                    @foreach ($ragOptions as $value => $label)
+                        <option value="{{ $value }}" @selected($filters['rag'] === $value)>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="flex gap-3">
-                <button type="submit" class="rounded-control bg-primary-700 px-4 py-2 font-semibold text-white hover:bg-primary-800">{{ __('documents.apply') }}</button>
+                <x-ui.button type="submit" variant="primary">{{ __('documents.apply') }}</x-ui.button>
                 @if (array_filter($filters))
                     <a href="{{ route('projects.index') }}" class="self-center text-sm text-link underline-offset-4 hover:underline">{{ __('documents.clear') }}</a>
                 @endif
@@ -57,6 +77,15 @@
             </ul>
 
             <div class="mt-10">{{ $projects->links() }}</div>
+        @endif
+
+        @if (count($pins) > 0)
+            <section aria-labelledby="project-locations" class="mt-16">
+                <p class="kicker">{{ __('projects.locations_kicker') }}</p>
+                <h2 id="project-locations" class="heading-2 mt-2">{{ __('projects.locations') }}</h2>
+                <p class="mt-2 max-w-prose text-ink-muted">{{ __('projects.locations_lead') }}</p>
+                <x-project-locations :pins="$pins" class="mt-6" />
+            </section>
         @endif
     </div>
 </x-layouts.public>

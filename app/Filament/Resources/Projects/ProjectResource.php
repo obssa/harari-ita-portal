@@ -2,15 +2,23 @@
 
 namespace App\Filament\Resources\Projects;
 
+use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Content\Models\Category;
 use App\Domain\Media\Enums\MediaKind;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Projects\Enums\ProjectStatus;
+use App\Domain\Projects\Enums\RagStatus;
 use App\Domain\Projects\Models\Project;
+use App\Domain\Status\Support\LocalisedText;
+use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\Projects\Pages\CreateProject;
 use App\Filament\Resources\Projects\Pages\EditProject;
 use App\Filament\Resources\Projects\Pages\ListProjects;
+use App\Filament\Resources\Projects\RelationManagers\KpisRelationManager;
+use App\Filament\Resources\Projects\RelationManagers\RisksRelationManager;
+use App\Filament\Support\CurrentUser;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
 use App\Filament\Support\Translatable;
@@ -20,6 +28,8 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -27,6 +37,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -83,6 +94,20 @@ class ProjectResource extends Resource
                     DirectoryFields::body($locale, __('projects.admin.field.body')),
                     DirectoryFields::published($locale, 'projects.manage'),
                 ]),
+                Section::make(__('projects.admin.milestones'))->description(__('projects.admin.help.milestones'))->schema([
+                    Repeater::make('milestones')->hiddenLabel()->schema([
+                        Hidden::make('id'),
+                        Grid::make(2)->schema(array_map(
+                            fn (string $locale): TextInput => TextInput::make("titles.{$locale}")->label(Locales::nativeName($locale))->maxLength(200),
+                            Locales::all(),
+                        )),
+                        Grid::make(2)->schema([
+                            DatePicker::make('due_on')->label(__('projects.admin.field.due_on')),
+                            DatePicker::make('done_on')->label(__('projects.admin.field.done_on'))->maxDate(now()),
+                        ]),
+                    ])->maxItems(30)->collapsible()->reorderable()->defaultItems(0)->addActionLabel(__('projects.admin.add_milestone'))
+                        ->itemLabel(fn (array $state): ?string => LocalisedText::pick(is_array($state['titles'] ?? null) ? $state['titles'] : []) ?: null),
+                ]),
             ]),
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 1])->schema([
                 Section::make(__('admin.posts.section.details'))->schema([
@@ -90,6 +115,13 @@ class ProjectResource extends Resource
                         ->default(ProjectStatus::Planned->value)->required(),
                     TextInput::make('progress')->label(__('projects.admin.field.progress'))->numeric()->integer()
                         ->minValue(0)->maxValue(100)->suffix('%'),
+                    Select::make('rag_status')->label(__('projects.admin.field.rag'))->options(RagStatus::options())
+                        ->helperText(__('projects.admin.help.rag'))->live(),
+                    Textarea::make('rag_reason')->label(__('projects.admin.field.rag_reason'))->rows(2)->maxLength(300)
+                        ->helperText(__('projects.admin.help.rag_reason'))->visible(fn (Get $get): bool => filled($get('rag_status'))),
+                    Select::make('pillar_id')->label(__('admin.leaders.field.pillar'))
+                        ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()
+                            ->mapWithKeys(fn (Pillar $p): array => [$p->id => $p->name()])->all()),
                     Select::make('sector_id')->label(__('projects.admin.field.sector'))
                         ->helperText(__('projects.admin.help.sector'))
                         ->options(fn (): array => self::sectorOptions()),
@@ -101,6 +133,8 @@ class ProjectResource extends Resource
                         DatePicker::make('ends_on')->label(__('projects.admin.field.ends_on'))->afterOrEqual('starts_on'),
                     ]),
                     TextInput::make('budget')->label(__('projects.admin.field.budget'))->numeric()->minValue(0)->suffix('ETB'),
+                    TextInput::make('spent')->label(__('projects.admin.field.spent'))->numeric()->minValue(0)->suffix('ETB')
+                        ->helperText(__('projects.admin.help.spent')),
                     Toggle::make('budget_public')->label(__('projects.admin.field.budget_public')),
                     Toggle::make('featured')->label(__('projects.admin.field.featured'))->helperText(__('projects.admin.help.featured')),
                 ]),
@@ -122,12 +156,15 @@ class ProjectResource extends Resource
     {
         return $table
             ->defaultSort('created_at', 'desc')
-            ->modifyQueryUsing(fn (Builder $query) => $query->with(['translations', 'sector.translations']))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['translations', 'sector.translations', 'pillar.translations']))
             ->columns([
                 TextColumn::make('title')->label(__('admin.posts.field.title'))
                     ->state(fn (Project $record): string => $record->title())->wrap(),
                 TextColumn::make('status')->label(__('projects.admin.field.status'))->badge()
                     ->formatStateUsing(fn (ProjectStatus $state): string => $state->label()),
+                TextColumn::make('rag_status')->label(__('projects.admin.field.rag'))->badge()->placeholder('—')
+                    ->formatStateUsing(fn (RagStatus $state): string => $state->label())
+                    ->color(fn (RagStatus $state): string => $state->color()),
                 TextColumn::make('progress')->label(__('projects.admin.field.progress'))->suffix('%')->placeholder('—')->sortable(),
                 TextColumn::make('sector')->label(__('projects.admin.field.sector'))
                     ->state(fn (Project $record): ?string => $record->sector?->name())->placeholder('—'),
@@ -136,10 +173,19 @@ class ProjectResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('status')->label(__('projects.admin.field.status'))->options(ProjectStatus::options()),
+                SelectFilter::make('rag_status')->label(__('projects.admin.field.rag'))->options(RagStatus::options()),
                 SelectFilter::make('sector_id')->label(__('projects.admin.field.sector'))->options(fn (): array => self::sectorOptions()),
+                SelectFilter::make('pillar_id')->label(__('admin.leaders.field.pillar'))
+                    ->options(fn (): array => Pillar::query()->with('translations')->orderBy('sort')->get()
+                        ->mapWithKeys(fn (Pillar $p): array => [$p->id => $p->name()])->all()),
                 TrashedFilter::make(),
             ])
             ->recordActions([ViewOnSite::row(), EditAction::make(), DeleteAction::make(), RestoreAction::make()]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [KpisRelationManager::class, RisksRelationManager::class];
     }
 
     public static function getPages(): array
@@ -156,7 +202,12 @@ class ProjectResource extends Resource
      */
     public static function getEloquentQuery(): Builder
     {
+        // A Project Manager scoped to a directorate sees only its projects (ADR-0024).
+        $user = CurrentUser::get();
+        $query = parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
+        $offices = OfficeScope::officeIds($user, 'projects.view');
+
         /** @var Builder<Project> */
-        return parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
+        return $offices === null ? $query : $query->whereIn('office_id', $offices);
     }
 }

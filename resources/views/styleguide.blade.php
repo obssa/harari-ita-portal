@@ -156,5 +156,38 @@
             </div>
             <x-ui.code class="mt-4" label="GET /api/v1/news">curl -s https://example.org/api/v1/news?lang=en</x-ui.code>
         </section>
+
+        @php
+            // Unsaved sample records: the components only read them.
+            $sgMilestones = collect([
+                new \App\Domain\Projects\Models\ProjectMilestone(['titles' => ['en' => 'Sample survey'], 'due_on' => now()->subMonths(2), 'done_on' => now()->subMonths(2)->subDay()]),
+                new \App\Domain\Projects\Models\ProjectMilestone(['titles' => ['en' => 'Sample installation'], 'due_on' => now()->subWeek()]),
+                new \App\Domain\Projects\Models\ProjectMilestone(['titles' => ['en' => 'Sample hand-over'], 'due_on' => now()->addMonths(2)]),
+            ]);
+            $sgKpi = new \App\Domain\Projects\Models\ProjectKpi(['names' => ['en' => 'Sample schools online'], 'units' => ['en' => 'schools'], 'baseline' => 0, 'target' => 40]);
+            $sgKpi->id = 1;
+            $sgKpi->setRelation('readings', collect([
+                new \App\Domain\Projects\Models\ProjectKpiReading(['value' => 6, 'as_of' => now()->subMonths(3)]),
+                new \App\Domain\Projects\Models\ProjectKpiReading(['value' => 11, 'as_of' => now()->subMonths(2)]),
+                new \App\Domain\Projects\Models\ProjectKpiReading(['value' => 18, 'as_of' => now()->subMonth()]),
+            ]));
+            $sgPins = [
+                ['title' => 'Sample project A', 'url' => '#', 'lat' => 9.311, 'lng' => 42.118, 'tone' => 'cyan'],
+                ['title' => 'Sample project B', 'url' => '#', 'lat' => 9.322, 'lng' => 42.139, 'tone' => 'saffron'],
+                ['title' => 'Sample project C', 'url' => '#', 'lat' => 9.298, 'lng' => 42.151, 'tone' => 'ruby'],
+            ];
+        @endphp
+        <section aria-labelledby="sg-projects">
+            <h2 id="sg-projects" class="heading-2">Projects: milestones, indicators, locations</h2>
+            <div class="mt-4 grid gap-6 lg:grid-cols-2">
+                <x-milestone-timeline :milestones="$sgMilestones" />
+                <x-kpi-card :kpi="$sgKpi" />
+            </div>
+            <div class="mt-6 grid gap-6 lg:grid-cols-2">
+                <div class="rounded-card bg-night-900 p-5"><x-progress-bar :value="64" tone="night" /></div>
+                <x-progress-bar :value="25" caption="Share of the budget spent" />
+            </div>
+            <x-project-locations :pins="$sgPins" class="mt-6" />
+        </section>
     </div>
 </x-layouts.public>

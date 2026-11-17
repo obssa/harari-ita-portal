@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Projects\Pages;
 
 use App\Domain\Projects\Actions\SaveProject;
 use App\Domain\Projects\Models\Project;
+use App\Domain\Projects\Models\ProjectMilestone;
 use App\Filament\Resources\Projects\ProjectResource;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\DirectoryFields;
@@ -31,6 +32,12 @@ class EditProject extends EditRecord
         /** @var Project $project */
         $project = $this->getRecord();
         $data['translations'] = DirectoryFields::fill($project, ['title', 'summary', 'location']);
+        $data['milestones'] = $project->milestones->map(fn (ProjectMilestone $m): array => [
+            'id' => $m->id,
+            'titles' => $m->titles,
+            'due_on' => $m->due_on?->toDateString(),
+            'done_on' => $m->done_on?->toDateString(),
+        ])->all();
 
         return $data;
     }
