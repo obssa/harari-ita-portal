@@ -164,6 +164,12 @@ it('sends the weekly digest to directorate heads and Admins, each for what they 
     Notification::assertNotSentTo($editor, WeeklyDigestNotice::class);
     Notification::assertNotSentTo($quiet, WeeklyDigestNotice::class);
 
+    // A dry run shows each recipient's sections and sends nothing.
+    Notification::fake();
+    $this->artisan('reports:weekly-digest', ['--dry-run' => true, '--user' => $head->id])
+        ->expectsOutputToContain('Sample ICT directorate')->expectsOutputToContain('Sample red project')->assertSuccessful();
+    Notification::assertNothingSent();
+
     // A directorate with nothing to report receives nothing.
     $empty = headOf(agencyOffice('Sample quiet directorate'));
     Notification::fake();
