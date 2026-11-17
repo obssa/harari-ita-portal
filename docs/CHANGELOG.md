@@ -2,6 +2,11 @@
 
 All notable changes to the Agency's portal. Newest first.
 
+## Unreleased — phase 4: projects and open data
+
+- `portal:sample-services` no longer adds a sample service: the Proposed services already cover office email. The
+  `[Sample]` email service was removed from staging.
+
 ## Unreleased — phase 3: innovation
 
 - **Startups directory** at `/innovation/startups`, with "Get listed" requests reviewed by the Agency and a label

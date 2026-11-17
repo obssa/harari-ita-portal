@@ -95,5 +95,7 @@ live figures on the homepage; manual chapter 8.
   needed (INPUTS).
 - The real services, SLA targets, working hours and status systems come from the Agency (open questions above).
   The `[Sample]` content stays on staging until then; `php artisan portal:sample-services --remove` deletes it.
+  (2026-11-17: the sample service was removed at Ramin's request, since the Proposed services cover office email;
+  the sample status systems, incident and ticket stay.)
 
 **Next.** Phase 3: innovation (startups, programmes and applications, challenges and judging).

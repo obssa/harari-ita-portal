@@ -14,14 +14,12 @@ it('adds labelled sample content without sending anything, once, and removes exa
     $this->artisan('portal:sample-services')->assertSuccessful();
     $this->artisan('portal:sample-services')->assertSuccessful();
 
-    expect(ServiceItem::query()->count())->toBe(1)
-        ->and(ServiceItem::query()->first()->translations()->count())->toBe(4)
+    expect(ServiceItem::query()->count())->toBe(0)
         ->and(StatusComponent::query()->count())->toBe(2)
         ->and(Incident::query()->count())->toBe(1)
         ->and(Ticket::query()->count())->toBe(1);
     Mail::assertNothingQueued();
 
-    $this->get('/en/services')->assertSee('[Sample] Email account for a public office');
     $this->get('/en/status')->assertSee('[Sample] Email is slow');
 
     $this->artisan('portal:sample-services', ['--remove' => true])->assertSuccessful();

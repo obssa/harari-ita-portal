@@ -56,6 +56,8 @@ green, CI green, deployed to staging and checked there.
 ## Open questions (for Ramin / the Agency)
 
 1. Does the Agency run its own incubation or acceleration programme now, or with partners (universities, MInT)?
+   **Answered (Ramin, 2026-11-17):** it can run its own, but mostly runs them with partners. The model already
+   fits: a programme's partner is optional and shows as "With …" on the programme pages (ADR-0021).
 2. The sectors to use for startups (the project sectors are reused unless the Agency wants its own list).
 3. What "verified by the Agency" means for a startup's label: seeing the MInT certificate, or more.
 4. Whether judges are outside experts who need an account with only the Judge role (the default), and how long
@@ -118,8 +120,8 @@ Also in this phase:
   and the participants' consent.
 - The manual chapter is in English only; its Amharic version (with chapter 8's) waits for the Agency's review of
   the English.
-- The open questions above remain for the Agency: its own programmes and partners, the sector list, what "verified
-  label" means, and who the judges are.
+- The open questions above remain for the Agency: the sector list, what "verified label" means, and who the
+  judges are. (Own programmes or partners is answered: mostly with partners.)
 - The `[Sample]` startup, programme and challenge stay on staging until real content arrives;
   `php artisan portal:sample-innovation --remove` deletes them.
 

@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Events\Models\EventRegistration;
-use App\Domain\Services\Actions\SaveServiceItem;
 use App\Domain\Services\Models\ServiceItem;
 use App\Domain\Status\Actions\SaveIncident;
 use App\Domain\Status\Models\Incident;
@@ -23,14 +22,15 @@ use Illuminate\Console\Command;
 
 /**
  * Clearly labelled sample content for the phase 2 gate on staging (docs/phases/02-services-support-status.md):
- * one service in four languages, two status systems with one incident, and one support ticket. No email or SMS is
- * sent. `--remove` deletes exactly what it added. Refuses to run in production.
+ * two status systems with one incident, and one support ticket. No email or SMS is sent. It adds no service: the
+ * catalogue shows the Proposed services (ADR-0019), which already cover office email. `--remove` deletes what it
+ * added, and also a [Sample] service left by its first version. Refuses to run in production.
  */
 final class SampleServicesCommand extends Command
 {
     protected $signature = 'portal:sample-services {--remove : Delete the sample content again}';
 
-    protected $description = 'Add (or remove) labelled sample services, status systems, an incident and a ticket';
+    protected $description = 'Add (or remove) labelled sample status systems, an incident and a ticket';
 
     private const MARK = '[Sample]';
 
@@ -47,7 +47,7 @@ final class SampleServicesCommand extends Command
 
     private function add(): int
     {
-        if (ServiceItem::query()->whereHas('translations', fn ($q) => $q->where('title', 'like', self::MARK.'%'))->exists()) {
+        if (Ticket::query()->where('email_hash', EventRegistration::hash('sample@example.org'))->exists()) {
             $this->components->warn('Sample content is already there.');
 
             return self::SUCCESS;
@@ -55,32 +55,8 @@ final class SampleServicesCommand extends Command
 
         $actor = User::role(SystemRole::SuperAdmin->value)->firstOrFail();
 
-        $service = app(SaveServiceItem::class)->handle(new ServiceItem, [
-            'channels' => ['online', 'in_person'],
-            'external_url' => 'https://hita.orcamind.dev/en/support/new',
-            'audiences' => ['government'],
-            'featured' => true,
-            'reviewed_at' => CarbonImmutable::now()->toDateString(),
-            'translations' => [
-                'en' => [
-                    'title' => self::MARK.' Email account for a public office',
-                    'summary' => 'Sample service for testing the catalogue. Not a real service.',
-                    'eligibility' => 'Sample: public offices of the region.',
-                    'documents' => "Sample request letter\nSample list of staff",
-                    'steps' => "Send the request\nThe service desk creates the account\nYou receive the details",
-                    'fees' => 'Free (sample)',
-                    'duration' => '3 working days (sample)',
-                    'faq' => [['question' => 'Sample question?', 'answer' => 'Sample answer.']],
-                    'published' => true,
-                ],
-                'am' => ['title' => self::MARK.' ለመንግሥት መሥሪያ ቤት የኢሜይል አካውንት', 'summary' => 'ለሙከራ የቀረበ ናሙና አገልግሎት። እውነተኛ አገልግሎት አይደለም።', 'published' => true],
-                'om' => ['title' => self::MARK.' Herrega imeelii waajjira mootummaaf', 'summary' => 'Tajaajila fakkeenyaa qormaataaf. Tajaajila dhugaa miti.', 'published' => true],
-                'har' => ['title' => self::MARK.' Email account (Harari sample)', 'published' => true],
-            ],
-        ], $actor);
-
         StatusComponent::query()->create(['names' => ['en' => self::MARK.' Website', 'am' => self::MARK.' ድረ ገጽ', 'om' => self::MARK.' Marsariitii'], 'sort' => 900]);
-        $mail = StatusComponent::query()->create(['names' => ['en' => self::MARK.' Email', 'am' => self::MARK.' ኢሜይል', 'om' => self::MARK.' Imeelii'], 'sort' => 901, 'service_item_id' => $service->id]);
+        $mail = StatusComponent::query()->create(['names' => ['en' => self::MARK.' Email', 'am' => self::MARK.' ኢሜይል', 'om' => self::MARK.' Imeelii'], 'sort' => 901]);
 
         app(SaveIncident::class)->handle(new Incident, [
             'titles' => ['en' => self::MARK.' Email is slow', 'am' => self::MARK.' ኢሜይል ቀርፋፋ ነው', 'om' => self::MARK.' Imeeliin suuta deema'],
@@ -105,7 +81,6 @@ final class SampleServicesCommand extends Command
             'channel' => TicketChannel::Web,
             'subject' => self::MARK.' The online form does not load',
             'description' => 'Sample ticket for testing the service desk. Not a real request.',
-            'service_item_id' => $service->id,
             'response_due_at' => WorkingHours::add($now, $targets['response']),
             'resolve_due_at' => WorkingHours::add($now, $targets['resolve']),
         ]);

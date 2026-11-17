@@ -21,7 +21,8 @@ staging stays noindex. Tick each item when received and note where it is stored.
 - [ ] ICT standards and guidelines that may be published
 
 ## Innovation
-- [ ] Current or planned programmes (incubation, acceleration), with eligibility and benefits
+- [ ] Current or planned programmes (incubation, acceleration), with eligibility and benefits. Known so far (Ramin,
+  2026-11-17): the Agency can run its own, but mostly runs them with partners; name each partner and get its consent
 - [ ] Startups and innovators who agree to be listed
 - [ ] Planned challenges or hackathons (dates, prizes, partners, judges with consent)
 - [ ] How the Agency works with MInT on startup labelling (wording to use)
