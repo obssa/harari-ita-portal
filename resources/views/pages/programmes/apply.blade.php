@@ -6,7 +6,7 @@
     {{-- ADR-0021: one form in three parts (the stepper shows them); nothing is lost if a part is wrong. --}}
     <x-page-hero :title="__('innovation.programmes.apply_to', ['programme' => $translation->title])" :kicker="$cohort?->name ?? $programme->kind->label()" tone="night"
                  :crumbs="[[__('innovation.programmes.title'), route('programmes.index')], [$translation->title, route('programmes.show', ['slug' => $translation->slug])]]">
-        <x-ui.stepper :steps="$steps" :current="0" class="max-w-3xl [&_.text-ink]:text-night-ink [&_.text-ink-muted]:text-night-muted" />
+        <x-ui.stepper :steps="$steps" :current="0" tone="night" class="max-w-3xl" />
     </x-page-hero>
 
     <div class="mx-auto max-w-page px-4 pt-10 pb-16 sm:px-6">

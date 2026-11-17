@@ -6,7 +6,7 @@
     {{-- ADR-0022: one team registers once; the contact gets the team reference, which opens the submission page. --}}
     <x-page-hero :title="__('innovation.challenges.register_for', ['challenge' => $translation->title])" :kicker="__('innovation.phase.registration')" tone="night"
                  :crumbs="[[__('innovation.challenges.title'), route('challenges.index')], [$translation->title, route('challenges.show', ['slug' => $translation->slug])]]">
-        <x-ui.stepper :steps="$steps" :current="0" class="max-w-3xl [&_.text-ink]:text-night-ink [&_.text-ink-muted]:text-night-muted" />
+        <x-ui.stepper :steps="$steps" :current="0" tone="night" class="max-w-3xl" />
     </x-page-hero>
 
     <div class="mx-auto max-w-page px-4 pt-10 pb-16 sm:px-6">

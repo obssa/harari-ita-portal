@@ -10,7 +10,7 @@
 <x-layouts.public :title="$startup->reference" :description="__('innovation.track.description')">
     {{-- ADR-0020: the founders' view of their listing: where the review stands and the reviewer's note. --}}
     <x-page-hero :title="$startup->reference" :kicker="__('innovation.track.title')" tone="night" :crumbs="[[__('innovation.startups.title'), route('startups.index')]]">
-        <x-ui.stepper :steps="$steps" :current="$current" class="max-w-3xl [&_.text-ink]:text-night-ink [&_.text-ink-muted]:text-night-muted" />
+        <x-ui.stepper :steps="$steps" :current="$current" tone="night" class="max-w-3xl" />
     </x-page-hero>
     <div class="mx-auto max-w-page px-4 pt-10 pb-16 sm:px-6">
         @if (session('status'))

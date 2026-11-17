@@ -16,7 +16,7 @@
 <x-layouts.public :title="$application->reference" :description="__('innovation.track.application_description')">
     {{-- ADR-0021: the applicant's view: where the application stands and, once decided, the note from the Agency. --}}
     <x-page-hero :title="$application->reference" :kicker="__('innovation.track.application_title')" tone="night" :crumbs="[[__('innovation.programmes.title'), route('programmes.index')]]">
-        <x-ui.stepper :steps="$steps" :current="$current" class="max-w-3xl [&_.text-ink]:text-night-ink [&_.text-ink-muted]:text-night-muted" />
+        <x-ui.stepper :steps="$steps" :current="$current" tone="night" class="max-w-3xl" />
     </x-page-hero>
     <div class="mx-auto max-w-page px-4 pt-10 pb-16 sm:px-6">
         @if (session('status'))

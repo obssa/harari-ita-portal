@@ -13,7 +13,7 @@
     {{-- ADR-0017: the request as the requester sees it: where it stands, the conversation without internal notes,
          and the way to write back or rate the help. --}}
     <x-page-hero :title="$ticket->reference" :kicker="__('support.track.title')" tone="night" :crumbs="[[__('support.public.title'), route('support.create')]]">
-        <x-ui.stepper :steps="$steps" :current="$current" class="max-w-3xl [&_.text-ink]:text-night-ink [&_.text-ink-muted]:text-night-muted" />
+        <x-ui.stepper :steps="$steps" :current="$current" tone="night" class="max-w-3xl" />
     </x-page-hero>
 
     <div class="mx-auto max-w-page px-4 pt-10 pb-16 sm:px-6">
