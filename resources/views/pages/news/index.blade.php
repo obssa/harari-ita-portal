@@ -10,7 +10,7 @@
         <nav aria-label="{{ __('news.filter_by_type') }}">
             <ul class="flex flex-wrap gap-2">
                 <li><x-ui.chip :href="route('news.index')" :active="! $type">{{ __('news.all') }}</x-ui.chip></li>
-                @foreach (PostType::cases() as $option)
+                @foreach (PostType::news() as $option)
                     <li><x-ui.chip :href="route('news.index', ['type' => $option->value])" :active="$type === $option">{{ $option->label() }}</x-ui.chip></li>
                 @endforeach
             </ul>

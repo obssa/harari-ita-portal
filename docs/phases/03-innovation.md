@@ -63,7 +63,7 @@ green, CI green, deployed to staging and checked there.
 4. Whether judges are outside experts who need an account with only the Judge role (the default), and how long
    submissions and applications are kept after a programme or challenge ends (default: two years).
 
-## Report (2026-11-18)
+## Report (2026-11-17)
 
 **Done.** The three PLAN.md §13 checks pass, in the tests and on staging:
 

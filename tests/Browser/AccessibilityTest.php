@@ -27,6 +27,8 @@ it('has no serious accessibility issues on the main pages', function () {
         '/en/innovation/challenges', '/en/innovation/challenges/sample-browser-hackathon', '/en/innovation/challenges/sample-browser-hackathon/register', '/en/innovation/teams',
         '/en/projects', '/en/projects/sample-browser-project', '/en/data', '/en/data/sample-browser-data', '/en/numbers', '/en/developers',
         '/en/academy', '/am/academy', '/en/academy/courses/sample-digital-skills-for-office-staff', '/en/academy/certificates/verify',
+        '/en/opportunities', '/am/opportunities', '/en/opportunities/sample-supply-of-network-equipment-for-regional-offices',
+        '/en/advisories', '/en/advisories/sample-phishing-messages-pretending-to-be-the-agency',
     ];
     $open = CourseCohort::query()->whereDate('starts_on', '>', now()->toDateString())->firstOrFail();
     $pages[] = "/en/academy/courses/sample-digital-skills-for-office-staff/enrol/{$open->id}";

@@ -7,6 +7,7 @@ use App\Domain\Innovation\Models\Startup;
 use App\Domain\Support\Models\Ticket;
 use App\Domain\Translation\Support\Locales;
 use App\Http\Controllers\Public\AcademyController;
+use App\Http\Controllers\Public\AdvisoryController;
 use App\Http\Controllers\Public\ApplicationController;
 use App\Http\Controllers\Public\CampaignLinkController;
 use App\Http\Controllers\Public\CertificateController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Public\MediaFileController;
 use App\Http\Controllers\Public\NewsController;
 use App\Http\Controllers\Public\NewsletterController;
 use App\Http\Controllers\Public\OfficeController;
+use App\Http\Controllers\Public\OpportunityController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\PageViewController;
 use App\Http\Controllers\Public\PillarController;
@@ -278,7 +280,17 @@ Route::prefix('{locale}')
         // Counted, so never answered from the cache.
         Route::get('documents/{slug}/download', [DocumentController::class, 'download'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')
             ->withoutMiddleware(CachePublicPages::class)->name('documents.download');
-        Route::get('notices', [DocumentController::class, 'notices'])->name('documents.notices');
+        // ADR-0032: the notices page became the opportunities.
+        Route::get('notices', [OpportunityController::class, 'notices'])->name('documents.notices');
+        // ADR-0032: tenders, calls for proposals, vacancies and internships, their deadline as a calendar file, the feed.
+        Route::get('opportunities', [OpportunityController::class, 'index'])->name('opportunities.index');
+        Route::get('opportunities/feed.xml', [OpportunityController::class, 'rss'])->name('opportunities.feed');
+        Route::get('opportunities/{slug}.ics', [OpportunityController::class, 'ics'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('opportunities.ics');
+        Route::get('opportunities/{slug}', [OpportunityController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('opportunities.show');
+        // ADR-0034: safety and awareness advisories and their feed.
+        Route::get('advisories', [AdvisoryController::class, 'index'])->name('advisories.index');
+        Route::get('advisories/feed.xml', [AdvisoryController::class, 'rss'])->name('advisories.feed');
+        Route::get('advisories/{slug}', [AdvisoryController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('advisories.show');
         Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
         Route::get('projects/{slug}', [ProjectController::class, 'show'])->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('projects.show');
         Route::get('numbers', [ProjectController::class, 'numbers'])->name('projects.numbers');

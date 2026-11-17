@@ -24,7 +24,10 @@
                 "https://hita.orcamind.dev/en/academy",
                 "https://hita.orcamind.dev/en/academy/courses/sample-digital-skills-for-office-staff",
                 "https://hita.orcamind.dev/am/academy/courses/sample-lebiro-seratenyoch-yedijital-kihilot",
-                "https://hita.orcamind.dev/en/academy/certificates/verify"
+                "https://hita.orcamind.dev/en/academy/certificates/verify",
+                "https://hita.orcamind.dev/en/opportunities",
+                "https://hita.orcamind.dev/en/opportunities/sample-supply-of-network-equipment-for-regional-offices",
+                "https://hita.orcamind.dev/en/advisories/sample-phishing-messages-pretending-to-be-the-agency"
             ],
             "numberOfRuns": 3,
             "settings": {

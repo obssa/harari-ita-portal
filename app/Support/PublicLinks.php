@@ -14,6 +14,7 @@ use App\Domain\Innovation\Models\Startup;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\Video;
 use App\Domain\OpenData\Models\Dataset;
+use App\Domain\Opportunities\Models\Opportunity;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\Pillar;
@@ -38,6 +39,7 @@ final class PublicLinks
         Project::class => 'projects.show',
         Dataset::class => 'datasets.show',
         Course::class => 'courses.show',
+        Opportunity::class => 'opportunities.show',
         Gallery::class => 'gallery.show',
         Video::class => 'videos.show',
         Leader::class => 'leaders.show',
@@ -81,7 +83,7 @@ final class PublicLinks
             return [];
         }
 
-        $route = self::ROUTES[$record::class] ?? null;
+        $route = $record instanceof Post ? $record->type->route() : (self::ROUTES[$record::class] ?? null);
         if ($route === null && ! $record instanceof Page) {
             return [];
         }

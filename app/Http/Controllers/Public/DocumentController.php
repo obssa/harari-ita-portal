@@ -52,19 +52,6 @@ final class DocumentController extends Controller
         ]);
     }
 
-    public function notices(): View
-    {
-        $locale = app()->getLocale();
-        $base = fn (): Builder => PublicDirectory::visible(Document::query(), $locale)->publicAccess()->ofTypes(DocumentType::notices())
-            ->with(['translations.file', 'office.translations']);
-
-        return view('pages.documents.notices', [
-            // Open ones by the nearest deadline; those without a deadline after them.
-            'open' => $base()->open()->orderByRaw('deadline_at is null')->orderBy('deadline_at')->orderByDesc('created_at')->limit(50)->get(),
-            'closed' => $base()->closed()->orderByDesc('deadline_at')->limit(20)->get(),
-        ]);
-    }
-
     public function show(string $slug): View
     {
         $locale = app()->getLocale();
@@ -76,7 +63,7 @@ final class DocumentController extends Controller
             ->filter()->values();
         $versions = $document->versions()->where('locale', $file->locale ?? $locale)->with('media')->get()
             ->filter(fn ($version): bool => $version->media !== null)->values();
-        $index = $document->type->isNotice() ? 'documents.notices' : 'documents.index';
+        $index = $document->type->isNotice() ? 'opportunities.index' : 'documents.index';
 
         return view('pages.documents.show', [
             'document' => $document,

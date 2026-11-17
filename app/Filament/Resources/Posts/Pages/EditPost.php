@@ -13,6 +13,7 @@ use App\Domain\Social\Models\SocialSource;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\Posts\PostResource;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\DraftCampaignAction;
 use App\Filament\Support\ViewOnSite;
 use App\Http\Controllers\Public\PreviewController;
 use Filament\Actions\Action;
@@ -34,6 +35,7 @@ class EditPost extends EditRecord
     {
         return [
             ...ViewOnSite::header(),
+            DraftCampaignAction::make(),
             Action::make('sendToMedia')
                 ->label(__('press.distribution.send'))
                 ->icon(Heroicon::OutlinedNewspaper)
@@ -139,6 +141,8 @@ class EditPost extends EditRecord
                 'slug' => $translation->slug,
                 'kicker' => $translation->kicker,
                 'excerpt' => $translation->excerpt,
+                'affected' => $translation->affected,
+                'actions' => $translation->actions,
                 'body' => $translation->body,
                 'status' => $translation->status->value,
                 'published_at' => $translation->published_at?->toDateTimeString(),

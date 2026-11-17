@@ -96,7 +96,7 @@ green, CI green, deployed to staging and checked there.
    library: is that wanted?
 4. The retention period for learners' contact details (two years after the cohort is proposed).
 
-## Report (2026-11-20)
+## Report (2026-11-17)
 
 **Acceptance (PLAN.md §13: enrol, attend, issue a certificate, verify by QR).** Checked on staging
 (https://hita.orcamind.dev) with the labelled samples of `portal:sample-academy`, in English, Amharic and Afaan Oromo:

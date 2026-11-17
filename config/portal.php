@@ -129,6 +129,14 @@ return [
     ],
 
     /*
+    | Advisories (ADR-0034): where cyber incidents are reported. National incidents belong to INSA; the Agency confirms
+    | the exact address (docs/INPUTS.md).
+    */
+    'advisories' => [
+        'incident_url' => env('PORTAL_INCIDENT_REPORT_URL', 'https://www.insa.gov.et'),
+    ],
+
+    /*
     | Campaign sending limits per minute (ADR-0052), to stay within what the mail
     | and SMS accounts accept.
     */

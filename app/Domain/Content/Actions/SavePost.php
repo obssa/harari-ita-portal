@@ -2,7 +2,9 @@
 
 namespace App\Domain\Content\Actions;
 
+use App\Domain\Content\Enums\AdvisorySeverity;
 use App\Domain\Content\Enums\ContentStatus;
+use App\Domain\Content\Enums\PostType;
 use App\Domain\Content\Models\Post;
 use App\Domain\Content\Models\PostTranslation;
 use App\Domain\Content\Support\BodyRenderer;
@@ -24,6 +26,8 @@ use Illuminate\Validation\ValidationException;
  *  - only people with `posts.publish` publish, schedule or archive;
  *  - only people who may edit the post itself change its type, image,
  *    categories, tags or flags (translators change the text only);
+ *  - only people with `advisories.manage` make a post an advisory, change
+ *    an advisory's type or severity; an advisory has a severity (ADR-0034);
  *  - a featured image needs alt text in every live language among
  *    English, Amharic and Afaan Oromo (PLAN.md §11).
  */
@@ -52,6 +56,7 @@ final class SavePost
 
         return DB::transaction(function () use ($post, $data, $translations, $actor, $canEditStructure): Post {
             if ($canEditStructure) {
+                $this->applyAdvisory($post, $data, $actor);
                 $post->fill([
                     'type' => $data['type'] ?? $post->type ?? 'news',
                     'featured_image_id' => filled($data['featured_image_id'] ?? null) ? (int) $data['featured_image_id'] : null,
@@ -127,6 +132,8 @@ final class SavePost
                 'slug' => filled($values['slug'] ?? null) ? trim((string) $values['slug']) : $current?->slug,
                 'kicker' => self::nullable($values['kicker'] ?? null),
                 'excerpt' => self::nullable($values['excerpt'] ?? null),
+                'affected' => $post->type === PostType::Advisory ? self::nullable($values['affected'] ?? null) : null,
+                'actions' => $post->type === PostType::Advisory ? self::nullable($values['actions'] ?? null) : null,
                 'body' => is_array($values['body'] ?? null) ? $values['body'] : null,
                 'seo_title' => self::nullable($values['seo_title'] ?? null),
                 'seo_description' => self::nullable($values['seo_description'] ?? null),
@@ -145,6 +152,35 @@ final class SavePost
 
             $this->revisions->handle($post, $translation);
         }
+    }
+
+    /**
+     * The advisory rules (ADR-0034): who may make or change one, and its severity.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    private function applyAdvisory(Post $post, array $data, User $actor): void
+    {
+        $type = PostType::tryFrom((string) ($data['type'] ?? '')) ?? $post->type ?? PostType::News;
+        $wasAdvisory = $post->exists && $post->getOriginal('type') === PostType::Advisory;
+        $severity = AdvisorySeverity::tryFrom((string) ($data['severity'] ?? ''));
+
+        if ($type !== PostType::Advisory && ! $wasAdvisory) {
+            $post->severity = null;
+
+            return;
+        }
+        if (! $actor->can('advisories.manage')) {
+            if ($type !== ($post->exists ? $post->getOriginal('type') : null) || ($severity !== null && $severity !== $post->severity)) {
+                throw ValidationException::withMessages(['data.type' => __('advisories.validation.permission')]);
+            }
+
+            return;
+        }
+        if ($type === PostType::Advisory && $severity === null) {
+            throw ValidationException::withMessages(['data.severity' => __('advisories.validation.severity')]);
+        }
+        $post->severity = $type === PostType::Advisory ? $severity : null;
     }
 
     /**

@@ -72,7 +72,7 @@ final class SiteNav extends Component
         $about = self::aboutPages(app()->getLocale());
 
         // The Agency's site map (PLAN.md §3). The sections of modules still to come (services, innovation,
-        // academy, opportunities) join the menu when their routes exist, so nothing links to a missing page.
+        // academy) join the menu when their routes exist, so nothing links to a missing page.
         $items = [
             $section('nav.about', 'nav.about_desc', $about[0]['url'] ?? route('structure'), null, [
                 ...$about,
@@ -114,6 +114,7 @@ final class SiteNav extends Component
         ]);
         $items[] = $section('nav.media', 'nav.media_desc', route('news.index'), null, [
             $link('nav.news', route('news.index'), 'news.*', 'nav.news_hint'),
+            $link('advisories.title', route('advisories.index'), 'advisories.*', 'nav.advisories_hint'),
             $link('nav.press_releases', route('news.index', ['type' => 'press_release']), null, 'nav.press_releases_hint'),
             $link('nav.statements', route('news.index', ['type' => 'statement']), null, 'nav.statements_hint'),
             $link('events.title', route('events.index'), 'events.*', 'nav.events_hint'),
@@ -128,9 +129,10 @@ final class SiteNav extends Component
             $link('nav.doc_bylaws', route('documents.index', ['type' => 'bylaw']), null, 'nav.doc_bylaws_hint'),
             $link('nav.doc_policies', route('documents.index', ['type' => 'policy']), null, 'nav.doc_policies_hint'),
             $link('nav.doc_reports', route('documents.index', ['type' => 'report']), null, 'nav.doc_reports_hint'),
-            $link('nav.notices', route('documents.notices'), 'documents.notices', 'nav.notices_hint'),
         ]);
+        // ADR-0032: opportunities lead "Get involved"; the menu keeps its eight sections so every language fits.
         $items[] = $section('nav.get_involved', 'nav.get_involved_desc', route('get-involved'), 'get-involved', [
+            $link('opportunities.title', route('opportunities.index'), 'opportunities.*', 'nav.opportunities_hint'),
             $link('nav.volunteer', route('volunteer.create'), 'volunteer.*', 'nav.volunteer_hint'),
             $link('events.title', route('events.index'), 'events.*', 'nav.events_hint'),
             $link('nav.newsletter', route('newsletter.create'), 'newsletter.*', 'nav.newsletter_hint'),

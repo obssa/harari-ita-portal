@@ -27,7 +27,7 @@ class Menu extends Model
 
     public const LOCATIONS = ['header', 'footer', 'utility'];
 
-    public const TYPES = ['page', 'post', 'news', 'leaders', 'offices', 'pillars', 'structure', 'gallery', 'videos', 'live', 'events', 'documents', 'notices', 'projects', 'achievements', 'open_data', 'developers', 'academy', 'verify_certificate', 'contact', 'press', 'get_involved', 'social', 'url'];
+    public const TYPES = ['page', 'post', 'news', 'leaders', 'offices', 'pillars', 'structure', 'gallery', 'videos', 'live', 'events', 'documents', 'opportunities', 'advisories', 'projects', 'achievements', 'open_data', 'developers', 'academy', 'verify_certificate', 'contact', 'press', 'get_involved', 'social', 'url'];
 
     /** Items per level, so menus stay usable on phones. */
     public const MAX_ITEMS = 12;
@@ -138,7 +138,9 @@ class Menu extends Model
             'live' => ['url' => route('videos.live', ['locale' => $locale]), 'external' => false, 'route' => 'videos.live'],
             'events' => ['url' => route('events.index', ['locale' => $locale]), 'external' => false, 'route' => 'events.*'],
             'documents' => ['url' => route('documents.index', ['locale' => $locale]), 'external' => false, 'route' => 'documents.index'],
-            'notices' => ['url' => route('documents.notices', ['locale' => $locale]), 'external' => false, 'route' => 'documents.notices'],
+            // ADR-0032: menus saved with the old notices page lead to the opportunities.
+            'notices', 'opportunities' => ['url' => route('opportunities.index', ['locale' => $locale]), 'external' => false, 'route' => 'opportunities.*'],
+            'advisories' => ['url' => route('advisories.index', ['locale' => $locale]), 'external' => false, 'route' => 'advisories.*'],
             'projects' => ['url' => route('projects.index', ['locale' => $locale]), 'external' => false, 'route' => 'projects.index'],
             'achievements' => ['url' => route('projects.numbers', ['locale' => $locale]), 'external' => false, 'route' => 'projects.numbers'],
             'open_data' => ['url' => route('datasets.index', ['locale' => $locale]), 'external' => false, 'route' => 'datasets.index'],
@@ -178,8 +180,8 @@ class Menu extends Model
         $post = Post::query()->with('translations')->find($id);
         $translation = $post?->translation($locale, fallback: false);
 
-        return $translation instanceof PostTranslation && $translation->isLive()
-            ? ['url' => route('news.show', ['locale' => $locale, 'slug' => $translation->slug]), 'external' => false, 'route' => null]
+        return $post !== null && $translation instanceof PostTranslation && $translation->isLive()
+            ? ['url' => $post->url($translation), 'external' => false, 'route' => null]
             : null;
     }
 

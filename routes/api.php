@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\DirectoryController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\EventController;
 use App\Http\Controllers\Api\V1\OpenApiController;
+use App\Http\Controllers\Api\V1\OpportunityController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Middleware\ApiCacheHeaders;
@@ -57,6 +58,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     $scoped(ApiScope::Datasets)->group(function () use ($key) {
         Route::get('datasets', [DatasetController::class, 'index'])->name('datasets.index');
         Route::get('datasets/{key}', [DatasetController::class, 'show'])->where('key', $key)->name('datasets.show');
+    });
+
+    $scoped(ApiScope::Opportunities)->group(function () use ($key) {
+        Route::get('opportunities', [OpportunityController::class, 'index'])->name('opportunities.index');
+        Route::get('opportunities/{key}', [OpportunityController::class, 'show'])->where('key', $key)->name('opportunities.show');
     });
 
     $scoped(ApiScope::Search)->group(function () {

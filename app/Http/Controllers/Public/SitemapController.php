@@ -16,6 +16,7 @@ use App\Domain\Innovation\Models\Startup;
 use App\Domain\Media\Models\Gallery;
 use App\Domain\Media\Models\Video;
 use App\Domain\OpenData\Models\Dataset;
+use App\Domain\Opportunities\Models\Opportunity;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\Pillar;
@@ -62,7 +63,7 @@ final class SitemapController extends Controller
     private function entries(string $language): array
     {
         $entries = [];
-        foreach (['home', 'news.index', 'leaders.index', 'offices.index', 'services.index', 'startups.index', 'programmes.index', 'challenges.index', 'pillars.index', 'structure', 'gallery.index', 'videos.index', 'events.index', 'documents.index', 'documents.notices', 'projects.index', 'projects.numbers', 'datasets.index', 'developers', 'academy.index', 'contact', 'press', 'get-involved', 'social'] as $route) {
+        foreach (['home', 'news.index', 'leaders.index', 'offices.index', 'services.index', 'startups.index', 'programmes.index', 'challenges.index', 'pillars.index', 'structure', 'gallery.index', 'videos.index', 'events.index', 'documents.index', 'opportunities.index', 'advisories.index', 'projects.index', 'projects.numbers', 'datasets.index', 'developers', 'academy.index', 'contact', 'press', 'get-involved', 'social'] as $route) {
             $alternates = [];
             foreach (Locales::all() as $locale) {
                 $alternates[$locale] = route($route, ['locale' => $locale]);
@@ -80,7 +81,7 @@ final class SitemapController extends Controller
             foreach ($post->translations as $translation) {
                 /** @var PostTranslation $translation */
                 if ($translation->isLive()) {
-                    $alternates[$translation->locale] = route('news.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
+                    $alternates[$translation->locale] = $post->url($translation);
                 }
             }
 
@@ -126,6 +127,7 @@ final class SitemapController extends Controller
             ...PublicDirectory::sitemap(Challenge::query()->with('translations')->get(), $language, 'challenges.show'),
             ...PublicDirectory::sitemap(Dataset::query()->with('translations')->get(), $language, 'datasets.show'),
             ...PublicDirectory::sitemap(Course::query()->with('translations')->get(), $language, 'courses.show'),
+            ...PublicDirectory::sitemap(Opportunity::query()->with('translations')->get(), $language, 'opportunities.show'),
             ...PublicDirectory::sitemap(Pillar::query()->with('translations')->get(), $language, 'pillars.show'),
             ...PublicDirectory::sitemap(Gallery::query()->with('translations')->get(), $language, 'gallery.show'),
             ...PublicDirectory::sitemap(Video::query()->with('translations')->get(), $language, 'videos.show'),

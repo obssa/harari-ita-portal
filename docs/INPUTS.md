@@ -32,6 +32,12 @@ staging stays noindex. Tick each item when received and note where it is stored.
 - [ ] Figures for "Digital Harar in numbers", each with its source and owner (no number without a source)
 - [ ] Datasets that may be published openly, with licence (for example CC BY 4.0) and update frequency
 - [ ] Courses and trainings: syllabus, level, duration, venue, instructors, and the certificate design and signatory
+- [ ] Procurement notices: the reference number format, the usual documents, how bids are submitted (in person, by
+      email or the national e-GP system) and whether award notices are published (phase 6, ADR-0032)
+- [ ] Vacancies and internships: whether they are published on the portal (or only through the regional civil
+      service) and the usual eligibility wording
+- [ ] Where cyber incidents should be reported: INSA's address is linked; confirm it, or name the Ethio-CERT
+      address the Agency prefers (`PORTAL_INCIDENT_REPORT_URL`, ADR-0034)
 
 ## Legal and technical
 - [ ] **Production hosting under the Personal Data Protection Proclamation 1321/2024**: where personal data may be stored (a host in Ethiopia or a written legal basis), and who signs off

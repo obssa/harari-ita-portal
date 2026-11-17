@@ -4,12 +4,14 @@ namespace App\Domain\Innovation\Queries;
 
 use App\Domain\Innovation\Models\Challenge;
 use App\Domain\Innovation\Models\Programme;
+use App\Domain\Opportunities\Enums\OpportunityType;
+use App\Domain\Opportunities\Models\Opportunity;
 use App\Domain\Organisation\Queries\PublicDirectory;
 use Carbon\CarbonImmutable;
 
 /**
- * What innovators can take part in now (ADR-0023): programme cohorts taking applications and challenges taking
- * teams, the nearest deadline first. When nothing is open, the next call to open.
+ * What innovators can take part in now (ADR-0023): programme cohorts taking applications, challenges taking
+ * teams, and calls for proposals and tenders (ADR-0032), the nearest deadline first. When nothing is open, the next call to open.
  */
 final class OpenCalls
 {
@@ -55,6 +57,31 @@ final class OpenCalls
                 'summary' => $shown->getAttribute('summary'),
                 'url' => route('challenges.show', ['locale' => $shown->locale, 'slug' => $shown->slug]),
                 'date' => $isOpen ? $challenge->registration_closes_at : $challenge->registration_opens_at,
+                'open' => $isOpen,
+                'locale' => $shown->locale,
+            ];
+            if ($isOpen) {
+                $open[] = $call;
+            } else {
+                $next[] = $call;
+            }
+        }
+
+        // ADR-0032: calls for proposals and tenders open now (or opening) join the innovators' calls.
+        $opportunities = PublicDirectory::visible(Opportunity::query(), $locale)->current()
+            ->whereIn('type', [OpportunityType::Call->value, OpportunityType::Tender->value])->orderBy('closes_at')->limit(12)->get();
+        foreach ($opportunities as $opportunity) {
+            $shown = PublicDirectory::shown($opportunity, $locale);
+            if ($shown === null) {
+                continue;
+            }
+            $isOpen = $opportunity->isOpen($now);
+            $call = [
+                'kind' => $opportunity->type->value,
+                'title' => (string) $shown->getAttribute('title'),
+                'summary' => $shown->getAttribute('summary'),
+                'url' => route('opportunities.show', ['locale' => $shown->locale, 'slug' => $shown->slug]),
+                'date' => $isOpen || $opportunity->opens_at === null ? $opportunity->closes_at : $opportunity->opens_at,
                 'open' => $isOpen,
                 'locale' => $shown->locale,
             ];

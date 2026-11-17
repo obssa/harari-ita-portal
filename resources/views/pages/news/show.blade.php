@@ -111,7 +111,7 @@
                             @php $t = $item->translation($locale, fallback: false); @endphp
                             @continue($t === null)
                             <li>
-                                <x-ui.card :title="$t->title" :href="route('news.show', ['slug' => $t->slug])" :media="$item->featuredImage" :heading-level="3">
+                                <x-ui.card :title="$t->title" :href="$item->url($t)" :media="$item->featuredImage" :heading-level="3">
                                     <x-slot:meta><x-date :date="$t->published_at" /></x-slot:meta>
                                 </x-ui.card>
                             </li>

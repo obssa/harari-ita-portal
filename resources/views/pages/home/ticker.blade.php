@@ -6,7 +6,7 @@
             @foreach ($data as $post)
                 @php $shown = PublicPosts::shown($post, app()->getLocale()); @endphp
                 @continue($shown === null)
-                <li lang="{{ $shown->locale }}"><a href="{{ route('news.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) }}" class="underline-offset-4 hover:underline">{{ $shown->title }}</a></li>
+                <li lang="{{ $shown->locale }}"><a href="{{ $post->url($shown) }}" class="underline-offset-4 hover:underline">{{ $shown->title }}</a></li>
             @endforeach
         </ul>
     </div>

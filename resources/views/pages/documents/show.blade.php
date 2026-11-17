@@ -12,7 +12,7 @@
                 <nav aria-label="{{ __('news.breadcrumb') }}" class="text-sm text-ink-muted">
                     <ol class="flex flex-wrap gap-1">
                         <li><a href="{{ route('home') }}" class="hover:underline">{{ __('nav.home') }}</a> /</li>
-                        <li><a href="{{ route($indexRoute) }}" class="hover:underline">{{ $document->type->isNotice() ? __('documents.notices_title') : __('documents.title') }}</a></li>
+                        <li><a href="{{ route($indexRoute) }}" class="hover:underline">{{ $document->type->isNotice() ? __('opportunities.title') : __('documents.title') }}</a></li>
                     </ol>
                 </nav>
 

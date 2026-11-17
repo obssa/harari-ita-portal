@@ -1,6 +1,6 @@
 @php
     $locale = app()->getLocale();
-    $url = route('news.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
+    $url = $post->url($translation);
     $first = $index === 0;
 @endphp
 {{-- ADR-0070: a featured story as a slide: its photo behind night blue (the plates when it has none). --}}

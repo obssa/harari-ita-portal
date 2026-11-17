@@ -113,7 +113,7 @@ final class SharePost
             return;
         }
 
-        $link = route('news.show', ['locale' => $share->locale, 'slug' => $translation->slug]);
+        $link = $share->post->url($translation);
         try {
             [$id, $url] = match ($source->platform) {
                 Platform::Facebook => $this->toFacebook($source, $share->message, $link),

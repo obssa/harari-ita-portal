@@ -13,6 +13,7 @@ enum ApiScope: string
     case Directory = 'directory';
     case Projects = 'projects';
     case Datasets = 'datasets';
+    case Opportunities = 'opportunities';
     case Search = 'search';
 
     public function label(): string

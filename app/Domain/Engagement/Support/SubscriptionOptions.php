@@ -10,7 +10,7 @@ final class SubscriptionOptions
 {
     public const CHANNELS = ['email', 'sms'];
 
-    public const TOPICS = ['news', 'statements', 'events', 'opportunities'];
+    public const TOPICS = ['news', 'statements', 'events', 'opportunities', 'advisories'];
 
     /**
      * @return array<string, string>

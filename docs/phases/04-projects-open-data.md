@@ -100,7 +100,7 @@ green, CI green, deployed to staging and checked there.
 3. Whether the Agency wants its catalogue harvested by a national portal, and which one.
 4. Who may hold an API key (the default: anyone who asks through the contact form, approved by an Admin).
 
-## Report (2026-11-19)
+## Report (2026-11-17)
 
 **Acceptance (PLAN.md §13).** Checked on staging (https://hita.orcamind.dev) with the labelled samples of
 `portal:sample-projects-data`, in English, Amharic and Afaan Oromo:

@@ -40,7 +40,7 @@
             <li class="{{ $card }}">
                 <h2 class="heading-3">{{ __('involved.vacancies.title') }}</h2>
                 <p class="mt-2 text-ink-muted">{{ __('involved.vacancies.text') }}</p>
-                <a href="{{ route('documents.notices') }}" class="mt-auto pt-4 text-sm font-semibold text-link underline-offset-4 hover:underline">{{ __('involved.vacancies.link') }}</a>
+                <a href="{{ route('opportunities.index') }}" class="mt-auto pt-4 text-sm font-semibold text-link underline-offset-4 hover:underline">{{ __('involved.vacancies.link') }}</a>
             </li>
 
 

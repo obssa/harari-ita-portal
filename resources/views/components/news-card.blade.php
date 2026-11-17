@@ -1,7 +1,7 @@
 @props(['post', 'shown', 'lead' => false, 'headingLevel' => 3])
 @use('App\Domain\Translation\Support\Locales')
 @php
-    $url = route('news.show', ['locale' => $shown->locale, 'slug' => $shown->slug]);
+    $url = $post->url($shown);
     $other = $shown->locale !== app()->getLocale();
 @endphp
 {{-- ADR-0012: every story card has the same parts in the same places: picture (or the placeholder), labels, title,
@@ -18,6 +18,9 @@
         @endif
         <div class="absolute start-3 top-3 flex flex-wrap gap-1.5">
             <x-ui.badge :tone="$post->type->tone()" class="shadow-sm">{{ $post->type->label() }}</x-ui.badge>
+            @if ($post->severity)
+                <x-ui.badge :tone="$post->severity->tone()" class="shadow-sm">{{ $post->severity->label() }}</x-ui.badge>
+            @endif
             @if ($other)
                 <x-ui.badge class="shadow-sm">{{ __('news.in_language', ['language' => Locales::nativeName($shown->locale)]) }}</x-ui.badge>
             @endif

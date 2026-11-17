@@ -327,7 +327,7 @@ the items still unconfirmed with `--remove`.
 **Why.** Ramin asked for the services the Agency should offer to be added. The project rule is never to state the
 Agency's facts without the Agency; the mark keeps the proposal useful on staging without presenting it as fact.
 
-## ADR-0020 — The startups directory (2026-11-18)
+## ADR-0020 — The startups directory (2026-11-17)
 
 **Decision.** `App\Domain\Innovation` holds `Startup` (reference `STU-XXXX-XXXX`, sector from the shared sector
 categories, stage, founded year, team size, area, website, logo, label claim, listing status, the founders'
@@ -346,7 +346,7 @@ encrypted contact with keyed hashes) and `StartupTranslation` (name, pitch, prod
   site search, sitemap and the edge-cache purge include listed startups; the founders' contact is never public.
 - The "Innovation" menu section appears with the directory.
 
-## ADR-0021 — Programmes, cohorts and applications (2026-11-18)
+## ADR-0021 — Programmes, cohorts and applications (2026-11-17)
 
 **Decision.**
 
@@ -366,7 +366,7 @@ encrypted contact with keyed hashes) and `StartupTranslation` (name, pitch, prod
 - Public `/innovation/programmes` and a page per programme with `EducationalOccupationalProgram` JSON-LD; site
   search, sitemap and the edge-cache purge include programmes.
 
-## ADR-0022 — Challenges, teams and judging (2026-11-18)
+## ADR-0022 — Challenges, teams and judging (2026-11-17)
 
 **Decision.**
 
@@ -407,7 +407,7 @@ and prizes, team sign-up, one submission, a published rubric, a judging panel bo
 and ranked results. Showing judges only the submission keeps the scoring on the work. Using the average of the
 judges' totals, rather than raw sums, keeps a team fair when a judge steps back for a conflict.
 
-## ADR-0023 — Innovation on the homepage: open calls, stories and live figures (2026-11-18)
+## ADR-0023 — Innovation on the homepage: open calls, stories and live figures (2026-11-17)
 
 **Decision.**
 
@@ -427,7 +427,7 @@ judges' totals, rather than raw sums, keeps a team fair when a judge steps back 
 **Why.** The Agency's homepage should answer an innovator's first question, "what can I take part in now?",
 with a date, and should show the ecosystem growing, using the portal's own records as the source.
 
-## ADR-0024 — Projects: pillar, RAG status, milestones, indicators and staff-only risks (2026-11-19)
+## ADR-0024 — Projects: pillar, RAG status, milestones, indicators and staff-only risks (2026-11-17)
 
 **Decision.**
 
@@ -452,7 +452,7 @@ internal working notes; publishing them would discourage honest reporting.
 **Changed from the plan.** `public` is not a separate flag: each language's publication already decides what is
 public. The homepage keeps its project cards; the locations view is on the projects page.
 
-## ADR-0025 — Open data: datasets, files, previews and counted downloads (2026-11-19)
+## ADR-0025 — Open data: datasets, files, previews and counted downloads (2026-11-17)
 
 **Decision.**
 
@@ -477,7 +477,7 @@ public. The homepage keeps its project cards; the locations view is on the proje
 **Why.** PLAN.md §4–§5. Checking the file at upload gives the reader honest facts (size, rows, checksum) and gives
 the Data Steward a last look before personal data is published by mistake.
 
-## ADR-0026 — DCAT-AP catalogue, the datasets API and the developers page (2026-11-19)
+## ADR-0026 — DCAT-AP catalogue, the datasets API and the developers page (2026-11-17)
 
 **Decision.**
 
@@ -493,7 +493,7 @@ the Data Steward a last look before personal data is published by mistake.
 
 **Why.** PLAN.md §4 (Developers) and §10. Reading the page from the API's own description keeps one source of truth.
 
-## ADR-0027 — Digital Harar in numbers (2026-11-19)
+## ADR-0027 — Digital Harar in numbers (2026-11-17)
 
 **Decision.**
 
@@ -509,7 +509,7 @@ the Data Steward a last look before personal data is published by mistake.
 
 **Why.** CLAUDE.md: every published number comes from live data with a source, never typed in.
 
-## ADR-0028 — The Academy: courses, cohorts, sessions and instructors (2026-11-20)
+## ADR-0028 — The Academy: courses, cohorts, sessions and instructors (2026-11-17)
 
 **Decision.**
 
@@ -532,7 +532,7 @@ the Data Steward a last look before personal data is published by mistake.
 **Why.** PLAN.md §4, §5, §7. Innovation programmes select people by application; the Academy is open courses,
 first come first served, so it is its own domain rather than a kind of programme.
 
-## ADR-0029 — Enrolment, the learner's link and retention (2026-11-20)
+## ADR-0029 — Enrolment, the learner's link and retention (2026-11-17)
 
 **Decision.**
 
@@ -556,7 +556,7 @@ first come first served, so it is its own domain rather than a kind of programme
 **Why.** PLAN.md §4 (enrolment with a waiting list), §11 (consent, retention, data-subject rights); the event
 registration pattern already works for an SMS-first audience.
 
-## ADR-0030 — Attendance, certificates and verification (2026-11-20)
+## ADR-0030 — Attendance, certificates and verification (2026-11-17)
 
 **Decision.**
 
@@ -580,7 +580,7 @@ registration pattern already works for an SMS-first audience.
 **Why.** PLAN.md §4, §13 (enrol, attend, issue, verify by QR); FORK.md §3 (the card verification pattern); CLAUDE.md
 (no stack change without asking).
 
-## ADR-0031 — The Academy on the public site (2026-11-20)
+## ADR-0031 — The Academy on the public site (2026-11-17)
 
 **Decision.**
 
@@ -599,3 +599,87 @@ registration pattern already works for an SMS-first audience.
 
 **Why.** PLAN.md §3, §4 (the Academy and the homepage), DESIGN.md §4 (course card: level, mode, next cohort in both
 calendars) and §7 (Academy pages).
+
+## ADR-0032 — Opportunities: tenders, calls, vacancies and internships (2026-11-17)
+
+**Decision.**
+
+- One domain, `App\Domain\Opportunities`, with one model for the four types (tender, call for proposals, vacancy,
+  internship). Each has the Agency's reference number, the issuing directorate, its pillar, when it opens (empty:
+  from publication) and closes, in Ethiopia's time zone, and where to apply (an https address or the Agency's own
+  email). A tender has the bid opening. A vacancy has its positions and the kind of employment; an internship has
+  positions. Per language: title, summary, description, who may apply (one requirement per line), how to apply and
+  the outcome (for example the award notice), each published on its own.
+- **Documents come from the library.** An opportunity attaches library documents in an order; only public ones are
+  shown. The library keeps one place for files, their languages, versions and download counts. The fork's
+  `/notices` page is folded in: it redirects (301) to `/opportunities`, and menus saved with "notices" lead there.
+- **The state comes from the dates**: opening soon, open, closing soon (the last seven days), closed, cancelled.
+  The pages are right at any moment. The scheduled `opportunities:archive` (every five minutes) marks each
+  opportunity whose deadline has passed as archived; the save purges the edge cache (ADR-0039 of the fork), so no
+  cached page shows a closed tender as open. Archived opportunities stay readable, below the open ones.
+- Public pages: `/opportunities` (open and upcoming by nearest deadline, filtered by type, then the archive, paged),
+  `/opportunities/{slug}` (facts and countdown beside the text, documents, the log), a calendar file with the
+  deadline and the bid opening, and an RSS feed of opportunities and their log entries. Vacancies and internships
+  carry `JobPosting` JSON-LD (employment type, openings, the Agency as hiring organisation, Harari region, never
+  "direct apply").
+- Opportunities join the "Get involved" menu section rather than adding a ninth section, so the desktop menu still
+  fits in every language (ADR-0031). Open calls and tenders join the homepage's open calls; opportunities are in site
+  search, the sitemaps and the API (`/api/v1/opportunities`, scope `opportunities`).
+- Procurement Officers (`opportunities.manage`) create, publish and change them; `opportunities.view` reads them.
+
+**Why.** PLAN.md §3, §4 (Opportunities), §5 (the model), §7 (Procurement Officer), §11 (`JobPosting`); DESIGN.md §4
+(opportunity card: type, reference, deadline). RISA (PLAN.md §2) publishes tenders and RFPs on its site.
+
+## ADR-0033 — The addenda and Q&A log (2026-11-17)
+
+**Decision.**
+
+- Each opportunity has a log of numbered, dated entries in every language, published at once. Four kinds:
+  **addendum** (a change to the documents, with an optional library document), **clarification** (the question as
+  title and the answer as text, both required), **extension** (a new deadline that must be later than the current
+  one and still to come: the opportunity takes it, the entry keeps the deadline it replaced and the opportunity its
+  first deadline, and it leaves the archive) and **cancellation** (a reason is required; the opportunity shows as
+  cancelled and takes no further entries).
+- **Entries are never deleted** (no delete in the policy). Their words or document can be corrected; the entry then
+  shows the date of the correction. Its kind, number, date and deadlines stay as published.
+- Once the log has an entry, or the opportunity is cancelled, its deadline changes only through an extension, so
+  what bidders were told stays on record.
+- The log shows newest first on the page, each entry with an anchor, and goes into the opportunities feed.
+
+**Why.** PLAN.md §4 ("addenda and Q&A are published as a dated log") and §13 (phase 6: a tender with an addendum).
+A public record of what bidders were told, which cannot be quietly changed, is the point of an addendum.
+
+## ADR-0034 — Advisories as a post type (2026-11-17)
+
+**Decision.**
+
+- An advisory is a **post** of the new type "advisory", not a model of its own: it keeps the editorial workflow,
+  revisions, translations, machine translation, social sharing, search and feeds. It adds a **severity** on the post
+  (Info, Advisory or Warning, shown with its word and icon, never colour alone) and, per language, the **affected
+  systems** and the **steps to take** (one per line).
+- Only staff with `advisories.manage` (Communications Editors, Admins) make a post an advisory, change an
+  advisory's type or change its severity; an advisory always has a severity. Translators translate it as any post.
+- Advisories have their own section: `/advisories` (filtered by severity, with its RSS feed) and
+  `/advisories/{slug}` (`Article` JSON-LD). The news list and its type filters leave them out. An advisory's
+  `/news/{slug}` address redirects (301) to `/advisories/{slug}`, and every link to a post now goes through
+  `Post::url()`. The homepage's latest news, the ticker and the main feed include advisories, with their severity.
+- Every advisory page has a box: cyber incidents are reported to INSA (national cybersecurity is INSA's, per
+  CLAUDE.md), and problems with systems the Agency supports go to its IT support form. The INSA address is
+  `portal.advisories.incident_url` (`PORTAL_INCIDENT_REPORT_URL`), for the Agency to confirm (INPUTS.md).
+
+**Why.** PLAN.md §4 (Advisories), §5 ("a typed Post category with severity, affected systems and actions"), §1
+(Trust & Cyber-awareness: awareness and guidance only).
+
+## ADR-0035 — Campaigns drafted from content (2026-11-17)
+
+**Decision.**
+
+- On an advisory and on an opportunity, "Draft an email campaign" (for those with `campaigns.manage`) makes a
+  campaign **draft**, never a sending. It holds the text of each language that is live, with the severity or type,
+  the summary, the affected systems and steps or the deadline, and the link to the page. It goes to newsletter
+  subscribers of the new topic "advisories" (safety advisories) or of "opportunities".
+- Staff then read it, send themselves a test and send or schedule it as any campaign (ADR-0052 of the fork), with
+  its consent by topic, sending limits and unsubscribe link.
+
+**Why.** PLAN.md §5 ("can also go out as a newsletter campaign") and §13 (phase 6: an advisory published and sent
+as a campaign). A draft keeps a person between publishing and sending.

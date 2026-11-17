@@ -92,19 +92,13 @@ it('lists library documents with filters and keeps notices on their own page', f
     $this->get('/en/documents?type=vacancy')->assertSee('Sample budget report');
 });
 
-it('shows open notices by their deadline and the recently closed ones apart', function () {
-    makeDocument(['en' => ['title' => 'Sample later vacancy', 'published' => true]], DocumentType::Vacancy, ['deadline_at' => CarbonImmutable::now()->addDays(9)->toDateTimeString()]);
+it('keeps notice documents out of the library and sends the old notices page to the opportunities', function () {
     makeDocument(['en' => ['title' => 'Sample sooner tender', 'published' => true]], DocumentType::Tender, ['deadline_at' => CarbonImmutable::now()->addDays(2)->toDateTimeString()]);
-    makeDocument(['en' => ['title' => 'Sample standing notice', 'published' => true]], DocumentType::Notice);
-    makeDocument(['en' => ['title' => 'Sample closed tender', 'published' => true]], DocumentType::Tender, ['deadline_at' => CarbonImmutable::now()->subDay()->toDateTimeString()]);
 
-    $html = (string) $this->get('/en/notices')->assertOk()->getContent();
-    $open = substr($html, (int) strpos($html, 'id="notices-open"'), (int) strpos($html, 'id="notices-closed"') - (int) strpos($html, 'id="notices-open"'));
-
-    expect(strpos($open, 'Sample sooner tender'))->toBeLessThan(strpos($open, 'Sample later vacancy'))
-        ->and(strpos($open, 'Sample later vacancy'))->toBeLessThan(strpos($open, 'Sample standing notice'))
-        ->and($open)->not->toContain('Sample closed tender')
-        ->and($html)->toContain('Sample closed tender');
+    // ADR-0032: tenders and vacancies are published as opportunities, which attach their documents.
+    $this->get('/en/documents')->assertOk()->assertDontSee('Sample sooner tender');
+    $this->get('/en/documents/sample-sooner-tender')->assertOk()->assertSee(route('opportunities.index', ['locale' => 'en']), escape: false);
+    $this->get('/en/notices')->assertStatus(301)->assertRedirect('/en/opportunities');
 });
 
 it('shows a document with its viewer, version, related documents and the file of another language', function () {
@@ -181,7 +175,7 @@ it('finds documents in search and lists them in the sitemaps', function () {
     $this->get('/en/search?q=irrigation')->assertSee('Sample irrigation strategy')->assertSee(DocumentType::Policy->label());
     $this->get('/sitemaps/en.xml')
         ->assertSee(url('/en/documents/sample-irrigation-strategy'), escape: false)
-        ->assertSee(url('/en/notices'), escape: false);
+        ->assertSee(url('/en/opportunities'), escape: false);
 });
 
 it('lets those who manage documents add them and bring back earlier versions in the admin', function () {

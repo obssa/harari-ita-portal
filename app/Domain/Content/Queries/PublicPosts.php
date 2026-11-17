@@ -2,6 +2,7 @@
 
 namespace App\Domain\Content\Queries;
 
+use App\Domain\Content\Enums\AdvisorySeverity;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Enums\PostType;
 use App\Domain\Content\Models\Post;
@@ -29,7 +30,7 @@ final class PublicPosts
     }
 
     /**
-     * @param  array{type?: ?PostType, category?: ?string, tag?: ?string}  $filters
+     * @param  array{type?: ?PostType, types?: ?list<PostType>, severity?: ?AdvisorySeverity, category?: ?string, tag?: ?string}  $filters
      * @return LengthAwarePaginator<int, Post>
      */
     public function paginate(string $locale, array $filters = [], int $perPage = 12): LengthAwarePaginator
@@ -92,7 +93,7 @@ final class PublicPosts
     }
 
     /**
-     * @param  array{type?: ?PostType, types?: list<PostType>, ids?: list<string>, featured?: bool, category?: ?string, tag?: ?string}  $filters
+     * @param  array{type?: ?PostType, types?: ?list<PostType>, severity?: ?AdvisorySeverity, ids?: list<string>, featured?: bool, category?: ?string, tag?: ?string}  $filters
      * @return Builder<Post>
      */
     private function query(string $locale, array $filters): Builder
@@ -106,6 +107,7 @@ final class PublicPosts
                 ->where('published_at', '<=', now()))
             ->when($filters['type'] ?? null, fn (Builder $q, PostType $type) => $q->where('type', $type->value))
             ->when($filters['types'] ?? null, fn (Builder $q, array $types) => $q->whereIn('type', array_map(fn (PostType $t): string => $t->value, $types)))
+            ->when($filters['severity'] ?? null, fn (Builder $q, AdvisorySeverity $severity) => $q->where('severity', $severity->value))
             ->when($filters['ids'] ?? null, fn (Builder $q, array $ids) => $q->whereKey($ids))
             ->when($filters['featured'] ?? false, fn (Builder $q) => $q->where('is_featured', true))
             ->when($filters['category'] ?? null, fn (Builder $q, string $slug) => $q->whereHas(

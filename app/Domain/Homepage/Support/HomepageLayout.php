@@ -244,7 +244,7 @@ final class HomepageLayout
         if (is_string($postId)) {
             $post = $this->posts->take($locale, 1, ['ids' => [$postId]])->first();
             $shown = $post !== null ? PublicPosts::shown($post, $locale) : null;
-            $link = $shown !== null ? route('news.show', ['locale' => $shown->locale, 'slug' => $shown->slug]) : null;
+            $link = $shown !== null ? $post->url($shown) : null;
         }
 
         return ['leader' => $leader, 'translation' => $translation, 'quote' => $quote, 'link' => $link];

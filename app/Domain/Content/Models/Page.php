@@ -55,6 +55,7 @@ class Page extends Model implements TranslatableModel
         'news', 'offices', 'leaders', 'pillars', 'events', 'documents', 'projects', 'social', 'search',
         'gallery', 'videos', 'live', 'contact', 'join', 'members', 'volunteer', 'newsletter', 'feedback',
         'preview', 'feed', 'structure', 'notices', 'achievements', 'press', 'get-involved', 'tickets', 'forms',
+        'services', 'support', 'status', 'innovation', 'data', 'developers', 'numbers', 'academy', 'opportunities', 'advisories',
     ];
 
     protected $fillable = ['template', 'parent_id', 'sort', 'featured_image_id'];

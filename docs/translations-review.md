@@ -45,3 +45,10 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | blended (in person and online) | ቅይጥ (በአካልና በኦንላይን) | makaa (qaamaa fi toora interneetii) | `academy.mode.blended` | |
 | learner / instructor | ሰልጣኝ / አሰልጣኝ | leenjifamaa / leenjisaa | `academy.admin.learners`, `academy.admin.instructor*` | |
 | revoke (a certificate) | መሻር | haquu | `academy.*revoke*`, `academy.verify.revoked*` | |
+| call for proposals | የፕሮፖዛል ጥሪ | waamicha piroppoozaalii | `opportunities.type.call`, `homepage.innovation.kind.call` | Om "piroppoozaalii" is a loanword; check whether "waamicha yaada piroojektii" is preferred |
+| internship | የተግባር ልምምድ | hojii shaakalaa | `opportunities.type*.internship` | Check against the regional civil service wording |
+| addendum / clarification / extension | ማሻሻያ / ማብራሪያ / የጊዜ ማራዘሚያ | dabalata / ibsa / dheereffama yeroo | `opportunities.addendum.kind.*` | Check against the Agency's procurement notices |
+| bid opening | የጨረታ መክፈቻ | banamuu caalbaasii | `opportunities.field.bid_opening_at`, `opportunities.calendar.bid_opening` | |
+| bidder | ተጫራች | dorgomaa caalbaasii | `opportunities.admin.help.closes_locked` | |
+| advisory (safety guidance) / severity: info, advisory, warning | የደህንነት ምክር / መረጃ፣ ምክር፣ ማስጠንቀቂያ | gorsa nageenyaa / odeeffannoo, gorsa, akeekkachiisa | `advisories.*` | Am "ምክር" is used both for the post type and the middle level; check whether "ጥንቃቄ" reads better for the level |
+| phishing | ማጭበርበሪያ መልእክት | ergaa gowwoomsaa | sample content only | Used in the sample advisory; for the tech glossary |

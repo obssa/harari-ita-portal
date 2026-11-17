@@ -31,7 +31,7 @@ final class DuplicatePost
             foreach ($original->translations as $translation) {
                 /** @var PostTranslation $translation */
                 $new = $copy->putTranslation($translation->locale, [
-                    ...$translation->only(['title', 'kicker', 'excerpt', 'body', 'seo_title', 'seo_description', 'noindex']),
+                    ...$translation->only(['title', 'kicker', 'excerpt', 'affected', 'actions', 'body', 'seo_title', 'seo_description', 'noindex']),
                     'slug' => null,
                     'status' => ContentStatus::Draft,
                     'published_at' => null,

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Posts\Schemas;
 
+use App\Domain\Content\Enums\AdvisorySeverity;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Enums\PostType;
 use App\Domain\Content\Models\Category;
@@ -63,7 +64,15 @@ class PostForm
                             ->label(__('admin.posts.field.type'))
                             ->options(PostType::options())
                             ->default(PostType::News->value)
-                            ->required(),
+                            ->required()
+                            ->live(),
+                        Select::make('severity')
+                            ->label(__('advisories.field.severity'))
+                            ->helperText(__('advisories.help.severity'))
+                            ->options(AdvisorySeverity::options())
+                            ->required()
+                            ->disabled(fn (): bool => ! CurrentUser::get()->can('advisories.manage'))
+                            ->visible(fn (Get $get): bool => $get('type') === PostType::Advisory->value),
                         Select::make('source_locale')
                             ->label(__('admin.posts.field.source_locale'))
                             ->helperText(__('admin.posts.help.source_locale'))
@@ -129,6 +138,20 @@ class PostForm
                 ->helperText(__('admin.posts.help.excerpt'))
                 ->rows(3)
                 ->maxLength(400),
+            Textarea::make("translations.{$locale}.affected")
+                ->label(__('advisories.field.affected'))
+                ->helperText(__('advisories.help.lines'))
+                ->rows(3)
+                ->maxLength(2000)
+                ->extraInputAttributes(['lang' => $locale])
+                ->visible(fn (Get $get): bool => $get('type') === PostType::Advisory->value),
+            Textarea::make("translations.{$locale}.actions")
+                ->label(__('advisories.field.actions'))
+                ->helperText(__('advisories.help.lines'))
+                ->rows(5)
+                ->maxLength(4000)
+                ->extraInputAttributes(['lang' => $locale])
+                ->visible(fn (Get $get): bool => $get('type') === PostType::Advisory->value),
             RichEditor::make("translations.{$locale}.body")
                 ->label(__('admin.posts.field.body'))
                 ->json()
@@ -204,7 +227,7 @@ class PostForm
                         }
                         $translator = app(MachineTranslator::class);
                         $fields = [];
-                        foreach (['title', 'kicker', 'excerpt', 'seo_title', 'seo_description'] as $field) {
+                        foreach (['title', 'kicker', 'excerpt', 'affected', 'actions', 'seo_title', 'seo_description'] as $field) {
                             $value = $get("translations.{$source}.{$field}");
                             if (is_string($value) && trim($value) !== '') {
                                 $fields[$field] = $value;

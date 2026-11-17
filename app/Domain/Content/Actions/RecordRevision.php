@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 final class RecordRevision
 {
     /** Fields kept in a version; anything else is structural or derived. */
-    public const FIELDS = ['title', 'kicker', 'excerpt', 'body', 'seo_title', 'seo_description', 'slug', 'status', 'published_at'];
+    public const FIELDS = ['title', 'kicker', 'excerpt', 'affected', 'actions', 'body', 'seo_title', 'seo_description', 'slug', 'status', 'published_at'];
 
     public function handle(Model $record, Translation $translation, ?string $note = null): ?Revision
     {

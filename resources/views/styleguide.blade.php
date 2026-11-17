@@ -212,5 +212,23 @@
             </div>
             <x-academy.certificate :certificate="$sgCertificate" class="mt-6" />
         </section>
+
+        @php
+            // ADR-0032: unsaved sample opportunities, one open and one closing soon; ADR-0034: the report box.
+            $sgOpportunity = fn (string $type, int $hours, string $title): array => [
+                tap(new \App\Domain\Opportunities\Models\Opportunity(['type' => $type, 'reference' => 'SAMPLE/'.strtoupper($type[0]).'/001', 'closes_at' => now()->addHours($hours)]), fn ($o) => $o->setRelation('office', null)),
+                new \App\Domain\Opportunities\Models\OpportunityTranslation(['locale' => app()->getLocale(), 'title' => $title, 'slug' => \Illuminate\Support\Str::slug($title), 'summary' => 'A sample opportunity card with its type, reference, state and deadline.']),
+            ];
+            $sgOpportunities = [$sgOpportunity('tender', 24 * 20, 'Sample network equipment tender'), $sgOpportunity('vacancy', 30, 'Sample systems administrator')];
+        @endphp
+        <section aria-labelledby="sg-opportunities">
+            <h2 id="sg-opportunities" class="heading-2">Opportunities and advisories: opportunity card, report box</h2>
+            <div class="mt-4 grid gap-6 lg:grid-cols-3">
+                @foreach ($sgOpportunities as [$sgOpp, $sgOppText])
+                    <x-opportunity-card :opportunity="$sgOpp" :translation="$sgOppText" />
+                @endforeach
+                <x-advisory-report />
+            </div>
+        </section>
     </div>
 </x-layouts.public>

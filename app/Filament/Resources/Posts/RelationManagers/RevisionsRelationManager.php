@@ -108,7 +108,7 @@ class RevisionsRelationManager extends RelationManager
         };
 
         $changes = [];
-        foreach (['title', 'kicker', 'excerpt', 'body', 'seo_title', 'seo_description'] as $field) {
+        foreach (['title', 'kicker', 'excerpt', 'affected', 'actions', 'body', 'seo_title', 'seo_description'] as $field) {
             $before = $text($field, $revision->data[$field] ?? null);
             $after = $text($field, $current?->getAttribute($field));
             if (TextDiff::changed($before, $after)) {

@@ -35,6 +35,9 @@
       "name": "Open data"
     },
     {
+      "name": "Opportunities"
+    },
+    {
       "name": "Search"
     }
   ],
@@ -2033,6 +2036,259 @@
         }
       }
     },
+    "/opportunities": {
+      "get": {
+        "tags": [
+          "Opportunities"
+        ],
+        "summary": "Opportunities",
+        "description": "Key scope: `opportunities`. Tenders, calls for proposals, vacancies and internships. Open ones come by nearest deadline; archived ones (closed or cancelled) newest first.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/lang"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "Only this type: tender, call, vacancy or internship.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "tender",
+                "call",
+                "vacancy",
+                "internship"
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "open (the default: open now or opening later) or archived (closed or cancelled).",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "open",
+                "archived"
+              ],
+              "default": "open"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/per_page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Opportunity"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Meta"
+                    },
+                    "links": {
+                      "$ref": "#/components/schemas/Links"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not changed since the ETag sent in If-None-Match."
+          },
+          "401": {
+            "description": "No key, or the key is wrong, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key does not allow this.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "A parameter has a value the API does not know.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests; see Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/opportunities/{key}": {
+      "get": {
+        "tags": [
+          "Opportunities"
+        ],
+        "summary": "One opportunity",
+        "description": "Key scope: `opportunities`. With its documents and its log of addenda, clarifications, extensions and cancellation, newest first.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/lang"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/OpportunityFull"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "lang": {
+                          "type": "string",
+                          "enum": [
+                            "en",
+                            "am",
+                            "om",
+                            "har"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not changed since the ETag sent in If-None-Match."
+          },
+          "401": {
+            "description": "No key, or the key is wrong, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key does not allow this.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "A parameter has a value the API does not know.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests; see Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No published record with this id or slug.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/search": {
       "get": {
         "tags": [
@@ -3641,6 +3897,278 @@
               "alternates": {
                 "type": "object",
                 "description": "The page of the record in every language it is published in.",
+                "additionalProperties": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Opportunity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "en",
+              "am",
+              "om",
+              "har"
+            ]
+          },
+          "slug": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "tender",
+              "call",
+              "vacancy",
+              "internship"
+            ]
+          },
+          "reference": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "upcoming",
+              "open",
+              "closing",
+              "closed",
+              "cancelled"
+            ]
+          },
+          "office": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pillar_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "opens_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "closes_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closes_ethiopian": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "original_closes_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "bid_opening_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "positions": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "employment_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "full_time",
+              "part_time",
+              "contract",
+              "temporary",
+              null
+            ]
+          },
+          "apply_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "apply_email": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "email"
+          },
+          "cancelled_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "OpportunityFull": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Opportunity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "body_html": {
+                "type": "string"
+              },
+              "eligibility": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "how_to_apply": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "outcome": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "documents": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                }
+              },
+              "addenda": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "number": {
+                      "type": "integer"
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "addendum",
+                        "clarification",
+                        "extension",
+                        "cancellation"
+                      ]
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "previous_closes_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "new_closes_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "published_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "corrected_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    }
+                  }
+                }
+              },
+              "alternates": {
+                "type": "object",
                 "additionalProperties": {
                   "type": "string",
                   "format": "uri"

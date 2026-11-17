@@ -15,7 +15,8 @@ final class DevelopersController extends Controller
 {
     /** Dated changes to the API, newest first: [date, translation key]. */
     public const CHANGELOG = [
-        ['2026-11-19', 'developers.changes.datasets'],
+        ['2026-11-17', 'developers.changes.opportunities'],
+        ['2026-11-17', 'developers.changes.datasets'],
         ['2026-11-16', 'developers.changes.v1'],
     ];
 

@@ -2,6 +2,26 @@
 
 All notable changes to the Agency's portal. Newest first.
 
+## Unreleased — phase 6: opportunities and advisories
+
+- **Opportunities** in the admin (Opportunities group): tenders, calls for proposals, vacancies and internships with
+  their reference, directorate, dates in Ethiopia's time zone, where to apply and the library documents they attach
+  (ADR-0032). A numbered, dated **log** of addenda, clarifications, extensions and cancellations that is never
+  deleted (ADR-0033).
+- The public **opportunities** at `/opportunities` (open ones by nearest deadline, the archive below) and pages with
+  a countdown, the log, a deadline calendar file and `JobPosting` JSON-LD for vacancies; an RSS feed. Closed ones
+  move to the archive by themselves (`opportunities:archive`, every five minutes). `/notices` now leads here.
+- **Advisories**: a post type with a severity, the affected systems and the steps to take, at `/advisories` with its
+  feed, and a box that sends cyber incidents to INSA (ADR-0034).
+- **Campaign drafts** from an advisory or an opportunity, for the new "advisories" topic or "opportunities"
+  (ADR-0035).
+- Opportunities on the homepage's open calls, in the menu and footer, search, sitemaps and the API
+  (`/api/v1/opportunities`).
+- `portal:sample-opportunities` adds and removes labelled sample opportunities and an advisory.
+- Manual: chapter 12, opportunities and advisories.
+- The dates of ADR-0020..0031 and the phase 3 to 5 reports were written ahead of the calendar; they now carry the
+  day the work was done (2026-11-17).
+
 ## Unreleased — phase 5: the digital skills academy
 
 - **Courses and cohorts** in the admin (Academy group): level, mode, length, languages, the partner who runs it, the

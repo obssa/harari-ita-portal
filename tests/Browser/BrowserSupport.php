@@ -80,6 +80,7 @@ Sample second prize', 'rules' => 'Sample rule.', 'published' => true]],
     // ADR-0028..0031: the labelled Academy samples: a course, a cohort taking enrolments and a certificate.
     staff(SystemRole::SuperAdmin, mfa: false);
     Artisan::call('portal:sample-academy');
+    Artisan::call('portal:sample-opportunities');
 
     app(SaveOffice::class)->handle(new Office, ['type' => 'regional_office', 'email' => 'office@example.org', 'phone' => '+251911000000',
         'translations' => ['en' => ['name' => 'Sample browser office', 'published' => true]]], $publisher);

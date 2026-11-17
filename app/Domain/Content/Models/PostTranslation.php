@@ -18,6 +18,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property string $title
  * @property ?string $kicker
  * @property ?string $excerpt
+ * @property ?string $affected advisories: the affected systems, one per line
+ * @property ?string $actions advisories: the steps to take, one per line
  * @property ?array<string, mixed> $body
  * @property ?string $seo_title
  * @property ?string $seo_description
@@ -91,14 +93,42 @@ class PostTranslation extends Translation
      */
     public function searchableParts(): array
     {
-        return [$this->title, $this->kicker, $this->excerpt, BodyRenderer::toText($this->body)];
+        return [$this->title, $this->kicker, $this->excerpt, $this->affected, $this->actions, BodyRenderer::toText($this->body)];
+    }
+
+    /**
+     * The affected systems of an advisory, one per line.
+     *
+     * @return list<string>
+     */
+    public function affectedList(): array
+    {
+        return self::lines($this->affected);
+    }
+
+    /**
+     * The steps to take of an advisory, in order.
+     *
+     * @return list<string>
+     */
+    public function actionList(): array
+    {
+        return self::lines($this->actions);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private static function lines(?string $text): array
+    {
+        return array_values(array_filter(array_map('trim', preg_split('/\R/u', (string) $text) ?: []), fn (string $line): bool => $line !== ''));
     }
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->useLogName('content')
-            ->logOnly(['locale', 'title', 'slug', 'kicker', 'excerpt', 'status', 'published_at', 'noindex'])
+            ->logOnly(['locale', 'title', 'slug', 'kicker', 'excerpt', 'affected', 'actions', 'status', 'published_at', 'noindex'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }

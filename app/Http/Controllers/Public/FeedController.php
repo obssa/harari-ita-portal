@@ -70,7 +70,7 @@ final class FeedController extends Controller
                 }
 
                 return [
-                    'url' => route('news.show', ['slug' => $translation->slug]),
+                    'url' => $post->url($translation),
                     'title' => $translation->title,
                     'summary' => $translation->excerpt,
                     'html' => BodyRenderer::toHtml($translation->body),

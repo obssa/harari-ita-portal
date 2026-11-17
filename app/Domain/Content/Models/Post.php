@@ -6,6 +6,7 @@ use App\Domain\Content\Concerns\BelongsToSite;
 use App\Domain\Content\Concerns\HasTranslations;
 use App\Domain\Content\Concerns\TracksEditors;
 use App\Domain\Content\Contracts\TranslatableModel;
+use App\Domain\Content\Enums\AdvisorySeverity;
 use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Enums\PostType;
 use App\Domain\Media\Models\Media;
@@ -33,6 +34,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  *
  * @property string $id
  * @property PostType $type
+ * @property ?AdvisorySeverity $severity advisories only (ADR-0034)
  * @property ?int $featured_image_id
  * @property bool $is_featured
  * @property bool $is_sticky
@@ -63,6 +65,7 @@ class Post extends Model implements TranslatableModel
     {
         return [
             'type' => PostType::class,
+            'severity' => AdvisorySeverity::class,
             'is_featured' => 'boolean',
             'is_sticky' => 'boolean',
             'view_count' => 'integer',
@@ -79,7 +82,7 @@ class Post extends Model implements TranslatableModel
     {
         return LogOptions::defaults()
             ->useLogName('content')
-            ->logOnly(['type', 'featured_image_id', 'is_featured', 'is_sticky', 'source_locale'])
+            ->logOnly(['type', 'severity', 'featured_image_id', 'is_featured', 'is_sticky', 'source_locale'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
@@ -153,6 +156,17 @@ class Post extends Model implements TranslatableModel
     public function title(?string $locale = null): string
     {
         return (string) $this->translation($locale)?->title;
+    }
+
+    public function isAdvisory(): bool
+    {
+        return $this->type === PostType::Advisory;
+    }
+
+    /** The public address of one language of this post: news, or the advisories section. */
+    public function url(PostTranslation $translation): string
+    {
+        return route($this->type->route(), ['locale' => $translation->locale, 'slug' => $translation->slug]);
     }
 
     /**

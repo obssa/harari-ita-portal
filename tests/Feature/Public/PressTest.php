@@ -75,7 +75,7 @@ it('shows ways to get involved, with what is coming later marked as such', funct
     $this->get('/en/get-involved')->assertOk()
         ->assertSee('Sample community meeting')
         ->assertSee('Sample suggestions')
-        ->assertSee(route('documents.notices', ['locale' => 'en']), escape: false)
+        ->assertSee(route('opportunities.index', ['locale' => 'en']), escape: false)
         ->assertDontSee(__('involved.coming_soon', [], 'en'))
         ->assertSee(route('newsletter.create', ['locale' => 'en']), escape: false);
 

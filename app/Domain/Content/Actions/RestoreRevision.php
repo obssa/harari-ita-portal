@@ -15,7 +15,7 @@ use InvalidArgumentException;
 final class RestoreRevision
 {
     /** Fields a restore writes back. */
-    public const FIELDS = ['title', 'kicker', 'excerpt', 'body', 'seo_title', 'seo_description'];
+    public const FIELDS = ['title', 'kicker', 'excerpt', 'affected', 'actions', 'body', 'seo_title', 'seo_description'];
 
     public function __construct(private readonly RecordRevision $revisions) {}
 

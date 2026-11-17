@@ -12,6 +12,7 @@ enum PostType: string
     case Statement = 'statement';
     case Speech = 'speech';
     case Announcement = 'announcement';
+    case Advisory = 'advisory';
 
     public function label(?string $locale = null): string
     {
@@ -27,7 +28,24 @@ enum PostType: string
             self::Statement => 'cyan',
             self::Speech => 'ruby',
             self::Announcement => 'saffron',
+            self::Advisory => 'ruby',
         };
+    }
+
+    /** The public page of a post of this type (ADR-0034): advisories have their own section. */
+    public function route(): string
+    {
+        return $this === self::Advisory ? 'advisories.show' : 'news.show';
+    }
+
+    /**
+     * The types listed on the news pages: all but advisories.
+     *
+     * @return list<self>
+     */
+    public static function news(): array
+    {
+        return [self::News, self::PressRelease, self::Statement, self::Speech, self::Announcement];
     }
 
     /**

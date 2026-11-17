@@ -19,6 +19,9 @@ use App\Domain\Media\Models\Media;
 use App\Domain\OpenData\Models\Dataset;
 use App\Domain\OpenData\Models\DatasetDistribution;
 use App\Domain\OpenData\Models\DatasetTranslation;
+use App\Domain\Opportunities\Models\Opportunity;
+use App\Domain\Opportunities\Models\OpportunityAddendum;
+use App\Domain\Opportunities\Models\OpportunityTranslation;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\LeaderTranslation;
 use App\Domain\Organisation\Models\Office;
@@ -66,13 +69,13 @@ final class ApiPresenter
             'sticky' => $post->is_sticky,
             'image' => $this->image($post->featuredImage, 'landscape', $t->locale),
             'categories' => $post->categories->map(fn (Category $category): ?array => $this->term($category, $t->locale))->filter()->values()->all(),
-            'url' => route('news.show', ['locale' => $t->locale, 'slug' => $t->slug]),
+            'url' => $post->url($t),
         ];
 
         if ($full) {
             $data['body_html'] = BodyRenderer::toHtml($t->body);
             $data['tags'] = $post->tags->map(fn (Tag $tag): ?array => $this->term($tag, $t->locale))->filter()->values()->all();
-            $data['alternates'] = $this->alternates($post, 'news.show');
+            $data['alternates'] = $this->alternates($post, $post->type->route());
         }
 
         return $data;
@@ -437,6 +440,65 @@ final class ApiPresenter
             'name' => $shown->name,
             'url' => route('offices.show', ['locale' => $shown->locale, 'slug' => $shown->slug]),
         ];
+    }
+
+    /**
+     * An opportunity (ADR-0032) with its dates, where to apply and, in full, its documents and log.
+     *
+     * @return array<string, mixed>
+     */
+    public function opportunity(Opportunity $opportunity, OpportunityTranslation $t, bool $full = false): array
+    {
+        $office = $opportunity->office !== null ? PublicDirectory::shown($opportunity->office, $t->locale) : null;
+        $data = [
+            'id' => $opportunity->id,
+            'lang' => $t->locale,
+            'slug' => $t->slug,
+            'url' => route('opportunities.show', ['locale' => $t->locale, 'slug' => $t->slug]),
+            'type' => $opportunity->type->value,
+            'reference' => $opportunity->reference,
+            'title' => $t->title,
+            'summary' => $t->summary,
+            'state' => $opportunity->state(),
+            'office' => $office !== null ? ['id' => (string) $opportunity->office_id, 'name' => (string) $office->getAttribute('name')] : null,
+            'pillar_id' => $opportunity->pillar_id,
+            'opens_at' => $this->time($opportunity->opens_at),
+            'closes_at' => $this->time($opportunity->closes_at),
+            'closes_ethiopian' => $this->ethiopian($opportunity->closes_at, $t->locale),
+            'original_closes_at' => $this->time($opportunity->original_closes_at),
+            'bid_opening_at' => $this->time($opportunity->bid_opening_at),
+            'positions' => $opportunity->positions,
+            'employment_type' => $opportunity->employment_type?->value,
+            'apply_url' => $opportunity->apply_url,
+            'apply_email' => $opportunity->apply_email,
+            'cancelled_at' => $this->time($opportunity->cancelled_at),
+            'published_at' => $this->time($t->published_at),
+        ];
+
+        if ($full) {
+            $data['body_html'] = BodyRenderer::toHtml($t->body);
+            $data['eligibility'] = $t->eligibilityList();
+            $data['how_to_apply'] = $t->how_to_apply;
+            $data['outcome'] = $t->outcome;
+            $data['documents'] = $opportunity->documents
+                ->map(fn (Document $document): ?array => ($shown = PublicDirectory::shown($document, $t->locale)) !== null
+                    ? ['id' => (string) $document->getKey(), 'title' => (string) $shown->getAttribute('title'), 'url' => route('documents.show', ['locale' => $shown->locale, 'slug' => $shown->getAttribute('slug')])]
+                    : null)
+                ->filter()->values()->all();
+            $data['addenda'] = $opportunity->addenda->map(fn (OpportunityAddendum $a): array => [
+                'number' => $a->number,
+                'kind' => $a->kind->value,
+                'title' => $a->title($t->locale),
+                'body' => $a->body($t->locale) !== '' ? $a->body($t->locale) : null,
+                'previous_closes_at' => $this->time($a->previous_closes_at),
+                'new_closes_at' => $this->time($a->new_closes_at),
+                'published_at' => $this->time($a->published_at),
+                'corrected_at' => $this->time($a->corrected_at),
+            ])->all();
+            $data['alternates'] = $this->alternates($opportunity, 'opportunities.show');
+        }
+
+        return $data;
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Domain\Content\Support\OgImage;
 use App\Domain\Translation\Support\Locales;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -21,12 +22,17 @@ use Illuminate\Support\Collection;
  */
 final class NewsController extends Controller
 {
-    public function index(Request $request, PublicPosts $posts): View
+    public function index(Request $request, PublicPosts $posts): View|RedirectResponse
     {
         $locale = app()->getLocale();
         $type = PostType::tryFrom((string) $request->query('type'));
+        // ADR-0034: advisories have their own section.
+        if ($type === PostType::Advisory) {
+            return redirect()->route('advisories.index', status: 301);
+        }
         $filters = [
             'type' => $type,
+            'types' => $type === null ? PostType::news() : null,
             'category' => is_string($request->query('category')) ? $request->query('category') : null,
             'tag' => is_string($request->query('tag')) ? $request->query('tag') : null,
         ];
@@ -38,7 +44,7 @@ final class NewsController extends Controller
         ]);
     }
 
-    public function show(string $slug): View
+    public function show(string $slug): View|RedirectResponse
     {
         $locale = app()->getLocale();
 
@@ -50,6 +56,9 @@ final class NewsController extends Controller
 
         $post = $translation?->post()->with(['translations', 'featuredImage', 'categories.translations', 'tags.translations'])->first();
         abort_if($translation === null || $post === null || ! $translation->isLive(), 404);
+        if ($post->isAdvisory()) {
+            return redirect()->to($post->url($translation), 301);
+        }
 
         return view('pages.news.show', [
             'post' => $post,
@@ -124,8 +133,8 @@ final class NewsController extends Controller
         foreach (Locales::all() as $locale) {
             $translation = $post->translation($locale, fallback: false);
             $urls[$locale] = $translation instanceof PostTranslation && $translation->isLive()
-                ? route('news.show', ['locale' => $locale, 'slug' => $translation->slug])
-                : route('news.index', ['locale' => $locale]);
+                ? $post->url($translation)
+                : route($post->isAdvisory() ? 'advisories.index' : 'news.index', ['locale' => $locale]);
         }
 
         return $urls;
