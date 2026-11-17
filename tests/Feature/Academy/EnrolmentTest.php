@@ -10,6 +10,7 @@ use App\Domain\Academy\Mail\EnrolmentMail;
 use App\Domain\Academy\Models\CourseCohort;
 use App\Domain\Academy\Models\Enrolment;
 use App\Domain\Access\Enums\SystemRole;
+use App\Services\Calendar\EthiopianCalendar;
 use App\Services\Sms\SendSms;
 use App\Support\SpamGuard;
 use Carbon\CarbonImmutable;
@@ -139,8 +140,10 @@ it('enrols from the public form and shows the learner their private page, where 
 });
 
 it('reminds enrolled learners once the day before the cohort starts', function () {
+    // Tomorrow in Ethiopia, whatever the hour in UTC.
+    $tomorrow = CarbonImmutable::tomorrow(EthiopianCalendar::timezone());
     $cohort = sampleCohort(sampleCourse(), [
-        'starts_on' => CarbonImmutable::tomorrow()->toDateString(), 'ends_on' => CarbonImmutable::tomorrow()->addDay()->toDateString(), 'sessions' => [],
+        'starts_on' => $tomorrow->toDateString(), 'ends_on' => $tomorrow->addDay()->toDateString(), 'sessions' => [],
     ]);
     $learner = enrol($cohort, ['email' => 'sample.learner@example.org']);
     enrol($cohort, ['phone' => '0911 000 401', 'consent' => true]);

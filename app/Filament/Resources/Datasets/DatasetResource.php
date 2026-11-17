@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Datasets;
 
+use App\Domain\Access\Support\OfficeScope;
 use App\Domain\OpenData\Enums\Licence;
 use App\Domain\OpenData\Enums\UpdateFrequency;
 use App\Domain\OpenData\Models\Dataset;
@@ -12,6 +13,7 @@ use App\Filament\Resources\Datasets\Pages\EditDataset;
 use App\Filament\Resources\Datasets\Pages\ListDatasets;
 use App\Filament\Resources\Datasets\RelationManagers\DistributionsRelationManager;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\CurrentUser;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
@@ -171,7 +173,8 @@ class DatasetResource extends Resource
      */
     public static function getEloquentQuery(): Builder
     {
+        // ADR-0040: a role scoped to directorates reads the datasets those directorates publish.
         /** @var Builder<Dataset> */
-        return parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
+        return OfficeScope::apply(parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]), CurrentUser::get(), 'datasets.view');
     }
 }

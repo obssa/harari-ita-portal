@@ -48,6 +48,9 @@ Schedule::command('academy:purge')->dailyAt('03:44');
 
 // ADR-0032: opportunities whose deadline has passed move to the archive, and the edge cache is purged.
 Schedule::command('opportunities:archive')->everyFiveMinutes()->withoutOverlapping();
+
+// ADR-0039: the weekly digest every Monday at 08:00 Addis Ababa time (05:00 UTC).
+Schedule::command('reports:weekly-digest')->weeklyOn(1, '05:00')->withoutOverlapping();
 Schedule::command('portal:purge-sign-ups')->dailyAt('03:42');
 Schedule::command('notifications:prune')->dailyAt('03:45');
 Schedule::command('queue:prune-failed', ['--hours' => 720])->dailyAt('03:50');

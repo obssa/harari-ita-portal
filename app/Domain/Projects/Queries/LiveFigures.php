@@ -27,16 +27,16 @@ final class LiveFigures
     {
         try {
             $figures = [
-                ['projects', __('numbers.live.projects'), PublicDirectory::visible(Project::query(), $locale)->count(), __('numbers.source.projects'), route('projects.index')],
+                ['projects', __('numbers.live.projects'), PublicDirectory::visible(Project::query(), $locale)->count(), __('numbers.source.projects'), route('projects.index', ['locale' => $locale])],
                 ['services_online', __('numbers.live.services_online'), PublicDirectory::visible(ServiceItem::query(), $locale)
-                    ->whereJsonContains('channels', ServiceChannel::Online->value)->whereNotNull('external_url')->count(), __('numbers.source.services'), route('services.index', ['channel' => ServiceChannel::Online->value])],
+                    ->whereJsonContains('channels', ServiceChannel::Online->value)->whereNotNull('external_url')->count(), __('numbers.source.services'), route('services.index', ['locale' => $locale, 'channel' => ServiceChannel::Online->value])],
                 ['tickets_resolved', __('numbers.live.tickets_resolved'), Ticket::query()->whereNotNull('resolved_at')
                     ->where('resolved_at', '>=', CarbonImmutable::now()->subDays(30))->count(), __('numbers.source.tickets'), null],
-                ['startups', __('numbers.live.startups'), PublicDirectory::visible(Startup::query()->listed(), $locale)->count(), __('numbers.source.startups'), route('startups.index')],
-                ['datasets', __('numbers.live.datasets'), PublicDirectory::visible(Dataset::query(), $locale)->count(), __('numbers.source.datasets'), route('datasets.index')],
-                ['downloads', __('numbers.live.downloads'), (int) PublicDirectory::visible(Dataset::query(), $locale)->sum('download_count'), __('numbers.source.downloads'), route('datasets.index')],
-                ['learners', __('numbers.live.learners'), Certificate::query()->whereNull('revoked_at')->distinct()->count('enrolment_id'), __('numbers.source.learners'), route('academy.index')],
-                ['courses', __('numbers.live.courses'), PublicDirectory::visible(Course::query(), $locale)->count(), __('numbers.source.courses'), route('academy.index')],
+                ['startups', __('numbers.live.startups'), PublicDirectory::visible(Startup::query()->listed(), $locale)->count(), __('numbers.source.startups'), route('startups.index', ['locale' => $locale])],
+                ['datasets', __('numbers.live.datasets'), PublicDirectory::visible(Dataset::query(), $locale)->count(), __('numbers.source.datasets'), route('datasets.index', ['locale' => $locale])],
+                ['downloads', __('numbers.live.downloads'), (int) PublicDirectory::visible(Dataset::query(), $locale)->sum('download_count'), __('numbers.source.downloads'), route('datasets.index', ['locale' => $locale])],
+                ['learners', __('numbers.live.learners'), Certificate::query()->whereNull('revoked_at')->distinct()->count('enrolment_id'), __('numbers.source.learners'), route('academy.index', ['locale' => $locale])],
+                ['courses', __('numbers.live.courses'), PublicDirectory::visible(Course::query(), $locale)->count(), __('numbers.source.courses'), route('academy.index', ['locale' => $locale])],
             ];
         } catch (QueryException) {
             return [];

@@ -4,13 +4,18 @@ namespace App\Filament\Support;
 
 use App\Domain\Dashboard\Contracts\DashboardWidget;
 use App\Domain\Dashboard\Models\DashboardLayout;
+use App\Filament\Widgets\AcademyCohorts;
 use App\Filament\Widgets\ActivityFeed;
 use App\Filament\Widgets\Announcements;
+use App\Filament\Widgets\AtAGlance;
 use App\Filament\Widgets\AttentionNeeded;
 use App\Filament\Widgets\CampaignResults;
 use App\Filament\Widgets\EditorialPipeline;
+use App\Filament\Widgets\InnovationPipeline;
 use App\Filament\Widgets\KpiStrip;
 use App\Filament\Widgets\MediaStorage;
+use App\Filament\Widgets\OpportunityDeadlines;
+use App\Filament\Widgets\ProjectsAndData;
 use App\Filament\Widgets\QueueHealth;
 use App\Filament\Widgets\QuickActions;
 use App\Filament\Widgets\SearchInsights;
@@ -36,14 +41,20 @@ final class DashboardRegistry
     public const SIZES = [3, 4, 6, 8, 12];
 
     /** At most this many widgets in one layout. */
-    public const MAX_WIDGETS = 16;
+    public const MAX_WIDGETS = 24;
 
     /** @var list<class-string<Widget&DashboardWidget>> */
     private const WIDGETS = [
         Announcements::class,
+        AtAGlance::class,
         KpiStrip::class,
         AttentionNeeded::class,
         ServiceDesk::class,
+        // ADR-0037: the Agency's modules.
+        InnovationPipeline::class,
+        ProjectsAndData::class,
+        AcademyCohorts::class,
+        OpportunityDeadlines::class,
         QuickActions::class,
         SubscriberGrowth::class,
         CampaignResults::class,

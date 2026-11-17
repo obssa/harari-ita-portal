@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Opportunities;
 
+use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Documents\Models\Document;
 use App\Domain\Opportunities\Enums\EmploymentType;
 use App\Domain\Opportunities\Enums\OpportunityType;
@@ -13,6 +14,7 @@ use App\Filament\Resources\Opportunities\Pages\EditOpportunity;
 use App\Filament\Resources\Opportunities\Pages\ListOpportunities;
 use App\Filament\Resources\Opportunities\RelationManagers\AddendaRelationManager;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\CurrentUser;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
@@ -181,7 +183,8 @@ class OpportunityResource extends Resource
      */
     public static function getEloquentQuery(): Builder
     {
+        // ADR-0040: a role scoped to directorates reads the opportunities those directorates issue.
         /** @var Builder<Opportunity> */
-        return parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
+        return OfficeScope::apply(parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]), CurrentUser::get(), 'opportunities.view');
     }
 }

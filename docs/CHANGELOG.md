@@ -2,6 +2,18 @@
 
 All notable changes to the Agency's portal. Newest first.
 
+## Unreleased — phase 7: the dashboard, reports and roles
+
+- Five dashboard widgets with live records, scoped to each person's directorates: Digital Harar at a glance, the
+  innovation pipeline, projects and data, the Academy's next cohorts, and opportunity deadlines (ADR-0037).
+- The applications board: one cohort's applications by stage.
+- CSV exports of a cohort's learners, startups, datasets and opportunities, formula-safe and logged (ADR-0038).
+- The weekly digest every Monday for directorate heads and Admins, as a notice kind each person can switch off
+  (ADR-0039).
+- Directorate Heads read the datasets and opportunities of their directorates; a role matrix test (ADR-0040).
+- Fixed: the Academy's "starts tomorrow" reminder counted days in UTC.
+- Manual: chapter 13, the dashboard, reports and exports.
+
 ## Unreleased — phase 6: opportunities and advisories
 
 - **Opportunities** in the admin (Opportunities group): tenders, calls for proposals, vacancies and internships with

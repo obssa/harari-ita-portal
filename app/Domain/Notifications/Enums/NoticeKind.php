@@ -2,6 +2,7 @@
 
 namespace App\Domain\Notifications\Enums;
 
+use App\Domain\Dashboard\Support\WeeklyDigest;
 use App\Domain\Notifications\Support\NoticePreferences;
 use App\Models\User;
 
@@ -20,6 +21,7 @@ enum NoticeKind: string
     case Sources = 'sources';
     case Health = 'health';
     case Security = 'security';
+    case Digest = 'digest';
 
     public function label(): string
     {
@@ -32,6 +34,7 @@ enum NoticeKind: string
             self::Sources => __('notifications.kind.sources'),
             self::Health => __('notifications.kind.health'),
             self::Security => __('notifications.kind.security'),
+            self::Digest => __('notifications.kind.digest'),
         };
     }
 
@@ -46,6 +49,7 @@ enum NoticeKind: string
             self::Sources => __('notifications.kind.sources_help'),
             self::Health => __('notifications.kind.health_help'),
             self::Security => __('notifications.kind.security_help'),
+            self::Digest => __('notifications.kind.digest_help'),
         };
     }
 
@@ -59,6 +63,8 @@ enum NoticeKind: string
     {
         return match ($this) {
             self::Registrations, self::Imports => [NoticePreferences::IN_APP],
+            // ADR-0039: the weekly digest is something to read, so by email unless the person chooses otherwise.
+            self::Digest => [NoticePreferences::EMAIL],
             default => [NoticePreferences::IN_APP, NoticePreferences::EMAIL],
         };
     }
@@ -73,6 +79,7 @@ enum NoticeKind: string
             self::Imports => $user->can('posts.review') || $user->can('translations.view'),
             self::Sources => $user->can('social.manage') || $user->can('settings.view'),
             self::Health => $user->can('settings.view'),
+            self::Digest => WeeklyDigest::concerns($user),
             // Security alerts always arrive in the portal and by email: there is no choice to offer.
             self::Security => false,
         };

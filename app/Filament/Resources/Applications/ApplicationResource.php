@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Applications;
 use App\Domain\Innovation\Enums\ApplicationStage;
 use App\Domain\Innovation\Models\Application;
 use App\Domain\Innovation\Models\Programme;
+use App\Filament\Resources\Applications\Pages\ApplicationBoard;
 use App\Filament\Resources\Applications\Pages\ListApplications;
 use App\Filament\Resources\Applications\Pages\ViewApplication;
 use App\Filament\Support\CalendarDate;
@@ -135,6 +136,7 @@ class ApplicationResource extends Resource
     {
         return [
             'index' => ListApplications::route('/'),
+            'board' => ApplicationBoard::route('/board'),
             'view' => ViewApplication::route('/{record}'),
         ];
     }

@@ -702,3 +702,70 @@ as a campaign). A draft keeps a person between publishing and sending.
 
 **Why.** A new advisory with no fixed release should not stop every deploy, but the gate must stay closed for
 anything else; a named list with reasons and dates keeps the exception small and visible.
+
+## ADR-0037 — The Agency's dashboard widgets (2026-11-18)
+
+**Decision.**
+
+- Five widgets join the registry (ADR-0021 of the fork), each reading live records and limited to what the person
+  may see: **Digital Harar at a glance** (`analytics.view`: the live figures of `/numbers` and the opportunities
+  open, each linking to its admin list where allowed), **Innovation pipeline** (`applications.view`: applications of
+  the cohorts taking or deciding applications by stage, and per challenge the submissions and scores given of those
+  assigned; counts only), **Projects and data** (`projects.view`: running projects by RAG status with the red and
+  amber ones named, and, with `datasets.view`, the datasets overdue for an update), **Academy: next cohorts**
+  (`cohorts.view`: places taken of places offered and the waiting list; instructors see their cohorts only) and
+  **Opportunity deadlines** (`opportunities.view`: what closes in seven days and the latest log entries).
+- Widgets on directorate records (projects, datasets, opportunities, tickets) apply the person's directorate scope
+  (`OfficeScope`) and the dashboard's directorate filter. RAG states show their word, never colour alone.
+- Each role's default layout is the registry's widgets it may see, in order; a layout holds up to 24 widgets.
+- The **applications board** shows one cohort's applications as a column per stage, best scored first; cards open
+  the application, where moving it applies the review rules and the decision note (ADR-0021).
+
+**Why.** PLAN.md §6 (new widgets, Kanban for applications) and §13 (phase 7: the widgets show real data).
+
+## ADR-0038 — Exports (2026-11-18)
+
+**Decision.**
+
+- Four lists export as CSV, with the list's current filters: a cohort's **learners** (name, phone, email, status,
+  sessions attended, certificate; `cohorts.manage` only, as it is personal data), the **startups** directory
+  (without the founders' contact details; `startups.view`), the **datasets** catalogue with freshness and downloads
+  (`datasets.view`, scoped to directorates) and **opportunities** (`opportunities.view`, scoped to directorates).
+- Every export starts with a byte-order mark (so spreadsheets read Ethiopic), neutralises cells a spreadsheet would
+  run as a formula, streams in chunks, and is recorded in the activity log with the list and count only.
+
+**Why.** PLAN.md §6 (CSV export of enrolments, startups, datasets). The learners export was deferred from phase 5.
+
+## ADR-0039 — The weekly digest (2026-11-18)
+
+**Decision.**
+
+- `reports:weekly-digest` runs every Monday at 08:00 Addis Ababa time (05:00 UTC). It goes to **directorate heads**
+  (for their directorates) and **Admins and Super Admins** (for the whole Agency).
+- Its sections, each only for what the person may see and only when there is something to say: IT support
+  (received, resolved, still open, past target), projects (running by RAG, red and amber named), open data
+  (datasets overdue), opportunities (closing in the week ahead, log entries published), the Academy (cohorts
+  starting), innovation (applications received, waiting for a decision) and content (published, waiting for review,
+  through the posts' directorates). Counts and titles only, never personal data. A person with nothing to report
+  receives nothing.
+- It is a notice kind, "Weekly digest", by email unless the person chooses in-app, Telegram or none in the
+  notification centre (ADR-0036 of the fork). It is built when sent, in the person's language.
+
+**Why.** PLAN.md §6 ("scheduled report emails (weekly digest per directorate)") and §13 (phase 7: the weekly digest
+is sent).
+
+## ADR-0040 — Role reach (2026-11-18)
+
+**Decision.**
+
+- Directorate Heads, who "read everything in their directorate" (PLAN.md §7), also read the **datasets** their
+  directorates publish and the **opportunities** they issue. The admin lists apply the directorate scope, so another
+  directorate's record is not found. The deploy's permission sync only grants new permissions to existing roles, so
+  a migration gives the existing role these two; nothing is taken away.
+- A role matrix test opens the admin lists for ten roles and checks which open and which are refused, and that each
+  role's default dashboard holds the widgets of its work. A change to a role's reach now fails a test until it is
+  meant.
+- Days in the Academy's reminders are counted in Ethiopia (they were counted in UTC, so between midnight and 03:00
+  in Ethiopia a "starts tomorrow" reminder could go on the first day itself).
+
+**Why.** PLAN.md §7 (roles) and §13 (phase 7: each role sees only its work).

@@ -168,6 +168,8 @@ enum SystemRole: string
                 'posts.view', 'posts.review', 'posts.publish', 'pages.view', 'events.view', 'documents.view',
                 'projects.view', 'services.view', 'status.view', 'tickets.view', 'inbox.view', 'volunteers.view',
                 'analytics.view',
+                // ADR-0040: the datasets their directorate publishes and the opportunities it issues.
+                'datasets.view', 'opportunities.view',
             ],
 
             self::Analyst => [...$staff, 'analytics.view', 'analytics.export'],

@@ -10,6 +10,7 @@ use App\Domain\Academy\Models\Enrolment;
 use App\Domain\Academy\Support\AttendanceRule;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\CsvDownload;
 use App\Filament\Support\CurrentUser;
 use Carbon\CarbonImmutable;
 use Filament\Actions\Action;
@@ -86,6 +87,15 @@ class EnrolmentsRelationManager extends RelationManager
             ])
             ->filters([
                 SelectFilter::make('status')->label(__('academy.admin.status'))->options(EnrolmentStatus::options()),
+            ])
+            ->headerActions([
+                // ADR-0038: the learners with their contact details, for those who manage cohorts; logged without the data.
+                CsvDownload::action('cohorts.manage', 'learners', 'academy', fn () => $cohort->enrolments()->getQuery()->whereNull('erased_at')->with('certificate'),
+                    array_map(fn (string $k): string => __("admin.export.{$k}"), ['name', 'phone', 'email', 'status', 'attended', 'certificate', 'language', 'enrolled_at']),
+                    fn (Enrolment $e): array => [
+                        (string) $e->name, (string) $e->phone, (string) $e->email, $e->status->label(),
+                        ($this->attended($cohort)[$e->id] ?? 0).' / '.$sessions, (string) $e->certificate?->code, $e->locale, CsvDownload::time($e->created_at),
+                    ]),
             ])
             ->recordActions([
                 Action::make('issue')->label(__('academy.admin.issue'))->icon(Heroicon::OutlinedCheckBadge)

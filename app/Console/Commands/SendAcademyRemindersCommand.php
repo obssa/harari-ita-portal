@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Domain\Academy\Actions\SendEnrolmentMessage;
 use App\Domain\Academy\Enums\EnrolmentStatus;
 use App\Domain\Academy\Models\Enrolment;
+use App\Services\Calendar\EthiopianCalendar;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,7 +22,8 @@ final class SendAcademyRemindersCommand extends Command
 
     public function handle(SendEnrolmentMessage $messages): int
     {
-        $today = CarbonImmutable::today();
+        // Days are counted in Ethiopia: a cohort's first day is a date there (ADR-0029).
+        $today = CarbonImmutable::today(EthiopianCalendar::timezone());
         $count = 0;
 
         Enrolment::query()

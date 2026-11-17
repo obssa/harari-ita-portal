@@ -49,7 +49,7 @@ function layoutKeys(SystemRole $role): array
 }
 
 it('starts each role with the widgets it may see', function () {
-    expect(layoutKeys(SystemRole::CommunicationsEditor))->toBe(['announcements', 'kpis', 'attention', 'quick', 'subscribers', 'campaigns', 'pipeline', 'coverage', 'translation_queue', 'search', 'traffic', 'top_pages', 'media'])
+    expect(layoutKeys(SystemRole::CommunicationsEditor))->toBe(['announcements', 'at_a_glance', 'kpis', 'attention', 'projects_data', 'quick', 'subscribers', 'campaigns', 'pipeline', 'coverage', 'translation_queue', 'search', 'traffic', 'top_pages', 'media'])
         ->and(layoutKeys(SystemRole::Admin))->toContain('queues', 'activity', 'media')
         ->and(layoutKeys(SystemRole::Author))->not->toContain('coverage', 'translation_queue', 'search', 'queues', 'activity')
         ->and(layoutKeys(SystemRole::Editor))->toContain('media')->not->toContain('kpis', 'subscribers');
