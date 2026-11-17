@@ -20,7 +20,11 @@
                 "https://hita.orcamind.dev/en/data",
                 "https://hita.orcamind.dev/en/data/sample-public-wi-fi-sessions-by-month",
                 "https://hita.orcamind.dev/en/numbers",
-                "https://hita.orcamind.dev/en/developers"
+                "https://hita.orcamind.dev/en/developers",
+                "https://hita.orcamind.dev/en/academy",
+                "https://hita.orcamind.dev/en/academy/courses/sample-digital-skills-for-office-staff",
+                "https://hita.orcamind.dev/am/academy/courses/sample-lebiro-seratenyoch-yedijital-kihilot",
+                "https://hita.orcamind.dev/en/academy/certificates/verify"
             ],
             "numberOfRuns": 3,
             "settings": {

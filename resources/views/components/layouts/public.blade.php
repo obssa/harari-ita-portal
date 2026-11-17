@@ -20,10 +20,12 @@
     <link rel="icon" href="/favicon-96.png?v=2" type="image/png" sizes="96x96">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
     <link rel="manifest" href="/site.webmanifest?v=2">
-    <link rel="preload" href="/fonts/portal/inter-latin-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
+    {{-- Only the fonts of the page's own script are preloaded: on Ethiopic pages Inter draws the odd Latin word and
+         may arrive later, so it does not compete with the Ethiopic font and the hero image on slow phones. --}}
     @if ($ethiopic)
         <link rel="preload" href="/fonts/portal/noto-sans-ethiopic-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
     @else
+        <link rel="preload" href="/fonts/portal/inter-latin-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/portal/space-grotesk-latin-wght-v5.woff2" as="font" type="font/woff2" crossorigin>
     @endif
     <x-locale-meta :alternates="$alternates" />

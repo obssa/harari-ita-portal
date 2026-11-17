@@ -112,6 +112,10 @@ it('issues certificates to those who met the attendance rule, with a random code
     expect(app(IssueCertificate::class)->handle($b, $coordinator)->code)->not->toBe($certificate->code)
         ->and(fn () => app(IssueCertificate::class)->handle($b, $coordinator))->toThrow(ValidationException::class);
 
+    // Signs are not initials; Ethiopic names give Ethiopic initials.
+    expect(IssueCertificate::initials('[Sample] Learner Example'))->toBe('S. L.')
+        ->and(IssueCertificate::initials('ናሙና ሰልጣኝ'))->toBe('ና. ሰ.');
+
     // A row changed outside the portal no longer verifies.
     DB::table('certificates')->where('id', $certificate->id)->update(['holder_initials' => 'X. Y.']);
     expect($certificate->refresh()->isValid())->toBeFalse();

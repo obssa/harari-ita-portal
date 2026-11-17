@@ -25,7 +25,9 @@ it('preloads the Ethiopic font only on Ethiopic pages', function () {
     expect((string) $this->get('/am')->getContent())->toContain('noto-sans-ethiopic-wght-v5.woff2')
         ->and((string) $this->get('/har')->getContent())->toContain('noto-sans-ethiopic-wght-v5.woff2')
         ->and((string) $this->get('/en')->getContent())->not->toContain('rel="preload" href="/fonts/portal/noto')
-        ->toContain('inter-latin-wght-v5.woff2');
+        ->toContain('inter-latin-wght-v5.woff2')
+        // Ethiopic pages preload their own script's font only, so it does not compete with Inter on slow phones.
+        ->and((string) $this->get('/am')->getContent())->not->toContain('rel="preload" href="/fonts/portal/inter');
 });
 
 it('has a description and today in both calendars', function () {
