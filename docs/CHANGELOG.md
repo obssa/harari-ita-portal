@@ -11,6 +11,11 @@ All notable changes to the Agency's portal. Newest first.
 - Plain HTTP is sent to HTTPS; the language cookie and API keys no longer carry the fork's name (ADR-0044).
 - The security review (`docs/security-review.md`, OWASP ASVS level 2) and the first restore drill on staging.
 - Manual: the Amharic chapters 8 to 13.
+- The Agency's first content in three languages replaces the samples: the five pillars, About, Harar Jugol and
+  Digital Ethiopia 2030 pages, four sourced news explainers, three advisories, six courses, two programmes and
+  three planned projects; no "Proposed" badge on services (ADR-0045).
+- A redesigned homepage: the five pillars as the way in, programmes and courses shown while nothing has dates, and
+  a new closing heritage band: five gates, five pillars (ADR-0046).
 
 ## Unreleased — phase 7: the dashboard, reports and roles
 

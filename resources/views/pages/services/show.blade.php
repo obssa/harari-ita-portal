@@ -17,9 +17,6 @@
     </x-page-hero>
 
     <div class="mx-auto max-w-page px-4 pt-10 pb-16 sm:px-6">
-        @if ($service->proposed)
-            <x-ui.alert tone="warning" :title="__('services.proposed')" class="mb-10 max-w-3xl">{{ __('services.proposed_notice') }}</x-ui.alert>
-        @endif
         <div class="grid gap-12 lg:grid-cols-[1fr_22rem]">
             <div class="min-w-0 space-y-12" lang="{{ $translation->locale }}">
                 @if (filled($translation->eligibility))

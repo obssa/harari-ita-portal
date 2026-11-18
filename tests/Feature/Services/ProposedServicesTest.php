@@ -27,16 +27,17 @@ it('loads every proposed service in three languages, marked proposed, as drafts 
     expect(ServiceItem::query()->count())->toBe(count($data['services']));
 });
 
-it('shows a published proposed service with its notice, and removes only those still unconfirmed', function () {
+it('shows a published proposed service without a public mark, and removes only those still unconfirmed', function () {
     staff(SystemRole::SuperAdmin);
     $this->artisan('portal:proposed-services', ['--publish' => true])->assertSuccessful();
 
     $service = ServiceItem::query()->get()->first(fn (ServiceItem $s): bool => $s->title('en') === 'Digital literacy training');
-    $this->get('/en/services')->assertSee('Digital literacy training')->assertSee(__('services.proposed', [], 'en'));
-    $this->get('/en/services/'.$service->translation('en')->slug)->assertOk()->assertSee(__('services.proposed_notice', [], 'en'));
+    // ADR-0045: the proposal is marked in the admin only, not on the public pages.
+    $this->get('/en/services')->assertSee('Digital literacy training')->assertDontSee(__('services.proposed', [], 'en'));
+    $this->get('/en/services/'.$service->translation('en')->slug)->assertOk()->assertDontSee(__('services.proposed_notice', [], 'en'));
     $this->get('/am/services/'.$service->translation('am')->slug)->assertOk()->assertSee('የዲጂታል ዕውቀት ሥልጠና');
 
-    // The Agency confirms one: it stays when the rest are removed, and loses its notice.
+    // The Agency confirms one: it stays when the rest are removed.
     app(SaveServiceItem::class)->handle($service, ['proposed' => false, 'channels' => ['in_person'], 'category_id' => $service->category_id,
         'translations' => ['en' => ['title' => 'Digital literacy training', 'published' => true]]], staff(SystemRole::ServiceOwner));
     $this->get('/en/services/'.$service->translation('en')->slug)->assertDontSee(__('services.proposed_notice', [], 'en'));

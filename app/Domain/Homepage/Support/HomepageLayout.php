@@ -3,6 +3,8 @@
 namespace App\Domain\Homepage\Support;
 
 use App\Domain\Academy\Models\Course;
+use App\Domain\Academy\Models\CourseCohort;
+use App\Domain\Academy\Models\CourseTranslation;
 use App\Domain\Content\Enums\PostType;
 use App\Domain\Content\Models\Post;
 use App\Domain\Content\Models\Translation;
@@ -11,6 +13,7 @@ use App\Domain\Events\Models\Event;
 use App\Domain\Homepage\Enums\SectionKey;
 use App\Domain\Homepage\Models\HeroSlide;
 use App\Domain\Homepage\Models\HomepageSection;
+use App\Domain\Innovation\Models\Programme;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\Innovation\Queries\OpenCalls;
 use App\Domain\Media\Models\Gallery;
@@ -127,8 +130,7 @@ final class HomepageLayout
             SectionKey::Innovation => $this->innovation($locale, $limit),
             SectionKey::OpenData => $this->nonEmpty(PublicDirectory::visible(Dataset::query(), $locale)
                 ->with(['translations', 'office.translations', 'distributions'])->orderByDesc('featured')->orderByDesc('data_updated_on')->limit($limit)->get()),
-            SectionKey::Academy => $this->nonEmpty(AcademyController::calendar(PublicDirectory::visible(Course::query(), $locale)
-                ->with(['translations', 'cohorts' => fn ($q) => $q->with('office.translations')])->get(), $limit)),
+            SectionKey::Academy => $this->academy($locale, $limit),
             SectionKey::Counters => $this->counters($section, $locale),
             SectionKey::Values => $this->items($section, $locale, 'title', [], ['text']),
             SectionKey::Pillars => $this->pillars($locale, $limit),
@@ -358,10 +360,28 @@ final class HomepageLayout
     }
 
     /**
-     * The innovation section (ADR-0023): the calls open now (or the next to open), the latest innovation stories
-     * and two live figures. Shown when there is a call or a story.
+     * The Academy section (ADR-0031): the next cohorts in both calendars; while no cohort is scheduled, the courses
+     * on offer (ADR-0045), so the section never stands empty when there is a catalogue.
      *
-     * @return array{calls: list<array<string, mixed>>, stories: SupportCollection<int, Post>, startups: int, challenges: int}|null
+     * @return array{cohorts: SupportCollection<int, array{cohort: CourseCohort, course: Course, translation: CourseTranslation}>, courses: Collection<int, Course>}|null
+     */
+    private function academy(string $locale, int $limit): ?array
+    {
+        $courses = PublicDirectory::visible(Course::query(), $locale)
+            ->with(['translations', 'cohorts' => fn ($q) => $q->with('office.translations')])->orderByDesc('featured')->orderBy('sort')->get();
+        $cohorts = AcademyController::calendar($courses, $limit);
+        if ($courses->isEmpty()) {
+            return null;
+        }
+
+        return ['cohorts' => $cohorts, 'courses' => $cohorts->isEmpty() ? $courses->take(3)->values() : new Collection];
+    }
+
+    /**
+     * The innovation section (ADR-0023): the calls open now (or the next to open), the latest innovation stories
+     * and two live figures; while no call is open, the programmes (ADR-0045). Shown when there is any of them.
+     *
+     * @return array{calls: list<array<string, mixed>>, stories: SupportCollection<int, Post>, programmes: Collection<int, Programme>, startups: int, challenges: int}|null
      */
     private function innovation(string $locale, int $limit): ?array
     {
@@ -373,13 +393,15 @@ final class HomepageLayout
         }
         $tag = (string) config('portal.innovation.stories_tag', 'innovation');
         $stories = $tag === '' ? collect() : $this->posts->take($locale, 3, ['tag' => $tag]);
-        if ($calls === [] && $stories->isEmpty()) {
+        $programmes = $calls === [] ? PublicDirectory::visible(Programme::query(), $locale)->orderBy('sort')->limit(3)->get() : new Collection;
+        if ($calls === [] && $stories->isEmpty() && $programmes->isEmpty()) {
             return null;
         }
 
         return [
             'calls' => $calls,
             'stories' => $stories,
+            'programmes' => $programmes,
             'startups' => $startups,
             'challenges' => count(array_filter($calls, fn (array $call): bool => $call['kind'] === 'challenge' && $call['open'])),
         ];

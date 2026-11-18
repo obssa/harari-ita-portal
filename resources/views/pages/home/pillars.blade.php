@@ -49,4 +49,24 @@
             </li>
         @endforeach
     </ul>
+    @php
+        $national = \App\Domain\Content\Models\PageTranslation::query()->with('page')->where('locale', $locale)->where('slug', 'digital-ethiopia-2030')->first();
+        $nationalPath = $national !== null && $national->isLive() ? $national->page?->path($locale) : null;
+    @endphp
+    @if ($nationalPath)
+        {{-- ADR-0046: the pillars are the region's part in the national strategy. --}}
+        <a href="{{ route('page.show', ['path' => $nationalPath]) }}" class="group mt-6 flex flex-wrap items-center justify-between gap-4 rounded-card border border-line bg-surface-muted px-6 py-5 transition hover:border-cyan-500">
+            <span class="flex items-center gap-4">
+                <span aria-hidden="true" class="grid size-11 shrink-0 place-items-center rounded-control bg-night-900 font-mono text-xs font-semibold text-saffron-300">2030</span>
+                <span>
+                    <span class="block font-display text-lg font-semibold tracking-tight">{{ __('homepage.pillars.national_title') }}</span>
+                    <span class="block text-sm text-ink-muted">{{ __('homepage.pillars.national_text') }}</span>
+                </span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 font-semibold text-link group-hover:underline underline-offset-4">
+                {{ __('homepage.pillars.national_link') }}
+                <svg aria-hidden="true" class="size-4 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+        </a>
+    @endif
 </section>

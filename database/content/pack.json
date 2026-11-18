@@ -1,16 +1,1384 @@
 {
-  "version": 1,
-  "compiled": "2026-11-16",
-  "note": "The Agency's content pack. Empty until the items of docs/INPUTS.md arrive: every record added here carries its source. Loaded once per key by `php artisan content:load-pack`; photos go in database/content/photos.",
-  "pillars": [],
+  "version": 2,
+  "compiled": "2026-11-18",
+  "note": "The Agency's first content (ADR-0045): public facts with their sources and the Agency's planned work, written for review. No named officials, tenders, vacancies, learners or unsourced figures. Loaded once per key; what editors change later is kept.",
+  "pillars": [
+    {
+      "key": "pillar.government",
+      "sort": 1,
+      "accent": "primary",
+      "translations": {
+        "en": {
+          "name": "Digital Government",
+          "slug": "digital-government",
+          "summary": "Public services that are easy to find, use online and trust, and IT support that keeps public offices working.",
+          "body": [
+            "The first gate leads to government that works for people where they are. The Agency helps the region's public offices bring their services online, keep their systems running and tell the public clearly how to use them.",
+            {
+              "h": "What the Agency does"
+            },
+            {
+              "ul": [
+                "A catalogue of public services, each with who it is for, the documents, the steps and where to go.",
+                "IT support for public offices: report a problem, follow it and see when it is resolved.",
+                "A status page that says when a public system is down or under maintenance.",
+                "Advice to offices that want to move a paper service online, in step with the national one-stop Mesob platform."
+              ]
+            },
+            "Start with the [services catalogue](/en/services) or [request IT support](/en/support/new)."
+          ]
+        },
+        "am": {
+          "name": "ዲጂታል መንግሥት",
+          "slug": "digital-government",
+          "summary": "በቀላሉ የሚገኙ፣ በኦንላይን የሚጠቀሙባቸውና የሚታመኑ የሕዝብ አገልግሎቶች፣ እንዲሁም የመንግሥት ጽሕፈት ቤቶችን ሥራ የሚያስቀጥል የአይቲ ድጋፍ።",
+          "body": [
+            "የመጀመሪያው በር ሰዎችን ባሉበት ቦታ ወደሚያገለግል መንግሥት ይመራል። ኤጀንሲው የክልሉ የመንግሥት ጽሕፈት ቤቶች አገልግሎቶቻቸውን ወደ ኦንላይን እንዲያመጡ፣ ሥርዓቶቻቸው ሳይቋረጡ እንዲሠሩ እና ሕዝቡ አገልግሎቶቹን እንዴት እንደሚጠቀም በግልጽ እንዲያሳውቁ ይረዳል።",
+            {
+              "h": "ኤጀንሲው የሚሠራው"
+            },
+            {
+              "ul": [
+                "የሕዝብ አገልግሎቶች ማውጫ፦ እያንዳንዱ አገልግሎት ለማን እንደሆነ፣ የሚያስፈልጉ ሰነዶች፣ ደረጃዎቹ እና የት መሄድ እንዳለብዎ ይገልጻል።",
+                "ለመንግሥት ጽሕፈት ቤቶች የአይቲ ድጋፍ፦ ችግርን ሪፖርት ያድርጉ፣ ሂደቱን ይከታተሉ እና መቼ እንደተፈታ ይመልከቱ።",
+                "አንድ የሕዝብ ሥርዓት ሲቋረጥ ወይም በጥገና ላይ ሲሆን የሚያሳውቅ የሁኔታ ገጽ።",
+                "የወረቀት አገልግሎትን ወደ ኦንላይን ማሸጋገር ለሚፈልጉ ጽሕፈት ቤቶች፣ ከብሔራዊው የአንድ ማዕከል መሶብ መድረክ ጋር የተጣጣመ ምክር።"
+              ]
+            },
+            "በ[አገልግሎቶች ማውጫ](/am/services) ይጀምሩ ወይም [የአይቲ ድጋፍ ይጠይቁ](/am/support/new)።"
+          ]
+        },
+        "om": {
+          "name": "Mootummaa Dijitaalaa",
+          "slug": "digital-government",
+          "summary": "Tajaajiloota mootummaa salphaatti argamuu, toora interneetiin itti fayyadamuu fi amanamuu danda'an, akkasumas deeggarsa IT waajjiraaleen mootummaa ittiin hojii isaanii itti fufan.",
+          "body": [
+            "Karri jalqabaa gara mootummaa namoota bakka isaan jiranitti tajaajiluutti geessa. Ejansichi waajjiraaleen mootummaa naannichaa tajaajiloota isaanii toora interneetiitti akka galchan, sirnoota isaanii hojiirra akka turan fi akkaataa itti fayyadama isaanii ummataaf ifatti akka himan ni gargaara.",
+            {
+              "h": "Waan Ejansichi hojjetu"
+            },
+            {
+              "ul": [
+                "Kaataalogii tajaajiloota mootummaa: tajaajilli tokkoon tokkoon eenyuuf akka ta'e, sanadoota barbaachisan, tarkaanfiiwwan fi bakka itti deemamu waliin.",
+                "Deeggarsa IT waajjiraalee mootummaatiif: rakkoo gabaasaa, hordofaa, yoom akka furame ilaalaa.",
+                "Fuula haala tajaajilaa kan sirni mootummaa yoom akka dhaabbate ykn suphaa irra jiru himu.",
+                "Gorsa waajjiraalee tajaajila waraqaa gara toora interneetiitti jijjiiruu barbaadaniif, waltajjii biyyoolessaa tajaajila bakka tokkootti kennu Mesob waliin walsimuun."
+              ]
+            },
+            "[Kaataalogii tajaajilaa](/om/services) irraa jalqabaa ykn [deeggarsa IT gaafadhaa](/om/support/new)."
+          ]
+        }
+      }
+    },
+    {
+      "key": "pillar.innovation",
+      "sort": 2,
+      "accent": "cyan",
+      "translations": {
+        "en": {
+          "name": "Innovation & Startups",
+          "slug": "innovation-startups",
+          "summary": "A home for the region's founders and innovators: a directory, programmes, challenges and a path to national support.",
+          "body": [
+            "Harar has traded ideas for a thousand years. The second gate opens the region to new ones: the Agency helps founders, students and innovators turn ideas into working products and services.",
+            {
+              "h": "What the Agency does"
+            },
+            {
+              "ul": [
+                "A directory where startups and innovators can be listed and found.",
+                "Incubation programmes and innovation challenges, announced here with their dates.",
+                "Guidance on national support, such as the startup label of the Ministry of Innovation and Technology under the Startup Proclamation."
+              ]
+            },
+            "Get listed in the [startups directory](/en/innovation/startups) or see the [programmes](/en/innovation/programmes)."
+          ]
+        },
+        "am": {
+          "name": "ፈጠራና ጀማሪ ኩባንያዎች",
+          "slug": "innovation-startups",
+          "summary": "ለክልሉ መሥራቾችና የፈጠራ ባለሙያዎች መኖሪያ፦ ማውጫ፣ ፕሮግራሞች፣ ውድድሮች እና ወደ ብሔራዊ ድጋፍ የሚያደርስ መንገድ።",
+          "body": [
+            "ሐረር ለአንድ ሺህ ዓመታት ሐሳቦችን ስትለዋወጥ ኖራለች። ሁለተኛው በር ክልሉን ለአዳዲስ ሐሳቦች ይከፍታል፦ ኤጀንሲው መሥራቾች፣ ተማሪዎች እና የፈጠራ ባለሙያዎች ሐሳባቸውን ወደሚሠሩ ምርቶችና አገልግሎቶች እንዲቀይሩ ይረዳል።",
+            {
+              "h": "ኤጀንሲው የሚሠራው"
+            },
+            {
+              "ul": [
+                "ጀማሪ ኩባንያዎችና የፈጠራ ባለሙያዎች የሚዘረዘሩበትና የሚገኙበት ማውጫ።",
+                "የማቀፊያ ፕሮግራሞችና የፈጠራ ውድድሮች፣ ከቀኖቻቸው ጋር እዚህ ይታወቃሉ።",
+                "በብሔራዊ ድጋፍ ላይ መመሪያ፣ ለምሳሌ በጀማሪ ኩባንያዎች አዋጅ መሠረት የኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር የሚሰጠው የጀማሪ ኩባንያ መለያ።"
+              ]
+            },
+            "በ[ጀማሪ ኩባንያዎች ማውጫ](/am/innovation/startups) ውስጥ ይመዝገቡ ወይም [ፕሮግራሞቹን](/am/innovation/programmes) ይመልከቱ።"
+          ]
+        },
+        "om": {
+          "name": "Kalaqa fi Jalqabbiiwwan Daldalaa",
+          "slug": "innovation-startups",
+          "summary": "Mana hundeessitootaa fi kalaqxota naannichaa: galmee, sagantaalee, dorgommiiwwan fi karaa deeggarsa biyyoolessaa itti argatan.",
+          "body": [
+            "Harar waggaa kuma tokkoof yaadota wal jijjiiraa turte. Karri lammaffaan naannicha yaadota haaraaf bana: Ejansichi hundeessitoonni, barattoonni fi kalaqxonni yaada isaanii gara oomishaalee fi tajaajiloota hojjetanitti akka jijjiiran ni gargaara.",
+            {
+              "h": "Waan Ejansichi hojjetu"
+            },
+            {
+              "ul": [
+                "Galmee jalqabbiiwwan daldalaa fi kalaqxonni itti tarreeffamanii fi itti argaman.",
+                "Sagantaalee inkubeeshinii fi dorgommiiwwan kalaqaa, guyyoota isaanii waliin asitti beeksifaman.",
+                "Qajeelfama deeggarsa biyyoolessaa irratti, kan akka mallattoo jalqabbii daldalaa Ministeera Kalaqaa fi Teeknooloojii kan Labsii Jalqabbiiwwan Daldalaa jalatti kennamu."
+              ]
+            },
+            "[Galmee jalqabbiiwwan daldalaa](/om/innovation/startups) keessatti tarreeffamaa ykn [sagantaalee](/om/innovation/programmes) ilaalaa."
+          ]
+        }
+      }
+    },
+    {
+      "key": "pillar.skills",
+      "sort": 3,
+      "accent": "saffron",
+      "translations": {
+        "en": {
+          "name": "Digital Skills",
+          "slug": "digital-skills",
+          "summary": "Practical courses for public servants, young people and residents, with certificates anyone can check.",
+          "body": [
+            "The third gate is learning. Digital public services only help when people can use them, and new technology only creates jobs when people can build with it.",
+            {
+              "h": "What the Agency does"
+            },
+            {
+              "ul": [
+                "Courses in digital literacy, cyber-safety, data, websites and artificial intelligence.",
+                "Coding and technology foundations for young people.",
+                "Certificates with a code and a QR code that employers can check online."
+              ]
+            },
+            "See the [Academy](/en/academy)."
+          ]
+        },
+        "am": {
+          "name": "ዲጂታል ክህሎት",
+          "slug": "digital-skills",
+          "summary": "ለመንግሥት ሠራተኞች፣ ለወጣቶችና ለነዋሪዎች ተግባራዊ ኮርሶች፣ ማንም ሊያረጋግጣቸው ከሚችሉ የምስክር ወረቀቶች ጋር።",
+          "body": [
+            "ሦስተኛው በር ትምህርት ነው። ዲጂታል የሕዝብ አገልግሎቶች የሚጠቅሙት ሰዎች ሊጠቀሙባቸው ሲችሉ ብቻ ነው፤ አዲስ ቴክኖሎጂም ሥራ የሚፈጥረው ሰዎች በእሱ መገንባት ሲችሉ ብቻ ነው።",
+            {
+              "h": "ኤጀንሲው የሚሠራው"
+            },
+            {
+              "ul": [
+                "በዲጂታል ዕውቀት፣ በሳይበር ደህንነት፣ በመረጃ፣ በድረ-ገጾች እና በሰው ሠራሽ አስተውሎት ላይ ኮርሶች።",
+                "ለወጣቶች የኮዲንግና የቴክኖሎጂ መሠረታዊ ትምህርቶች።",
+                "አሠሪዎች በኦንላይን ሊያረጋግጧቸው የሚችሉ፣ ኮድና የQR ኮድ ያላቸው የምስክር ወረቀቶች።"
+              ]
+            },
+            "[አካዳሚውን](/am/academy) ይመልከቱ።"
+          ]
+        },
+        "om": {
+          "name": "Dandeettii Dijitaalaa",
+          "slug": "digital-skills",
+          "summary": "Koorsiiwwan hojiirra oolan hojjettoota mootummaa, dargaggootaa fi jiraattotaaf, waraqaa ragaa namni kamiyyuu mirkaneessuu danda'u waliin.",
+          "body": [
+            "Karri sadaffaan barumsa. Tajaajiloonni mootummaa dijitaalaa kan gargaaran yoo namoonni itti fayyadamuu danda'an qofa, teeknooloojiin haaraan immoo carraa hojii kan uumu yoo namoonni ittiin ijaaruu danda'an qofa.",
+            {
+              "h": "Waan Ejansichi hojjetu"
+            },
+            {
+              "ul": [
+                "Koorsiiwwan beekumsa dijitaalaa, nageenya saayibarii, daataa, marsariitiiwwan fi sammuu namtolchee irratti.",
+                "Bu'uura koodii barreessuu fi teeknooloojii dargaggootaaf.",
+                "Waraqaa ragaa koodii fi koodii QR qabu, kan qacartoonni toora interneetiin mirkaneessuu danda'an."
+              ]
+            },
+            "[Akkaadamii](/om/academy) ilaalaa."
+          ]
+        }
+      }
+    },
+    {
+      "key": "pillar.data",
+      "sort": 4,
+      "accent": "ruby",
+      "translations": {
+        "en": {
+          "name": "Data & Infrastructure",
+          "slug": "data-infrastructure",
+          "summary": "The networks, systems and open data the region's digital future is built on, tracked in the open.",
+          "body": [
+            "The fourth gate is the foundation. Networks, hosting and data are what every other service stands on.",
+            {
+              "h": "What the Agency does"
+            },
+            {
+              "ul": [
+                "A public portfolio of the Agency's projects, with their milestones and progress.",
+                "An open data catalogue with an API, so others can build on public information.",
+                "Digital Harar in numbers: figures counted from live records, each with its source."
+              ]
+            },
+            "See the [projects](/en/projects) and [open data](/en/data)."
+          ]
+        },
+        "am": {
+          "name": "መረጃና መሠረተ ልማት",
+          "slug": "data-infrastructure",
+          "summary": "የክልሉ ዲጂታል የወደፊት ዕጣ የሚገነባባቸው ኔትወርኮች፣ ሥርዓቶችና ክፍት መረጃ፣ በግልጽ የሚከታተሉ።",
+          "body": [
+            "አራተኛው በር መሠረቱ ነው። ኔትወርኮች፣ ማስተናገጃ (ሆስቲንግ) እና መረጃ ሌሎች አገልግሎቶች ሁሉ የሚቆሙባቸው ናቸው።",
+            {
+              "h": "ኤጀንሲው የሚሠራው"
+            },
+            {
+              "ul": [
+                "የኤጀንሲው ፕሮጀክቶች ከምዕራፎቻቸውና ከሂደታቸው ጋር የሚታዩበት ይፋዊ ዝርዝር።",
+                "ሌሎች በሕዝብ መረጃ ላይ እንዲገነቡ፣ API ያለው የክፍት መረጃ ካታሎግ።",
+                "ዲጂታል ሐረር በቁጥሮች፦ ከቀጥታ መዛግብት የተቆጠሩ አኃዞች፣ እያንዳንዱ ከምንጩ ጋር።"
+              ]
+            },
+            "[ፕሮጀክቶቹን](/am/projects) እና [ክፍት መረጃውን](/am/data) ይመልከቱ።"
+          ]
+        },
+        "om": {
+          "name": "Daataa fi Bu'uuraalee Misoomaa",
+          "slug": "data-infrastructure",
+          "summary": "Networkiiwwan, sirnootaa fi daataa banaa egereen dijitaalaa naannichaa irratti ijaaramu, ifatti kan hordofaman.",
+          "body": [
+            "Karri afraffaan bu'uura. Networkiiwwan, keessummeessa marsariitii (hosting) fi daataan waan tajaajilli biraa hundi irratti dhaabbatu dha.",
+            {
+              "h": "Waan Ejansichi hojjetu"
+            },
+            {
+              "ul": [
+                "Tarree pirojektoota Ejansichaa ummataaf banaa ta'e, sadarkaalee ijoo fi adeemsa isaanii waliin.",
+                "Kaataalogii daataa banaa API qabu, akka namoonni biroo odeeffannoo ummataa irratti ijaaruu danda'aniif.",
+                "Harar Dijitaalaa lakkoofsaan: lakkoofsota galmeewwan kallattii irraa lakkaa'aman, tokkoon tokkoon isaanii madda isaa waliin."
+              ]
+            },
+            "[Pirojektoota](/om/projects) fi [daataa banaa](/om/data) ilaalaa."
+          ]
+        }
+      }
+    },
+    {
+      "key": "pillar.trust",
+      "sort": 5,
+      "accent": "night",
+      "translations": {
+        "en": {
+          "name": "Trust & Cyber-awareness",
+          "slug": "trust-cyber-awareness",
+          "summary": "Plain guidance that helps residents and public offices stay safe online, and where to report an incident.",
+          "body": [
+            "The fifth gate is trust. People use digital services when they feel safe doing so.",
+            {
+              "h": "What the Agency does"
+            },
+            {
+              "ul": [
+                "Dated safety advisories with the steps to take.",
+                "Cyber-safety training for public offices.",
+                "A clear route to report incidents: national cybersecurity is the responsibility of the Information Network Security Administration (INSA)."
+              ]
+            },
+            "Read the [advisories](/en/advisories)."
+          ]
+        },
+        "am": {
+          "name": "እምነትና የሳይበር ግንዛቤ",
+          "slug": "trust-cyber-awareness",
+          "summary": "ነዋሪዎችና የመንግሥት ጽሕፈት ቤቶች በኦንላይን ደህንነታቸው እንዲጠበቅ የሚረዳ ግልጽ መመሪያ፣ እንዲሁም የሳይበር ጥቃትን የት ሪፖርት ማድረግ እንደሚቻል።",
+          "body": [
+            "አምስተኛው በር እምነት ነው። ሰዎች ዲጂታል አገልግሎቶችን የሚጠቀሙት ደህንነት ሲሰማቸው ነው።",
+            {
+              "h": "ኤጀንሲው የሚሠራው"
+            },
+            {
+              "ul": [
+                "መወሰድ ያለባቸውን እርምጃዎች የያዙ፣ ቀን የተጻፈባቸው የደህንነት ምክሮች።",
+                "ለመንግሥት ጽሕፈት ቤቶች የሳይበር ደህንነት ሥልጠና።",
+                "የሳይበር ጥቃቶችን ሪፖርት ለማድረግ ግልጽ መንገድ፦ የብሔራዊ የሳይበር ደህንነት ኃላፊነት የኢንፎርሜሽን መረብ ደህንነት አስተዳደር (ኢንሳ) ነው።"
+              ]
+            },
+            "[የደህንነት ምክሮቹን](/am/advisories) ያንብቡ።"
+          ]
+        },
+        "om": {
+          "name": "Amanamummaa fi Hubannoo Saayibarii",
+          "slug": "trust-cyber-awareness",
+          "summary": "Qajeelfama ifaa jiraattonnii fi waajjiraaleen mootummaa toora interneetii irratti nagaan akka jiraatan gargaaru, akkasumas balaa eessatti akka gabaasan.",
+          "body": [
+            "Karri shanaffaan amanamummaa. Namoonni tajaajiloota dijitaalaa kan itti fayyadaman yeroo akkas gochuun nageenya akka qabu itti dhaga'amu dha.",
+            {
+              "h": "Waan Ejansichi hojjetu"
+            },
+            {
+              "ul": [
+                "Gorsa nageenyaa guyyaa qabu, tarkaanfiiwwan fudhatamuu qaban waliin.",
+                "Leenjii nageenya saayibarii waajjiraalee mootummaatiif.",
+                "Karaa ifaa balaa itti gabaasan: nageenyi saayibarii biyyoolessaa itti gaafatamummaa Bulchiinsa Nageenya Networkii Odeeffannoo (INSA) ti."
+              ]
+            },
+            "[Gorsa nageenyaa](/om/advisories) dubbisaa."
+          ]
+        }
+      }
+    }
+  ],
   "offices": [],
   "leaders": [],
-  "pages": [],
+  "pages": [
+    {
+      "key": "page.about",
+      "sort": 1,
+      "translations": {
+        "en": {
+          "title": "About the Agency",
+          "slug": "about",
+          "excerpt": "The Harari Regional State Innovation and Technology Agency leads the region's digital transformation: public services, innovation, skills, data and online safety.",
+          "body": [
+            "The Harari Regional State Innovation and Technology Agency (HinTA) is the region's body for innovation and technology. It helps public offices serve people better with technology, supports the region's innovators, builds digital skills and keeps the region's digital foundations strong and safe.",
+            {
+              "h": "Five gates, five pillars"
+            },
+            "Harar Jugol, the walled old city, is entered through its historic gates. The Agency organises its work as five pillars in the same spirit: each one a way in to the region's digital future.",
+            {
+              "ul": [
+                "Digital Government: public services online and IT support for public offices.",
+                "Innovation & Startups: a directory, programmes and challenges for founders.",
+                "Digital Skills: courses and verifiable certificates.",
+                "Data & Infrastructure: networks, projects and open data.",
+                "Trust & Cyber-awareness: safety guidance and where to report."
+              ]
+            },
+            {
+              "h": "Part of a national effort"
+            },
+            "The Agency's work follows Ethiopia's national strategy, Digital Ethiopia 2030, and works with national institutions such as the Ministry of Innovation and Technology, the Ethiopian Artificial Intelligence Institute and the Information Network Security Administration. Read more on [Digital Ethiopia 2030](/en/digital-ethiopia-2030).",
+            {
+              "h": "Our commitments"
+            },
+            {
+              "ul": [
+                "Every page in English, Amharic and Afaan Oromo, with Harari to follow.",
+                "Accessible to everyone, on any phone (WCAG 2.2 AA).",
+                "Personal data collected only for a stated purpose, kept only as long as needed, and never sold.",
+                "Every figure on this site counted from records, with its source."
+              ]
+            }
+          ]
+        },
+        "am": {
+          "title": "ስለ ኤጀንሲው",
+          "slug": "about",
+          "excerpt": "የሐረሪ ክልላዊ መንግሥት ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ የክልሉን ዲጂታል ሽግግር ይመራል፦ የሕዝብ አገልግሎቶች፣ ፈጠራ፣ ክህሎት፣ መረጃ እና የኦንላይን ደህንነት።",
+          "body": [
+            "የሐረሪ ክልላዊ መንግሥት ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ (HinTA) የክልሉ የኢኖቬሽንና ቴክኖሎጂ ተቋም ነው። የመንግሥት ጽሕፈት ቤቶች በቴክኖሎጂ ሕዝቡን በተሻለ እንዲያገለግሉ ይረዳል፣ የክልሉን የፈጠራ ባለሙያዎች ይደግፋል፣ ዲጂታል ክህሎትን ይገነባል፣ እንዲሁም የክልሉ ዲጂታል መሠረቶች ጠንካራና ደህንነታቸው የተጠበቀ እንዲሆኑ ያደርጋል።",
+            {
+              "h": "አምስት በሮች፣ አምስት ምሰሶዎች"
+            },
+            "ቅጥር የተከበበችው አሮጌዋ ከተማ ሐረር ጀጎል የምትገባው በታሪካዊ በሮቿ ነው። ኤጀንሲውም ሥራውን በዚሁ መንፈስ በአምስት ምሰሶዎች ያደራጃል፦ እያንዳንዳቸው ወደ ክልሉ ዲጂታል የወደፊት ዕጣ የሚያስገቡ መንገዶች ናቸው።",
+            {
+              "ul": [
+                "ዲጂታል መንግሥት፦ በኦንላይን የሚሰጡ የሕዝብ አገልግሎቶችና ለመንግሥት ጽሕፈት ቤቶች የአይቲ ድጋፍ።",
+                "ፈጠራና ጀማሪ ኩባንያዎች፦ ለመሥራቾች ማውጫ፣ ፕሮግራሞችና ውድድሮች።",
+                "ዲጂታል ክህሎት፦ ኮርሶችና ሊረጋገጡ የሚችሉ የምስክር ወረቀቶች።",
+                "መረጃና መሠረተ ልማት፦ ኔትወርኮች፣ ፕሮጀክቶችና ክፍት መረጃ።",
+                "እምነትና የሳይበር ግንዛቤ፦ የደህንነት መመሪያና የት ሪፖርት ማድረግ እንደሚቻል።"
+              ]
+            },
+            {
+              "h": "የብሔራዊ ጥረት አካል"
+            },
+            "የኤጀንሲው ሥራ የኢትዮጵያን ብሔራዊ ስትራቴጂ ዲጂታል ኢትዮጵያ 2030ን ይከተላል፤ እንደ ኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር፣ የኢትዮጵያ ሰው ሠራሽ አስተውሎት ኢንስቲትዩት እና የኢንፎርሜሽን መረብ ደህንነት አስተዳደር ካሉ ብሔራዊ ተቋማት ጋርም ይሠራል። ስለ [ዲጂታል ኢትዮጵያ 2030](/am/digital-ethiopia-2030) ተጨማሪ ያንብቡ።",
+            {
+              "h": "ቃል ኪዳኖቻችን"
+            },
+            {
+              "ul": [
+                "እያንዳንዱ ገጽ በእንግሊዝኛ፣ በአማርኛና በአፋን ኦሮሞ፣ ሐረሪ ደግሞ በቀጣይ ይጨመራል።",
+                "በማንኛውም ስልክ ለሁሉም ተደራሽ (WCAG 2.2 AA)።",
+                "የግል መረጃ የሚሰበሰበው ለተገለጸ ዓላማ ብቻ ነው፤ የሚቀመጠው ለሚያስፈልገው ጊዜ ብቻ ሲሆን በፍጹም አይሸጥም።",
+                "በዚህ ድረ-ገጽ ላይ ያለ እያንዳንዱ አኃዝ ከመዛግብት የተቆጠረና ከምንጩ ጋር የቀረበ ነው።"
+              ]
+            }
+          ]
+        },
+        "om": {
+          "title": "Waa'ee Ejansichaa",
+          "slug": "about",
+          "excerpt": "Ejansiin Kalaqaa fi Teeknooloojii Mootummaa Naannoo Hararii jijjiirama dijitaalaa naannichaa ni geggeessa: tajaajiloota mootummaa, kalaqa, dandeettii, daataa fi nageenya toora interneetii.",
+          "body": [
+            "Ejansiin Kalaqaa fi Teeknooloojii Mootummaa Naannoo Hararii (HinTA) qaama naannichaa kalaqaa fi teeknooloojiif itti gaafatamu dha. Waajjiraaleen mootummaa teeknooloojiidhaan ummata caalaatti akka tajaajilan ni gargaara, kalaqxota naannichaa ni deeggara, dandeettii dijitaalaa ni ijaara, akkasumas bu'uuraaleen dijitaalaa naannichaa jabaa fi nageenya qabeessa akka ta'an ni eega.",
+            {
+              "h": "Karrawwan shan, utubaalee shan"
+            },
+            "Harar Jugol, magaalaan durii dallaan marfamte, karrawwan ishee seenaa qabeeyyii keessaan seenama. Ejansichi hojii isaa hafuura walfakkaatuun akka utubaalee shanitti qindeessa: tokkoon tokkoon isaanii karra egeree dijitaalaa naannichaatti nama seensisu dha.",
+            {
+              "ul": [
+                "Mootummaa Dijitaalaa: tajaajiloota mootummaa toora interneetii irratti fi deeggarsa IT waajjiraalee mootummaatiif.",
+                "Kalaqa fi Jalqabbiiwwan Daldalaa: galmee, sagantaalee fi dorgommiiwwan hundeessitootaaf.",
+                "Dandeettii Dijitaalaa: koorsiiwwan fi waraqaa ragaa mirkanaa'uu danda'u.",
+                "Daataa fi Bu'uuraalee Misoomaa: networkiiwwan, pirojektoota fi daataa banaa.",
+                "Amanamummaa fi Hubannoo Saayibarii: qajeelfama nageenyaa fi bakka itti gabaasan."
+              ]
+            },
+            {
+              "h": "Kutaa carraaqqii biyyoolessaa"
+            },
+            "Hojiin Ejansichaa tarsiimoo biyyoolessaa Itoophiyaa, Itoophiyaa Dijitaalaa 2030, hordofa, akkasumas dhaabbilee biyyoolessaa kan akka Ministeera Kalaqaa fi Teeknooloojii, Inistiitiyuutii Sammuu Namtolchee Itoophiyaa fi Bulchiinsa Nageenya Networkii Odeeffannoo waliin hojjeta. Dabalataaf [Itoophiyaa Dijitaalaa 2030](/om/digital-ethiopia-2030) irratti dubbisaa.",
+            {
+              "h": "Waadaa keenya"
+            },
+            {
+              "ul": [
+                "Fuulli hundi Afaan Ingiliffaa, Afaan Amaaraa fi Afaan Oromootiin; Afaan Hararii immoo itti aansee.",
+                "Nama hundaaf, bilbila kamiin iyyuu kan argamu (WCAG 2.2 AA).",
+                "Odeeffannoon dhuunfaa kaayyoo ibsameef qofa ni sassaabama, hanga barbaachisutti qofa ni kuufama, gonkumaa hin gurguramu.",
+                "Lakkoofsi marsariitii kana irra jiru hundi galmeewwan irraa kan lakkaa'ame, madda isaa waliin."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "page.harar",
+      "sort": 2,
+      "translations": {
+        "en": {
+          "title": "Harar Jugol, a World Heritage city",
+          "slug": "harar",
+          "excerpt": "The fortified historic town of Harar has been on UNESCO's World Heritage List since 2006.",
+          "body": [
+            "Harar Jugol, the fortified historic town of Harar, stands on a plateau in eastern Ethiopia. UNESCO inscribed it on the World Heritage List in 2006.",
+            {
+              "h": "What makes Jugol unique"
+            },
+            {
+              "ul": [
+                "Its walls were built between the 13th and 16th centuries.",
+                "UNESCO counts 82 mosques, three of them from the 10th century, and 102 shrines inside the town.",
+                "Its townhouses, with their exceptional interior design, are the most striking part of its heritage.",
+                "African and Islamic traditions shaped its building types and its maze of narrow lanes."
+              ]
+            },
+            "For centuries Harar was a crossroads of trade and learning. Its crafts, among them basketry, weaving and bookbinding, are still part of daily life.",
+            {
+              "h": "Heritage and the digital future"
+            },
+            "The Agency takes its design from Jugol: the lanes of the old town become the lines of a circuit, and the gates become the five pillars of its work. The same openness that made Harar a meeting place of ideas can make it a place where digital ideas grow.",
+            "Source: [UNESCO World Heritage Centre, Harar Jugol, the Fortified Historic Town](https://whc.unesco.org/en/list/1189)."
+          ]
+        },
+        "am": {
+          "title": "ሐረር ጀጎል፣ የዓለም ቅርስ ከተማ",
+          "slug": "harar",
+          "excerpt": "ቅጥር የተከበበችው ታሪካዊቷ የሐረር ከተማ ከ2006 ጀምሮ በዩኔስኮ የዓለም ቅርስ ዝርዝር ውስጥ ትገኛለች።",
+          "body": [
+            "ቅጥር የተከበበችው ታሪካዊቷ የሐረር ከተማ ሐረር ጀጎል በምሥራቅ ኢትዮጵያ በሚገኝ አምባ ላይ ትገኛለች። ዩኔስኮ በ2006 በዓለም ቅርስ ዝርዝር ውስጥ አስመዝግቧታል።",
+            {
+              "h": "ጀጎልን ልዩ የሚያደርጋት"
+            },
+            {
+              "ul": [
+                "ቅጥሯ የተገነባው ከ13ኛው እስከ 16ኛው ክፍለ ዘመን ባለው ጊዜ ውስጥ ነው።",
+                "ዩኔስኮ በከተማዋ ውስጥ 82 መስጊዶችን፣ ከእነዚህም ሦስቱ ከ10ኛው ክፍለ ዘመን የተገኙ፣ እና 102 የመቃብር ቦታዎችን (ሽሪኖችን) ይቆጥራል።",
+                "ልዩ የውስጥ ዲዛይን ያላቸው የከተማ ቤቶቿ የቅርሷ እጅግ ጎልቶ የሚታይ ክፍል ናቸው።",
+                "የአፍሪካና የእስልምና ወጎች የሕንፃዎቿን ዓይነቶችና ጠባብ መንገዶቿ የሚፈጥሩትን ውስብስብ መረብ ቀርፀዋል።"
+              ]
+            },
+            "ሐረር ለዘመናት የንግድና የትምህርት መገናኛ ነበረች። የእጅ ሥራዎቿ፣ ከእነዚህም መካከል የሰፌድ ሥራ፣ ሽመና እና የመጻሕፍት ጥረዛ፣ ዛሬም የዕለት ተዕለት ሕይወት አካል ናቸው።",
+            {
+              "h": "ቅርስና ዲጂታል የወደፊት ዕጣ"
+            },
+            "ኤጀንሲው ዲዛይኑን ከጀጎል ይወስዳል፦ የአሮጌዋ ከተማ መንገዶች የኤሌክትሮኒክ ዑደት (ሰርኪዩት) መስመሮች ይሆናሉ፣ በሮቿም የሥራው አምስት ምሰሶዎች ይሆናሉ። ሐረርን የሐሳቦች መገናኛ ያደረጋት ያው ግልጽነት የዲጂታል ሐሳቦች የሚያድጉባት ቦታም ሊያደርጋት ይችላል።",
+            "ምንጭ፦ [የዩኔስኮ የዓለም ቅርስ ማዕከል፣ ሐረር ጀጎል፣ ቅጥር የተከበበችው ታሪካዊ ከተማ](https://whc.unesco.org/en/list/1189)።"
+          ]
+        },
+        "om": {
+          "title": "Harar Jugol, magaalaa hambaa addunyaa",
+          "slug": "harar",
+          "excerpt": "Magaalaan seenaa qabeettiin dallaan eegamte Harar bara 2006 irraa kaasee Galmee Hambaa Addunyaa UNESCO irra jirti.",
+          "body": [
+            "Harar Jugol, magaalaan seenaa qabeettiin Harar dallaan eegamte, Itoophiyaa bahaa keessatti lafa olka'aa diriiraa irra argamti. UNESCO bara 2006 Galmee Hambaa Addunyaa irratti ishee galmeesse.",
+            {
+              "h": "Jugol maaliin addaa taati"
+            },
+            {
+              "ul": [
+                "Dallaan ishee jaarraa 13ffaa fi 16ffaa gidduutti ijaarame.",
+                "UNESCO magaalattii keessatti masjiidota 82, kanneen keessaa sadi jaarraa 10ffaa irraa kan ta'an, fi iddoowwan qulqulluu 102 lakkaa'a.",
+                "Manneen magaalattii, qindaa'ina keessaa addaa qaban, kutaa hambaa ishee isa caalaa nama hawwatu dha.",
+                "Aadaawwan Afrikaa fi Islaamaa gosoota ijaarsa ishee fi daandiiwwan ishee dhiphoo fi walxaxaa bocaniiru."
+              ]
+            },
+            "Jaarraawwaniif Harar qaxxaamura daldalaa fi barumsaa turte. Ogummaawwan harkaa ishee, kanneen keessaa hojii gundoo, wayyaa dha'uu fi kitaaba hidhuu, ammallee kutaa jireenya guyyaa guyyaa ti.",
+            {
+              "h": "Hambaa fi egeree dijitaalaa"
+            },
+            "Ejansichi dizaayinii isaa Jugol irraa fudhata: daandiiwwan magaalaa durii sararoota sirkiyuutii ta'u, karrawwan immoo utubaalee hojii isaa shanan ta'u. Banaa ta'uun Harar bakka walgahii yaadotaa godhe sun bakka yaadonni dijitaalaa itti guddatan gochuu danda'a.",
+            "Madda: [Giddugala Hambaa Addunyaa UNESCO, Harar Jugol, Magaalaa Seenaa Qabeettii Dallaan Eegamte](https://whc.unesco.org/en/list/1189)."
+          ]
+        }
+      }
+    },
+    {
+      "key": "page.digital-ethiopia-2030",
+      "sort": 3,
+      "translations": {
+        "en": {
+          "title": "Digital Ethiopia 2030",
+          "slug": "digital-ethiopia-2030",
+          "excerpt": "The national digital strategy and the laws that shape the Agency's work, with links to their official sources.",
+          "body": [
+            "The Agency's work follows national strategy and law. This page brings together what matters most for the Harari Region, with links to the sources. Where sources differ, the official text prevails.",
+            {
+              "h": "Digital Ethiopia 2030"
+            },
+            "The Council of Ministers approved Digital Ethiopia 2030 in late 2025, following Digital Ethiopia 2025. It covers digital public infrastructure, connectivity, digital skills, digital sovereignty and a growing startup ecosystem.",
+            "Sources: [Ethiopian News Agency](https://www.ena.et/web/eng/w/eng_8021907), [Shega](https://shega.co/news/ethiopias-ministerial-council-approves-digital-2030-strategy).",
+            {
+              "h": "The Startup Proclamation (No. 1396/2025)"
+            },
+            "Parliament approved the Startup Proclamation in July 2025. A startup label from the Ministry of Innovation and Technology opens the incentives the law provides, and the law provides for an innovation fund. The criteria for the label are set by the Ministry: check them on the [Ministry's website](https://www.mint.gov.et).",
+            "Sources: [Mondaq](https://www.mondaq.com/corporate-and-company-law/1728380/ethiopias-new-startup-proclamation-no-13962025), [Shega](https://shega.co/news/ethiopia-ratified-a-startup-law-now-comes-the-hard-part).",
+            {
+              "h": "Personal data protection (Proclamation No. 1321/2024)"
+            },
+            "Ethiopia's personal data protection law has been in force since July 2024 and is enforced by the Ethiopian Communications Authority. It gives people rights over their personal data. This portal's [privacy policy](/en/privacy) explains what it collects and how to ask for a copy or for deletion.",
+            "Source: [Mondaq](https://www.mondaq.com/privacy-protection/1766200/ethiopian-personal-data-protection-law-proclamation-13212024-business-compliance-guide).",
+            {
+              "h": "Fayda, the national digital ID"
+            },
+            "Fayda is Ethiopia's national digital identity. Services that need to know who a person is can rely on it instead of paper copies."
+          ]
+        },
+        "am": {
+          "title": "ዲጂታል ኢትዮጵያ 2030",
+          "slug": "digital-ethiopia-2030",
+          "excerpt": "የኤጀንሲውን ሥራ የሚቀርጹት ብሔራዊ የዲጂታል ስትራቴጂና ሕጎች፣ ከይፋዊ ምንጮቻቸው ማገናኛዎች ጋር።",
+          "body": [
+            "የኤጀንሲው ሥራ ብሔራዊ ስትራቴጂንና ሕግን ይከተላል። ይህ ገጽ ለሐረሪ ክልል እጅግ አስፈላጊ የሆኑትን ከምንጮቹ ማገናኛዎች ጋር ያቀርባል። ምንጮች በሚለያዩበት ጊዜ ይፋዊው ጽሑፍ ተፈጻሚ ይሆናል።",
+            {
+              "h": "ዲጂታል ኢትዮጵያ 2030"
+            },
+            "የሚኒስትሮች ምክር ቤት ዲጂታል ኢትዮጵያ 2025ን ተከትሎ ዲጂታል ኢትዮጵያ 2030ን በ2025 መጨረሻ አጽድቋል። ስትራቴጂው ዲጂታል የሕዝብ መሠረተ ልማትን፣ ትስስርን (ኮኔክቲቪቲ)፣ ዲጂታል ክህሎትን፣ ዲጂታል ሉዓላዊነትን እና እያደገ የመጣውን የጀማሪ ኩባንያዎች ምኅዳር ያካትታል።",
+            "ምንጮች፦ [የኢትዮጵያ ዜና አገልግሎት](https://www.ena.et/web/eng/w/eng_8021907)፣ [ሸገ](https://shega.co/news/ethiopias-ministerial-council-approves-digital-2030-strategy)።",
+            {
+              "h": "የጀማሪ ኩባንያዎች አዋጅ (ቁጥር 1396/2025)"
+            },
+            "ፓርላማው የጀማሪ ኩባንያዎች አዋጅን በጁላይ 2025 አጽድቋል። ከኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር የሚገኝ የጀማሪ ኩባንያ መለያ ሕጉ የሚሰጣቸውን ማበረታቻዎች ያስገኛል፤ ሕጉ የፈጠራ ፈንድም እንዲቋቋም ይደነግጋል። የመለያው መስፈርቶች የሚወሰኑት በሚኒስቴሩ ነው፦ በ[ሚኒስቴሩ ድረ-ገጽ](https://www.mint.gov.et) ላይ ያረጋግጧቸው።",
+            "ምንጮች፦ [ሞንዳቅ](https://www.mondaq.com/corporate-and-company-law/1728380/ethiopias-new-startup-proclamation-no-13962025)፣ [ሸገ](https://shega.co/news/ethiopia-ratified-a-startup-law-now-comes-the-hard-part)።",
+            {
+              "h": "የግል መረጃ ጥበቃ (አዋጅ ቁጥር 1321/2024)"
+            },
+            "የኢትዮጵያ የግል መረጃ ጥበቃ ሕግ ከጁላይ 2024 ጀምሮ በሥራ ላይ ሲሆን የሚያስፈጽመውም የኢትዮጵያ ኮሙኒኬሽን ባለሥልጣን ነው። ሕጉ ሰዎች በግል መረጃቸው ላይ መብት እንዲኖራቸው ያደርጋል። የዚህ ፖርታል [የግላዊነት ፖሊሲ](/am/privacy) ምን እንደሚሰበስብ እና ቅጂ ወይም መሰረዝ እንዴት እንደሚጠየቅ ያብራራል።",
+            "ምንጭ፦ [ሞንዳቅ](https://www.mondaq.com/privacy-protection/1766200/ethiopian-personal-data-protection-law-proclamation-13212024-business-compliance-guide)።",
+            {
+              "h": "ፋይዳ፣ ብሔራዊ ዲጂታል መታወቂያ"
+            },
+            "ፋይዳ የኢትዮጵያ ብሔራዊ ዲጂታል መታወቂያ ነው። አንድ ሰው ማን እንደሆነ ማወቅ የሚያስፈልጋቸው አገልግሎቶች ከወረቀት ቅጂዎች ይልቅ በእሱ ሊተማመኑ ይችላሉ።"
+          ]
+        },
+        "om": {
+          "title": "Itoophiyaa Dijitaalaa 2030",
+          "slug": "digital-ethiopia-2030",
+          "excerpt": "Tarsiimoo dijitaalaa biyyoolessaa fi seerota hojii Ejansichaa bocan, liinkii maddeen isaanii idilee waliin.",
+          "body": [
+            "Hojiin Ejansichaa tarsiimoo fi seera biyyoolessaa hordofa. Fuulli kun waan Naannoo Hararii caalaatti ilaallatu, liinkii maddeen isaanii waliin walitti fida. Bakka maddeen garaa garaa ta'anitti, barreeffamni idilee dursa qaba.",
+            {
+              "h": "Itoophiyaa Dijitaalaa 2030"
+            },
+            "Manni Maree Ministirootaa dhuma bara 2025 Itoophiyaa Dijitaalaa 2030 raggaasise; kunis Itoophiyaa Dijitaalaa 2025 itti aanee dhufe. Bu'uuraalee misoomaa dijitaalaa ummataa, walqunnamtii networkii, dandeettii dijitaalaa, abbummaa dijitaalaa fi sirna jalqabbiiwwan daldalaa guddachaa jiru ni haguuga.",
+            "Maddeen: [Ejansii Oduu Itoophiyaa](https://www.ena.et/web/eng/w/eng_8021907), [Shega](https://shega.co/news/ethiopias-ministerial-council-approves-digital-2030-strategy).",
+            {
+              "h": "Labsii Jalqabbiiwwan Daldalaa (Lakk. 1396/2025)"
+            },
+            "Paarlaamaan Labsii Jalqabbiiwwan Daldalaa Adoolessa 2025 raggaasise. Mallattoon jalqabbii daldalaa Ministeera Kalaqaa fi Teeknooloojii irraa kennamu jajjabeessitoota seerichi kenne argachuuf karra bana; seerichi fandiin kalaqaa akka jiraatus tumeera. Ulaagaaleen mallattichaa Ministeerichaan murteeffamu: [marsariitii Ministeerichaa](https://www.mint.gov.et) irratti ilaalaa.",
+            "Maddeen: [Mondaq](https://www.mondaq.com/corporate-and-company-law/1728380/ethiopias-new-startup-proclamation-no-13962025), [Shega](https://shega.co/news/ethiopia-ratified-a-startup-law-now-comes-the-hard-part).",
+            {
+              "h": "Eegumsa odeeffannoo dhuunfaa (Labsii Lakk. 1321/2024)"
+            },
+            "Seerri eegumsa odeeffannoo dhuunfaa Itoophiyaa Adoolessa 2024 irraa kaasee hojiirra kan jiru yoo ta'u, Abbaa Taayitaa Komunikeeshinii Itoophiyaatiin hojiirra oola. Seerichi namootaaf odeeffannoo dhuunfaa isaanii irratti mirga kenna. [Imaammanni dhuunfaa](/om/privacy) poortaalii kanaa maal akka sassaabuu fi garagalcha ykn haqamuu akkamitti akka gaafattan ibsa.",
+            "Madda: [Mondaq](https://www.mondaq.com/privacy-protection/1766200/ethiopian-personal-data-protection-law-proclamation-13212024-business-compliance-guide).",
+            {
+              "h": "Faayidaa, eenyummaa dijitaalaa biyyoolessaa"
+            },
+            "Faayidaan eenyummaa dijitaalaa biyyoolessaa Itoophiyaa ti. Tajaajiloonni namni tokko eenyu akka ta'e beekuu barbaadan garagalcha waraqaa bakka fayyadamuu isa irratti hirkachuu danda'u."
+          ]
+        }
+      }
+    }
+  ],
   "events": [],
-  "homepage": {},
+  "homepage": {
+    "order": [
+      "hero",
+      "pillars",
+      "services",
+      "innovation",
+      "academy",
+      "latest_news",
+      "projects",
+      "open_data",
+      "events"
+    ]
+  },
   "settings": {},
   "updates": [],
   "slides": [],
   "social_sources": [],
-  "corrections": []
+  "corrections": [],
+  "posts": [
+    {
+      "key": "post.mesob-harar",
+      "type": "news",
+      "translations": {
+        "en": {
+          "title": "Harar's Mesob centre brings public services under one roof",
+          "excerpt": "The one-stop Mesob centre in Harar brings 8 institutions and 67 services to a single place, as part of a national push to modernise public services.",
+          "body": [
+            "Residents of Harar can now reach many public services in one place. The Mesob one-stop service centre in Harar brings 8 institutions and 67 services under one roof, according to the Ethiopian News Agency, and is part of a national push to modernise public services.",
+            "Mesob centres and the national Mesob digital platform aim to cut the trips, queues and paperwork people face when dealing with government.",
+            {
+              "h": "What it means for the region"
+            },
+            "For the Agency, Mesob shows the direction of travel: services that are easy to find, quick to use and increasingly online. The [services catalogue](/en/services) lists each service with who it is for, the documents and the steps, and public offices can ask the Agency for help moving a paper service online.",
+            "Source: [Ethiopian News Agency](https://www.ena.et/web/eng/w/eng_8457291)."
+          ]
+        },
+        "am": {
+          "title": "የሐረር መሶብ ማዕከል የሕዝብ አገልግሎቶችን በአንድ ጣሪያ ሥር አሰባሰበ",
+          "excerpt": "በሐረር የሚገኘው የአንድ ማዕከል መሶብ ማዕከል፣ የሕዝብ አገልግሎቶችን ለማዘመን የሚደረገው ብሔራዊ ጥረት አካል ሆኖ፣ 8 ተቋማትንና 67 አገልግሎቶችን በአንድ ቦታ ያሰባስባል።",
+          "body": [
+            "የሐረር ነዋሪዎች አሁን ብዙ የሕዝብ አገልግሎቶችን በአንድ ቦታ ማግኘት ይችላሉ። የኢትዮጵያ ዜና አገልግሎት እንደዘገበው በሐረር የሚገኘው የመሶብ የአንድ ማዕከል አገልግሎት 8 ተቋማትንና 67 አገልግሎቶችን በአንድ ጣሪያ ሥር ያሰባስባል፤ ይህም የሕዝብ አገልግሎቶችን ለማዘመን የሚደረገው ብሔራዊ ጥረት አካል ነው።",
+            "የመሶብ ማዕከላትና ብሔራዊው የመሶብ ዲጂታል መድረክ ሰዎች ከመንግሥት ጋር ጉዳይ ሲኖራቸው የሚያጋጥማቸውን ምልልስ፣ ሰልፍና የወረቀት ሥራ ለመቀነስ ያለሙ ናቸው።",
+            {
+              "h": "ለክልሉ ያለው ትርጉም"
+            },
+            "ለኤጀንሲው መሶብ የጉዞውን አቅጣጫ ያሳያል፦ በቀላሉ የሚገኙ፣ በፍጥነት የሚጠቀሙባቸው እና በኦንላይን እየጨመሩ የሚሄዱ አገልግሎቶች። [የአገልግሎቶች ማውጫው](/am/services) እያንዳንዱን አገልግሎት ለማን እንደሆነ፣ ከሚያስፈልጉ ሰነዶችና ከደረጃዎቹ ጋር ይዘረዝራል፤ የመንግሥት ጽሕፈት ቤቶችም የወረቀት አገልግሎትን ወደ ኦንላይን ለማሸጋገር የኤጀንሲውን እገዛ መጠየቅ ይችላሉ።",
+            "ምንጭ፦ [የኢትዮጵያ ዜና አገልግሎት](https://www.ena.et/web/eng/w/eng_8457291)።"
+          ]
+        },
+        "om": {
+          "title": "Giddugalli Mesob Harar tajaajiloota mootummaa bakka tokkotti walitti fida",
+          "excerpt": "Giddugalli tajaajila bakka tokkoo Mesob Harar dhaabbilee 8 fi tajaajiloota 67 bakka tokkotti fida; kunis kutaa sochii biyyoolessaa tajaajiloota mootummaa ammayyeessuu ti.",
+          "body": [
+            "Jiraattonni Harar amma tajaajiloota mootummaa hedduu bakka tokkotti argachuu danda'u. Akka Ejansiin Oduu Itoophiyaa gabaasetti, Giddugalli tajaajila bakka tokkoo Mesob Harar dhaabbilee 8 fi tajaajiloota 67 bakka tokkotti walitti fida; kunis kutaa sochii biyyoolessaa tajaajiloota mootummaa ammayyeessuu ti.",
+            "Giddugaleewwan Mesob fi waltajjiin dijitaalaa biyyoolessaa Mesob deemsa, tarree eegumsaa fi waraqaalee namoota yeroo mootummaa waliin dhimma raawwatan mudatan hir'isuu kaayyeffatu.",
+            {
+              "h": "Naannichaaf maal jechuu dha"
+            },
+            "Ejansichaaf, Mesob kallattii deemsaa agarsiisa: tajaajiloota salphaatti argaman, dafanii itti fayyadaman, toora interneetii irrattis daran baay'achaa deeman. [Kaataalogiin tajaajilaa](/om/services) tajaajila tokkoon tokkoo eenyuuf akka ta'e, sanadootaa fi tarkaanfiiwwan isaa waliin tarreessa; waajjiraaleen mootummaas tajaajila waraqaa gara toora interneetiitti jijjiiruuf Ejansicha gargaarsa gaafachuu danda'u.",
+            "Madda: [Ejansii Oduu Itoophiyaa](https://www.ena.et/web/eng/w/eng_8457291)."
+          ]
+        }
+      }
+    },
+    {
+      "key": "post.de2030",
+      "type": "news",
+      "translations": {
+        "en": {
+          "title": "Digital Ethiopia 2030: what the national strategy means for the Harari Region",
+          "excerpt": "Ethiopia's new digital strategy covers public infrastructure, connectivity, skills and startups. Here is how the Agency's work fits.",
+          "body": [
+            "The Council of Ministers approved Digital Ethiopia 2030 in late 2025. The strategy follows Digital Ethiopia 2025 and sets the country's digital direction for the rest of the decade.",
+            {
+              "h": "The themes"
+            },
+            {
+              "ul": [
+                "Digital public infrastructure: shared building blocks such as digital identity and payments.",
+                "Connectivity: networks that reach every region.",
+                "Digital skills: people able to use and build digital services.",
+                "Digital sovereignty: data and systems the country controls.",
+                "A startup ecosystem that can grow world-class companies."
+              ]
+            },
+            {
+              "h": "Where the Agency comes in"
+            },
+            "Each theme has a regional side. The Agency's five pillars, from digital government to cyber-awareness, are how the Harari Region takes part. Read the Agency's summary on [Digital Ethiopia 2030](/en/digital-ethiopia-2030).",
+            "Sources: [Ethiopian News Agency](https://www.ena.et/web/eng/w/eng_8021907), [Shega](https://shega.co/news/ethiopias-ministerial-council-approves-digital-2030-strategy)."
+          ]
+        },
+        "am": {
+          "title": "ዲጂታል ኢትዮጵያ 2030፦ ብሔራዊው ስትራቴጂ ለሐረሪ ክልል ያለው ትርጉም",
+          "excerpt": "የኢትዮጵያ አዲሱ የዲጂታል ስትራቴጂ የሕዝብ መሠረተ ልማትን፣ ትስስርን፣ ክህሎትንና ጀማሪ ኩባንያዎችን ያካትታል። የኤጀንሲው ሥራ እንዴት እንደሚጣጣም እነሆ።",
+          "body": [
+            "የሚኒስትሮች ምክር ቤት ዲጂታል ኢትዮጵያ 2030ን በ2025 መጨረሻ አጽድቋል። ስትራቴጂው ዲጂታል ኢትዮጵያ 2025ን ተከትሎ የመጣ ሲሆን ለቀሪው አሥር ዓመት የአገሪቱን ዲጂታል አቅጣጫ ይወስናል።",
+            {
+              "h": "ዋና ዋና ጭብጦች"
+            },
+            {
+              "ul": [
+                "ዲጂታል የሕዝብ መሠረተ ልማት፦ እንደ ዲጂታል መታወቂያና ክፍያ ያሉ የጋራ መገንቢያ አካላት።",
+                "ትስስር (ኮኔክቲቪቲ)፦ እያንዳንዱን ክልል የሚደርሱ ኔትወርኮች።",
+                "ዲጂታል ክህሎት፦ ዲጂታል አገልግሎቶችን መጠቀምና መገንባት የሚችሉ ሰዎች።",
+                "ዲጂታል ሉዓላዊነት፦ አገሪቱ የምትቆጣጠራቸው መረጃዎችና ሥርዓቶች።",
+                "በዓለም ደረጃ ተወዳዳሪ ኩባንያዎችን ማሳደግ የሚችል የጀማሪ ኩባንያዎች ምኅዳር።"
+              ]
+            },
+            {
+              "h": "የኤጀንሲው ድርሻ"
+            },
+            "እያንዳንዱ ጭብጥ ክልላዊ ገጽታ አለው። ከዲጂታል መንግሥት እስከ የሳይበር ግንዛቤ ያሉት የኤጀንሲው አምስት ምሰሶዎች የሐረሪ ክልል የሚሳተፍባቸው መንገዶች ናቸው። ኤጀንሲው ስለ [ዲጂታል ኢትዮጵያ 2030](/am/digital-ethiopia-2030) ያዘጋጀውን ማጠቃለያ ያንብቡ።",
+            "ምንጮች፦ [የኢትዮጵያ ዜና አገልግሎት](https://www.ena.et/web/eng/w/eng_8021907)፣ [ሸገ](https://shega.co/news/ethiopias-ministerial-council-approves-digital-2030-strategy)።"
+          ]
+        },
+        "om": {
+          "title": "Itoophiyaa Dijitaalaa 2030: tarsiimoon biyyoolessaa Naannoo Harariif maal jechuu dha",
+          "excerpt": "Tarsiimoon dijitaalaa haaraa Itoophiyaa bu'uuraalee misoomaa ummataa, walqunnamtii, dandeettii fi jalqabbiiwwan daldalaa ni haguuga. Hojiin Ejansichaa akkamitti akka itti walsimu kunooti.",
+          "body": [
+            "Manni Maree Ministirootaa dhuma bara 2025 Itoophiyaa Dijitaalaa 2030 raggaasise. Tarsiimoon kun Itoophiyaa Dijitaalaa 2025 itti aanee, kallattii dijitaalaa biyyattii hanga dhuma kurnan kanaatti kaa'a.",
+            {
+              "h": "Mata-dureewwan"
+            },
+            {
+              "ul": [
+                "Bu'uuraalee misoomaa dijitaalaa ummataa: bu'uuraalee waloo kan akka eenyummaa dijitaalaa fi kaffaltii.",
+                "Walqunnamtii: networkiiwwan naannoo hunda ga'an.",
+                "Dandeettii dijitaalaa: namoota tajaajiloota dijitaalaa itti fayyadamuu fi ijaaruu danda'an.",
+                "Abbummaa dijitaalaa: daataa fi sirnoota biyyattiin to'attu.",
+                "Sirna jalqabbiiwwan daldalaa kubbaaniyyoota sadarkaa addunyaa guddisuu danda'u."
+              ]
+            },
+            {
+              "h": "Gaheen Ejansichaa eessa"
+            },
+            "Mata-dureen tokkoon tokkoon gama naannoo qaba. Utubaaleen Ejansichaa shanan, mootummaa dijitaalaa irraa hanga hubannoo saayibariitti, karaa Naannoon Hararii itti hirmaatu dha. Cuunfaa Ejansichaa [Itoophiyaa Dijitaalaa 2030](/om/digital-ethiopia-2030) irratti dubbisaa.",
+            "Maddeen: [Ejansii Oduu Itoophiyaa](https://www.ena.et/web/eng/w/eng_8021907), [Shega](https://shega.co/news/ethiopias-ministerial-council-approves-digital-2030-strategy)."
+          ]
+        }
+      }
+    },
+    {
+      "key": "post.startup-law",
+      "type": "news",
+      "translations": {
+        "en": {
+          "title": "The Startup Proclamation: a first guide for Harari founders",
+          "excerpt": "Ethiopia's startup law creates a startup label and an innovation fund. Here is where founders in the region can start.",
+          "body": [
+            "Parliament approved the Startup Proclamation (No. 1396/2025) in July 2025. It gives startups a legal definition for the first time.",
+            {
+              "h": "The essentials"
+            },
+            {
+              "ul": [
+                "A startup label from the Ministry of Innovation and Technology opens the incentives the law provides.",
+                "The law provides for an innovation fund.",
+                "The criteria for the label are set by the Ministry. Check them on the Ministry's website before applying."
+              ]
+            },
+            {
+              "h": "Where to start in Harari"
+            },
+            "List your startup in the [startups directory](/en/innovation/startups) so partners and investors can find you. The directory shows whether a startup reports holding the Ministry's label, and the Agency confirms it.",
+            "Sources: [Ministry of Innovation and Technology](https://www.mint.gov.et), [Mondaq](https://www.mondaq.com/corporate-and-company-law/1728380/ethiopias-new-startup-proclamation-no-13962025)."
+          ]
+        },
+        "am": {
+          "title": "የጀማሪ ኩባንያዎች አዋጅ፦ ለሐረሪ መሥራቾች የመጀመሪያ መመሪያ",
+          "excerpt": "የኢትዮጵያ የጀማሪ ኩባንያዎች ሕግ የጀማሪ ኩባንያ መለያንና የፈጠራ ፈንድን ያቋቁማል። በክልሉ ያሉ መሥራቾች ከየት መጀመር እንደሚችሉ እነሆ።",
+          "body": [
+            "ፓርላማው የጀማሪ ኩባንያዎች አዋጅን (ቁጥር 1396/2025) በጁላይ 2025 አጽድቋል። አዋጁ ለመጀመሪያ ጊዜ ለጀማሪ ኩባንያዎች ሕጋዊ ትርጓሜ ይሰጣል።",
+            {
+              "h": "ዋና ዋና ነጥቦች"
+            },
+            {
+              "ul": [
+                "ከኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር የሚገኝ የጀማሪ ኩባንያ መለያ ሕጉ የሚሰጣቸውን ማበረታቻዎች ያስገኛል።",
+                "ሕጉ የፈጠራ ፈንድ እንዲቋቋም ይደነግጋል።",
+                "የመለያው መስፈርቶች የሚወሰኑት በሚኒስቴሩ ነው። ከማመልከትዎ በፊት በሚኒስቴሩ ድረ-ገጽ ላይ ያረጋግጧቸው።"
+              ]
+            },
+            {
+              "h": "በሐረሪ ከየት መጀመር"
+            },
+            "አጋሮችና ባለሀብቶች እንዲያገኙዎ ጀማሪ ኩባንያዎን በ[ጀማሪ ኩባንያዎች ማውጫ](/am/innovation/startups) ውስጥ ያስመዝግቡ። ማውጫው አንድ ጀማሪ ኩባንያ የሚኒስቴሩን መለያ እንደያዘ መግለጹን ያሳያል፤ ኤጀንሲውም ይህን ያረጋግጣል።",
+            "ምንጮች፦ [የኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር](https://www.mint.gov.et)፣ [ሞንዳቅ](https://www.mondaq.com/corporate-and-company-law/1728380/ethiopias-new-startup-proclamation-no-13962025)።"
+          ]
+        },
+        "om": {
+          "title": "Labsii Jalqabbiiwwan Daldalaa: qajeelfama jalqabaa hundeessitoota Hararii",
+          "excerpt": "Seerri jalqabbiiwwan daldalaa Itoophiyaa mallattoo jalqabbii daldalaa fi fandii kalaqaa uuma. Hundeessitoonni naannichaa eessaa akka jalqaban kunooti.",
+          "body": [
+            "Paarlaamaan Labsii Jalqabbiiwwan Daldalaa (Lakk. 1396/2025) Adoolessa 2025 raggaasise. Labsiin kun yeroo jalqabaaf jalqabbiiwwan daldalaatiif hiika seeraa kenna.",
+            {
+              "h": "Qabxiilee ijoo"
+            },
+            {
+              "ul": [
+                "Mallattoon jalqabbii daldalaa Ministeera Kalaqaa fi Teeknooloojii irraa kennamu jajjabeessitoota seerichi kenne argachuuf karra bana.",
+                "Seerichi fandiin kalaqaa akka jiraatu tumeera.",
+                "Ulaagaaleen mallattichaa Ministeerichaan murteeffamu. Utuu hin iyyatin dura marsariitii Ministeerichaa irratti ilaalaa."
+              ]
+            },
+            {
+              "h": "Naannoo Hararii keessatti eessaa jalqabuu"
+            },
+            "Akka michoonni fi invastaroonni isin argataniif, jalqabbii daldalaa keessan [galmee jalqabbiiwwan daldalaa](/om/innovation/startups) keessatti tarreessaa. Galmeen kun jalqabbiin daldalaa tokko mallattoo Ministeerichaa qabaachuu isaa gabaasuu isaa ni agarsiisa, Ejansichis ni mirkaneessa.",
+            "Maddeen: [Ministeera Kalaqaa fi Teeknooloojii](https://www.mint.gov.et), [Mondaq](https://www.mondaq.com/corporate-and-company-law/1728380/ethiopias-new-startup-proclamation-no-13962025)."
+          ]
+        }
+      }
+    },
+    {
+      "key": "post.data-rights",
+      "type": "news",
+      "translations": {
+        "en": {
+          "title": "Your personal data has rights: Ethiopia's data protection law",
+          "excerpt": "Since July 2024, Ethiopia's personal data protection law gives people rights over their data. Here is how this portal applies it.",
+          "body": [
+            "Ethiopia's Personal Data Protection Proclamation (No. 1321/2024) has been in force since July 2024, enforced by the Ethiopian Communications Authority.",
+            {
+              "h": "How this portal applies it"
+            },
+            {
+              "ul": [
+                "Every form says why it asks for your details and how long they are kept.",
+                "Phone numbers, emails and names are stored encrypted.",
+                "Details are deleted when their time is up.",
+                "You can ask for a copy of your data, or for its deletion."
+              ]
+            },
+            "Read the [privacy policy](/en/privacy) for the details and how to make a request.",
+            "Source: [Mondaq](https://www.mondaq.com/privacy-protection/1766200/ethiopian-personal-data-protection-law-proclamation-13212024-business-compliance-guide)."
+          ]
+        },
+        "am": {
+          "title": "የግል መረጃዎ መብት አለው፦ የኢትዮጵያ የመረጃ ጥበቃ ሕግ",
+          "excerpt": "ከጁላይ 2024 ጀምሮ የኢትዮጵያ የግል መረጃ ጥበቃ ሕግ ሰዎች በመረጃቸው ላይ መብት እንዲኖራቸው ያደርጋል። ይህ ፖርታል ሕጉን እንዴት እንደሚተገብር እነሆ።",
+          "body": [
+            "የኢትዮጵያ የግል መረጃ ጥበቃ አዋጅ (ቁጥር 1321/2024) ከጁላይ 2024 ጀምሮ በሥራ ላይ ሲሆን የሚያስፈጽመውም የኢትዮጵያ ኮሙኒኬሽን ባለሥልጣን ነው።",
+            {
+              "h": "ይህ ፖርታል ሕጉን እንዴት እንደሚተገብር"
+            },
+            {
+              "ul": [
+                "እያንዳንዱ ቅጽ መረጃዎን ለምን እንደሚጠይቅና ለምን ያህል ጊዜ እንደሚቀመጥ ይገልጻል።",
+                "ስልክ ቁጥሮች፣ ኢሜይሎችና ስሞች ተመስጥረው ይቀመጣሉ።",
+                "መረጃዎች የመቆያ ጊዜያቸው ሲያበቃ ይሰረዛሉ።",
+                "የመረጃዎን ቅጂ ወይም መረጃዎ እንዲሰረዝ መጠየቅ ይችላሉ።"
+              ]
+            },
+            "ዝርዝሩንና ጥያቄ እንዴት እንደሚያቀርቡ ለማወቅ [የግላዊነት ፖሊሲውን](/am/privacy) ያንብቡ።",
+            "ምንጭ፦ [ሞንዳቅ](https://www.mondaq.com/privacy-protection/1766200/ethiopian-personal-data-protection-law-proclamation-13212024-business-compliance-guide)።"
+          ]
+        },
+        "om": {
+          "title": "Odeeffannoon dhuunfaa keessan mirga qaba: seera eegumsa odeeffannoo Itoophiyaa",
+          "excerpt": "Adoolessa 2024 irraa kaasee, seerri eegumsa odeeffannoo dhuunfaa Itoophiyaa namootaaf odeeffannoo isaanii irratti mirga kenna. Poortaalli kun akkamitti akka hojiirra oolchu kunooti.",
+          "body": [
+            "Labsiin Eegumsa Odeeffannoo Dhuunfaa Itoophiyaa (Lakk. 1321/2024) Adoolessa 2024 irraa kaasee hojiirra jira; Abbaa Taayitaa Komunikeeshinii Itoophiyaatiin hojiirra oola.",
+            {
+              "h": "Poortaalli kun akkamitti hojiirra oolcha"
+            },
+            {
+              "ul": [
+                "Unkaan hundi odeeffannoo keessan maaliif akka gaafatuu fi hammam akka kuufamu ni ibsa.",
+                "Lakkoofsonni bilbilaa, imeeliiwwan fi maqaaleen haala icciitiin eegameen (encryption) kuufamu.",
+                "Odeeffannoon yeroon isaa yommuu ga'u ni haqama.",
+                "Garagalcha odeeffannoo keessanii ykn akka haqamu gaafachuu dandeessu."
+              ]
+            },
+            "Bal'ina isaa fi akkaataa gaaffii itti dhiyeessan beekuuf [imaammata dhuunfaa](/om/privacy) dubbisaa.",
+            "Madda: [Mondaq](https://www.mondaq.com/privacy-protection/1766200/ethiopian-personal-data-protection-law-proclamation-13212024-business-compliance-guide)."
+          ]
+        }
+      }
+    }
+  ],
+  "advisories": [
+    {
+      "key": "advisory.two-step",
+      "severity": "info",
+      "translations": {
+        "en": {
+          "title": "Turn on two-step sign-in for your important accounts",
+          "excerpt": "A password alone is easy to steal. A second step keeps your account safe even when the password leaks.",
+          "affected": "Email accounts\nSocial media accounts\nMessaging apps\nOnline banking",
+          "actions": "Open the security settings of each important account.\nTurn on two-step sign-in (also called two-factor authentication).\nPrefer an authenticator app to text messages where you can.\nKeep the backup codes somewhere safe, away from your phone.",
+          "body": [
+            "Most accounts are taken over with a stolen or guessed password. Two-step sign-in asks for a second proof, usually a code from your phone, so a stolen password is not enough."
+          ]
+        },
+        "am": {
+          "title": "ለአስፈላጊ መለያዎችዎ ባለሁለት ደረጃ መግቢያን ያብሩ",
+          "excerpt": "የይለፍ ቃል ብቻውን በቀላሉ ይሰረቃል። ሁለተኛ ደረጃ የይለፍ ቃሉ ቢወጣም መለያዎን ደህንነቱ የተጠበቀ ያደርገዋል።",
+          "affected": "የኢሜይል መለያዎች\nየማኅበራዊ ሚዲያ መለያዎች\nየመልእክት መላላኪያ መተግበሪያዎች\nየኦንላይን ባንክ አገልግሎት",
+          "actions": "የእያንዳንዱን አስፈላጊ መለያ የደህንነት ቅንብሮች ይክፈቱ።\nባለሁለት ደረጃ መግቢያን (ባለሁለት ደረጃ ማረጋገጫ ተብሎም ይጠራል) ያብሩ።\nበሚቻልበት ጊዜ ከአጭር የጽሑፍ መልእክት ይልቅ የማረጋገጫ መተግበሪያን ይምረጡ።\nየመጠባበቂያ ኮዶቹን ከስልክዎ ርቆ ደህንነቱ በተጠበቀ ቦታ ያስቀምጡ።",
+          "body": [
+            "አብዛኞቹ መለያዎች የሚወሰዱት በተሰረቀ ወይም በተገመተ የይለፍ ቃል ነው። ባለሁለት ደረጃ መግቢያ ሁለተኛ ማረጋገጫ ይጠይቃል፤ ይህም ብዙውን ጊዜ ከስልክዎ የሚገኝ ኮድ ነው፤ በመሆኑም የተሰረቀ የይለፍ ቃል ብቻውን በቂ አይሆንም።"
+          ]
+        },
+        "om": {
+          "title": "Herregoota keessan barbaachisoo irratti seensa sadarkaa lamaa banaa",
+          "excerpt": "Jecha icciitii qofa hatuun salphaa dha. Sadarkaan lammaffaan yeroo jechi icciitii ba'ellee herrega keessan nagaan eega.",
+          "affected": "Herregoota imeelii\nHerregoota miidiyaa hawaasaa\nAppiiwwan ergaa\nBaankii toora interneetii",
+          "actions": "Qindaa'ina nageenyaa herrega barbaachisaa tokkoon tokkoo banaa.\nSeensa sadarkaa lamaa (mirkaneessa ragaa lamaa jedhamees ni beekama) banaa.\nBakka dandeessanitti, ergaa barreeffamaa caalaa appii mirkaneessaa filadhaa.\nKoodiiwwan kuusaa (backup codes) bakka nageenya qabu, bilbila keessan irraa fagaatee kaa'aa.",
+          "body": [
+            "Herregoonni baay'een jecha icciitii hatame ykn tilmaamameen qabamu. Seensi sadarkaa lamaa ragaa lammaffaa, yeroo baay'ee koodii bilbila keessan irraa argamu, gaafata; kanaaf jechi icciitii hatame qofti gahaa miti."
+          ]
+        }
+      }
+    },
+    {
+      "key": "advisory.phishing",
+      "severity": "advisory",
+      "translations": {
+        "en": {
+          "title": "Spot phishing messages before you click",
+          "excerpt": "Fake messages pretend to come from banks, offices or friends to get your password or money. A few checks stop most of them.",
+          "affected": "Email\nText messages\nMessaging apps\nSocial media",
+          "actions": "Be suspicious of any message that is urgent, threatening or too good to be true.\nCheck the sender's address or number, not just the name shown.\nDo not open links or files you did not expect; go to the website yourself instead.\nNever share passwords, PINs or verification codes, with anyone.\nIf you entered a password on a suspicious page, change it at once.",
+          "body": [
+            "Phishing messages imitate people and institutions you trust. They often ask you to \"confirm\" an account, claim a prize or pay a fee. Public offices should share this advisory with their staff."
+          ]
+        },
+        "am": {
+          "title": "ከመጫንዎ በፊት የማጭበርበሪያ (ፊሺንግ) መልእክቶችን ይለዩ",
+          "excerpt": "ሐሰተኛ መልእክቶች የይለፍ ቃልዎን ወይም ገንዘብዎን ለማግኘት ከባንኮች፣ ከጽሕፈት ቤቶች ወይም ከጓደኞች የመጡ መስለው ይቀርባሉ። ጥቂት ማጣሪያዎች አብዛኞቹን ያስቆማሉ።",
+          "affected": "ኢሜይል\nአጭር የጽሑፍ መልእክቶች\nየመልእክት መላላኪያ መተግበሪያዎች\nማኅበራዊ ሚዲያ",
+          "actions": "አስቸኳይ፣ አስፈራሪ ወይም ለማመን የሚከብድ ያህል ጥሩ በሆነ ማንኛውም መልእክት ይጠራጠሩ።\nየሚታየውን ስም ብቻ ሳይሆን የላኪውን አድራሻ ወይም ቁጥር ያረጋግጡ።\nያልጠበቋቸውን ማገናኛዎች ወይም ፋይሎች አይክፈቱ፤ ይልቁንም ድረ-ገጹን ራስዎ ይክፈቱ።\nየይለፍ ቃሎችን፣ የሚስጥር ቁጥሮችን (PIN) ወይም የማረጋገጫ ኮዶችን ለማንም በፍጹም አያጋሩ።\nአጠራጣሪ በሆነ ገጽ ላይ የይለፍ ቃል ካስገቡ ወዲያውኑ ይቀይሩት።",
+          "body": [
+            "የማጭበርበሪያ (ፊሺንግ) መልእክቶች የሚያምኗቸውን ሰዎችና ተቋማት ያስመስላሉ። ብዙውን ጊዜ መለያዎን \"እንዲያረጋግጡ\"፣ ሽልማት እንዲቀበሉ ወይም ክፍያ እንዲፈጽሙ ይጠይቃሉ። የመንግሥት ጽሕፈት ቤቶች ይህን የደህንነት ምክር ለሠራተኞቻቸው ማጋራት አለባቸው።"
+          ]
+        },
+        "om": {
+          "title": "Ergaa gowwoomsaa (phishing) utuu hin cuqaasin dura adda baasaa",
+          "excerpt": "Ergaan sobaa jecha icciitii ykn maallaqa keessan argachuuf akka baankii, waajjira ykn hiriyyoota irraa dhufeetti of fakkeessa. Sakatta'iinsi muraasni baay'ee isaanii ni dhaaba.",
+          "affected": "Imeelii\nErgaa barreeffamaa\nAppiiwwan ergaa\nMiidiyaa hawaasaa",
+          "actions": "Ergaa ariifachiisaa, sodaachisaa ykn dhugaa ta'uuf baay'ee gaarii ta'e kamiyyuu shakkaa.\nMaqaa mul'atu qofa osoo hin taane, teessoo ykn lakkoofsa namicha ergee mirkaneessaa.\nLiinkiiwwan ykn faayilota hin eegin hin banina; kanaa mannaa ofumaan gara marsariitichaatti deemaa.\nJecha icciitii, PIN ykn koodii mirkaneessaa nama kamiifuu gonkumaa hin qoodinaa.\nYoo fuula shakkisiisaa irratti jecha icciitii galchitan, battalumatti jijjiiraa.",
+          "body": [
+            "Ergaan gowwoomsaa namootaa fi dhaabbilee isin amantan fakkeessa. Yeroo baay'ee herrega \"akka mirkaneessitan\", badhaasa akka fudhattan ykn kaffaltii akka raawwattan isin gaafata. Waajjiraaleen mootummaa gorsa kana hojjettoota isaaniif qooduu qabu."
+          ]
+        }
+      }
+    },
+    {
+      "key": "advisory.account-takeover",
+      "severity": "advisory",
+      "translations": {
+        "en": {
+          "title": "Messaging app account takeovers: never share your verification code",
+          "excerpt": "Scammers take over messaging accounts by tricking people into sharing the code the app sends, then ask the victim's contacts for money.",
+          "affected": "Messaging apps\nThe contacts of a person whose account was taken",
+          "actions": "Never share a verification code sent to your phone, even with someone who says they are a friend or an official.\nTurn on the app's two-step verification PIN.\nIf a friend asks for money by message, call them to check.\nIf your account was taken, reinstall the app and register your number again, then tell your contacts.",
+          "body": [
+            "A verification code is the key to your account. Anyone who asks for it, whatever the reason, is trying to take the account over. Report cyber incidents to INSA, the national authority."
+          ]
+        },
+        "am": {
+          "title": "የመልእክት መላላኪያ መተግበሪያ መለያዎችን መውሰድ፦ የማረጋገጫ ኮድዎን በፍጹም አያጋሩ",
+          "excerpt": "አጭበርባሪዎች መተግበሪያው የሚልከውን ኮድ ሰዎች እንዲያጋሩ በማታለል የመልእክት መለያዎችን ይወስዳሉ፤ ከዚያም የተጎጂውን ግንኙነቶች ገንዘብ ይጠይቃሉ።",
+          "affected": "የመልእክት መላላኪያ መተግበሪያዎች\nመለያው የተወሰደበት ሰው ግንኙነቶች",
+          "actions": "ወደ ስልክዎ የተላከን የማረጋገጫ ኮድ፣ ጓደኛ ወይም ባለሥልጣን ነኝ ለሚል ሰው እንኳ፣ በፍጹም አያጋሩ።\nየመተግበሪያውን ባለሁለት ደረጃ ማረጋገጫ የሚስጥር ቁጥር (PIN) ያብሩ።\nአንድ ጓደኛዎ በመልእክት ገንዘብ ከጠየቀ ለማረጋገጥ ይደውሉለት።\nመለያዎ ከተወሰደ መተግበሪያውን እንደገና ይጫኑ፣ ቁጥርዎን እንደገና ያስመዝግቡ፣ ከዚያም ለግንኙነቶችዎ ያሳውቁ።",
+          "body": [
+            "የማረጋገጫ ኮድ የመለያዎ ቁልፍ ነው። ምክንያቱ ምንም ይሁን ምን ኮዱን የሚጠይቅ ማንኛውም ሰው መለያውን ለመውሰድ እየሞከረ ነው። የሳይበር ጥቃቶችን ለብሔራዊው ባለሥልጣን ለኢንሳ ሪፖርት ያድርጉ።"
+          ]
+        },
+        "om": {
+          "title": "Herrega appii ergaa humnaan qabachuu: koodii mirkaneessaa keessan gonkumaa hin qoodinaa",
+          "excerpt": "Gowwoomsitoonni namoota koodii appichi ergu akka qoodan gowwoomsuun herrega ergaa qabatu, achiis namoota quunnamtii miidhamaa irraa maallaqa gaafatu.",
+          "affected": "Appiiwwan ergaa\nNamoota quunnamtii nama herregni isaa qabame",
+          "actions": "Koodii mirkaneessaa bilbila keessanitti ergame, nama hiriyaa ykn qondaala ta'uu isaa himuuf illee, gonkumaa hin qoodinaa.\nPIN mirkaneessa sadarkaa lamaa appichaa banaa.\nYoo hiriyaan tokko ergaadhaan maallaqa isin gaafate, mirkaneeffachuuf bilbilaafaa.\nYoo herregni keessan qabame, appicha irra deebi'aa fe'aa, lakkoofsa keessan irra deebi'aa galmeessaa, achiis namoota quunnamtii keessaniif himaa.",
+          "body": [
+            "Koodiin mirkaneessaa furtuu herrega keessanii ti. Namni isa gaafatu kamiyyuu, sababni isaa maal iyyuu yoo ta'e, herrega sana qabachuu yaalaa jira. Balaa saayibarii INSA, abbaa taayitaa biyyoolessaatti gabaasaa."
+          ]
+        }
+      }
+    }
+  ],
+  "courses": [
+    {
+      "key": "course.digital-literacy",
+      "level": "beginner",
+      "mode": "in_person",
+      "duration_hours": 16,
+      "languages": [
+        "am",
+        "om",
+        "en"
+      ],
+      "pillar": "pillar.skills",
+      "sort": 1,
+      "translations": {
+        "en": {
+          "title": "Digital literacy for public servants",
+          "summary": "The everyday digital skills a public office needs: computers, email, documents and online services.",
+          "audience": "Public servants who use a computer rarely or not at all.",
+          "prerequisites": "None.",
+          "outcomes": "Use a computer and its files with confidence\nWrite, format and share documents\nUse email professionally\nFind and use online public services\nKeep accounts and devices safe",
+          "syllabus": "Computers, files and folders\nDocuments and spreadsheets\nEmail and calendars\nThe internet and online services\nStaying safe online"
+        },
+        "am": {
+          "title": "ለመንግሥት ሠራተኞች የዲጂታል ዕውቀት",
+          "summary": "አንድ የመንግሥት ጽሕፈት ቤት የሚያስፈልጉት የዕለት ተዕለት ዲጂታል ክህሎቶች፦ ኮምፒውተሮች፣ ኢሜይል፣ ሰነዶችና የኦንላይን አገልግሎቶች።",
+          "audience": "ኮምፒውተርን አልፎ አልፎ የሚጠቀሙ ወይም ጭራሽ የማይጠቀሙ የመንግሥት ሠራተኞች።",
+          "prerequisites": "የለም።",
+          "outcomes": "ኮምፒውተርንና ፋይሎቹን በልበ ሙሉነት መጠቀም\nሰነዶችን መጻፍ፣ ቅርጽ ማስያዝና ማጋራት\nኢሜይልን በሙያዊ መንገድ መጠቀም\nየኦንላይን የሕዝብ አገልግሎቶችን ማግኘትና መጠቀም\nመለያዎችንና መሣሪያዎችን ደህንነታቸውን መጠበቅ",
+          "syllabus": "ኮምፒውተሮች፣ ፋይሎችና ፎልደሮች\nሰነዶችና የተመን ሉሆች (ስፕሬድሺቶች)\nኢሜይልና የቀን መቁጠሪያዎች\nኢንተርኔትና የኦንላይን አገልግሎቶች\nበኦንላይን ደህንነትን መጠበቅ"
+        },
+        "om": {
+          "title": "Beekumsa dijitaalaa hojjettoota mootummaatiif",
+          "summary": "Dandeettii dijitaalaa guyyaa guyyaa waajjirri mootummaa barbaadu: kompiitara, imeelii, sanadoota fi tajaajiloota toora interneetii.",
+          "audience": "Hojjettoota mootummaa kompiitara yeroo muraasa fayyadaman ykn gonkumaa hin fayyadamne.",
+          "prerequisites": "Hin jiru.",
+          "outcomes": "Kompiitaraa fi faayilota isaa ofitti amanamummaan itti fayyadamuu\nSanadoota barreessuu, qindeessuu fi qooduu\nImeelii haala ogummaa qabuun itti fayyadamuu\nTajaajiloota mootummaa toora interneetii barbaaduu fi itti fayyadamuu\nHerregootaa fi meeshaalee nagaan eeguu",
+          "syllabus": "Kompiitara, faayilota fi foolderoota\nSanadoota fi spreadsheetii\nImeelii fi kaalaandara\nInterneetii fi tajaajiloota toora interneetii\nToora interneetii irratti nagaan jiraachuu"
+        }
+      }
+    },
+    {
+      "key": "course.cyber-safety",
+      "level": "beginner",
+      "mode": "blended",
+      "duration_hours": 8,
+      "languages": [
+        "am",
+        "om",
+        "en"
+      ],
+      "pillar": "pillar.trust",
+      "sort": 2,
+      "translations": {
+        "en": {
+          "title": "Cyber-safety for public offices",
+          "summary": "How attacks happen and the habits that stop them: passwords, phishing, devices and what to do when something goes wrong.",
+          "audience": "Staff of public offices, at every level.",
+          "prerequisites": "Basic computer use.",
+          "outcomes": "Recognise phishing and social engineering\nProtect accounts with strong passwords and two-step sign-in\nKeep devices and data safe\nKnow how and where to report an incident",
+          "syllabus": "How attacks happen\nPasswords and two-step sign-in\nPhishing and fake messages\nDevices, networks and data\nReporting an incident"
+        },
+        "am": {
+          "title": "ለመንግሥት ጽሕፈት ቤቶች የሳይበር ደህንነት",
+          "summary": "ጥቃቶች እንዴት እንደሚፈጸሙና የሚያስቆሟቸው ልማዶች፦ የይለፍ ቃሎች፣ ማጭበርበሪያ (ፊሺንግ)፣ መሣሪያዎች እና ችግር ሲፈጠር ምን ማድረግ እንዳለብዎ።",
+          "audience": "በሁሉም ደረጃ ያሉ የመንግሥት ጽሕፈት ቤቶች ሠራተኞች።",
+          "prerequisites": "መሠረታዊ የኮምፒውተር አጠቃቀም።",
+          "outcomes": "ማጭበርበሪያን (ፊሺንግን) እና ማኅበራዊ ምህንድስናን መለየት\nመለያዎችን በጠንካራ የይለፍ ቃሎችና በባለሁለት ደረጃ መግቢያ መጠበቅ\nመሣሪያዎችንና መረጃዎችን ደህንነታቸውን መጠበቅ\nየሳይበር ጥቃትን እንዴትና የት ሪፖርት ማድረግ እንደሚቻል ማወቅ",
+          "syllabus": "ጥቃቶች እንዴት ይፈጸማሉ\nየይለፍ ቃሎችና ባለሁለት ደረጃ መግቢያ\nማጭበርበሪያና ሐሰተኛ መልእክቶች\nመሣሪያዎች፣ ኔትወርኮችና መረጃ\nየሳይበር ጥቃትን ሪፖርት ማድረግ"
+        },
+        "om": {
+          "title": "Nageenya saayibarii waajjiraalee mootummaatiif",
+          "summary": "Haleellaan akkamitti akka raawwatamuu fi amaloota isa dhaaban: jecha icciitii, ergaa gowwoomsaa, meeshaalee fi yeroo wanti tokko dogoggore maal gochuu akka qabdan.",
+          "audience": "Hojjettoota waajjiraalee mootummaa, sadarkaa hundaa.",
+          "prerequisites": "Itti fayyadama kompiitaraa bu'uuraa.",
+          "outcomes": "Ergaa gowwoomsaa fi gowwoomsa hawaasummaa (social engineering) adda baasuu\nJecha icciitii cimaa fi seensa sadarkaa lamaatiin herregoota eeguu\nMeeshaalee fi daataa nagaan eeguu\nBalaa akkamitti fi eessatti akka gabaasan beekuu",
+          "syllabus": "Haleellaan akkamitti raawwatama\nJecha icciitii fi seensa sadarkaa lamaa\nErgaa gowwoomsaa fi ergaa sobaa\nMeeshaalee, networkiiwwan fi daataa\nBalaa gabaasuu"
+        }
+      }
+    },
+    {
+      "key": "course.data-skills",
+      "level": "intermediate",
+      "mode": "in_person",
+      "duration_hours": 20,
+      "languages": [
+        "am",
+        "en"
+      ],
+      "pillar": "pillar.data",
+      "sort": 3,
+      "translations": {
+        "en": {
+          "title": "Working with data in public offices",
+          "summary": "Collect, clean, analyse and publish an office's data, from spreadsheets to open data.",
+          "audience": "Public servants who keep records or prepare reports.",
+          "prerequisites": "Comfortable with spreadsheets.",
+          "outcomes": "Design a clean table of records\nClean and check data\nSummarise data with charts and pivot tables\nPrepare a dataset for publication as open data",
+          "syllabus": "Good tables and records\nCleaning and checking data\nAnalysis and charts\nOpen data: licences and publication"
+        },
+        "am": {
+          "title": "በመንግሥት ጽሕፈት ቤቶች ከመረጃ ጋር መሥራት",
+          "summary": "የአንድን ጽሕፈት ቤት መረጃ መሰብሰብ፣ ማጽዳት፣ መተንተንና ማሳተም፣ ከተመን ሉሆች እስከ ክፍት መረጃ።",
+          "audience": "መዛግብትን የሚይዙ ወይም ሪፖርቶችን የሚያዘጋጁ የመንግሥት ሠራተኞች።",
+          "prerequisites": "የተመን ሉሆችን (ስፕሬድሺቶችን) በምቾት መጠቀም።",
+          "outcomes": "ንጹሕ የመዛግብት ሰንጠረዥ መንደፍ\nመረጃን ማጽዳትና ማረጋገጥ\nመረጃን በቻርቶችና በፒቮት ሰንጠረዦች ማጠቃለል\nየመረጃ ስብስብን እንደ ክፍት መረጃ ለማሳተም ማዘጋጀት",
+          "syllabus": "ጥሩ ሰንጠረዦችና መዛግብት\nመረጃን ማጽዳትና ማረጋገጥ\nትንተናና ቻርቶች\nክፍት መረጃ፦ ፈቃዶችና ማሳተም"
+        },
+        "om": {
+          "title": "Waajjiraalee mootummaa keessatti daataa waliin hojjechuu",
+          "summary": "Daataa waajjiraa sassaabuu, qulqulleessuu, xiinxaluu fi maxxansuu, spreadsheetii irraa hanga daataa banaatti.",
+          "audience": "Hojjettoota mootummaa galmee qabatan ykn gabaasa qopheessan.",
+          "prerequisites": "Spreadsheetii fayyadamuu irratti kan mijatan.",
+          "outcomes": "Gabatee galmeewwan qulqulluu qopheessuu\nDaataa qulqulleessuu fi sakatta'uu\nChaartii fi gabatee pivot (pivot table) fayyadamuun daataa cuunfuu\nDaataa akka daataa banaatti maxxansuuf qopheessuu",
+          "syllabus": "Gabatee fi galmeewwan gaarii\nDaataa qulqulleessuu fi sakatta'uu\nXiinxala fi chaartii\nDaataa banaa: hayyamoota fi maxxansa"
+        }
+      }
+    },
+    {
+      "key": "course.web",
+      "level": "beginner",
+      "mode": "in_person",
+      "duration_hours": 12,
+      "languages": [
+        "am",
+        "om",
+        "en"
+      ],
+      "pillar": "pillar.government",
+      "sort": 4,
+      "translations": {
+        "en": {
+          "title": "Running a public office website",
+          "summary": "Keep an office's web pages accurate, accessible and up to date, in every language.",
+          "audience": "Communications staff and the people who publish for an office.",
+          "prerequisites": "Basic computer use.",
+          "outcomes": "Publish and update pages and news\nWrite clearly for the public\nMake pages accessible to everyone\nWork with translations",
+          "syllabus": "Planning what to publish\nWriting for the web\nImages and accessibility\nPublishing in several languages"
+        },
+        "am": {
+          "title": "የመንግሥት ጽሕፈት ቤት ድረ-ገጽን ማስተዳደር",
+          "summary": "የአንድን ጽሕፈት ቤት ድረ-ገጾች በሁሉም ቋንቋ ትክክለኛ፣ ተደራሽና ወቅታዊ አድርጎ መያዝ።",
+          "audience": "የኮሙኒኬሽን ሠራተኞችና ለአንድ ጽሕፈት ቤት ይዘት የሚያሳትሙ ሰዎች።",
+          "prerequisites": "መሠረታዊ የኮምፒውተር አጠቃቀም።",
+          "outcomes": "ገጾችንና ዜናዎችን ማሳተምና ማዘመን\nለሕዝብ በግልጽ መጻፍ\nገጾችን ለሁሉም ተደራሽ ማድረግ\nከትርጉሞች ጋር መሥራት",
+          "syllabus": "የሚታተመውን ማቀድ\nለድረ-ገጽ መጻፍ\nምስሎችና ተደራሽነት\nበብዙ ቋንቋዎች ማሳተም"
+        },
+        "om": {
+          "title": "Marsariitii waajjira mootummaa geggeessuu",
+          "summary": "Fuulota marsariitii waajjiraa afaan hundaan sirrii, nama hundaaf qaqqabamoo fi kan yeroo isaanii eeggatan gochuu.",
+          "audience": "Hojjettoota quunnamtii fi namoota waajjiraaf maxxansan.",
+          "prerequisites": "Itti fayyadama kompiitaraa bu'uuraa.",
+          "outcomes": "Fuulotaa fi oduu maxxansuu fi haaromsuu\nUmmataaf ifatti barreessuu\nFuulota nama hundaaf qaqqabamoo gochuu\nHiikkaa waliin hojjechuu",
+          "syllabus": "Waan maxxanfamu karoorsuu\nMarsariitiif barreessuu\nSuuraalee fi qaqqabamummaa\nAfaanota hedduun maxxansuu"
+        }
+      }
+    },
+    {
+      "key": "course.ai-intro",
+      "level": "beginner",
+      "mode": "blended",
+      "duration_hours": 12,
+      "languages": [
+        "am",
+        "en"
+      ],
+      "pillar": "pillar.skills",
+      "sort": 5,
+      "translations": {
+        "en": {
+          "title": "Introduction to artificial intelligence",
+          "summary": "What AI is, what it can and cannot do, and how to use it responsibly at work.",
+          "audience": "Anyone curious about AI, in public offices or beyond.",
+          "prerequisites": "Basic computer use.",
+          "outcomes": "Explain what AI is in plain words\nUse AI assistants for everyday tasks\nCheck AI output for mistakes\nUse AI responsibly with personal data",
+          "syllabus": "What AI is\nAI assistants in practice\nChecking and correcting AI\nResponsible use and personal data"
+        },
+        "am": {
+          "title": "የሰው ሠራሽ አስተውሎት መግቢያ",
+          "summary": "ሰው ሠራሽ አስተውሎት (AI) ምን እንደሆነ፣ ምን ማድረግ እንደሚችልና እንደማይችል፣ እንዲሁም በሥራ ላይ በኃላፊነት እንዴት እንደሚጠቀሙበት።",
+          "audience": "በመንግሥት ጽሕፈት ቤቶችም ሆነ ከዚያ ውጭ፣ ስለ ሰው ሠራሽ አስተውሎት ማወቅ የሚፈልግ ማንኛውም ሰው።",
+          "prerequisites": "መሠረታዊ የኮምፒውተር አጠቃቀም።",
+          "outcomes": "ሰው ሠራሽ አስተውሎት ምን እንደሆነ በቀላል ቃላት ማብራራት\nለዕለት ተዕለት ተግባራት የሰው ሠራሽ አስተውሎት ረዳቶችን መጠቀም\nየሰው ሠራሽ አስተውሎት ውጤቶችን ለስህተት መፈተሽ\nከግል መረጃ ጋር ሰው ሠራሽ አስተውሎትን በኃላፊነት መጠቀም",
+          "syllabus": "ሰው ሠራሽ አስተውሎት ምንድን ነው\nየሰው ሠራሽ አስተውሎት ረዳቶች በተግባር\nሰው ሠራሽ አስተውሎትን መፈተሽና ማረም\nኃላፊነት የተሞላበት አጠቃቀምና የግል መረጃ"
+        },
+        "om": {
+          "title": "Seensa sammuu namtolchee",
+          "summary": "Sammuun namtolchee (AI) maal akka ta'e, maal gochuu danda'uu fi hin dandeenye, akkasumas hojii irratti itti gaafatamummaadhaan akkamitti itti fayyadaman.",
+          "audience": "Nama AI beekuuf fedhii qabu kamiyyuu, waajjiraalee mootummaa keessaa ykn ala.",
+          "prerequisites": "Itti fayyadama kompiitaraa bu'uuraa.",
+          "outcomes": "AI maal akka ta'e jechoota salphaan ibsuu\nHojii guyyaa guyyaatiif gargaartota AI fayyadamuu\nBu'aa AI dogoggora irraa sakatta'uu\nOdeeffannoo dhuunfaa wajjin AI itti gaafatamummaan fayyadamuu",
+          "syllabus": "AI maal akka ta'e\nGargaartota AI hojiirratti\nAI sakatta'uu fi sirreessuu\nItti fayyadama itti gaafatamummaa qabu fi odeeffannoo dhuunfaa"
+        }
+      }
+    },
+    {
+      "key": "course.coding-youth",
+      "level": "beginner",
+      "mode": "in_person",
+      "duration_hours": 24,
+      "languages": [
+        "am",
+        "om",
+        "en"
+      ],
+      "pillar": "pillar.skills",
+      "sort": 6,
+      "translations": {
+        "en": {
+          "title": "Coding foundations for young people",
+          "summary": "A first step into programming: from simple instructions to a small project of your own.",
+          "audience": "Students and young people aged 14 to 24.",
+          "prerequisites": "None.",
+          "outcomes": "Think through a problem step by step\nWrite small programs\nBuild a simple web page\nPresent a small project",
+          "syllabus": "Thinking like a programmer\nFirst programs\nBuilding a web page\nA project of your own"
+        },
+        "am": {
+          "title": "ለወጣቶች የኮዲንግ መሠረታዊ ትምህርት",
+          "summary": "ወደ ፕሮግራሚንግ የመጀመሪያ እርምጃ፦ ከቀላል ትእዛዞች እስከ የራስዎ ትንሽ ፕሮጀክት።",
+          "audience": "ዕድሜያቸው ከ14 እስከ 24 የሆኑ ተማሪዎችና ወጣቶች።",
+          "prerequisites": "የለም።",
+          "outcomes": "አንድን ችግር ደረጃ በደረጃ ማሰብ\nትናንሽ ፕሮግራሞችን መጻፍ\nቀላል ድረ-ገጽ መገንባት\nትንሽ ፕሮጀክት ማቅረብ",
+          "syllabus": "እንደ ፕሮግራመር ማሰብ\nየመጀመሪያ ፕሮግራሞች\nድረ-ገጽ መገንባት\nየራስዎ ፕሮጀክት"
+        },
+        "om": {
+          "title": "Bu'uura koodii barreessuu dargaggootaaf",
+          "summary": "Tarkaanfii jalqabaa gara sagantaa kompiitaraa barreessuutti: ajajoota salphaa irraa hanga pirojektii xiqqaa kan ofii keessaniitti.",
+          "audience": "Barattootaa fi dargaggoota umuriin isaanii 14 hanga 24.",
+          "prerequisites": "Hin jiru.",
+          "outcomes": "Rakkoo tokko tarkaanfii tarkaanfiidhaan yaaduu\nSagantaalee kompiitaraa xixiqqoo barreessuu\nFuula marsariitii salphaa ijaaruu\nPirojektii xiqqaa dhiyeessuu",
+          "syllabus": "Akka ogeessa sagantaa kompiitaraa yaaduu\nSagantaalee kompiitaraa jalqabaa\nFuula marsariitii ijaaruu\nPirojektii kan ofii keessanii"
+        }
+      }
+    }
+  ],
+  "programmes": [
+    {
+      "key": "programme.incubation",
+      "kind": "incubation",
+      "sort": 1,
+      "translations": {
+        "en": {
+          "title": "Harar Digital Innovation Programme",
+          "slug": "harar-digital-innovation-programme",
+          "summary": "Support for early-stage founders in the Harari Region to turn a digital idea into a working product.",
+          "eligibility": "Founders and teams based in the Harari Region\nA digital product or service at the idea or early stage\nAt least one founder able to commit time to the programme",
+          "benefits": "Mentoring from practitioners\nTraining in product, business and finance\nA path to national support and the Ministry's startup label\nA showcase to partners and investors",
+          "timeline": "Calls for applications are announced on this page and in the newsletter.\nShortlisted teams are interviewed before selection.",
+          "body": [
+            "The programme supports founders from the first idea to a product people use. Calls for applications open here, with their dates; subscribe to the newsletter to hear when the next one opens."
+          ]
+        },
+        "am": {
+          "title": "የሐረር ዲጂታል ፈጠራ ፕሮግራም",
+          "slug": "harar-digital-innovation-programme",
+          "summary": "በሐረሪ ክልል በመጀመሪያ ደረጃ ላይ ያሉ መሥራቾች ዲጂታል ሐሳባቸውን ወደሚሠራ ምርት እንዲቀይሩ የሚደረግ ድጋፍ።",
+          "eligibility": "በሐረሪ ክልል የሚገኙ መሥራቾችና ቡድኖች\nበሐሳብ ወይም በመጀመሪያ ደረጃ ላይ ያለ ዲጂታል ምርት ወይም አገልግሎት\nለፕሮግራሙ ጊዜ መስጠት የሚችል ቢያንስ አንድ መሥራች",
+          "benefits": "ከዘርፉ ባለሙያዎች የሚሰጥ ምክርና ክትትል (መንተርሺፕ)\nበምርት፣ በንግድና በፋይናንስ ላይ ሥልጠና\nወደ ብሔራዊ ድጋፍና ወደ ሚኒስቴሩ የጀማሪ ኩባንያ መለያ የሚያደርስ መንገድ\nለአጋሮችና ለባለሀብቶች ራስን የማስተዋወቅ መድረክ",
+          "timeline": "የማመልከቻ ጥሪዎች በዚህ ገጽና በዜና መልእክቱ (ኒውስሌተር) ይታወቃሉ።\nለመጨረሻ ዙር የተመረጡ ቡድኖች ከምርጫው በፊት ቃለ መጠይቅ ይደረግላቸዋል።",
+          "body": [
+            "ፕሮግራሙ መሥራቾችን ከመጀመሪያው ሐሳብ አንሥቶ ሰዎች እስከሚጠቀሙበት ምርት ድረስ ይደግፋል። የማመልከቻ ጥሪዎች ከቀኖቻቸው ጋር እዚህ ይከፈታሉ፤ ቀጣዩ ጥሪ ሲከፈት ለማወቅ ለዜና መልእክቱ ይመዝገቡ።"
+          ]
+        },
+        "om": {
+          "title": "Sagantaa Kalaqa Dijitaalaa Harar",
+          "slug": "harar-digital-innovation-programme",
+          "summary": "Deeggarsa hundeessitoota sadarkaa jalqabaa Naannoo Hararii yaada dijitaalaa gara oomisha hojjetuutti akka jijjiiran.",
+          "eligibility": "Hundeessitootaa fi gareewwan Naannoo Hararii keessa jiran\nOomisha ykn tajaajila dijitaalaa sadarkaa yaadaa ykn jalqabaa irra jiru\nYoo xiqqaate hundeessaa tokko kan sagantichaaf yeroo kennuu danda'u",
+          "benefits": "Gorsa (mentoring) ogeeyyii hojii irra jiran irraa\nLeenjii oomishaa, daldalaa fi faayinaansii\nKaraa deeggarsa biyyoolessaa fi mallattoo jalqabbii daldalaa Ministeerichaa itti argatan\nMichootaa fi invastaroota duratti agarsiisuu",
+          "timeline": "Waamichi iyyannoo fuula kanaa fi oduu imeelii irratti ni beeksifama.\nGareewwan tarree gabaabaa keessa galan filannoo dura af-gaaffiin ni godhamaaf.",
+          "body": [
+            "Sagantichi hundeessitoota yaada jalqabaa irraa kaasee hanga oomisha namoonni itti fayyadamaniitti ni deeggara. Waamichi iyyannoo guyyoota isaanii waliin asitti banama; inni itti aanu yoom akka banamu dhaga'uuf oduu imeelii galmaa'aa."
+          ]
+        }
+      }
+    },
+    {
+      "key": "programme.youth-tech",
+      "kind": "training",
+      "sort": 2,
+      "translations": {
+        "en": {
+          "title": "Youth Technology Clubs",
+          "slug": "youth-technology-clubs",
+          "summary": "Clubs where young people learn coding, robotics and artificial intelligence by building projects together.",
+          "eligibility": "Students and young people aged 14 to 24 in the Harari Region\nCuriosity; no experience needed",
+          "benefits": "Hands-on projects in coding, robotics and AI\nMentors from the technology community\nA showcase of the best projects",
+          "timeline": "Club sessions and intakes are announced on this page.",
+          "body": [
+            "The clubs give young people a place to learn technology by making things. Schools and youth centres that want to host a club can contact the Agency."
+          ]
+        },
+        "am": {
+          "title": "የወጣቶች የቴክኖሎጂ ክበባት",
+          "slug": "youth-technology-clubs",
+          "summary": "ወጣቶች በጋራ ፕሮጀክቶችን በመሥራት ኮዲንግ፣ ሮቦቲክስና ሰው ሠራሽ አስተውሎትን የሚማሩባቸው ክበባት።",
+          "eligibility": "በሐረሪ ክልል የሚገኙ ዕድሜያቸው ከ14 እስከ 24 የሆኑ ተማሪዎችና ወጣቶች\nየማወቅ ጉጉት፤ ልምድ አያስፈልግም",
+          "benefits": "በኮዲንግ፣ በሮቦቲክስና በሰው ሠራሽ አስተውሎት ላይ በተግባር የሚሠሩ ፕሮጀክቶች\nከቴክኖሎጂው ማኅበረሰብ የተውጣጡ አማካሪዎች\nምርጥ ፕሮጀክቶች የሚቀርቡበት ትርኢት",
+          "timeline": "የክበብ መርሐ ግብሮችና የምዝገባ ዙሮች በዚህ ገጽ ይታወቃሉ።",
+          "body": [
+            "ክበባቱ ወጣቶች ነገሮችን በመሥራት ቴክኖሎጂን የሚማሩበት ቦታ ይሰጣሉ። ክበብ ማስተናገድ የሚፈልጉ ትምህርት ቤቶችና የወጣቶች ማዕከላት ኤጀንሲውን ማነጋገር ይችላሉ።"
+          ]
+        },
+        "om": {
+          "title": "Kilaboota Teeknooloojii Dargaggootaa",
+          "slug": "youth-technology-clubs",
+          "summary": "Kilaboota dargaggoonni pirojektoota waliin ijaaruun koodii barreessuu, roobootiksii fi sammuu namtolchee itti baratan.",
+          "eligibility": "Barattootaa fi dargaggoota Naannoo Hararii keessa jiran, umuriin isaanii 14 hanga 24\nFedhii beekuu; muuxannoon hin barbaachisu",
+          "benefits": "Pirojektoota hojiin baratamu koodii barreessuu, roobootiksii fi AI irratti\nGorsitoota hawaasa teeknooloojii irraa\nAgarsiisa pirojektoota hunda caalanii",
+          "timeline": "Yeroowwan kilabaa fi galmeewwan haaraan fuula kana irratti ni beeksifamu.",
+          "body": [
+            "Kilabootni dargaggootaaf bakka waa hojjechuudhaan teeknooloojii itti baratan kennu. Manneen barumsaa fi giddugaleewwan dargaggootaa kilaba keessummeessuu barbaadan Ejansicha quunnamuu danda'u."
+          ]
+        }
+      }
+    }
+  ],
+  "projects": [
+    {
+      "key": "project.services-online",
+      "status": "planned",
+      "pillar": "pillar.government",
+      "featured": true,
+      "translations": {
+        "en": {
+          "title": "Public services online",
+          "slug": "public-services-online",
+          "summary": "Bring the region's most used public services online, one by one, in step with the national Mesob platform."
+        },
+        "am": {
+          "title": "የሕዝብ አገልግሎቶች በኦንላይን",
+          "slug": "public-services-online",
+          "summary": "በክልሉ በብዛት የሚጠየቁትን የሕዝብ አገልግሎቶች ከብሔራዊው የመሶብ መድረክ ጋር በተጣጣመ መልኩ አንድ በአንድ ወደ ኦንላይን ማምጣት።"
+        },
+        "om": {
+          "title": "Tajaajiloota mootummaa toora interneetii irratti",
+          "slug": "public-services-online",
+          "summary": "Tajaajiloota mootummaa naannichaa caalaatti itti fayyadaman tokko tokkoon toora interneetiitti galchuu, waltajjii biyyoolessaa Mesob waliin walsimuun."
+        }
+      }
+    },
+    {
+      "key": "project.open-data",
+      "status": "planned",
+      "pillar": "pillar.data",
+      "translations": {
+        "en": {
+          "title": "Open data for Harari",
+          "slug": "open-data-for-harari",
+          "summary": "Publish the public data of regional offices in an open catalogue, with an API, so others can build on it."
+        },
+        "am": {
+          "title": "ክፍት መረጃ ለሐረሪ",
+          "slug": "open-data-for-harari",
+          "summary": "ሌሎች በላዩ ላይ እንዲገነቡ፣ የክልል ጽሕፈት ቤቶችን ይፋዊ መረጃ API ባለው ክፍት ካታሎግ ማሳተም።"
+        },
+        "om": {
+          "title": "Daataa banaa Harariif",
+          "slug": "open-data-for-harari",
+          "summary": "Daataa ummataa waajjiraalee naannichaa kaataalogii banaa API qabu keessatti maxxansuu, akka namoonni biroo isa irratti ijaaruu danda'aniif."
+        }
+      }
+    },
+    {
+      "key": "project.cyber-offices",
+      "status": "planned",
+      "pillar": "pillar.trust",
+      "translations": {
+        "en": {
+          "title": "Cyber-safe public offices",
+          "slug": "cyber-safe-public-offices",
+          "summary": "Train the staff of every regional public office in cyber-safety, and give each office a clear way to report incidents."
+        },
+        "am": {
+          "title": "የሳይበር ደህንነታቸው የተጠበቀ የመንግሥት ጽሕፈት ቤቶች",
+          "slug": "cyber-safe-public-offices",
+          "summary": "የእያንዳንዱን የክልል መንግሥት ጽሕፈት ቤት ሠራተኞች በሳይበር ደህንነት ማሠልጠን፣ እንዲሁም ለእያንዳንዱ ጽሕፈት ቤት የሳይበር ጥቃቶችን ሪፖርት የሚያደርግበት ግልጽ መንገድ መስጠት።"
+        },
+        "om": {
+          "title": "Waajjiraalee mootummaa nageenya saayibarii qaban",
+          "slug": "cyber-safe-public-offices",
+          "summary": "Hojjettoota waajjira mootummaa naannichaa hundaa nageenya saayibarii irratti leenjisuu, waajjira tokkoon tokkoof immoo karaa ifaa balaa itti gabaasan kennuu."
+        }
+      }
+    }
+  ]
 }

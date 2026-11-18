@@ -37,10 +37,29 @@ function samplePack(array $records): string
     return "{$folder}/pack.json";
 }
 
-it('ships an empty pack until the Agency sends its content', function () {
+it('ships the Agency\'s first content in three languages, loaded once, with no sample labels', function () {
     staff(SystemRole::SuperAdmin, mfa: false);
 
-    expect(app(LoadContentPack::class)->handle(database_path('content/pack.json')))->toBe([]);
+    $counts = app(LoadContentPack::class)->handle(database_path('content/pack.json'));
+    expect($counts)->toMatchArray(['pillars' => 5, 'pages' => 3, 'posts' => 4, 'advisories' => 3, 'courses' => 6, 'programmes' => 2, 'projects' => 3, 'homepage' => 1])
+        ->and(app(LoadContentPack::class)->handle(database_path('content/pack.json')))->toBe([])
+        ->and(Pillar::query()->count())->toBe(5)
+        ->and(Post::query()->where('type', 'advisory')->count())->toBe(3);
+    foreach (['en', 'am', 'om'] as $locale) {
+        expect(Pillar::query()->firstOrFail()->translation($locale, fallback: false)?->status)->toBe(ContentStatus::Published);
+    }
+
+    // ADR-0045, ADR-0046: the homepage leads with the pillars and shows the programmes and courses while nothing has
+    // dates yet; the heritage band closes it. Nothing is labelled as a sample.
+    $home = (string) $this->get('/en')->assertOk()->getContent();
+    expect($home)->toContain('Digital Government')->toContain('Harar Digital Innovation Programme')
+        ->toContain('Digital literacy for public servants')->toContain(__('homepage.heritage.title', [], 'en'))
+        ->toContain('/en/digital-ethiopia-2030')->not->toContain('Sample');
+    $this->get('/am')->assertOk()->assertSee('ዲጂታል መንግሥት');
+    $this->get('/en/harar')->assertOk()->assertSee('whc.unesco.org/en/list/1189', escape: false);
+    $this->get('/en/news')->assertOk()->assertSee('Mesob');
+    $this->get('/en/advisories')->assertOk()->assertSee('two-step sign-in');
+    expect(json_encode(json_decode((string) file_get_contents(database_path('content/pack.json')), true)))->not->toContain('Sample');
 });
 
 it('loads a pack, published, with a portrait, heads, pages, the homepage and a slide', function () {

@@ -841,3 +841,55 @@ is sent).
   existed yet.
 
 **Why.** Found in the security review (`docs/security-review.md`, V9 and V13).
+
+## ADR-0045 — The Agency's first content, with no sample labels (2026-11-18)
+
+**Decision** (Ramin, 2026-11-18: "real sources and expert drafts").
+
+- The labelled samples are removed (`portal:remove-samples`). The content pack (`database/content/pack.json`,
+  loaded on every deploy, once per key) brings the Agency's first content in English, Amharic and Afaan Oromo:
+  - **the five pillars**, from PLAN.md §1;
+  - **three pages:** About the Agency, Harar Jugol (from UNESCO's description), and Digital Ethiopia 2030 with the
+    startup and data protection laws (from their sources);
+  - **four news explainers built on sourced facts:** Harar's Mesob centre (ENA), Digital Ethiopia 2030, the Startup
+    Proclamation, and personal data rights;
+  - **three awareness advisories:** two-step sign-in, phishing, and messaging account takeovers;
+  - **six courses**, the Academy catalogue with no cohorts or dates;
+  - **two programmes**, with no call dates;
+  - **three planned projects**, with no budgets, dates or progress.
+- The loader gains posts, advisories, courses, programmes and projects, and a simple body format (paragraphs,
+  headings, lists, Markdown links) turned into editor documents (`PackBody`).
+- The services researched in phase 2 (ADR-0019) stay published, and no longer carry the public "Proposed" badge.
+  The flag stays in the admin, so staff see which services the Agency still has to confirm.
+- **Still never invented:** named officials and leaders, tenders, vacancies, learners and certificates, dated
+  events and calls, and figures without a source. Those sections show their empty states until the Agency's records
+  arrive.
+- The test-site notice no longer speaks of sample content.
+
+**Why.** The owner asked for real, correct content in every section and no "sample" word. Facts come from cited
+sources. Agency-specific statements describe the role and planned work the plan sets out, without claiming people,
+dates or results.
+
+## ADR-0046 — A homepage that leads with the five pillars, closing on Harar (2026-11-18)
+
+**Decision.**
+
+- **Order:** set once by the content pack; editors can reorder afterwards. Hero, the five pillars, services,
+  innovation, the Academy, latest news and advisories, projects, open data, events, then the heritage band always
+  last, just above the footer.
+- **Hero:** the plan's line "A thousand years of ideas. A digital future for Harari." and the five pillars as the
+  way in (replacing the "4 languages / 5 pillars" figures).
+- **Pillars section:** closes with a link to Digital Ethiopia 2030.
+- **Fallbacks:** the innovation section shows the programmes while no call is open, and the Academy section shows
+  the courses while no cohort is scheduled, so neither disappears.
+- **Heritage band, the page's finale:** on night, under the line "A thousand years of ideas. Five gates to the
+  future."
+  - five arches, one per pillar, each opening its pillar page and joined by a lane drawn as a circuit;
+  - credited photographs of Jugol;
+  - UNESCO's facts: inscribed in 2006, 82 mosques, 102 shrines, walls built between the 13th and 16th centuries,
+    with the source named.
+
+  It no longer links to leadership or offices, which are empty until the Agency sends them.
+
+**Why.** The owner found the homepage too basic and asked for a professional, inspiring design and a creative
+heritage band. The gates-to-pillars idea is the design direction of DESIGN.md ("Jugol Circuit").

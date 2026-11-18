@@ -31,10 +31,26 @@
                         <x-ui.button :href="route('pillars.index')" variant="light" size="lg">{{ __('homepage.hero.pillars') }}</x-ui.button>
                     @endif
                 </p>
-                <dl class="animate-rise mt-12 grid max-w-sm grid-cols-2 divide-x divide-night-line border-y border-night-line font-mono text-xs [--rise-delay:400ms] rtl:divide-x-reverse">
-                    <div class="flex flex-col py-3 pe-3"><dt class="text-night-muted uppercase">{{ __('homepage.hero.languages') }}</dt><dd class="order-first font-display text-2xl text-saffron-400">4</dd></div>
-                    <div class="flex flex-col py-3 ps-4"><dt class="text-night-muted uppercase">{{ __('homepage.hero.pillars_count') }}</dt><dd class="order-first font-display text-2xl text-saffron-400">5</dd></div>
-                </dl>
+                @php
+                    $heroPillars = \App\Domain\Organisation\Queries\PublicDirectory::visible(\App\Domain\Organisation\Models\Pillar::query(), app()->getLocale())->orderBy('sort')->limit(5)->get()
+                        ->map(fn ($p) => \App\Domain\Organisation\Queries\PublicDirectory::shown($p, app()->getLocale()))->filter()->values();
+                    $heroNodes = ['bg-pillar-1', 'bg-pillar-2', 'bg-pillar-3', 'bg-pillar-4', 'bg-pillar-5'];
+                @endphp
+                @if ($heroPillars->isNotEmpty())
+                    {{-- ADR-0046: the five pillars as the way in, each with its gate colour. --}}
+                    <nav aria-label="{{ __('homepage.hero.pillars') }}" class="animate-rise mt-12 [--rise-delay:400ms]">
+                        <p class="font-mono text-xs tracking-wider text-night-muted uppercase">{{ __('homepage.hero.five_gates') }}</p>
+                        <ul class="mt-3 flex flex-wrap gap-2">
+                            @foreach ($heroPillars as $pillar)
+                                <li lang="{{ $pillar->locale }}">
+                                    <a href="{{ route('pillars.show', ['locale' => $pillar->locale, 'slug' => $pillar->slug]) }}" class="inline-flex items-center gap-2 rounded-control border border-night-line bg-night-950/50 px-3 py-2 text-sm font-medium text-night-ink transition hover:border-cyan-400 hover:bg-night-800">
+                                        <span aria-hidden="true" class="size-2 rotate-45 {{ $heroNodes[$loop->index % 5] }}"></span>{{ $pillar->getAttribute('name') }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </nav>
+                @endif
             </div>
 
             <figure class="animate-rise relative isolate mx-auto w-full max-w-md [--rise-delay:200ms] lg:max-w-none">

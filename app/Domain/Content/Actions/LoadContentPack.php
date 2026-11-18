@@ -2,12 +2,15 @@
 
 namespace App\Domain\Content\Actions;
 
+use App\Domain\Academy\Actions\SaveCourse;
+use App\Domain\Academy\Models\Course;
 use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Content\Models\ContentPackItem;
 use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Post;
 use App\Domain\Content\Models\PostTranslation;
 use App\Domain\Content\Support\BodyRenderer;
+use App\Domain\Content\Support\PackBody;
 use App\Domain\Content\Workflow\ContentWorkflow;
 use App\Domain\Events\Actions\SaveEvent;
 use App\Domain\Events\Models\Event;
@@ -18,6 +21,8 @@ use App\Domain\Homepage\Models\HomepageSection;
 use App\Domain\Homepage\Support\HomepageLayout;
 use App\Domain\Import\Models\ContentImport;
 use App\Domain\Import\Models\ContentSource;
+use App\Domain\Innovation\Actions\SaveProgramme;
+use App\Domain\Innovation\Models\Programme;
 use App\Domain\Media\Actions\SyncMediaUsage;
 use App\Domain\Media\Actions\UploadMedia;
 use App\Domain\Media\Models\Media;
@@ -27,6 +32,8 @@ use App\Domain\Organisation\Actions\SavePillar;
 use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\Pillar;
+use App\Domain\Projects\Actions\SaveProject;
+use App\Domain\Projects\Models\Project;
 use App\Domain\Social\Enums\Platform;
 use App\Domain\Social\Models\SocialSource;
 use App\Filament\Pages\ManageHomepage;
@@ -59,6 +66,10 @@ final class LoadContentPack
         private readonly UploadMedia $upload,
         private readonly ContentWorkflow $workflow,
         private readonly SyncMediaUsage $usage,
+        private readonly SavePost $posts,
+        private readonly SaveCourse $courses,
+        private readonly SaveProgramme $programmes,
+        private readonly SaveProject $projects,
     ) {}
 
     /**
@@ -105,6 +116,23 @@ final class LoadContentPack
             $this->once($item, 'events', fn (array $data): Model => $this->events->handle(new Event, $data, $actor));
         }
 
+        // ADR-0045: the Agency's first content: explainers, advisories, courses, programmes and planned projects.
+        foreach ((array) ($pack['posts'] ?? []) as $item) {
+            $this->once($item, 'posts', fn (array $data): Model => $this->posts->handle(new Post, ['type' => $data['type'] ?? 'news', 'source_locale' => 'en', ...$data], $actor));
+        }
+        foreach ((array) ($pack['advisories'] ?? []) as $item) {
+            $this->once($item, 'advisories', fn (array $data): Model => $this->posts->handle(new Post, [...$data, 'type' => 'advisory', 'source_locale' => 'en'], $actor));
+        }
+        foreach ((array) ($pack['courses'] ?? []) as $item) {
+            $this->once($item, 'courses', fn (array $data): Model => $this->courses->handle(new Course, [...$data, 'pillar_id' => $this->id($item['pillar'] ?? null)], $actor));
+        }
+        foreach ((array) ($pack['programmes'] ?? []) as $item) {
+            $this->once($item, 'programmes', fn (array $data): Model => $this->programmes->handle(new Programme, [...$data, 'pillar_id' => $this->id($item['pillar'] ?? null)], $actor));
+        }
+        foreach ((array) ($pack['projects'] ?? []) as $item) {
+            $this->once($item, 'projects', fn (array $data): Model => $this->projects->handle(new Project, [...$data, 'pillar_id' => $this->id($item['pillar'] ?? null)], $actor));
+        }
+
         foreach ((array) ($pack['updates'] ?? []) as $update) {
             $this->update((array) $update, $photos, $actor);
         }
@@ -146,8 +174,11 @@ final class LoadContentPack
 
         DB::transaction(function () use ($item, $key, $kind, $create): void {
             $data = $item;
+            // Published at once; posts read "status", the other records "published". Bodies written as simple blocks
+            // become editor documents (ADR-0045).
             $data['translations'] = array_map(
-                fn (array $values): array => ['published' => true, ...$values],
+                fn (array $values): array => ['published' => true, 'status' => 'published', ...$values,
+                    ...(is_array($values['body'] ?? null) ? ['body' => PackBody::build($values['body'])] : [])],
                 (array) ($item['translations'] ?? []),
             );
             $model = $create($data);
@@ -421,6 +452,22 @@ final class LoadContentPack
      */
     private function homepageSections(array $homepage, User $actor): void
     {
+        // ADR-0046: the order of the homepage sections, set once; editors reorder freely afterwards.
+        $order = array_values(array_filter((array) ($homepage['order'] ?? []), 'is_string'));
+        if ($order !== [] && ! ContentPackItem::query()->where('key', 'homepage.order')->exists()) {
+            $sort = 0;
+            $sections = HomepageLayout::all()->sortBy(fn (HomepageSection $s): int => ($i = array_search($s->key->value, $order, true)) === false ? 1000 + $s->sort : (int) $i);
+            foreach ($sections as $section) {
+                $section->sort = ++$sort;
+                if (in_array($section->key->value, $order, true)) {
+                    $section->enabled = true;
+                }
+                $section->save();
+            }
+            ContentPackItem::remember('homepage.order', null);
+            $this->counts['homepage'] = ($this->counts['homepage'] ?? 0) + 1;
+        }
+
         $changes = [];
         $leadership = (array) ($homepage['leadership'] ?? []);
         $leaderId = $this->id($leadership['leader'] ?? null);

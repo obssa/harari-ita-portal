@@ -41,6 +41,28 @@
                 </article>
                 @vite('resources/js/countdown.js')
             @endif
+            @if (! $lead && ($data['programmes'] ?? collect())->isNotEmpty())
+                {{-- ADR-0045: while no call is open, the programmes, each with where its next call will appear. --}}
+                <ul class="grid gap-4 sm:grid-cols-2">
+                    @foreach ($data['programmes'] as $programme)
+                        @php $shownProgramme = \App\Domain\Organisation\Queries\PublicDirectory::shown($programme, $locale); @endphp
+                        @continue($shownProgramme === null)
+                        <li lang="{{ $shownProgramme->locale }}" @class(['group relative isolate overflow-hidden rounded-card border p-6 transition', 'border-night-line bg-night-900 text-night-ink sm:col-span-2' => $loop->first, 'border-line bg-surface hover:border-cyan-500' => ! $loop->first])>
+                            @if ($loop->first)
+                                <x-circuit class="absolute inset-x-0 bottom-0 -z-10 h-12 w-full text-cyan-500/20" />
+                            @endif
+                            <p @class(['kicker', '[--color-eyebrow:var(--color-cyan-300)]' => $loop->first])>{{ $programme->kind->label() }}</p>
+                            <h3 @class(['mt-2 font-display font-semibold tracking-tight', 'text-2xl sm:text-3xl' => $loop->first, 'text-lg' => ! $loop->first])>
+                                <a href="{{ route('programmes.show', ['locale' => $shownProgramme->locale, 'slug' => $shownProgramme->slug]) }}" class="after:absolute after:inset-0 group-hover:underline underline-offset-4">{{ $shownProgramme->getAttribute('title') }}</a>
+                            </h3>
+                            @if (filled($shownProgramme->getAttribute('summary')))
+                                <p @class(['mt-2 max-w-prose', 'text-night-muted' => $loop->first, 'text-ink-muted' => ! $loop->first])>{{ $shownProgramme->getAttribute('summary') }}</p>
+                            @endif
+                            <p @class(['mt-4 font-mono text-xs', 'text-cyan-300 pb-6' => $loop->first, 'text-ink-muted' => ! $loop->first])>{{ __('homepage.innovation.next_call_soon') }}</p>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
             @if ($rest !== [])
                 <ul class="grid gap-4 sm:grid-cols-2">
                     @foreach ($rest as $call)
