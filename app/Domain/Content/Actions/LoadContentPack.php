@@ -270,6 +270,16 @@ final class LoadContentPack
                 }
             }
 
+            // ADR-0050: a portrait for a leader the pack loaded without one, credited to its source.
+            if ($record instanceof Leader && $record->portrait_id === null && filled($update['portrait'] ?? null)) {
+                $record->forceFill(['portrait_id' => $this->photo($photos, [
+                    'photo' => $update['portrait'],
+                    'source_url' => $update['portrait_source'] ?? null,
+                    'translations' => $record->translations()->pluck('name', 'locale')->map(fn ($name): array => ['name' => (string) $name])->all(),
+                ], $actor, (string) ($update['portrait_credit'] ?? '')), 'updated_by' => $actor->id])->save();
+                $this->usage->handle($record, 'portrait', [$record->portrait_id]);
+            }
+
             if ($record instanceof Leader && $record->photo_ids === null && ($update['photos'] ?? []) !== []) {
                 $ids = [];
                 foreach ((array) $update['photos'] as $photo) {

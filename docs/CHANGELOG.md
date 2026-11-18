@@ -20,6 +20,8 @@ All notable changes to the Agency's portal. Newest first.
   panels wrap text (ADR-0047); pillar pages lead to their own work.
 - The leadership page opens with the head of the Agency, from ENA's report of 9 November 2026, with its source
   (ADR-0049).
+- The head of the Agency's portrait, ENA's photo with its credit; content pack updates can set a portrait once
+  (ADR-0050).
 
 ## Unreleased — phase 7: the dashboard, reports and roles
 

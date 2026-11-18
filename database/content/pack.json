@@ -656,7 +656,15 @@
     ]
   },
   "settings": {},
-  "updates": [],
+  "updates": [
+    {
+      "key": "leader.agency-head#portrait",
+      "target": "leader.agency-head",
+      "portrait": "jemal-ibrahim.jpg",
+      "portrait_credit": "Ethiopian News Agency (ENA)",
+      "portrait_source": "https://www.ena.et/web/amh/w/amh_9899183"
+    }
+  ],
   "slides": [],
   "social_sources": [],
   "corrections": [],

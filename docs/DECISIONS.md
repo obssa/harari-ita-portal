@@ -933,3 +933,18 @@ state media is public, and the source link lets readers and the Agency check it.
 - **Photos:** a portrait needs the person's consent and a credited photo (INPUTS.md), so the profile shows initials
   until the Agency supplies one.
 - **Others:** the Agency confirms the record and supplies its deputies and directors.
+
+## ADR-0050 — The head of the Agency's portrait, from ENA (2026-11-18)
+
+**Decision.** The head of the Agency's profile uses ENA's photo from its report of 9 November 2026
+(<https://www.ena.et/web/amh/w/amh_9899183>), cropped to a square and credited "Ethiopian News Agency (ENA)".
+- **Identification:** ENA places the photo directly under the paragraph that names him, and its file is named
+  "ጀማል (16).jpg". The report's other photos follow the other people it quotes, in order.
+- **Loading:** the content pack's `updates` gain `portrait`, `portrait_credit` and `portrait_source`. They set a
+  leader's portrait once, only while the profile has none, so a portrait an editor changes or removes stays as they
+  left it.
+
+**Why.** The owner asked for his profile picture from the media. ENA is the state news agency, and its photo was
+taken for a report on the Agency's own work.
+- **This supersedes ADR-0049's "no photo".** The photo is credited, and the Agency can replace it with an official
+  portrait at any time (INPUTS.md).

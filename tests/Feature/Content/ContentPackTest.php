@@ -60,10 +60,11 @@ it('ships the Agency\'s first content in three languages, loaded once, with no s
     $this->get('/en/news')->assertOk()->assertSee('Mesob');
     $this->get('/en/advisories')->assertOk()->assertSee('two-step sign-in');
 
-    // ADR-0049: the head of the Agency, as state media published the post, with the source and its date.
+    // ADR-0049, ADR-0050: the head of the Agency, as state media published the post, with the source, its date and
+    // its photo.
     $head = Leader::query()->sole();
     expect($head->body)->toBe(LeaderBody::Management)->and($head->source_url)->toStartWith('https://www.ena.et/')
-        ->and($head->source_date?->toDateString())->toBe('2026-11-09')->and($head->portrait_id)->toBeNull();
+        ->and($head->source_date?->toDateString())->toBe('2026-11-09')->and($head->portrait?->credit)->toBe('Ethiopian News Agency (ENA)');
     foreach (['en', 'am', 'om'] as $locale) {
         expect($head->translation($locale, fallback: false)?->status)->toBe(ContentStatus::Published);
     }
@@ -202,6 +203,28 @@ it('corrects a name and a phrase once, as the Agency asked, and then leaves them
     $leader->translation('en')?->forceFill(['name' => 'Name an editor chose'])->save();
     expect(app(LoadContentPack::class)->handle($corrections))->toBe([])
         ->and($leader->fresh()?->translation('en')?->name)->toBe('Name an editor chose');
+});
+
+it('adds a credited portrait once to a leader the pack loaded without one', function () {
+    staff(SystemRole::SuperAdmin, mfa: false);
+    app(LoadContentPack::class)->handle(samplePack([
+        'leaders' => [['key' => 'leader.sample', 'body' => 'management', 'translations' => ['en' => ['name' => 'Sample Person'], 'am' => ['name' => 'ናሙና ሰው']]]],
+    ]));
+    $path = samplePack(['updates' => [['key' => 'leader.sample#portrait', 'target' => 'leader.sample', 'portrait' => 'sample.jpg',
+        'portrait_credit' => 'Sample News Agency', 'portrait_source' => 'https://example.org/sample-report']]]);
+    File::ensureDirectoryExists(dirname($path).'/photos');
+    $image = imagecreatetruecolor(400, 400);
+    imagejpeg($image, dirname($path).'/photos/sample.jpg', 80);
+
+    expect(app(LoadContentPack::class)->handle($path))->toBe(['updates' => 1]);
+    $leader = Leader::query()->sole();
+    expect($leader->portrait)->not->toBeNull()
+        ->and($leader->portrait?->credit)->toBe('Sample News Agency')
+        ->and($leader->portrait?->altFor('am'))->toBe('ናሙና ሰው');
+
+    // ADR-0050: once only; a portrait an editor removes is not put back.
+    $leader->forceFill(['portrait_id' => null])->save();
+    expect(app(LoadContentPack::class)->handle($path))->toBe([])->and($leader->fresh()?->portrait_id)->toBeNull();
 });
 
 it('corrects a phrase once wherever the site shows it, then leaves it to editors', function () {
