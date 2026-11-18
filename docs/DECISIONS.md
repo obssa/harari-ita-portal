@@ -893,3 +893,22 @@ dates or results.
 
 **Why.** The owner found the homepage too basic and asked for a professional, inspiring design and a creative
 heritage band. The gates-to-pillars idea is the design direction of DESIGN.md ("Jugol Circuit").
+
+## ADR-0047 — Header menus close on an outside click (2026-11-18)
+
+**Decision.** The header menus stay `<details>` elements, which open and close without script. A small module
+(`resources/js/menu.js`, loaded on every public page) closes an open menu when the visitor clicks or taps outside
+it, or presses Escape; Escape returns focus to the menu's button. The menu panels allow their text to wrap: the
+menu row keeps `whitespace-nowrap` so every language fits on one line, but the panels no longer inherit it.
+
+**Why.** The owner found that a menu stayed open after clicking elsewhere, and that link descriptions in the About
+panel ran into each other.
+
+## ADR-0048 — One night band for every page header (2026-11-18)
+
+**Decision.** `x-page-hero` always draws the night band with the hexagon field (the pillar pages' look), replacing
+the light and dark variants of ADR-0012; the saffron tone still adds the orange bar. A `scope-night` class gives the
+surface, line and text tokens their dark-mode values inside the band, so chips, buttons, fields and muted text
+placed there read as they do in dark mode. axe passes on every page whose header changed.
+
+**Why.** The owner found the light and dark headers inconsistent between pages.

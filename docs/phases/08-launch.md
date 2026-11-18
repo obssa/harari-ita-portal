@@ -64,12 +64,13 @@ indexing on.
 
 | # | Step | Commit |
 |---|---|---|
-| 8.0 | **Plan**: this file | |
-| 8.1 | **Launch in place**: go-live runbook, `portal:launch-check`, `portal:remove-samples`, Harari visibility setting | |
-| 8.2 | **Security review**: the ASVS L2 checklist with evidence; fixes | |
-| 8.3 | **Restore drill** on staging, recorded | |
-| 8.4 | **Translations**: Amharic manual chapters 8–13; review list | |
-| 8.5 | **Gate**: the launch check on staging; report with what is ready and what waits for the Agency | |
+| 8.0 | **Plan**: this file | `cb4666e` |
+| 8.1 | **Launch in place**: go-live runbook, `portal:launch-check`, `portal:remove-samples`, Harari visibility setting | `93e40a1`, `8dfc1ac` |
+| 8.2 | **Security review**: the ASVS L2 checklist with evidence; fixes | `93e40a1`, `8dfc1ac` |
+| 8.3 | **Restore drill** on staging, recorded | `93e40a1`, `8dfc1ac` |
+| 8.4 | **Translations**: Amharic manual chapters 8–13; review list | `93e40a1`, `8dfc1ac` |
+| 8.4b | **Content and homepage** (added at the owner's request, 2026-11-18): the samples replaced by the Agency's first content in three languages, and a redesigned homepage (ADR-0045, ADR-0046) | `8118927`, `670ab57` |
+| 8.5 | **Gate**: the launch check on staging; report with what is ready and what waits for the Agency | `d0723eb`, `60293c9`, this report |
 
 ## Decisions to record
 
@@ -86,3 +87,91 @@ All are in INPUTS.md:
 - the Turnstile and Cloudflare accounts;
 - the official sender address for email;
 - the date the Agency wants search engines to start indexing the site.
+
+## Report (2026-11-18)
+
+**Acceptance (PLAN.md §13: Agency content loaded; am/om complete; security review; restore drill; production domain;
+indexing on), with the decisions of 2026-11-18.**
+
+1. **Agency content loaded: done, as far as public sources go.** At the owner's request (ADR-0045) every labelled
+   sample is gone from hita.orcamind.dev (`portal:remove-samples`: "No labelled sample content is left"), and the
+   content pack loaded the Agency's first content in English, Amharic and Afaan Oromo:
+   - the five pillars;
+   - the About, Harar Jugol and Digital Ethiopia 2030 pages, each fact with its source;
+   - four news explainers built on sourced facts;
+   - three awareness advisories;
+   - six courses and two programmes;
+   - three planned projects;
+   - the 16 researched services, without the public "Proposed" mark.
+
+   The Agency's own records stay with the Agency, because they would mislead if invented: directorates, leadership,
+   tenders and vacancies, learners, dated events and figures. `portal:launch-check` lists each, with who supplies it.
+2. **Amharic and Afaan Oromo complete.** `lang:missing` reports both complete. The content pack has every record in
+   both languages, and the Amharic manual chapters 8 to 13 are written. Harari is hidden from visitors until its
+   strings are entered (ADR-0043). Doubtful terms are in `docs/translations-review.md` for the Agency's native
+   speakers.
+3. **Security review: done.** `docs/security-review.md` covers OWASP ASVS level 2 from the code and the live site.
+   - Fixed and checked live: plain HTTP now answers 301 to HTTPS; the language cookie and API key prefix no longer
+     carry the fork's name.
+   - Confirmed: rate limits see visitors' real addresses.
+   - No high finding is open. The open items have owners: two-step sign-in to switch on (Super Admin), and the
+     Turnstile keys and Cloudflare token (Agency).
+4. **Restore drill: done.** A drill database was added on the server. The first drill passed (137 tables, 78
+   migrations, 97 seconds), and it now runs monthly.
+5. **Production domain: decided.** hita.orcamind.dev on the current hosting (ADR-0041). The go-live runbook is
+   rewritten for the launch in place.
+6. **Indexing on: ready, waiting for the Agency's sign-off.** The switch is `APP_ENV=production`, with
+   `portal:launch-check --strict` as its gate. Indexing waits for the Agency's own records and sign-off, so search
+   engines first meet the official site.
+
+**The homepage** (ADR-0046), redesigned at the owner's request:
+- **Opening:** "A thousand years of ideas. A digital future for Harari." with the five pillars as the way in.
+- **Pillars:** the five pillars with a Digital Ethiopia 2030 strip.
+- **Fallbacks:** the programmes and the course catalogue show while nothing has dates.
+- **Closing:** a heritage band, "A thousand years of ideas. Five gates to the future.", with five arches opening
+  the pillars, joined by a lane drawn as a circuit, over UNESCO's facts and credited photographs of Jugol.
+
+Checked in English and Amharic, on desktop and phone (`08-screens/`).
+
+**Fixed after the owner's review (2026-11-18).**
+- **Page headers:** every page header now opens on the same night band as the pillar pages (ADR-0048). Before, some
+  used a light band, which looked inconsistent. A `scope-night` class gives the chips, buttons and fields inside the
+  band their dark colours. axe passes on the 13 pages whose header changed.
+- **Menu panels:** descriptions in the header menu panels wrap instead of running into each other. The menu row's
+  no-wrap rule no longer reaches the panels.
+- **Closing menus:** a header menu closes on a click or tap outside it, or on Escape (ADR-0047). Checked in a
+  browser on staging.
+- **Pillar buttons:** pillar pages lead to their own work (services, programmes, the Academy, open data,
+  advisories), no longer to the volunteer form.
+
+**Checks.**
+
+- **Tests:** the new tests cover the launch check, removing the samples, hidden languages, the content pack in
+  three languages and the homepage. They and the suites the changes touch pass locally; the full suite and the
+  browser test pass in CI. Larastan and Pint are clean, and the hard-coded strings check passes.
+- **Accessibility:** axe found no serious or critical issue (light and dark) on the homepage in three languages,
+  Harar Jugol, Digital Ethiopia 2030, About, a pillar, the Academy, a programme and an advisory.
+- **Lighthouse (mobile, representative runs):** all 26 audited pages pass; the English homepage scores performance 98, accessibility 100 and best practices 96, the Amharic homepage 92, Harar Jugol 99, a pillar 98 and a course 99. The audited pages now include the Agency's content in place of the removed samples. The audited pages now include the Agency's content
+  instead of the removed samples.
+
+**The launch check on staging** (2026-11-18): 5 ready, 3 deferred by decision (Harari, SMS, indexing) and 8 missing.
+All missing items are the Agency's or the Super Admin's:
+- directorates and leadership;
+- the legal adviser's approval of the three legal pages;
+- contact details;
+- the official mail sender;
+- the Turnstile and Cloudflare keys;
+- required two-step sign-in.
+
+**Open for the Agency** (INPUTS.md):
+- its organisation and leaders (with consent);
+- confirmation or correction of the drafted services, courses, programmes and projects;
+- the legal texts and native-speaker review;
+- contact details;
+- Cloudflare and mail accounts;
+- the date to start indexing.
+
+SMS comes last, as decided.
+
+**Next.** This is the last build phase of PLAN.md §13. What remains is the Agency's content and sign-off, then the
+launch steps in `docs/runbook/go-live.md`, and SMS after everything else.

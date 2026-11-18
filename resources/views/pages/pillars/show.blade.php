@@ -38,8 +38,18 @@
                         @if ($translation->summary)
                             <p class="mt-5 max-w-prose text-lg text-night-muted sm:text-xl">{{ $translation->summary }}</p>
                         @endif
+                        @php
+                            // ADR-0046: each pillar leads to its own work (by its English address); others to the services.
+                            [$ctaRoute, $ctaLabel] = match ($pillar->translation('en', fallback: false)?->getAttribute('slug')) {
+                                'innovation-startups' => ['programmes.index', __('innovation.programmes.title')],
+                                'digital-skills' => ['academy.index', __('academy.title')],
+                                'data-infrastructure' => ['datasets.index', __('opendata.title')],
+                                'trust-cyber-awareness' => ['advisories.index', __('advisories.title')],
+                                default => ['services.index', __('homepage.hero.services')],
+                            };
+                        @endphp
                         <p class="mt-8 flex flex-wrap gap-3">
-                            <x-ui.button :href="route('volunteer.create')" variant="action" size="lg">{{ __('nav.volunteer') }}</x-ui.button>
+                            <x-ui.button :href="route($ctaRoute)" variant="action" size="lg">{{ $ctaLabel }}</x-ui.button>
                         </p>
                     </header>
                     @if ($head)

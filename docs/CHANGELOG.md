@@ -16,6 +16,8 @@ All notable changes to the Agency's portal. Newest first.
   three planned projects; no "Proposed" badge on services (ADR-0045).
 - A redesigned homepage: the five pillars as the way in, programmes and courses shown while nothing has dates, and
   a new closing heritage band: five gates, five pillars (ADR-0046).
+- Every page header on the same night band (ADR-0048); header menus close on an outside click or Escape and their
+  panels wrap text (ADR-0047); pillar pages lead to their own work.
 
 ## Unreleased — phase 7: the dashboard, reports and roles
 
