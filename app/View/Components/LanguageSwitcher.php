@@ -24,8 +24,9 @@ final class LanguageSwitcher extends Component
         $urls = $alternates ?? LocalizedUrls::forCurrentRoute();
         $current = app()->getLocale();
 
+        // ADR-0043: hidden languages are not offered, except the one the visitor is reading.
         foreach (Locales::all() as $locale) {
-            if (! isset($urls[$locale])) {
+            if (! isset($urls[$locale]) || ($locale !== $current && Locales::isHidden($locale))) {
                 continue;
             }
             $this->items[] = [

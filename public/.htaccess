@@ -5,6 +5,11 @@
 
     RewriteEngine On
 
+    # Send plain HTTP to HTTPS (ADR-0044). Behind Cloudflare the visitor's scheme arrives in these headers.
+    RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
+    RewriteCond %{HTTP:CF-Visitor} "\"scheme\":\"http\""
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

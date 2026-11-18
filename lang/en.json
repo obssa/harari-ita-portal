@@ -905,6 +905,8 @@
     "admin.settings.site.field.default_locale": "Default language",
     "admin.settings.site.field.default_locale_help": "Used when a visitor's browser does not ask for one of the four languages.",
     "admin.settings.site.field.facebook_feed": "Facebook posts on the site",
+    "admin.settings.site.field.hidden_locales": "Languages hidden from visitors",
+    "admin.settings.site.field.hidden_locales_help": "A hidden language is left out of the language menu, the search engines and the sitemaps until it is ready. Its pages still open from links already shared. English and the default language cannot be hidden.",
     "admin.settings.site.field.hotline": "Hotline",
     "admin.settings.site.field.office_hours": "Office hours (:language)",
     "admin.settings.site.field.show_secondary_calendar": "Also show the other calendar in brackets",

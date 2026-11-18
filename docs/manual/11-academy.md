@@ -1,8 +1,7 @@
 # The Academy
 
 This chapter is for the Agency staff who run courses (academy coordinators) and the people who teach them
-(instructors). Each section says who may do it. An Amharic version will follow once the Agency has reviewed this
-English text.
+(instructors). Each section says who may do it. Amharic version: [11-academy.am.md](11-academy.am.md).
 
 Everything is under **Academy** in the admin: Courses, Cohorts, Instructors and Certificates.
 

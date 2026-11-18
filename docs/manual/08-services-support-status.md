@@ -1,7 +1,7 @@
 # Services, IT support and service status
 
 For the Agency's staff who publish services, answer IT support requests and keep the status page up to date. Each
-section says who may do it. An Amharic version follows once the Agency has reviewed this English text.
+section says who may do it. Amharic version: [08-services-support-status.am.md](08-services-support-status.am.md).
 
 Everything is under **Services & support** in the admin.
 

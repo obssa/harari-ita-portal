@@ -8,6 +8,7 @@ use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Import\Models\ContentSource;
 use App\Models\User;
 use App\Settings\SecuritySettings;
+use App\Settings\SiteSettings;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -99,4 +100,14 @@ function sampleImportSources(): void
             'name' => $name, 'priority' => $priority, 'default_locale' => 'am', 'enabled' => true, 'auto_publish' => $trusted,
         ]);
     }
+}
+
+/**
+ * Offers every language to visitors (ADR-0043 hides Harari by default until its strings are entered).
+ */
+function showAllLanguages(): void
+{
+    $settings = app(SiteSettings::class);
+    $settings->hidden_locales = [];
+    $settings->save();
 }

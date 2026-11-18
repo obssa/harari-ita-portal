@@ -1,7 +1,6 @@
 # The dashboard, reports and exports
 
-This chapter is for all staff, and in particular for directorate heads and administrators. An Amharic version will
-follow once the Agency has reviewed this English text.
+This chapter is for all staff, and in particular for directorate heads and administrators. Amharic version: [13-dashboard-reports.am.md](13-dashboard-reports.am.md).
 
 ## 1. Your dashboard
 

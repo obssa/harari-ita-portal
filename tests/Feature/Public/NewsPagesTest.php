@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Translation\Support\Locales;
 use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Content\Actions\SavePost;
 use App\Domain\Content\Models\Post;
@@ -105,7 +106,7 @@ it('answers 404 for drafts, unknown slugs and slugs of another language', functi
 it('lets public news pages be cached and keeps them free of session cookies', function () {
     $post = newsPost(['en' => ['title' => 'Cacheable']], ['en']);
 
-    $response = $this->withUnencryptedCookie('hpp_locale', 'en')->get('/en/news/'.$post->translation('en')?->slug)->assertOk();
+    $response = $this->withUnencryptedCookie(Locales::COOKIE, 'en')->get('/en/news/'.$post->translation('en')?->slug)->assertOk();
     expect($response->headers->get('Cache-Control'))->toContain('s-maxage')
         ->and($response->headers->getCookies())->toBe([]);
 });

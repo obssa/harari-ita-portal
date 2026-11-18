@@ -13,6 +13,9 @@ class SiteSettings extends Settings
 {
     public string $default_locale;
 
+    /** @var list<string> ADR-0043: languages kept off the switcher, hreflang and sitemaps until they are ready */
+    public array $hidden_locales = [];
+
     /** Which calendar leads in dual dates: "ethiopian" or "gregorian". */
     public string $calendar_primary;
 

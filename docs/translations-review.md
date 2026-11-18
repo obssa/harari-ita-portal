@@ -52,3 +52,14 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | bidder | ተጫራች | dorgomaa caalbaasii | `opportunities.admin.help.closes_locked` | |
 | advisory (safety guidance) / severity: info, advisory, warning | የደህንነት ምክር / መረጃ፣ ምክር፣ ማስጠንቀቂያ | gorsa nageenyaa / odeeffannoo, gorsa, akeekkachiisa | `advisories.*` | Am "ምክር" is used both for the post type and the middle level; check whether "ጥንቃቄ" reads better for the level |
 | phishing | ማጭበርበሪያ መልእክት | ergaa gowwoomsaa | sample content only | Used in the sample advisory; for the tech glossary |
+| RSS feed | በRSS ይከተሉ (button) / የRSS መጋቢ (text) | — | `news.feed`, `opportunities.feed`, `advisories.feed`, manual 08, 12 | ምግብ (food) was replaced; check መጋቢ in running text |
+| innovation (admin section vs. public text) | ኢኖቬሽን (admin menu) / ፈጠራ (public) | kalaqa | `admin.nav.innovation`, `nav.innovation`, manual 09 | Two Amharic words for one idea; the Agency may want one |
+| weekly digest; time "08:00" | ሳምንታዊ ማጠቃለያ; "በየሰኞ በ08:00" | cuunfaa torbanii | `notifications.kind.digest`, manual 13 | Written without "in the morning" so it is not read on the Ethiopian clock (2 in the morning); confirm how the Agency writes times |
+| phase (of development) vs. chapter | የልማት ምዕራፍ / ምዕራፍ | — | manuals 12, 13 | ምዕራፍ means both; "የልማት" added to tell them apart |
+| incident (cyber) | የሳይበር ጥቃት | balaa saayibarii | `advisories.report.*`, manual 12 | ጥቃት is "attack", narrower than "incident"; check the INSA wording |
+| signatory | ፈራሚው | mallattoo kan godhu | `academy.field.signatory_*`, manual 11 | |
+| private link | የግል ማስፈንጠሪያ | hidhaa dhuunfaa | `academy.enrol.*`, manual 11 | Other manuals use ሊንክ or ማገናኛ; one word should be chosen |
+| cancel (a cohort) vs. delete | ሰርዝ / ከሥርዓቱ ማስወገድ | haquu / balleessuu | manual 11 | Kept apart on purpose |
+| retention period | የማቆያ ጊዜ | yeroo kuusaa | manuals 08, 09 | |
+| production / staging site | ዋናው ድረ ገጽ / የሙከራ ድረ ገጽ | marsariitii ijoo / qorannoo | manuals 08 to 11 | |
+| exports (heading) | ፋይሎችን ማውጣት | baasuu | manual 13, `admin.export.csv` | The button reads "በCSV ላክ" |

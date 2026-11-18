@@ -2,7 +2,7 @@
 
 This chapter is for the Agency staff who run the startups directory, the incubation and other programmes, and
 innovation challenges and hackathons. It is also for the judges who score challenge teams. Each section says who
-may do it. An Amharic version will follow once the Agency has reviewed this English text.
+may do it. Amharic version: [09-innovation.am.md](09-innovation.am.md).
 
 Everything is under **Innovation** in the admin.
 

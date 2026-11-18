@@ -40,7 +40,8 @@ final class SitemapController extends Controller
     public function index(): Response
     {
         $xml = Cache::remember('sitemap:index', self::TTL, fn (): string => view('feeds.sitemap-index', [
-            'locales' => Locales::all(),
+            // ADR-0043: hidden languages have no sitemap in the index.
+            'locales' => Locales::shown(),
         ])->render());
 
         return $this->xml($xml);
@@ -65,7 +66,7 @@ final class SitemapController extends Controller
         $entries = [];
         foreach (['home', 'news.index', 'leaders.index', 'offices.index', 'services.index', 'startups.index', 'programmes.index', 'challenges.index', 'pillars.index', 'structure', 'gallery.index', 'videos.index', 'events.index', 'documents.index', 'opportunities.index', 'advisories.index', 'projects.index', 'projects.numbers', 'datasets.index', 'developers', 'academy.index', 'contact', 'press', 'get-involved', 'social'] as $route) {
             $alternates = [];
-            foreach (Locales::all() as $locale) {
+            foreach (Locales::shown() as $locale) {
                 $alternates[$locale] = route($route, ['locale' => $locale]);
             }
             $entries[] = ['url' => $alternates[$language], 'lastmod' => null, 'alternates' => $alternates];
@@ -100,7 +101,7 @@ final class SitemapController extends Controller
         $pages = Page::query()->with('translations')->get();
         foreach ($pages as $page) {
             $alternates = [];
-            foreach (Locales::all() as $locale) {
+            foreach (Locales::shown() as $locale) {
                 $translation = $page->translation($locale, fallback: false);
                 $path = $page->path($locale);
                 if ($translation instanceof PageTranslation && $translation->isLive() && ! $translation->noindex && $path !== null) {

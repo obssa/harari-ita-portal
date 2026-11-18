@@ -71,6 +71,7 @@ it('returns 404 for languages the portal does not serve', function (string $path
 })->with(['/fr', '/EN', '/amh', '/about']);
 
 it('lists every language version and the default for search engines', function () {
+    showAllLanguages();
     $response = $this->get('/om')->assertOk();
 
     foreach (['en', 'am', 'om', 'har'] as $locale) {
@@ -81,6 +82,7 @@ it('lists every language version and the default for search engines', function (
 });
 
 it('offers every language in its own script and marks the current one', function () {
+    showAllLanguages();
     $this->get('/om')
         ->assertOk()
         ->assertSee('lang="am" hreflang="am"', escape: false)

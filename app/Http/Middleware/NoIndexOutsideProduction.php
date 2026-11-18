@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Domain\Translation\Support\Locales;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,8 @@ final class NoIndexOutsideProduction
         /** @var Response $response */
         $response = $next($request);
 
-        if (! app()->environment('production')) {
+        // ADR-0043: a language hidden from visitors is not indexed either.
+        if (! app()->environment('production') || Locales::isHidden(app()->getLocale())) {
             $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
         }
 

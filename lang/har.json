@@ -905,6 +905,8 @@
     "admin.settings.site.field.default_locale": "",
     "admin.settings.site.field.default_locale_help": "",
     "admin.settings.site.field.facebook_feed": "",
+    "admin.settings.site.field.hidden_locales": "",
+    "admin.settings.site.field.hidden_locales_help": "",
     "admin.settings.site.field.hotline": "",
     "admin.settings.site.field.office_hours": "",
     "admin.settings.site.field.show_secondary_calendar": "",

@@ -905,6 +905,8 @@
     "admin.settings.site.field.default_locale": "Afaan durtii",
     "admin.settings.site.field.default_locale_help": "Yeroo barbaaduun daawwataa afaanota afran keessaa tokko hin gaafanne itti fayyadama.",
     "admin.settings.site.field.facebook_feed": "Barreeffamoota Facebook marsariitii irratti",
+    "admin.settings.site.field.hidden_locales": "Afaanota daawwattoota irraa dhokfaman",
+    "admin.settings.site.field.hidden_locales_help": "Afaan dhokfame hanga qophaa'utti tarree afaanii, maashinoota barbaacha fi kaartaa marsariitii irraa ni hafa. Fuulonni isaa hidhaa duraan qoodaman irraa ammallee ni banamu. Ingiliffaa fi afaan durtii dhokfamuu hin danda'an.",
     "admin.settings.site.field.hotline": "Sarara bilisaa",
     "admin.settings.site.field.office_hours": "Sa'aatii hojii (:language)",
     "admin.settings.site.field.show_secondary_calendar": "Dhaha guyyaa isa kaanis xaxxamaa keessatti agarsiisi",

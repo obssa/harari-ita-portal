@@ -1,8 +1,7 @@
 # Opportunities and advisories
 
 This chapter is for the Agency staff who publish tenders, calls, vacancies and internships (procurement officers)
-and for those who publish safety advisories (communications editors). Each section says who may do it. An Amharic
-version will follow once the Agency has reviewed this English text.
+and for those who publish safety advisories (communications editors). Each section says who may do it. Amharic version: [12-opportunities-advisories.am.md](12-opportunities-advisories.am.md).
 
 Opportunities are under **Opportunities** in the admin. Advisories are posts, under **Content → Posts**.
 

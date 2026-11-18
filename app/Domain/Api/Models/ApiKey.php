@@ -33,7 +33,7 @@ class ApiKey extends Model
     use LogsActivity;
 
     /** Every key starts with this, so a leaked one is easy to recognise. */
-    public const PREFIX = 'hpp_';
+    public const PREFIX = 'hita_';
 
     protected $fillable = ['name', 'scopes', 'rate_per_minute', 'notes', 'expires_at'];
 

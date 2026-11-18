@@ -769,3 +769,75 @@ is sent).
   in Ethiopia a "starts tomorrow" reminder could go on the first day itself).
 
 **Why.** PLAN.md §7 (roles) and §13 (phase 7: each role sees only its work).
+
+## ADR-0041 — Launch in place on hita.orcamind.dev (2026-11-18)
+
+**Decision** (Ramin, 2026-11-18).
+
+- The production site is **hita.orcamind.dev on the current hosting**. There is no `.gov.et` move and no second
+  installation: the launch turns this installation into production (`docs/runbook/go-live.md`):
+  1. the Agency's content is in;
+  2. the samples are removed;
+  3. `APP_ENV=production` lifts `noindex` and the "Test site" notice;
+  4. the sitemaps are submitted.
+- **SMS** is set up after everything else (an Ethio Telecom account and sender ID). Until then text messages go to
+  the log driver, and email carries every message where the person gave an address.
+- The data localisation question PLAN.md §11 raised under Proclamation 1321/2024 stays the Agency's to settle; the
+  decision to stay on the current hosting is recorded here.
+
+**Why.** The owner's decision for phase 8. It removes the second installation the fork's runbook assumed.
+
+## ADR-0042 — The launch check and removing the samples (2026-11-18)
+
+**Decision.**
+
+- `portal:launch-check` lists what stands between the site and launch, each **ready**, **missing** (with who
+  supplies it) or **deferred** by decision:
+  - labelled samples left;
+  - directorates, leadership and services;
+  - legal pages still marked as drafts;
+  - contact details;
+  - Harari;
+  - demo accounts;
+  - mail;
+  - Turnstile;
+  - the Cloudflare token;
+  - SMS;
+  - two-step sign-in required;
+  - a recent backup and a passing restore drill;
+  - indexing.
+
+  It changes nothing. With `--strict` it fails while anything is missing, as the last check before the switch.
+- `portal:remove-samples` runs every sample command's `--remove`, then reports any record still labelled as a
+  sample. It refuses in production, so it runs before the switch.
+
+**Why.** PLAN.md §13 phase 8. With the launch in place, one command must say what is left and who owns it.
+
+## ADR-0043 — Hiding a language until it is ready (2026-11-18)
+
+**Decision.**
+
+- Site settings → **Languages hidden from visitors**. A hidden language is left out of:
+  - the language menu, except while a visitor is reading in it;
+  - the hreflang links;
+  - the sitemap index.
+
+  Its pages still answer at their addresses, with `X-Robots-Tag: noindex`. English and the default language
+  cannot be hidden.
+- Harari starts hidden: its interface strings are empty and its pages fall back to Amharic. The go-live runbook
+  asks for Harari strings or Harari hidden. An administrator shows it once its translator has entered the strings.
+
+**Why.** A language offered to visitors and search engines should be one the Agency stands behind.
+
+## ADR-0044 — HTTPS only, and the fork's names retired (2026-11-18)
+
+**Decision.**
+
+- `public/.htaccess` sends plain HTTP to HTTPS with a 301. It reads the visitor's scheme from `X-Forwarded-Proto`
+  or `CF-Visitor`, because Cloudflare stands in front. HSTS was already sent, but a first visit over HTTP was
+  answered with the page.
+- The language cookie becomes `hita_locale` (was `hpp_locale`) and API keys start with `hita_` (were `hpp_`), so
+  nothing on the wire carries the fork's name. Existing visitors choose their language once more; no API keys
+  existed yet.
+
+**Why.** Found in the security review (`docs/security-review.md`, V9 and V13).

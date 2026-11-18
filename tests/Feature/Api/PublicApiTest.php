@@ -99,7 +99,7 @@ it('refuses requests without a usable key and stops an address that keeps guessi
         ->assertUnauthorized()
         ->assertJsonPath('message', __('api.error.unauthenticated'))
         ->assertHeader('WWW-Authenticate');
-    $this->getJson('/api/v1/posts', ['X-Api-Key' => 'hpp_wrong'])->assertUnauthorized();
+    $this->getJson('/api/v1/posts', ['X-Api-Key' => 'hita_wrong'])->assertUnauthorized();
 
     $revoked = apiKey();
     app(IssueApiKey::class)->revoke(ApiKey::query()->latest('id')->firstOrFail());
@@ -112,7 +112,7 @@ it('refuses requests without a usable key and stops an address that keeps guessi
 
     RateLimiter::clear('api-failed:127.0.0.1');
     for ($i = 0; $i < AuthenticateApiKey::FAILURES_PER_MINUTE; $i++) {
-        $this->getJson('/api/v1/posts', ['X-Api-Key' => 'hpp_guess'.$i]);
+        $this->getJson('/api/v1/posts', ['X-Api-Key' => 'hita_guess'.$i]);
     }
     $this->getJson('/api/v1/posts', ['X-Api-Key' => apiKey()])
         ->assertStatus(429)

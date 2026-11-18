@@ -203,7 +203,7 @@
  * CSS scroll timelines where the browser has them and are skipped elsewhere; nothing moves for people
  * who ask for reduced motion.
  */
-@keyframes hpp-rise {
+@keyframes hita-rise {
     from {
         transform: translateY(1.5rem);
         filter: blur(6px);
@@ -214,7 +214,7 @@
     }
 }
 
-@keyframes hpp-reveal {
+@keyframes hita-reveal {
     from {
         transform: translateY(2.5rem) scale(0.98);
     }
@@ -223,7 +223,7 @@
     }
 }
 
-@keyframes hpp-zoom {
+@keyframes hita-zoom {
     from {
         transform: scale(1.02);
     }
@@ -232,13 +232,13 @@
     }
 }
 
-@keyframes hpp-spin {
+@keyframes hita-spin {
     to {
         transform: rotate(360deg);
     }
 }
 
-@keyframes hpp-float {
+@keyframes hita-float {
     50% {
         transform: translateY(-0.5rem);
     }
@@ -246,29 +246,29 @@
 
 @media (prefers-reduced-motion: no-preference) {
     .animate-rise {
-        animation: hpp-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+        animation: hita-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
         animation-delay: var(--rise-delay, 0ms);
     }
 
     .animate-zoom {
-        animation: hpp-zoom 28s ease-in-out infinite alternate;
+        animation: hita-zoom 28s ease-in-out infinite alternate;
     }
 
     .animate-spin-slow {
-        animation: hpp-spin 120s linear infinite;
+        animation: hita-spin 120s linear infinite;
     }
 
     .animate-spin-slower {
-        animation: hpp-spin 180s linear infinite reverse;
+        animation: hita-spin 180s linear infinite reverse;
     }
 
     .animate-float {
-        animation: hpp-float 6s ease-in-out infinite;
+        animation: hita-float 6s ease-in-out infinite;
     }
 
     @supports (animation-timeline: view()) {
         .reveal {
-            animation: hpp-reveal linear both;
+            animation: hita-reveal linear both;
             animation-timeline: view();
             animation-range: entry 0% entry 60%;
         }
@@ -323,13 +323,13 @@
     transform-origin: left;
 }
 
-@keyframes hpp-progress {
+@keyframes hita-progress {
     to {
         transform: scaleX(1);
     }
 }
 
-@keyframes hpp-focus {
+@keyframes hita-focus {
     from {
         transform: scale(1.05);
         filter: blur(12px);
@@ -342,7 +342,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
     [data-carousel][data-running] [data-progress] {
-        animation: hpp-progress var(--slide-duration, 7s) linear forwards;
+        animation: hita-progress var(--slide-duration, 7s) linear forwards;
     }
 
     [data-carousel][data-held] [data-progress] {
@@ -350,7 +350,7 @@
     }
 
     [data-carousel][data-mode='focus'] [data-track] > .is-entering {
-        animation: hpp-focus 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+        animation: hita-focus 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) both;
     }
 }
 

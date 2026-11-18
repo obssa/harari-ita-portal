@@ -11,12 +11,14 @@ use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use UnitEnum;
@@ -99,6 +101,12 @@ class ManageSiteSettings extends SettingsPage
                             ->required(),
                         Toggle::make('show_secondary_calendar')
                             ->label(__('admin.settings.site.field.show_secondary_calendar')),
+                        CheckboxList::make('hidden_locales')
+                            ->label(__('admin.settings.site.field.hidden_locales'))
+                            ->helperText(__('admin.settings.site.field.hidden_locales_help'))
+                            ->options(fn (Get $get): array => collect($locales)->reject(fn (string $l): bool => $l === 'en' || $l === $get('default_locale'))
+                                ->mapWithKeys(fn (string $l): array => [$l => Locales::nativeName($l)])->all())
+                            ->columns(3),
                     ]),
 
                 Section::make(__('admin.settings.site.section.contact'))
@@ -156,6 +164,7 @@ class ManageSiteSettings extends SettingsPage
      */
     protected function mutateFormDataBeforeSave(array $data): array
     {
+        $data['hidden_locales'] = array_values(array_diff(array_map('strval', (array) ($data['hidden_locales'] ?? [])), ['en', (string) ($data['default_locale'] ?? '')]));
         foreach (['address', 'office_hours', 'social_links'] as $key) {
             $data[$key] = array_filter((array) ($data[$key] ?? []), fn (mixed $v): bool => filled($v));
         }

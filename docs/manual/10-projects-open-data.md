@@ -1,8 +1,7 @@
 # Projects and open data
 
 This chapter is for the Agency staff who report on projects (project managers) and who publish open data (data
-stewards). Each section says who may do it. An Amharic version will follow once the Agency has reviewed this
-English text.
+stewards). Each section says who may do it. Amharic version: [10-projects-open-data.am.md](10-projects-open-data.am.md).
 
 Everything is under **Projects & data** in the admin.
 

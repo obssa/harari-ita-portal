@@ -2,6 +2,16 @@
 
 All notable changes to the Agency's portal. Newest first.
 
+## Unreleased — phase 8: content, translations, hardening and launch
+
+- The launch is in place on hita.orcamind.dev (ADR-0041); the go-live runbook is rewritten for it.
+- `portal:launch-check` lists what is ready, missing (and who supplies it) or deferred; `portal:remove-samples`
+  removes every labelled sample set (ADR-0042).
+- Site settings → Languages hidden from visitors; Harari is hidden until its strings are entered (ADR-0043).
+- Plain HTTP is sent to HTTPS; the language cookie and API keys no longer carry the fork's name (ADR-0044).
+- The security review (`docs/security-review.md`, OWASP ASVS level 2) and the first restore drill on staging.
+- Manual: the Amharic chapters 8 to 13.
+
 ## Unreleased — phase 7: the dashboard, reports and roles
 
 - Five dashboard widgets with live records, scoped to each person's directorates: Digital Harar at a glance, the

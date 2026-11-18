@@ -25,7 +25,8 @@ final class LocaleMeta extends Component
      */
     public function __construct(?array $alternates = null)
     {
-        $this->urls = $alternates ?? LocalizedUrls::forCurrentRoute();
+        // ADR-0043: hidden languages are left out of hreflang.
+        $this->urls = array_filter($alternates ?? LocalizedUrls::forCurrentRoute(), fn (string $locale): bool => ! Locales::isHidden($locale), ARRAY_FILTER_USE_KEY);
         $this->default = $this->urls[Locales::default()] ?? null;
         $this->canonical = $this->urls[app()->getLocale()] ?? url()->current();
     }

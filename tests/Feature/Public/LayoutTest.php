@@ -15,6 +15,7 @@ it('gives every page landmarks, a skip link and a labelled main menu', function 
 });
 
 it('links every language version and the default for search engines', function () {
+    showAllLanguages();
     $html = (string) $this->get('/om')->getContent();
 
     expect(substr_count($html, 'rel="alternate" hreflang='))->toBe(5)
@@ -68,6 +69,7 @@ it('shows the year in both calendars and marks the test site outside production'
 });
 
 it('offers the four languages on the home page, each in its own language', function () {
+    showAllLanguages();
     $html = (string) $this->get('/en')->getContent();
 
     foreach (Locales::all() as $locale) {
@@ -79,7 +81,7 @@ it('offers the four languages on the home page, each in its own language', funct
 it('still renders the footer when the settings cannot be read', function () {
     app()->bind(SiteSettings::class, fn () => throw new RuntimeException('settings unavailable'));
 
-    $this->withUnencryptedCookie('hpp_locale', 'en')->get('/en')
+    $this->withUnencryptedCookie(Locales::COOKIE, 'en')->get('/en')
         ->assertOk()
         ->assertSee(__('footer.contact_soon', [], 'en'));
 });

@@ -2,7 +2,9 @@
 
 namespace App\Domain\Translation\Support;
 
+use App\Settings\SiteSettings;
 use Illuminate\Http\Request;
+use Throwable;
 
 /**
  * The portal's languages and how a visitor's language is chosen
@@ -11,7 +13,7 @@ use Illuminate\Http\Request;
 final class Locales
 {
     /** Remembers the visitor's language choice for one year (unencrypted, not sensitive). */
-    public const COOKIE = 'hpp_locale';
+    public const COOKIE = 'hita_locale';
 
     /**
      * @return list<string>
@@ -19,6 +21,40 @@ final class Locales
     public static function all(): array
     {
         return array_values(array_map('strval', (array) config('portal.locales')));
+    }
+
+    /**
+     * The languages offered to visitors (ADR-0043): all but those an administrator hid until they are ready. English
+     * and the default language are never hidden. Hidden languages still answer at their address, without being
+     * offered or indexed.
+     *
+     * @return list<string>
+     */
+    public static function shown(): array
+    {
+        $hidden = self::hidden();
+
+        return array_values(array_filter(self::all(), fn (string $locale): bool => ! in_array($locale, $hidden, true)));
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function hidden(): array
+    {
+        try {
+            $hidden = (array) app(SiteSettings::class)->hidden_locales;
+        } catch (Throwable) {
+            return [];
+        }
+        $keep = ['en', self::default()];
+
+        return array_values(array_filter(array_map('strval', $hidden), fn (string $locale): bool => in_array($locale, self::all(), true) && ! in_array($locale, $keep, true)));
+    }
+
+    public static function isHidden(string $locale): bool
+    {
+        return in_array($locale, self::hidden(), true);
     }
 
     /** @var (\Closure(): ?string)|null */
