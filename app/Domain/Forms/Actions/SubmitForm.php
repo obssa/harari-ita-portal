@@ -11,6 +11,7 @@ use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Notifications\NewTicketNotice;
 use App\Domain\Forms\Support\FormField;
 use App\Domain\Forms\Support\InboxScope;
+use App\Domain\Forms\Support\SubmissionAbout;
 use App\Domain\Forms\Support\WorkingDays;
 use App\Domain\Media\Enums\MediaKind;
 use App\Domain\Media\Exceptions\RejectedUpload;
@@ -41,7 +42,7 @@ final class SubmitForm
     public function __construct(private readonly UploadInspector $inspector) {}
 
     /**
-     * @param  array<string, mixed>  $input  name, email, phone and answers keyed by question
+     * @param  array<string, mixed>  $input  name, email, phone, answers keyed by question and what it is about
      * @param  array<string, UploadedFile>  $uploads  keyed by question
      */
     public function handle(Form $form, array $input, array $uploads, string $locale): FormSubmission
@@ -103,8 +104,13 @@ final class SubmitForm
             throw ValidationException::withMessages($errors);
         }
 
+        // ADR-0053: kept only when the item is public and really uses this form.
+        $about = SubmissionAbout::accept(isset($input['about']) ? (string) $input['about'] : null, $form, $locale);
+
         $submission = new FormSubmission([
             'form_id' => $form->id,
+            'about_type' => $about['type'] ?? null,
+            'about_id' => $about['id'] ?? null,
             'office_id' => $form->office_id,
             'locale' => $locale,
             'reference' => FormSubmission::newReference(),

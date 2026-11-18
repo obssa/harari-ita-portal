@@ -5,6 +5,7 @@ namespace App\Domain\Services\Actions;
 use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Content\Actions\WriteTranslations;
 use App\Domain\Content\Models\Category;
+use App\Domain\Forms\Models\Form;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Services\Enums\ServiceAudience;
 use App\Domain\Services\Enums\ServiceChannel;
@@ -65,17 +66,24 @@ final class SaveServiceItem
             $errors['data.office_id'] = __('services.validation.office_scope');
         }
 
+        $formId = filled($data['request_form_id'] ?? null) ? (string) $data['request_form_id'] : null;
+        if ($formId !== null && Form::query()->whereKey($formId)->where('active', true)->doesntExist()) {
+            $errors['data.request_form_id'] = __('services.validation.request_form');
+        }
+
         if ($errors !== []) {
             throw ValidationException::withMessages($errors);
         }
 
-        return DB::transaction(function () use ($service, $data, $translations, $actor, $channels, $audiences, $url, $categoryId, $officeId): ServiceItem {
+        return DB::transaction(function () use ($service, $data, $translations, $actor, $channels, $audiences, $url, $categoryId, $officeId, $formId): ServiceItem {
             $service->fill([
                 'category_id' => $categoryId,
                 'office_id' => $officeId,
                 'channels' => $channels,
                 'audiences' => $audiences,
                 'external_url' => $url,
+                'accepts_requests' => (bool) ($data['accepts_requests'] ?? true),
+                'request_form_id' => $formId,
                 'featured' => (bool) ($data['featured'] ?? false),
                 'proposed' => (bool) ($data['proposed'] ?? false),
                 'rank' => max(0, (int) ($data['rank'] ?? 0)),

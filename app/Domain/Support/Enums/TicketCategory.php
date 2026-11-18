@@ -7,6 +7,8 @@ namespace App\Domain\Support\Enums;
  */
 enum TicketCategory: string
 {
+    /** Asking for one of the Agency's services from its page (ADR-0053). */
+    case ServiceRequest = 'service_request';
     case Hardware = 'hardware';
     case Network = 'network';
     case Software = 'software';

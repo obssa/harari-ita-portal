@@ -7,6 +7,7 @@ use App\Domain\Forms\Actions\SubmitForm;
 use App\Domain\Forms\Models\Form;
 use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Models\FormTranslation;
+use App\Domain\Forms\Support\SubmissionAbout;
 use App\Domain\Organisation\Enums\OfficeType;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Queries\PublicDirectory;
@@ -31,11 +32,13 @@ final class FormController extends Controller
 {
     private const SESSION_KEY = 'forms.verified';
 
-    public function show(string $slug, Turnstile $turnstile): View
+    public function show(Request $request, string $slug, Turnstile $turnstile): View
     {
         [$form, $translation] = $this->find($slug);
+        $token = $request->query('about');
 
         return view('pages.forms.show', [
+            'about' => SubmissionAbout::accept(is_string($token) ? $token : null, $form, app()->getLocale()),
             'form' => $form,
             'translation' => $translation,
             'turnstileKey' => $turnstile->siteKey(),
@@ -56,6 +59,7 @@ final class FormController extends Controller
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'answers' => (array) $request->input('answers', []),
+            'about' => $request->input('about'),
         ], $uploads, app()->getLocale());
 
         self::remember($request, $submission);

@@ -1,4 +1,4 @@
-@props(['form', 'translation', 'turnstileKey' => null])
+@props(['form', 'translation', 'turnstileKey' => null, 'about' => null])
 @use('App\Domain\Forms\Support\FormField')
 @php
     $locale = app()->getLocale();
@@ -8,6 +8,9 @@
 <form method="post" action="{{ route('forms.submit', ['locale' => $translation->locale, 'slug' => $translation->slug]) }}" @if ($form->hasFileQuestions()) enctype="multipart/form-data" @endif
       {{ $attributes->class('max-w-xl space-y-5') }} novalidate>
     @csrf
+    @if ($about)
+        <input type="hidden" name="about" value="{{ \App\Domain\Forms\Support\SubmissionAbout::token($about['type'], $about['id']) }}">
+    @endif
     @error('form')
         <p role="alert" class="rounded-card border border-danger-600/40 bg-danger-50 px-4 py-3 text-danger-800">{{ $message }}</p>
     @enderror

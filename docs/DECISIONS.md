@@ -1015,3 +1015,23 @@ Communication.
 **Why.** The owner found the menu cluttered. It was all HinTA's own functionality (no party-era item was left), but
 the groups appeared in the order the code was discovered, Content held 17 entries mixing editorial work with site
 plumbing, three groups held one or two entries, and the labels mixed Title Case and sentence case.
+
+## ADR-0053 — Every offering leads to a request, answered in the admin (2026-11-19)
+
+**Decision.** A service page always offers **Request this service** unless the service is switched off as
+information only (`accepts_requests`, on by default, also for proposed services). The button leads:
+1. to the service's own **request form** (`request_form_id`, a form from Communication → Forms) when that form is
+   active and live in the reader's language; the form carries a hidden `about=service.<id>`;
+2. otherwise to the service desk form, `support/new?service=<slug>`, which then reads "Request a service", names
+   the service, chooses it and the new category **Service request**, and fills the subject.
+
+- **Tickets** show, filter and link the service. The public form only ties a ticket to a service its reader can
+  see; staff may log a ticket against any service, drafts included.
+- **Form submissions** get one "about" link (`about_type`, `about_id`) instead of a column per kind. The server
+  keeps it only when the item is public and really uses that form, so an address cannot file a message against
+  something else. The Inbox shows and filters it.
+- **Opportunities (next step):** calls, vacancies and internships may take an application form; tenders do not,
+  since bids go in sealed with a bid opening; they keep their documents and a question link.
+
+**Why.** The owner found service pages that listed steps but led nowhere. The desk already stored a ticket's
+service and answered by email and SMS, so the request reuses it instead of building a second inbox.

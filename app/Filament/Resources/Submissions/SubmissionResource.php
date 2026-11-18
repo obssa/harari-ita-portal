@@ -7,7 +7,9 @@ use App\Domain\Forms\Models\Form;
 use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Support\AnswerText;
 use App\Domain\Forms\Support\InboxScope;
+use App\Domain\Forms\Support\SubmissionAbout;
 use App\Domain\Translation\Support\Locales;
+use App\Filament\Resources\Services\ServiceItemResource;
 use App\Filament\Resources\Submissions\Pages\ListSubmissions;
 use App\Filament\Resources\Submissions\Pages\ViewSubmission;
 use App\Filament\Resources\Submissions\RelationManagers\NotesRelationManager;
@@ -99,6 +101,7 @@ class SubmissionResource extends Resource
             ->columns([
                 TextColumn::make('reference')->label(__('forms.reference'))->fontFamily('mono')->searchable()->copyable(),
                 TextColumn::make('form')->label(__('forms.form'))->state(fn (FormSubmission $record): string => $record->form->title())->wrap(),
+                TextColumn::make('about')->label(__('forms.about.label'))->state(fn (FormSubmission $record): ?string => SubmissionAbout::describe($record)['title'] ?? null)->placeholder('—')->wrap()->toggleable(),
                 TextColumn::make('status')->label(__('forms.status_label'))->badge()
                     ->formatStateUsing(fn (SubmissionStatus $state): string => $state->label())
                     ->color(fn (SubmissionStatus $state): string => $state->color()),
@@ -112,6 +115,7 @@ class SubmissionResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('status')->label(__('forms.status_label'))->options(SubmissionStatus::options()),
+                SelectFilter::make('about_type')->label(__('forms.about.label'))->options(SubmissionAbout::kinds()),
                 SelectFilter::make('form_id')->label(__('forms.form'))
                     ->options(fn (): array => Form::query()->withTrashed()->with('translations')->get()->mapWithKeys(fn (Form $f): array => [$f->id => $f->title()])->all()),
                 Filter::make('open')->label(__('forms.inbox.filter.open'))->default()
@@ -142,6 +146,10 @@ class SubmissionResource extends Resource
             Section::make(__('admin.posts.section.details'))->columnSpan(['default' => 3, 'lg' => 1])->schema([
                 TextEntry::make('reference')->label(__('forms.reference'))->fontFamily('mono')->copyable(),
                 TextEntry::make('form_title')->label(__('forms.form'))->state(fn (FormSubmission $record): string => $record->form->title()),
+                TextEntry::make('about')->label(__('forms.about.label'))
+                    ->state(fn (FormSubmission $record): ?string => ($about = SubmissionAbout::describe($record)) !== null ? $about['kind'].' · '.$about['title'] : null)
+                    ->url(fn (FormSubmission $record): ?string => ($about = SubmissionAbout::describe($record)) !== null && ! $about['record']->trashed() ? ServiceItemResource::getUrl('edit', ['record' => $about['record']]) : null)
+                    ->visible(fn (FormSubmission $record): bool => $record->about_type !== null),
                 TextEntry::make('status')->label(__('forms.status_label'))->badge()
                     ->formatStateUsing(fn (SubmissionStatus $state): string => $state->label())->color(fn (SubmissionStatus $state): string => $state->color()),
                 TextEntry::make('office_name')->label(__('forms.admin.field.office'))->state(fn (FormSubmission $record): ?string => $record->office?->name())->placeholder('—'),

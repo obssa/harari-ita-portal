@@ -132,7 +132,7 @@ class Ticket extends Model
      */
     public function serviceItem(): BelongsTo
     {
-        return $this->belongsTo(ServiceItem::class);
+        return $this->belongsTo(ServiceItem::class)->withTrashed();
     }
 
     /**

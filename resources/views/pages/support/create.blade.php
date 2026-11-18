@@ -5,9 +5,14 @@
     $field = 'mt-1 block w-full rounded-control border border-line bg-surface px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/30';
     $describe = fn (string $name, ?string $help = null): string => trim(($help ? "{$name}-help " : '').($errors->has($name) ? "{$name}-error" : ''));
 @endphp
-<x-layouts.public :title="__('support.public.title')" :description="__('support.public.description')">
+@php
+    // ADR-0053: arriving from a service page, the form is a request for that service.
+    $heading = $requested ? __('support.public.request_title') : __('support.public.title');
+    $lead = $requested ? __('support.public.request_lead') : __('support.public.description');
+@endphp
+<x-layouts.public :title="$heading" :description="$lead">
     {{-- ADR-0017: the request form opens on night like the other service pages; what happens next sits beside it. --}}
-    <x-page-hero :title="__('support.public.title')" :lead="__('support.public.description')" :kicker="__('support.public.kicker')" tone="night"
+    <x-page-hero :title="$heading" :lead="$lead" :kicker="__('support.public.kicker')" tone="night"
                  :crumbs="Route::has('services.index') ? [[__('services.title'), route('services.index')]] : []" />
 
     <div class="mx-auto max-w-page px-4 pt-10 pb-16 sm:px-6">
@@ -15,6 +20,14 @@
             <div class="min-w-0 max-w-2xl">
                 @if ($errors->any())
                     <x-ui.alert tone="danger" class="mb-8">{{ __('support.public.check') }}</x-ui.alert>
+                @endif
+
+                @if ($requested)
+                    <div class="mb-8 rounded-card border border-cyan-600/30 bg-cyan-50 px-5 py-4 dark:bg-night-900">
+                        <p class="font-mono text-[11px] tracking-wider text-ink-muted uppercase">{{ __('support.public.requesting') }}</p>
+                        <p class="mt-1 font-display text-lg font-semibold tracking-tight">{{ $requested['title'] }}</p>
+                        <p class="mt-1 text-sm"><a href="{{ $requested['url'] }}" class="text-link underline underline-offset-4">{{ __('support.public.request_back') }}</a></p>
+                    </div>
                 @endif
 
                 <form method="post" action="{{ route('support.store') }}" enctype="multipart/form-data" class="space-y-8" novalidate>
@@ -69,7 +82,7 @@
                             <select id="category" name="category" required @error('category') aria-invalid="true" aria-describedby="category-error" @enderror class="{{ $field }}">
                                 <option value="">—</option>
                                 @foreach (TicketCategory::cases() as $category)
-                                    <option value="{{ $category->value }}" @selected(old('category') === $category->value)>{{ $category->label() }}</option>
+                                    <option value="{{ $category->value }}" @selected(old('category', $requested ? TicketCategory::ServiceRequest->value : null) === $category->value)>{{ $category->label() }}</option>
                                 @endforeach
                             </select>
                             @error('category')<p id="category-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
@@ -80,7 +93,7 @@
                                 <select id="service_item_id" name="service_item_id" class="{{ $field }}">
                                     <option value="">{{ __('support.public.no_service') }}</option>
                                     @foreach ($services as $id => $title)
-                                        <option value="{{ $id }}" @selected(old('service_item_id') === $id)>{{ $title }}</option>
+                                        <option value="{{ $id }}" @selected(old('service_item_id', $requested['id'] ?? null) === $id)>{{ $title }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -89,7 +102,7 @@
 
                     <div>
                         <label for="subject" class="font-medium">{{ __('support.public.subject') }}</label>
-                        <input id="subject" name="subject" type="text" value="{{ old('subject') }}" required maxlength="200"
+                        <input id="subject" name="subject" type="text" value="{{ old('subject', $requested['title'] ?? '') }}" required maxlength="200"
                                @error('subject') aria-invalid="true" aria-describedby="subject-error" @enderror class="{{ $field }}">
                         @error('subject')<p id="subject-error" class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
                     </div>

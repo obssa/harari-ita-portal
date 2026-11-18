@@ -6,7 +6,14 @@
                 @if (filled($translation->intro))
                     <p class="mt-3 max-w-prose whitespace-pre-line text-lg text-ink-muted">{{ $translation->intro }}</p>
                 @endif
-                <x-forms.public-form :form="$form" :translation="$translation" :turnstile-key="$turnstileKey" class="mt-8" />
+                @if ($about)
+                    <div class="mt-6 max-w-xl rounded-card border border-cyan-600/30 bg-cyan-50 px-5 py-4 dark:bg-night-900">
+                        <p class="font-mono text-[11px] tracking-wider text-ink-muted uppercase">{{ __('support.public.requesting') }}</p>
+                        <p class="mt-1 font-display text-lg font-semibold tracking-tight">{{ $about['title'] }}</p>
+                        <p class="mt-1 text-sm"><a href="{{ $about['url'] }}" class="text-link underline underline-offset-4">{{ __('support.public.request_back') }}</a></p>
+                    </div>
+                @endif
+                <x-forms.public-form :form="$form" :translation="$translation" :turnstile-key="$turnstileKey" :about="$about" class="mt-8" />
             </div>
             <aside class="space-y-3 text-sm text-ink-muted" aria-label="{{ __('forms.after_title') }}">
                 <h2 class="heading-3 text-ink">{{ __('forms.after_title') }}</h2>

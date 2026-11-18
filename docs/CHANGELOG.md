@@ -26,6 +26,9 @@ All notable changes to the Agency's portal. Newest first.
   lane; a "Live on the portal" panel counts published services, courses, programmes and projects; published figures
   with their sources follow the pillars (the first three from ENA on the Ethio-Coders training); projects show a
   roadmap; cards catch the pointer's light; stories without photos get their own circuit tiles.
+- Every service page offers "Request this service" (ADR-0053): the request opens the desk form with the service
+  chosen, or the service's own form; tickets and the Inbox show which service a request is about; admins can
+  switch requests off per service.
 - The admin menu follows the Agency's work (ADR-0052): fixed group order, a new "Site setup" group, sentence-case
   labels, nothing removed; the manuals' menu paths are updated.
 

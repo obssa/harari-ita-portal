@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Organisation\Queries\PublicDirectory;
 use App\Domain\Services\Models\ServiceItem;
+use App\Domain\Services\Models\ServiceItemTranslation;
 use App\Domain\Support\Actions\OpenTicket;
 use App\Domain\Support\Actions\RequesterReply;
 use App\Domain\Support\Actions\StoreAttachments;
@@ -30,11 +31,24 @@ final class SupportController extends Controller
 {
     private const SESSION_KEY = 'support.verified';
 
-    public function create(Turnstile $turnstile): View
+    public function create(Request $request, Turnstile $turnstile): View
     {
         $locale = app()->getLocale();
 
+        // ADR-0053: arriving from a service page, the form is about that service.
+        $requested = null;
+        $slug = $request->query('service');
+        if (is_string($slug) && preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug) === 1) {
+            /** @var ServiceItemTranslation|null $translation */
+            $translation = ServiceItemTranslation::query()->where('locale', $locale)->where('slug', $slug)->first();
+            $service = $translation?->serviceItem;
+            if ($translation !== null && $service !== null && $translation->isLive() && $service->accepts_requests) {
+                $requested = ['id' => $service->id, 'title' => $translation->title, 'url' => route('services.show', ['slug' => $translation->slug])];
+            }
+        }
+
         return view('pages.support.create', [
+            'requested' => $requested,
             'turnstileKey' => $turnstile->siteKey(),
             'services' => PublicDirectory::visible(ServiceItem::query(), $locale)->orderBy('rank')->get()
                 ->mapWithKeys(fn (ServiceItem $service): array => [$service->id => (string) PublicDirectory::shown($service, $locale)?->getAttribute('title')])

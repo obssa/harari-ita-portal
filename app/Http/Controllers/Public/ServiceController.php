@@ -64,7 +64,7 @@ final class ServiceController extends Controller
 
         /** @var ServiceItemTranslation|null $translation */
         $translation = ServiceItemTranslation::query()->where('locale', $locale)->where('slug', $slug)->first();
-        $service = $translation?->serviceItem()->with(['translations', 'office.translations', 'category.translations'])->first();
+        $service = $translation?->serviceItem()->with(['translations', 'office.translations', 'category.translations', 'requestForm.translations'])->first();
         abort_if($translation === null || $service === null || ! $translation->isLive(), 404);
 
         $related = $service->category_id === null ? collect() : PublicDirectory::visible(ServiceItem::query(), $locale)
@@ -81,6 +81,7 @@ final class ServiceController extends Controller
         return view('pages.services.show', [
             'service' => $service,
             'translation' => $translation,
+            'requestUrl' => $service->requestUrl($locale, $translation->slug),
             'body' => BodyRenderer::toHtml($translation->body),
             'office' => $office instanceof Office ? PublicDirectory::shown($office, $locale) : null,
             'category' => $service->category?->name($locale) ?: null,

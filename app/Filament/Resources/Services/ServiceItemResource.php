@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Services;
 
 use App\Domain\Content\Models\Category;
+use App\Domain\Forms\Models\Form;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Services\Enums\ServiceAudience;
 use App\Domain\Services\Enums\ServiceChannel;
@@ -28,6 +29,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -129,6 +131,17 @@ class ServiceItemResource extends Resource
                     ->url()
                     ->startsWith(['https://'])
                     ->maxLength(500),
+                Toggle::make('accepts_requests')
+                    ->label(__('admin.services.field.accepts_requests'))
+                    ->helperText(__('admin.services.help.accepts_requests'))
+                    ->default(true),
+                Select::make('request_form_id')
+                    ->label(__('admin.services.field.request_form'))
+                    ->helperText(__('admin.services.help.request_form'))
+                    ->searchable()
+                    ->options(fn (): array => Form::query()->with('translations')->where('active', true)->get()
+                        ->mapWithKeys(fn (Form $form): array => [$form->id => $form->title()])->all())
+                    ->visible(fn (Get $get): bool => (bool) $get('accepts_requests')),
                 CheckboxList::make('audiences')
                     ->label(__('admin.services.field.audiences'))
                     ->options(ServiceAudience::options()),

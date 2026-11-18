@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Tickets;
 
 use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Services\Models\ServiceItem;
 use App\Domain\Support\Enums\RequesterType;
 use App\Domain\Support\Enums\SlaState;
 use App\Domain\Support\Enums\TicketCategory;
@@ -12,6 +13,7 @@ use App\Domain\Support\Enums\TicketPriority;
 use App\Domain\Support\Enums\TicketStatus;
 use App\Domain\Support\Models\Ticket;
 use App\Domain\Translation\Support\Locales;
+use App\Filament\Resources\Services\ServiceItemResource;
 use App\Filament\Resources\Tickets\Pages\CreateTicket;
 use App\Filament\Resources\Tickets\Pages\ListTickets;
 use App\Filament\Resources\Tickets\Pages\TicketBoard;
@@ -107,6 +109,7 @@ class TicketResource extends Resource
                     Select::make('priority')->label(__('support.field.priority'))->options(TicketPriority::options())->default(TicketPriority::Normal->value)->required(),
                 ]),
                 TextInput::make('subject')->label(__('support.field.subject'))->required()->maxLength(200),
+                Select::make('service_item_id')->label(__('support.field.service'))->searchable()->options(fn (): array => self::serviceOptions()),
                 Textarea::make('description')->label(__('support.field.description'))->required()->rows(6)->maxLength(5000),
             ]),
             Section::make(__('support.admin.requester'))->columnSpan(['default' => 3, 'lg' => 1])->schema([
@@ -130,7 +133,7 @@ class TicketResource extends Resource
     {
         return $table
             ->defaultSort('created_at', 'desc')
-            ->modifyQueryUsing(fn (Builder $query) => $query->with(['office.translations', 'assignee']))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['office.translations', 'assignee', 'serviceItem.translations']))
             ->columns([
                 TextColumn::make('reference')->label(__('support.reference'))->fontFamily('mono')->searchable()->copyable(),
                 TextColumn::make('subject')->label(__('support.field.subject'))->limit(60)->wrap(),
@@ -145,6 +148,7 @@ class TicketResource extends Resource
                     ->color(fn (Ticket $record): string => $record->slaState()->color()),
                 TextColumn::make('category')->label(__('support.field.category'))
                     ->formatStateUsing(fn (TicketCategory $state): string => $state->label())->toggleable(),
+                TextColumn::make('service')->label(__('support.field.service'))->state(fn (Ticket $record): ?string => self::serviceTitle($record))->placeholder('—')->wrap()->toggleable(),
                 TextColumn::make('office')->label(__('support.field.office'))->state(fn (Ticket $record): ?string => $record->office?->name())->placeholder('—')->toggleable(),
                 TextColumn::make('assignee.name')->label(__('support.field.assignee'))->placeholder('—'),
                 TextColumn::make('created_at')->label(__('support.field.created_at'))->formatStateUsing(CalendarDate::format(withTime: true))->sortable(),
@@ -161,6 +165,7 @@ class TicketResource extends Resource
                 SelectFilter::make('status')->label(__('support.field.status'))->options(TicketStatus::options()),
                 SelectFilter::make('priority')->label(__('support.field.priority'))->options(TicketPriority::options()),
                 SelectFilter::make('category')->label(__('support.field.category'))->options(TicketCategory::options()),
+                SelectFilter::make('service_item_id')->label(__('support.field.service'))->searchable()->options(fn (): array => self::serviceOptions()),
                 SelectFilter::make('office_id')->label(__('support.field.office'))->options(fn (): array => self::officeOptions()),
             ])
             ->recordActions([ViewAction::make()])
@@ -186,6 +191,8 @@ class TicketResource extends Resource
                     TextEntry::make('priority')->label(__('support.field.priority'))->badge()
                         ->formatStateUsing(fn (TicketPriority $state): string => $state->label())->color(fn (TicketPriority $state): string => $state->color()),
                     TextEntry::make('category')->label(__('support.field.category'))->formatStateUsing(fn (TicketCategory $state): string => $state->label()),
+                    TextEntry::make('service')->label(__('support.field.service'))->state(fn (Ticket $record): ?string => self::serviceTitle($record))->placeholder('—')
+                        ->url(fn (Ticket $record): ?string => $record->serviceItem !== null && ! $record->serviceItem->trashed() ? ServiceItemResource::getUrl('edit', ['record' => $record->serviceItem]) : null),
                     TextEntry::make('office_name')->label(__('support.field.office'))->state(fn (Ticket $record): ?string => $record->office?->name())->placeholder('—'),
                     TextEntry::make('assignee.name')->label(__('support.field.assignee'))->placeholder('—'),
                     TextEntry::make('response')->label(__('support.field.response_due_at'))
@@ -231,6 +238,26 @@ class TicketResource extends Resource
         return Office::query()->with('translations')->orderBy('type')->orderBy('sort')->get()
             ->mapWithKeys(fn (Office $office): array => [$office->id => $office->name()])
             ->all();
+    }
+
+    /**
+     * The services a ticket can be about (ADR-0053), by title.
+     *
+     * @return array<string, string>
+     */
+    public static function serviceOptions(): array
+    {
+        return ServiceItem::query()->with('translations')->orderBy('rank')->get()
+            ->mapWithKeys(fn (ServiceItem $service): array => [$service->id => (string) $service->translationOrAny()?->getAttribute('title')])
+            ->filter()
+            ->all();
+    }
+
+    private static function serviceTitle(Ticket $ticket): ?string
+    {
+        $title = $ticket->serviceItem?->translationOrAny()?->getAttribute('title');
+
+        return filled($title) ? (string) $title : null;
     }
 
     public static function getPages(): array

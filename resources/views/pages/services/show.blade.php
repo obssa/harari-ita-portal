@@ -13,6 +13,13 @@
                     <span class="sr-only">({{ __('services.opens_external') }})</span>
                 </x-ui.button>
             @endif
+            {{-- ADR-0053: every service that takes requests can be asked for from its page. --}}
+            @if ($requestUrl)
+                <x-ui.button :href="$requestUrl" :variant="$service->isOnline() ? 'light' : 'action'" size="lg">
+                    {{ __('services.request') }}
+                    <svg aria-hidden="true" class="size-4 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </x-ui.button>
+            @endif
         </x-slot:actions>
     </x-page-hero>
 
@@ -51,6 +58,16 @@
                                 </li>
                             @endforeach
                         </ol>
+                    </section>
+                @endif
+
+                @if ($requestUrl)
+                    <section aria-labelledby="service-request" class="flex flex-wrap items-center justify-between gap-4 rounded-card border border-cyan-600/30 bg-cyan-50 px-6 py-5 dark:bg-night-900">
+                        <div class="max-w-prose">
+                            <h2 id="service-request" class="font-display text-xl font-semibold tracking-tight">{{ __('services.request_ready') }}</h2>
+                            <p class="mt-1 text-ink-muted">{{ __('services.request_lead') }}</p>
+                        </div>
+                        <x-ui.button :href="$requestUrl" variant="action">{{ __('services.request') }} <svg aria-hidden="true" class="size-4 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></x-ui.button>
                     </section>
                 @endif
 
@@ -113,6 +130,9 @@
                     </dl>
                     @if ($service->isOnline())
                         <p class="mt-6"><x-ui.button :href="$service->external_url" variant="action" class="w-full" target="_blank" rel="noopener">{{ __('services.start_online') }} <span class="sr-only">({{ __('services.opens_external') }})</span></x-ui.button></p>
+                    @endif
+                    @if ($requestUrl)
+                        <p @class(['mt-6' => ! $service->isOnline(), 'mt-3' => $service->isOnline()])><x-ui.button :href="$requestUrl" :variant="$service->isOnline() ? 'light' : 'action'" class="w-full">{{ __('services.request') }}</x-ui.button></p>
                     @endif
                 </section>
 

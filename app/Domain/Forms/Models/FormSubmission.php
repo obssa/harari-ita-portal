@@ -39,6 +39,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?CarbonImmutable $first_response_at
  * @property ?CarbonImmutable $resolved_at
  * @property CarbonImmutable $created_at
+ * @property ?string $about_type what the message is about (ADR-0053), e.g. a service
+ * @property ?string $about_id
  * @property-read Form $form
  * @property-read ?Office $office
  * @property-read ?User $assignee
@@ -53,7 +55,7 @@ class FormSubmission extends Model
     /** Letters and digits that cannot be mistaken for each other. */
     public const REFERENCE_ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
-    protected $fillable = ['form_id', 'office_id', 'locale', 'reference', 'name', 'email', 'phone', 'email_hash', 'phone_hash', 'answers', 'files', 'status', 'due_at'];
+    protected $fillable = ['form_id', 'about_type', 'about_id', 'office_id', 'locale', 'reference', 'name', 'email', 'phone', 'email_hash', 'phone_hash', 'answers', 'files', 'status', 'due_at'];
 
     protected $hidden = ['name', 'email', 'phone', 'answers'];
 

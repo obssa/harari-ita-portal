@@ -15,6 +15,11 @@ Who: service owners (only for their own directorate if their role is limited to 
 3. Use **More details** for anything longer, and **Questions and answers** for up to twelve common questions.
 4. On the right, tick **How it can be used**: online, in person, by phone. An online service needs its
    **Online service link** (https only); "Start online" on the public page opens it in a new tab.
+   **Show "Request this service"** is on for every service: the page then offers a button that opens the request
+   form with this service already chosen, and the request arrives in **Support tickets** as a "Service request".
+   Turn it off for a service that is information only. If the service needs its own questions, build a form under
+   **Communication → Forms** and choose it as the **Request form**: the button then opens that form, and the answers
+   arrive in the **Inbox**, marked with the service.
 5. Choose who it is **For**, the **Category** (categories are managed under **Site setup → Categories**, type
    "Service categories"), and the **Responsible office**.
 6. Switch on **Top service** to show it on the homepage; **Order** sets its place. Set **Last reviewed** each time
@@ -28,10 +33,12 @@ The service appears at `/{language}/services`, in search and, if it is a top ser
 Who: service desk agents (only their directorate's tickets if their role is limited to one), service owners can
 read them.
 
-Requests arrive from **Request IT support** on the website, or staff record them with **Support tickets → Record a
+Requests arrive from **Request IT support** and from each service's **Request this service** button on the
+website, or staff record them with **Support tickets → Record a
 ticket** when someone calls, emails or comes to the desk. Each has a reference such as `SUP-7K3D-9Q2M`.
 
-- **The list** shows open tickets; **Mine** and **Overdue** narrow it. **Board** shows the same tickets in a
+- **The list** shows open tickets; **Mine** and **Overdue** narrow it, and **Service** shows the requests for one
+  service. **Board** shows the same tickets in a
   column per status.
 - Each ticket has two targets in working hours (Monday to Friday, 08:30–17:30): the **first answer** and the
   **resolution**. The colour tells you where it stands: on time, due soon (two working hours left), overdue, met.

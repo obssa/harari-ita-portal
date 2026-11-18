@@ -6,6 +6,7 @@ use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Notifications\Support\Recipients;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\Organisation\Queries\PublicDirectory;
 use App\Domain\Services\Models\ServiceItem;
 use App\Domain\Support\Enums\RequesterType;
 use App\Domain\Support\Enums\TicketCategory;
@@ -91,7 +92,12 @@ final class OpenTicket
             }
         }
 
-        $service = filled($data['service_item_id'] ?? null) ? ServiceItem::query()->find((string) $data['service_item_id']) : null;
+        $service = null;
+        if (filled($data['service_item_id'] ?? null)) {
+            // ADR-0053: the public form only names a service its reader can see; staff may log against any.
+            $services = $staff !== null ? ServiceItem::query() : PublicDirectory::visible(ServiceItem::query(), $locale);
+            $service = $services->whereKey((string) $data['service_item_id'])->first();
+        }
         $officeId = $service?->office_id;
         $priority = TicketPriority::Normal;
         $channel = TicketChannel::Web;
