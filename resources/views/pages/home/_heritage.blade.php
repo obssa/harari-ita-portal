@@ -55,7 +55,7 @@
         @if ($pillars->isNotEmpty())
             {{-- Five gates, five pillars: each arch opens its pillar; the lane beneath runs from gate to gate. --}}
             <nav aria-label="{{ __('homepage.heritage.gates_label') }}" class="relative mt-20">
-                <svg aria-hidden="true" class="draw-in pointer-events-none absolute inset-x-0 bottom-9 hidden h-8 w-full text-cyan-500/40 sm:block" viewBox="0 0 1000 32" preserveAspectRatio="none" fill="none">
+                <svg aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-9 hidden h-8 w-full text-cyan-500/40 sm:block" viewBox="0 0 1000 32" preserveAspectRatio="none" fill="none">
                     <path d="M0 16H120l14-12h120l14 12h180l14 12h120l14-12h180l14 12H1000" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
                 </svg>
                 <ol class="relative grid grid-cols-2 gap-6 sm:grid-cols-5 sm:gap-4">

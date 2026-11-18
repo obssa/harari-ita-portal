@@ -5,7 +5,8 @@
     <div class="flex flex-wrap items-end justify-between gap-4">
         <div>
             <p class="kicker">{{ __('academy.kicker') }}</p>
-            <h2 id="home-academy" class="heading-2 mt-2">{{ $section->heading() }}</h2>
+            {{-- ADR-0046: while only the catalogue shows, the heading speaks of courses rather than cohorts. --}}
+            <h2 id="home-academy" class="heading-2 mt-2">{{ $data['cohorts']->isEmpty() && blank($section->setting('titles.'.app()->getLocale())) ? __('homepage.academy.courses_title') : $section->heading() }}</h2>
         </div>
         <p class="flex flex-wrap gap-4 text-sm font-semibold">
             <a href="{{ route('academy.index') }}" class="text-link underline-offset-4 hover:underline">{{ __('academy.all') }}</a>

@@ -50,7 +50,7 @@ enum SectionKey: string
             self::Ticker, self::Hero, self::Press => 5,
             self::LatestNews => 12,
             self::Counters, self::Values => 8,
-            self::Pillars => 4,
+            self::Pillars => 5,
             self::Events => 6,
             self::Projects => 6,
             self::OpenData => 3,
@@ -69,7 +69,8 @@ enum SectionKey: string
     {
         return match ($this) {
             self::LatestNews => 6,
-            self::Pillars => 2,
+            // ADR-0046: all five pillars by default.
+            self::Pillars => 5,
             self::Events => 3,
             self::Projects => 3,
             self::Academy => 3,

@@ -92,6 +92,7 @@
         </div>
 
         <aside class="flex flex-col gap-4" aria-label="{{ __('homepage.innovation.figures') }}">
+            @if ($data['startups'] > 0 || $data['challenges'] > 0)
             <dl class="grid grid-cols-2 gap-4 lg:grid-cols-1">
                 <div class="flex flex-col-reverse gap-1 rounded-card border border-line bg-surface p-5">
                     <dt class="font-mono text-xs tracking-wide text-ink-muted uppercase">{{ __('homepage.live.startups_listed') }}</dt>
@@ -102,6 +103,7 @@
                     <dd class="font-display text-4xl font-bold tracking-tight tabular-nums" dir="ltr">{{ $data['challenges'] }}</dd>
                 </div>
             </dl>
+            @endif
             <nav aria-label="{{ __('nav.innovation') }}" class="flex flex-col gap-2 rounded-card border border-line bg-surface p-5">
                 @foreach ([
                     [route('startups.apply'), __('innovation.startups.apply')],

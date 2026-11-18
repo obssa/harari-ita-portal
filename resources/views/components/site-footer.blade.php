@@ -1,6 +1,6 @@
 {{-- ADR-0010: the night band: a strip in the five pillar colours, the hexagon field, the lockup with the
      newsletter, then the pillars, the main listings, quick links, contact and the Agency's pages. --}}
-<footer class="relative isolate mt-20 overflow-hidden bg-night-900 text-sm text-night-muted [&_a:hover]:text-night-ink">
+<footer @class(['relative isolate overflow-hidden bg-night-900 text-sm text-night-muted [&_a:hover]:text-night-ink', 'mt-20' => ! $flush])>
     <div aria-hidden="true" class="grid h-1 grid-cols-5">
         <span class="bg-pillar-1"></span><span class="bg-pillar-2"></span><span class="bg-pillar-3"></span><span class="bg-pillar-4"></span><span class="bg-pillar-5"></span>
     </div>

@@ -1,4 +1,4 @@
-@props(['title' => null, 'description' => null, 'alternates' => null, 'image' => null, 'type' => 'website', 'jsonLd' => []])
+@props(['title' => null, 'description' => null, 'alternates' => null, 'image' => null, 'type' => 'website', 'jsonLd' => [], 'flushFooter' => false])
 @php
     $locale = app()->getLocale();
     $ethiopic = in_array($locale, ['am', 'har'], true);
@@ -113,6 +113,6 @@
         {{ $slot }}
     </main>
 
-    <x-site-footer />
+    <x-site-footer :flush="$flushFooter" />
 </body>
 </html>

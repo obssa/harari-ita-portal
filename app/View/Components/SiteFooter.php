@@ -50,7 +50,10 @@ final class SiteFooter extends Component
     /** @var list<array{label: string, url: string}> the main listings of the site */
     public array $explore = [];
 
-    public function __construct()
+    /**
+     * @param  bool  $flush  no space above the footer, for a page that ends on a band of its own (ADR-0046)
+     */
+    public function __construct(public bool $flush = false)
     {
         $this->years = app(EthiopianCalendar::class)->years(now());
         $locale = app()->getLocale();
