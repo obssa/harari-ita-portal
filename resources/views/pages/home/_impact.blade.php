@@ -37,7 +37,7 @@
                                 @if (filled($source))
                                     {{ __('leaders.source') }}:
                                     @if ($statistic->source_url)
-                                        <a href="{{ $statistic->source_url }}" rel="noopener nofollow" class="text-cyan-300 underline-offset-2 hover:underline">{{ $source }}</a>
+                                        <a href="{{ $statistic->source_url }}" rel="noopener nofollow" class="text-cyan-300 underline underline-offset-2 hover:no-underline">{{ $source }}</a>
                                     @else
                                         {{ $source }}
                                     @endif

@@ -14,7 +14,7 @@
             <span class="mt-1 block text-xs text-ink-muted">
                 @if (filled($source))
                     @if ($statistic->source_url)
-                        <a href="{{ $statistic->source_url }}" rel="noopener" class="underline-offset-2 hover:underline">{{ $source }}</a>
+                        <a href="{{ $statistic->source_url }}" rel="noopener" class="underline underline-offset-2 hover:no-underline">{{ $source }}</a>
                     @else
                         {{ $source }}
                     @endif
