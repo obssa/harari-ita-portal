@@ -144,6 +144,17 @@
             <div class="mt-4 grid gap-4 sm:grid-cols-2">
                 <div class="relative h-48 overflow-hidden rounded-card bg-night-900"><x-circuit :draw="true" class="absolute inset-0 size-full text-cyan-500/50" /></div>
                 <div class="relative h-48 overflow-hidden rounded-card bg-night-900"><x-hex-field id="sg-hex" class="absolute inset-0 size-full text-cyan-500/30" /></div>
+                {{-- ADR-0051: the living circuit, a seeded story tile, the card light, the live dot and a counting figure. --}}
+                <div data-motion class="relative h-48 overflow-hidden rounded-card bg-night-900"><x-circuit :flow="true" class="absolute inset-0 size-full text-cyan-500/30" /></div>
+                <div class="relative h-48 overflow-hidden rounded-card"><x-news-placeholder seed="styleguide" class="absolute inset-0" /></div>
+                <div class="glow-card rounded-card border border-line bg-surface p-6">
+                    <p class="font-display text-lg font-semibold">.glow-card</p>
+                    <p class="mt-1 text-sm text-ink-muted">A soft light follows the pointer across the card.</p>
+                </div>
+                <div class="rounded-card border border-line bg-surface p-6">
+                    <p class="flex items-center gap-2 font-mono text-xs uppercase"><span aria-hidden="true" class="live-dot relative size-2 rounded-full bg-cyan-400"></span>.live-dot</p>
+                    <p class="mt-2 font-display text-4xl font-semibold tabular-nums" dir="ltr"><span data-count-to="55000">55,000</span></p>
+                </div>
             </div>
         </section>
 

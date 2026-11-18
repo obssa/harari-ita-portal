@@ -11,8 +11,10 @@
 @else
     {{-- ADR-0011: the night hero: the promise on the left over the hexagon field and the logo's orange curve,
          a framed, credited Harar photo on the right with the five pillar nodes. Text first, so it paints at once. --}}
-    <section aria-label="{{ $section->heading() }}" class="relative isolate overflow-hidden bg-night-900 text-night-ink">
+    <section aria-label="{{ $section->heading() }}" data-motion class="relative isolate overflow-hidden bg-night-900 text-night-ink">
         <x-hex-field id="hero-hex" class="absolute inset-0 -z-20 size-full text-cyan-500/20" />
+        {{-- ADR-0051: the Jugol circuit runs along the foot of the hero, with light moving through it. --}}
+        <x-circuit :flow="true" class="absolute inset-x-0 bottom-0 -z-10 h-56 w-full text-cyan-500/15 [mask-image:linear-gradient(to_top,#000,transparent)]" />
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[radial-gradient(60rem_40rem_at_85%_10%,rgb(16_93_111/0.55),transparent_70%)]"></div>
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgb(29_74_88/0.35)_1px,transparent_1px)] bg-[size:6rem_100%] opacity-60 [mask-image:linear-gradient(to_bottom,#000,transparent_85%)]"></div>
 
@@ -72,6 +74,25 @@
                     <li class="size-3 rotate-45 bg-pillar-1"></li><li class="size-3 rotate-45 bg-pillar-2"></li><li class="size-3 rotate-45 bg-pillar-3"></li><li class="size-3 rotate-45 bg-pillar-4"></li><li class="size-3 rotate-45 bg-pillar-5"></li>
                 </ul>
                 <figcaption class="mt-3 text-end text-[11px] text-night-muted"><x-harar-credit name="gate" /></figcaption>
+                @php $pulse = \App\Domain\Homepage\Queries\PortalPulse::for(app()->getLocale()); @endphp
+                @if ($pulse !== [])
+                    {{-- ADR-0051: what the portal offers right now, counted live from its published records. --}}
+                    <div class="mt-4 rounded-card border border-night-line bg-night-950/90 p-4 shadow-2xl shadow-night-950/60 backdrop-blur-md lg:absolute lg:-start-24 lg:bottom-24 lg:mt-0 lg:w-80">
+                        <p class="flex items-center gap-2 font-mono text-[0.7rem] tracking-wider text-cyan-300 uppercase">
+                            <span aria-hidden="true" class="live-dot relative size-2 rounded-full bg-cyan-400"></span>{{ __('homepage.pulse.kicker') }}
+                        </p>
+                        <ul class="mt-3 grid grid-cols-2 gap-1">
+                            @foreach ($pulse as $figure)
+                                <li>
+                                    <a href="{{ $figure['url'] }}" class="flex flex-col rounded-control px-2 py-1.5 transition hover:bg-night-800">
+                                        <span class="font-display text-2xl font-semibold tracking-tight text-night-ink tabular-nums" dir="ltr" data-count-to="{{ $figure['value'] }}">{{ number_format($figure['value']) }}</span>
+                                        <span class="text-xs text-night-muted">{{ $figure['label'] }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </figure>
         </div>
         <span id="home-after-hero"></span>

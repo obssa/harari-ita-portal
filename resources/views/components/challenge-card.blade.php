@@ -16,7 +16,7 @@
 @endphp
 {{-- ADR-0022: a challenge as a card: the phase as a status pill, the title, the pitch, the next date and, for live
      challenges, the first prize line. --}}
-<article {{ $attributes->class('group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-7 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
+<article {{ $attributes->class('glow-card group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-7 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
     <div class="flex flex-wrap items-center justify-between gap-2">
         <p class="kicker">{{ __('innovation.challenges.kicker') }}</p>
         @if ($phase === Challenge::PHASE_RESULTS)

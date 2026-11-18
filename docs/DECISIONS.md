@@ -948,3 +948,34 @@ state media is public, and the source link lets readers and the Agency check it.
 taken for a report on the Agency's own work.
 - **This supersedes ADR-0049's "no photo".** The photo is credited, and the Agency can replace it with an official
   portrait at any time (INPUTS.md).
+
+## ADR-0051 — A living homepage: the circuit in motion, live figures and a roadmap (2026-11-18)
+
+**Decision.** The site gains motion that reads as technology without distracting.
+- **The living circuit:** `x-circuit :flow` sends short pulses of light along the Jugol circuit's traces, each at its
+  own pace, and its pads breathe. It runs at the foot of the homepage hero, at the far edge of every page header
+  (`x-page-hero`), along the heritage band's lane between the five gates, and in the circuit panels already on the
+  service desk, innovation, services and data pages.
+- **Live on the portal:** a panel on the hero photo counts what a visitor can use right now: services, courses,
+  programmes, projects, open datasets and startups. It is counted live from the published records (`PortalPulse`),
+  shows only figures above zero, at most four, and each figure links to its list.
+- **Progress you can count:** a band after the pillars shows up to three published statistics (ADR-0027), each with
+  its source and as-of date, and links to "Digital Harar in numbers". The content pack now loads statistics. The
+  first three come from ENA's report of 9 November 2026 on the 5 Million Ethiopian Coders training in the region.
+  Without a published figure the band is not drawn.
+- **The roadmap:** homepage projects show where each stands, planned → ongoing → completed, with the current stage lit.
+- **Cards and tiles:**
+  - every card (services, courses, datasets, projects, startups, challenges, opportunities, news, pillars) catches a
+    soft light under the pointer;
+  - pillar and heritage arches redraw themselves on hover;
+  - figures count up the first time they are seen;
+  - stories without a photo get their own arrangement of the circuit, turned and placed by the story's id, with
+    the emblem small in the corner, instead of a large centred logo.
+
+**Why.** The owner asked for a livelier, modern homepage with tech-and-digital motion that stays professional and
+fast, and for creative touches on the other pages.
+- **Speed:** only stroke offsets, transforms and a pseudo-element's opacity animate, so nothing moves the layout.
+  Animated bands pause off screen. The script (`motion.js`) is 0.6 KB gzipped.
+- **Without script:** the page shows the final numbers and still cards.
+- **Reduced motion:** the pulses are not drawn and nothing counts or follows the pointer. Text never fades
+  (ADR-0066).

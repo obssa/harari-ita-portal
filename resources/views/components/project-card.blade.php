@@ -1,5 +1,5 @@
 @props(['project', 'translation', 'headingLevel' => 2])
-<article {{ $attributes->class('group relative flex flex-col overflow-hidden rounded-card border border-line bg-surface') }} lang="{{ $translation->locale }}">
+<article {{ $attributes->class('glow-card group relative flex flex-col overflow-hidden rounded-card border border-line bg-surface') }} lang="{{ $translation->locale }}">
     @if ($project->cover)
         <x-picture :media="$project->cover" preset="landscape" sizes="(min-width: 64rem) 24rem, (min-width: 40rem) 50vw, 100vw" class="aspect-video w-full object-cover" />
     @endif

@@ -21,7 +21,7 @@
             @endforeach
         </ul>
         <nav aria-label="{{ __('support.public.kicker') }}" class="relative isolate flex flex-col gap-2 overflow-hidden rounded-card border border-night-line bg-night-900 p-6 text-night-ink">
-            <x-circuit class="absolute inset-x-0 bottom-0 -z-10 h-28 w-full text-cyan-500/25" />
+            <x-circuit :flow="true" class="absolute inset-x-0 bottom-0 -z-10 h-28 w-full text-cyan-500/25" />
             <p class="kicker [--color-eyebrow:var(--color-cyan-300)]">{{ __('support.public.kicker') }}</p>
             @foreach (array_filter([
                 Route::has('support.create') ? [route('support.create'), __('nav.support_new'), __('nav.support_new_hint')] : null,

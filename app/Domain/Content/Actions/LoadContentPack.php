@@ -33,7 +33,9 @@ use App\Domain\Organisation\Models\Leader;
 use App\Domain\Organisation\Models\Office;
 use App\Domain\Organisation\Models\Pillar;
 use App\Domain\Projects\Actions\SaveProject;
+use App\Domain\Projects\Actions\SaveStatistic;
 use App\Domain\Projects\Models\Project;
+use App\Domain\Projects\Models\Statistic;
 use App\Domain\Social\Enums\Platform;
 use App\Domain\Social\Models\SocialSource;
 use App\Filament\Pages\ManageHomepage;
@@ -70,6 +72,7 @@ final class LoadContentPack
         private readonly SaveCourse $courses,
         private readonly SaveProgramme $programmes,
         private readonly SaveProject $projects,
+        private readonly SaveStatistic $statistics,
     ) {}
 
     /**
@@ -131,6 +134,11 @@ final class LoadContentPack
         }
         foreach ((array) ($pack['projects'] ?? []) as $item) {
             $this->once($item, 'projects', fn (array $data): Model => $this->projects->handle(new Project, [...$data, 'pillar_id' => $this->id($item['pillar'] ?? null)], $actor));
+        }
+
+        // ADR-0051: published figures, each with its source and date.
+        foreach ((array) ($pack['statistics'] ?? []) as $item) {
+            $this->once($item, 'statistics', fn (array $data): Model => $this->statistics->handle(new Statistic, $data, $actor));
         }
 
         foreach ((array) ($pack['updates'] ?? []) as $update) {

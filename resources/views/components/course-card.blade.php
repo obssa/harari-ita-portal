@@ -6,7 +6,7 @@
 @endphp
 {{-- ADR-0031: a course as a card: the level in mono, the title and summary, the mode, length and languages as chips,
      and at the foot the next cohort in both calendars with whether it is open. --}}
-<article {{ $attributes->class('group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
+<article {{ $attributes->class('glow-card group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
     <div class="flex items-start justify-between gap-3">
         <p class="kicker">{{ $course->level->label() }}</p>
         @if ($next && in_array($next->enrolmentState(), [\App\Domain\Academy\Models\CourseCohort::STATE_OPEN, \App\Domain\Academy\Models\CourseCohort::STATE_WAITLIST], true))

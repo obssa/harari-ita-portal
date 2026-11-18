@@ -8,7 +8,7 @@
 @endphp
 {{-- DESIGN.md §4 opportunity card (ADR-0032): the type and reference in mono, the title, the issuing directorate, and at
      the foot the deadline in both calendars with the time left, said in words (never by colour alone). --}}
-<article {{ $attributes->class(['group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5', 'opacity-90' => $past]) }} lang="{{ $translation->locale }}">
+<article {{ $attributes->class(['glow-card group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5', 'opacity-90' => $past]) }} lang="{{ $translation->locale }}">
     <div class="flex flex-wrap items-start justify-between gap-2">
         <p class="flex flex-wrap items-center gap-2">
             <x-ui.badge :tone="$opportunity->type->tone()">{{ $opportunity->type->label() }}</x-ui.badge>

@@ -14,7 +14,7 @@
 @endphp
 {{-- ADR-0046: the closing band. Jugol's gates become the five pillars: an arch for each, joined by a lane that turns
      into a circuit, over the facts that make Harar a World Heritage city. Night, so it reads as the page's finale. --}}
-<section aria-labelledby="home-heritage" class="relative isolate overflow-hidden bg-night-950 text-night-ink">
+<section aria-labelledby="home-heritage" data-motion class="relative isolate overflow-hidden bg-night-950 text-night-ink">
     <x-hex-field id="heritage-hex" fade="radial" class="absolute inset-0 -z-20 size-full text-cyan-500/15" />
     <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[radial-gradient(50rem_30rem_at_15%_0%,rgb(16_93_111/0.45),transparent_70%),radial-gradient(40rem_28rem_at_90%_100%,rgb(232_145_45/0.18),transparent_70%)]"></div>
 
@@ -57,6 +57,11 @@
             <nav aria-label="{{ __('homepage.heritage.gates_label') }}" class="relative mt-20">
                 <svg aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-9 hidden h-8 w-full text-cyan-500/40 sm:block" viewBox="0 0 1000 32" preserveAspectRatio="none" fill="none">
                     <path d="M0 16H120l14-12h120l14 12h180l14 12h120l14-12h180l14 12H1000" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+                    {{-- ADR-0051: light travels the lane from gate to gate. --}}
+                    <g class="circuit-flow" stroke="#67e8f9" stroke-width="2.5" stroke-linecap="round">
+                        <path d="M0 16H120l14-12h120l14 12h180l14 12h120l14-12h180l14 12H1000" pathLength="100" vector-effect="non-scaling-stroke" style="--flow-duration: 9s"/>
+                        <path d="M0 16H120l14-12h120l14 12h180l14 12h120l14-12h180l14 12H1000" pathLength="100" vector-effect="non-scaling-stroke" style="--flow-duration: 9s; --flow-delay: 4.5s"/>
+                    </g>
                 </svg>
                 <ol class="relative grid grid-cols-2 gap-6 sm:grid-cols-5 sm:gap-4">
                     @foreach ($pillars as $item)
@@ -65,9 +70,9 @@
                             <a href="{{ route('pillars.show', ['locale' => $item['shown']->locale, 'slug' => $item['shown']->slug]) }}"
                                class="group flex flex-col items-center gap-4 text-center focus-visible:outline-3 focus-visible:outline-offset-4">
                                 <span class="relative grid h-36 w-28 place-items-end justify-center sm:h-44 sm:w-32">
-                                    <svg aria-hidden="true" class="absolute inset-0 size-full {{ $strokes[$i] }} transition duration-300 group-hover:-translate-y-1" viewBox="0 0 80 100" fill="none">
-                                        <path d="M8 100V42Q8 10 40 2q32 8 32 40v58" stroke="currentColor" stroke-width="3"/>
-                                        <path d="M20 100V48Q20 26 40 18q20 8 20 30v52" stroke="currentColor" stroke-width="1.5" opacity=".55"/>
+                                    <svg aria-hidden="true" class="arch-draw absolute inset-0 size-full {{ $strokes[$i] }} transition duration-300 group-hover:-translate-y-1" viewBox="0 0 80 100" fill="none">
+                                        <path d="M8 100V42Q8 10 40 2q32 8 32 40v58" stroke="currentColor" stroke-width="3" pathLength="520"/>
+                                        <path d="M20 100V48Q20 26 40 18q20 8 20 30v52" stroke="currentColor" stroke-width="1.5" opacity=".55" pathLength="520"/>
                                     </svg>
                                     <span class="relative mb-3 font-mono text-xs text-night-muted">{{ sprintf('%02d', $loop->iteration) }}</span>
                                 </span>

@@ -656,6 +656,77 @@
     ]
   },
   "settings": {},
+  "statistics": [
+    {
+      "key": "statistic.ethio-coders-completed",
+      "value": 55000,
+      "as_of": "2026-11-09",
+      "source_url": "https://www.ena.et/web/amh/w/amh_9899183",
+      "sort": 1,
+      "translations": {
+        "en": {
+          "label": "people in the region completed the 5 Million Ethiopian Coders training",
+          "unit": "+",
+          "source": "ENA (Ethiopian News Agency)"
+        },
+        "am": {
+          "label": "በክልሉ የ5 ሚሊዮን ኢትዮጵያውያን ኮደርስ ሥልጠናን ያጠናቀቁ ዜጎች",
+          "unit": "+",
+          "source": "ኢዜአ (የኢትዮጵያ ዜና አገልግሎት)"
+        },
+        "om": {
+          "label": "lammiilee naannicha keessaa leenjii Koodaroota Itoophiyaa Miliyoona 5 xumuran",
+          "unit": "+",
+          "source": "ENA (Tajaajila Oduu Itoophiyaa)"
+        }
+      }
+    },
+    {
+      "key": "statistic.ethio-coders-certified",
+      "value": 41000,
+      "as_of": "2026-11-09",
+      "source_url": "https://www.ena.et/web/amh/w/amh_9899183",
+      "sort": 2,
+      "translations": {
+        "en": {
+          "label": "of them earned internationally recognised certificates",
+          "unit": "+",
+          "source": "ENA (Ethiopian News Agency)"
+        },
+        "am": {
+          "label": "ከእነዚህም ዓለም አቀፍ ተቀባይነት ያለው የምስክር ወረቀት ያገኙ",
+          "unit": "+",
+          "source": "ኢዜአ (የኢትዮጵያ ዜና አገልግሎት)"
+        },
+        "om": {
+          "label": "isaan keessaa ragaa sadarkaa addunyaatti fudhatama qabu kan argatan",
+          "unit": "+",
+          "source": "ENA (Tajaajila Oduu Itoophiyaa)"
+        }
+      }
+    },
+    {
+      "key": "statistic.ethio-coders-new",
+      "value": 20000,
+      "as_of": "2026-11-09",
+      "source_url": "https://www.ena.et/web/amh/w/amh_9899183",
+      "sort": 3,
+      "translations": {
+        "en": {
+          "label": "new young people to be trained this budget year in web, Android, data science and AI",
+          "source": "ENA (Ethiopian News Agency)"
+        },
+        "am": {
+          "label": "በበጀት ዓመቱ በዌብ፣ በአንድሮይድ፣ በዳታ ሳይንስና በአርቲፊሻል ኢንተለጀንስ የሚሠለጥኑ አዳዲስ ወጣቶች",
+          "source": "ኢዜአ (የኢትዮጵያ ዜና አገልግሎት)"
+        },
+        "om": {
+          "label": "dargaggoota haaraa bara baajataa kana weebii, Androyidii, saayinsii daataa fi AI irratti leenjifaman",
+          "source": "ENA (Tajaajila Oduu Itoophiyaa)"
+        }
+      }
+    }
+  ],
   "updates": [
     {
       "key": "leader.agency-head#portrait",

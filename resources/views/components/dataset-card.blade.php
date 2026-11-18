@@ -7,7 +7,7 @@
 @endphp
 {{-- ADR-0025: a dataset as a card: the publisher in mono, the title, the summary, its format chips, and at the foot the
      last update (with an overdue note) and the licence. --}}
-<article {{ $attributes->class('group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
+<article {{ $attributes->class('glow-card group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
     <div class="flex items-start justify-between gap-3">
         <p class="kicker">{{ $office?->getAttribute('name') ?? __('opendata.title') }}</p>
         @if ($dataset->isOverdue())

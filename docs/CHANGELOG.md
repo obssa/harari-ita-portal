@@ -22,6 +22,10 @@ All notable changes to the Agency's portal. Newest first.
   (ADR-0049).
 - The head of the Agency's portrait, ENA's photo with its credit; content pack updates can set a portrait once
   (ADR-0050).
+- A living homepage (ADR-0051): light runs along the Jugol circuit in the hero, every page header and the heritage
+  lane; a "Live on the portal" panel counts published services, courses, programmes and projects; published figures
+  with their sources follow the pillars (the first three from ENA on the Ethio-Coders training); projects show a
+  roadmap; cards catch the pointer's light; stories without photos get their own circuit tiles.
 
 ## Unreleased — phase 7: the dashboard, reports and roles
 

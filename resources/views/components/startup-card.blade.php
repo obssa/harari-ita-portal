@@ -6,7 +6,7 @@
 @endphp
 {{-- ADR-0020: a startup as a card: logo (or its initials on night), sector in mono, name, pitch, stage and the label
      claim (verified by the Agency, or self-declared). --}}
-<article {{ $attributes->class('group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
+<article {{ $attributes->class('glow-card group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
     <div class="flex items-center gap-4">
         @if ($startup->logo)
             <x-picture :media="$startup->logo" preset="square" sizes="4rem" class="size-14 shrink-0 rounded-control bg-white object-contain p-1 ring-1 ring-line" />

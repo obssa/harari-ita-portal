@@ -28,8 +28,8 @@
             @endphp
             @continue($shown === null)
             <li lang="{{ $shown->locale }}" @class(['lg:col-span-2' => $loop->first])>
-                <article class="reveal group relative flex h-full min-h-56 flex-col gap-5 overflow-hidden rounded-card border border-line bg-surface p-7 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-night-950/5 {{ $edges[$i] }}">
-                    <svg aria-hidden="true" class="pointer-events-none absolute -end-6 -bottom-10 h-44 w-auto opacity-[0.07] {{ $texts[$i] }}" viewBox="0 0 80 100" fill="none" stroke="currentColor" stroke-width="6"><path d="M10 100V40Q10 12 40 4q30 8 30 36v60"/></svg>
+                <article class="reveal glow-card group relative flex h-full min-h-56 flex-col gap-5 overflow-hidden rounded-card border border-line bg-surface p-7 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-night-950/5 {{ $edges[$i] }}">
+                    <svg aria-hidden="true" class="arch-draw pointer-events-none absolute -end-6 -bottom-10 -z-10 h-44 w-auto opacity-[0.08] transition-opacity duration-300 group-hover:opacity-30 {{ $texts[$i] }}" viewBox="0 0 80 100" fill="none" stroke="currentColor" stroke-width="6"><path d="M10 100V40Q10 12 40 4q30 8 30 36v60" pathLength="520"/></svg>
                     <div class="flex items-center gap-3">
                         <span aria-hidden="true" class="size-3 rotate-45 {{ $nodes[$i] }}"></span>
                         <span class="font-mono text-xs text-ink-muted">{{ sprintf('%02d', $loop->iteration) }}</span>

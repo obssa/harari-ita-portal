@@ -84,7 +84,7 @@
         @endif
 
         <section aria-labelledby="data-reuse" class="relative isolate mt-16 overflow-hidden rounded-card border border-night-line bg-night-900 p-8 text-night-ink sm:p-10">
-            <x-circuit class="absolute inset-y-0 end-0 -z-10 h-full w-1/2 text-cyan-500/25" />
+            <x-circuit :flow="true" class="absolute inset-y-0 end-0 -z-10 h-full w-1/2 text-cyan-500/25" />
             <h2 id="data-reuse" class="font-display text-2xl font-semibold tracking-tight">{{ __('opendata.reuse_title') }}</h2>
             <p class="mt-2 max-w-prose text-night-muted">{{ __('opendata.reuse_text') }}</p>
             <p class="mt-6 flex flex-wrap gap-3">

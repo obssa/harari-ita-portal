@@ -8,7 +8,7 @@
 @endphp
 {{-- ADR-0016: a service as a card: the category in mono, the title, the summary, how it can be used (channel
      badges) and, at the foot, the typical time and the responsible office. --}}
-<article {{ $attributes->class('group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
+<article {{ $attributes->class('glow-card group relative flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-6 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-lg hover:shadow-night-950/5') }} lang="{{ $translation->locale }}">
     <div class="flex items-start justify-between gap-3">
         <p class="kicker">{{ $category ?? __('services.title') }}</p>
     </div>

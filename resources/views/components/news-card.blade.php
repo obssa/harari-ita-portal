@@ -7,14 +7,14 @@
 {{-- ADR-0012: every story card has the same parts in the same places: picture (or the placeholder), labels, title,
      summary and a mono date; a hairline border that turns cyan on hover. --}}
 <article lang="{{ $shown->locale }}" {{ $attributes->class([
-    'reveal group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-surface transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-xl hover:shadow-night-950/5',
+    'reveal glow-card group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-surface transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:shadow-xl hover:shadow-night-950/5',
 ]) }}>
     <div @class(['relative overflow-hidden bg-night-900', 'aspect-[16/10] shrink-0' => ! $lead, 'aspect-[16/9] shrink-0 lg:aspect-auto lg:min-h-[18rem] lg:flex-1' => $lead])>
         @if ($post->featuredImage)
             <x-picture :media="$post->featuredImage" preset="landscape" :sizes="$lead ? '(min-width: 64rem) 46rem, 100vw' : '(min-width: 64rem) 25rem, (min-width: 40rem) 50vw, 100vw'"
                        class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]" />
         @else
-            <x-news-placeholder :type="$post->type" :lead="$lead" class="absolute inset-0" />
+            <x-news-placeholder :type="$post->type" :lead="$lead" :seed="$post->id" class="absolute inset-0" />
         @endif
         <div class="absolute start-3 top-3 flex flex-wrap gap-1.5">
             <x-ui.badge :tone="$post->type->tone()" class="shadow-sm">{{ $post->type->label() }}</x-ui.badge>

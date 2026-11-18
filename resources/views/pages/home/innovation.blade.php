@@ -25,7 +25,7 @@
         <div class="space-y-4">
             @if ($lead)
                 <article class="group relative isolate overflow-hidden rounded-card border border-night-line bg-night-900 p-7 pb-16 text-night-ink" lang="{{ $lead['locale'] }}">
-                    <x-circuit class="absolute inset-x-0 bottom-0 -z-10 h-12 w-full text-cyan-500/20" />
+                    <x-circuit :flow="true" class="absolute inset-x-0 bottom-0 -z-10 h-12 w-full text-cyan-500/20" />
                     <div class="grid gap-6 md:grid-cols-[1fr_16rem] md:items-end">
                         <div>
                             <p class="kicker [--color-eyebrow:var(--color-cyan-300)]">{{ $lead['open'] ? __('homepage.innovation.open_call') : __('homepage.innovation.next_call') }} · {{ __('homepage.innovation.kind.'.$lead['kind']) }}</p>

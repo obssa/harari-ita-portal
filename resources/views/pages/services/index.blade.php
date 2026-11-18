@@ -77,7 +77,7 @@
 
         @if (Route::has('support.create'))
             <section aria-labelledby="services-help" class="relative isolate mt-16 overflow-hidden rounded-card border border-night-line bg-night-900 p-8 text-night-ink sm:p-10">
-                <x-circuit class="absolute inset-y-0 end-0 -z-10 h-full w-1/2 text-cyan-500/25" />
+                <x-circuit :flow="true" class="absolute inset-y-0 end-0 -z-10 h-full w-1/2 text-cyan-500/25" />
                 <h2 id="services-help" class="font-display text-2xl font-semibold tracking-tight">{{ __('services.request_help') }}</h2>
                 <p class="mt-2 max-w-prose text-night-muted">{{ __('services.request_help_text') }}</p>
                 <p class="mt-6"><x-ui.button :href="route('support.create')" variant="action">{{ __('nav.cta_support') }}</x-ui.button></p>

@@ -41,7 +41,7 @@ it('ships the Agency\'s first content in three languages, loaded once, with no s
     staff(SystemRole::SuperAdmin, mfa: false);
 
     $counts = app(LoadContentPack::class)->handle(database_path('content/pack.json'));
-    expect($counts)->toMatchArray(['pillars' => 5, 'pages' => 3, 'posts' => 4, 'advisories' => 3, 'courses' => 6, 'programmes' => 2, 'projects' => 3, 'leaders' => 1, 'homepage' => 1])
+    expect($counts)->toMatchArray(['pillars' => 5, 'pages' => 3, 'posts' => 4, 'advisories' => 3, 'courses' => 6, 'programmes' => 2, 'projects' => 3, 'leaders' => 1, 'statistics' => 3, 'homepage' => 1])
         ->and(app(LoadContentPack::class)->handle(database_path('content/pack.json')))->toBe([])
         ->and(Pillar::query()->count())->toBe(5)
         ->and(Post::query()->where('type', 'advisory')->count())->toBe(3);
