@@ -12,7 +12,7 @@
     };
     $hash = crc32((string) $seed);
     $turn = ['', '-scale-x-100', '-scale-y-100', 'rotate-180'][$hash % 4];
-    $place = ['-start-1/4 -top-1/4', '-end-1/4 -top-1/3', '-start-1/3 -bottom-1/4', '-end-1/4 -bottom-1/3'][intdiv($hash, 4) % 4];
+    $place = ['start-[-25%] top-[-25%]', 'end-[-20%] top-[-40%]', 'start-[-40%] bottom-[-20%]', 'end-[-30%] bottom-[-35%]'][intdiv($hash, 4) % 4];
 @endphp
 <div aria-hidden="true" {{ $attributes->class(['relative isolate size-full overflow-hidden bg-night-900 bg-linear-to-br to-night-900', $tint]) }}>
     <x-hex-field :id="'card-hex-'.($lead ? 'lead' : 'item')" fade="radial" class="absolute inset-0 -z-10 size-full text-cyan-400/20 transition-transform duration-700 group-hover:scale-110" />
