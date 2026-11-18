@@ -1,11 +1,11 @@
 <?php
 
-use App\Domain\Translation\Support\Locales;
 use App\Domain\Access\Enums\SystemRole;
 use App\Domain\Content\Actions\SavePost;
 use App\Domain\Content\Models\Post;
 use App\Domain\Content\Workflow\ContentWorkflow;
 use App\Domain\Content\Workflow\Transition;
+use App\Domain\Translation\Support\Locales;
 use App\Http\Controllers\Public\PreviewController;
 
 /**
