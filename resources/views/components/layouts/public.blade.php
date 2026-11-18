@@ -33,7 +33,7 @@
     {{-- ADR-0008: the visitor's colour theme, applied before the first paint. --}}
     <script nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">try{var t=localStorage.getItem('hinta-theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t}}catch(e){}</script>
     {{-- ADR-0040: a cookieless page view count; ADR-0008: the theme switch; the homepage carousel adds its own small script (ADR-0070). --}}
-    @vite(['resources/css/app.css', 'resources/js/beacon.js', 'resources/js/theme.js'])
+    @vite(['resources/css/app.css', 'resources/js/beacon.js', 'resources/js/theme.js', 'resources/js/menu.js'])
 </head>
 <body class="flex min-h-screen flex-col bg-canvas text-ink antialiased">
     <a href="#content" class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-white">

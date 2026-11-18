@@ -96,7 +96,7 @@
                                 {{ $item['label'] }}
                                 <svg aria-hidden="true" class="size-3 opacity-60 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
                             </summary>
-                            <div class="absolute inset-x-0 top-full z-40 border-y border-line bg-surface shadow-2xl shadow-night-950/15">
+                            <div class="absolute inset-x-0 top-full z-40 border-y border-line bg-surface whitespace-normal shadow-2xl shadow-night-950/15">
                                 <div class="mx-auto grid max-w-page gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[20rem_1fr]">
                                     <div class="relative isolate flex flex-col gap-3 overflow-hidden rounded-card bg-night-900 p-6 text-night-ink">
                                         <x-hex-field id="nav-hex-{{ $loop->index }}" fade="right" class="absolute inset-0 -z-10 size-full text-cyan-500/25" />

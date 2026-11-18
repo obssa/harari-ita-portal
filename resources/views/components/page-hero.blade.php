@@ -1,11 +1,12 @@
 @props(['title', 'lead' => null, 'kicker' => null, 'tone' => 'plaster', 'crumbs' => [], 'headingLang' => null])
 @php
-    // ADR-0012: two looks. Night (night, ink, primary, ruby, cyan): the dark band with the hexagon field.
-    // Light (plaster, saffron): a calm band with the field faint at the end; saffron adds the orange bar.
-    $dark = in_array($tone, ['night', 'ink', 'ruby', 'primary', 'cyan'], true);
+    // ADR-0048 (replacing the two looks of ADR-0012): every page opens on the same night band with the hexagon
+    // field, so the site reads as one; saffron still adds the orange bar. scope-night gives whatever the page puts
+    // in the band (chips, buttons, fields, muted text) its dark-mode colours.
+    $dark = true;
 @endphp
 <section {{ $attributes->class([
-    'relative isolate overflow-hidden border-b',
+    'scope-night relative isolate overflow-hidden border-b',
     'border-night-line bg-night-900 text-night-ink' => $dark,
     'border-line bg-surface-muted' => ! $dark,
 ]) }}>

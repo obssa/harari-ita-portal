@@ -401,3 +401,16 @@
         }
     }
 }
+
+/* ADR-0048: a band that stays night whatever the theme (the page header): inside it the surface, line and text
+   tokens take their dark values, so cards, chips, buttons and fields placed in it read as they do in dark mode. */
+.scope-night {
+    --color-canvas: var(--color-night-900);
+    --color-surface: var(--color-night-800);
+    --color-surface-muted: var(--color-night-950);
+    --color-line: var(--color-night-line);
+    --color-ink: var(--color-night-ink);
+    --color-ink-muted: var(--color-night-muted);
+    --color-link: var(--color-cyan-300);
+    --color-eyebrow: var(--color-cyan-300);
+}
