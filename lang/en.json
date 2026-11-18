@@ -1014,7 +1014,7 @@
     "advisories.report.support": "Ask the Agency's IT support",
     "advisories.report.text": "The Agency gives guidance. Cyber incidents are reported to INSA, the national authority. For a problem with a system the Agency supports, ask our IT support.",
     "advisories.report.title": "Where to report",
-    "advisories.severity.advisory": "Advisory",
+    "advisories.severity.advisory": "Caution",
     "advisories.severity.advisory_help": "A known risk. Take the steps soon.",
     "advisories.severity.info": "Info",
     "advisories.severity.info_help": "Good practice and awareness. No action is needed straight away.",

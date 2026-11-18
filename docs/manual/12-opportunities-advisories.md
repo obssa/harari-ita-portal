@@ -58,7 +58,7 @@ severity). Translators translate advisories as any post.
 1. Open **Content → Posts → New post** and choose the type **Advisory**.
 2. Choose the **severity**:
    - **Info**: good practice and awareness, no action needed straight away;
-   - **Advisory**: a known risk, act soon;
+   - **Caution**: a known risk, act soon;
    - **Warning**: an active threat, act now.
 3. In each language: the title, the summary, the **affected systems** (one per line), the **steps to take** (one
    per line, in order) and, if needed, more details in the text.

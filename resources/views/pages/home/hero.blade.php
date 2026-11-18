@@ -14,7 +14,8 @@
     <section aria-label="{{ $section->heading() }}" data-motion class="relative isolate overflow-hidden bg-night-900 text-night-ink">
         <x-hex-field id="hero-hex" class="absolute inset-0 -z-20 size-full text-cyan-500/20" />
         {{-- ADR-0051: the Jugol circuit runs along the foot of the hero, with light moving through it. --}}
-        <x-circuit :flow="true" class="absolute inset-x-0 bottom-0 -z-10 h-56 w-full text-cyan-500/15 [mask-image:linear-gradient(to_top,#000,transparent)]" />
+        <x-circuit :flow="true" class="absolute start-0 bottom-0 -z-10 h-72 w-[36rem] text-cyan-500/15 [mask-image:linear-gradient(to_top,#000,transparent)]" />
+        <x-circuit :flow="true" class="absolute end-0 bottom-0 -z-10 hidden h-72 w-[36rem] -scale-x-100 text-cyan-500/15 [mask-image:linear-gradient(to_top,#000,transparent)] lg:block" />
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[radial-gradient(60rem_40rem_at_85%_10%,rgb(16_93_111/0.55),transparent_70%)]"></div>
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgb(29_74_88/0.35)_1px,transparent_1px)] bg-[size:6rem_100%] opacity-60 [mask-image:linear-gradient(to_bottom,#000,transparent_85%)]"></div>
 

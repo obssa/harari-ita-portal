@@ -50,7 +50,7 @@ term goes into the glossary (Admin → Translations → Glossary) so that machin
 | addendum / clarification / extension | ማሻሻያ / ማብራሪያ / የጊዜ ማራዘሚያ | dabalata / ibsa / dheereffama yeroo | `opportunities.addendum.kind.*` | Check against the Agency's procurement notices |
 | bid opening | የጨረታ መክፈቻ | banamuu caalbaasii | `opportunities.field.bid_opening_at`, `opportunities.calendar.bid_opening` | |
 | bidder | ተጫራች | dorgomaa caalbaasii | `opportunities.admin.help.closes_locked` | |
-| advisory (safety guidance) / severity: info, advisory, warning | የደህንነት ምክር / መረጃ፣ ምክር፣ ማስጠንቀቂያ | gorsa nageenyaa / odeeffannoo, gorsa, akeekkachiisa | `advisories.*` | Am "ምክር" is used both for the post type and the middle level; check whether "ጥንቃቄ" reads better for the level |
+| advisory (safety guidance) / severity: info, caution, warning | የደህንነት ምክር / መረጃ፣ ጥንቃቄ፣ ማስጠንቀቂያ | gorsa nageenyaa / odeeffannoo, of eeggannaa, akeekkachiisa | `advisories.*` | The middle level was renamed from "advisory" to "caution" (2026-11-18) so it no longer repeats the post type; check the Amharic and Afaan Oromo words |
 | phishing | ማጭበርበሪያ መልእክት | ergaa gowwoomsaa | sample content only | Used in the sample advisory; for the tech glossary |
 | RSS feed | በRSS ይከተሉ (button) / የRSS መጋቢ (text) | — | `news.feed`, `opportunities.feed`, `advisories.feed`, manual 08, 12 | ምግብ (food) was replaced; check መጋቢ in running text |
 | innovation (admin section vs. public text) | ኢኖቬሽን (admin menu) / ፈጠራ (public) | kalaqa | `admin.nav.innovation`, `nav.innovation`, manual 09 | Two Amharic words for one idea; the Agency may want one |

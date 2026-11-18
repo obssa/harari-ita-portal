@@ -7,7 +7,8 @@
 @if ($statistics->isNotEmpty())
     <section aria-labelledby="home-impact" data-motion class="relative isolate overflow-hidden bg-night-950 text-night-ink">
         <x-hex-field id="impact-hex" fade="left" class="absolute inset-y-0 start-0 -z-20 h-full w-1/2 text-cyan-500/15" />
-        <x-circuit :flow="true" class="absolute inset-0 -z-10 size-full text-cyan-500/10" />
+        <x-circuit :flow="true" class="absolute start-0 top-0 -z-10 h-80 w-[40rem] text-cyan-500/10" />
+        <x-circuit :flow="true" class="absolute end-0 bottom-0 -z-10 hidden h-80 w-[40rem] rotate-180 text-cyan-500/10 lg:block" />
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[radial-gradient(40rem_24rem_at_85%_100%,rgb(232_145_45/0.16),transparent_70%)]"></div>
         <div class="mx-auto grid max-w-page gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_2fr] lg:items-end">
             <div>

@@ -1014,7 +1014,7 @@
     "advisories.report.support": "የኤጀንሲውን የአይቲ ድጋፍ ይጠይቁ",
     "advisories.report.text": "ኤጀንሲው ምክር ይሰጣል። የሳይበር ጥቃቶች ለብሔራዊው ባለሥልጣን ለኢንሳ ሪፖርት ይደረጋሉ። ኤጀንሲው በሚደግፈው ሥርዓት ላይ ችግር ካጋጠመዎት የአይቲ ድጋፋችንን ይጠይቁ።",
     "advisories.report.title": "የት ሪፖርት እንደሚደረግ",
-    "advisories.severity.advisory": "ምክር",
+    "advisories.severity.advisory": "ጥንቃቄ",
     "advisories.severity.advisory_help": "የታወቀ ስጋት። እርምጃዎቹን በቅርቡ ይውሰዱ።",
     "advisories.severity.info": "መረጃ",
     "advisories.severity.info_help": "ጥሩ ልምድና ግንዛቤ። ወዲያውኑ መወሰድ ያለበት እርምጃ የለም።",

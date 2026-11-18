@@ -16,7 +16,7 @@
         'text-primary-700/10 dark:text-cyan-500/15' => ! $dark,
     ])" />
     {{-- ADR-0051: the Jugol circuit at the band's far edge, with light running through it, on every page. --}}
-    <x-circuit :flow="true" class="absolute end-0 bottom-0 -z-10 hidden h-40 w-1/2 text-cyan-500/20 [mask-image:linear-gradient(to_left,#000_20%,transparent)] sm:block" />
+    <x-circuit :flow="true" class="absolute end-0 bottom-0 -z-10 hidden h-48 w-96 text-cyan-500/20 [mask-image:linear-gradient(to_left,#000_20%,transparent)] sm:block" />
     @if ($tone === 'saffron')
         <span aria-hidden="true" class="absolute inset-x-0 top-0 h-1 bg-saffron-500"></span>
     @endif

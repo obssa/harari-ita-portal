@@ -972,6 +972,9 @@ taken for a report on the Agency's own work.
   - stories without a photo get their own arrangement of the circuit, turned and placed by the story's id, with
     the emblem small in the corner, instead of a large centred logo.
 
+- **Severity wording:** the middle advisory level is now "Caution" (ጥንቃቄ, Of eeggannaa), so an advisory card no
+  longer reads "Advisory · Advisory".
+
 **Why.** The owner asked for a livelier, modern homepage with tech-and-digital motion that stays professional and
 fast, and for creative touches on the other pages.
 - **Speed:** only stroke offsets, transforms and a pseudo-element's opacity animate, so nothing moves the layout.
