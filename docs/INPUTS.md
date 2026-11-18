@@ -12,6 +12,8 @@ staging stays noindex. Tick each item when received and note where it is stored.
 ## Organisation
 - [ ] Organisation chart: directorates and teams, each with a one-line responsibility
 - [ ] Leadership to publish: name, title, photo and short bio, with **written consent** for each person
+  - The head of the Agency is published from ENA's report of 9 November 2026 (ADR-0049): confirm the name
+    and title, and supply a photo (with consent) and the deputies and directors.
 - [ ] Office address, map location, hours, phone and hotline, official email, social media accounts
 
 ## Services and operations

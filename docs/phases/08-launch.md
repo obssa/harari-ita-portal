@@ -144,6 +144,10 @@ Checked in English and Amharic, on desktop and phone (`08-screens/`).
 - **Pillar buttons:** pillar pages lead to their own work (services, programmes, the Academy, open data,
   advisories), no longer to the volunteer form.
 
+**Leadership (2026-11-18, at the owner's request).** The head of the Agency, Ato Jemal Ibrahim, is published
+from the Ethiopian News Agency's report of 9 November 2026, with the source on his profile (ADR-0049). No other
+official of the Agency is named in public sources, so the deputies and directors wait for the Agency.
+
 **Checks.**
 
 - **Tests:** the new tests cover the launch check, removing the samples, hidden languages, the content pack in
@@ -151,7 +155,7 @@ Checked in English and Amharic, on desktop and phone (`08-screens/`).
   browser test pass in CI. Larastan and Pint are clean, and the hard-coded strings check passes.
 - **Accessibility:** axe found no serious or critical issue (light and dark) on the homepage in three languages,
   Harar Jugol, Digital Ethiopia 2030, About, a pillar, the Academy, a programme and an advisory.
-- **Lighthouse (mobile, representative runs):** all 26 audited pages pass; the English homepage scores performance 98, accessibility 100 and best practices 96, the Amharic homepage 92, Harar Jugol 99, a pillar 98 and a course 99. The audited pages now include the Agency's content in place of the removed samples. The audited pages now include the Agency's content
+- **Lighthouse (mobile, representative runs):** all 26 audited pages pass; the English homepage scores performance 98, accessibility 100 and best practices 96, the Amharic homepage 92, Harar Jugol 99, a pillar 98 and a course 99. The audited pages now include the Agency's content
   instead of the removed samples.
 
 **The launch check on staging** (2026-11-18): 5 ready, 3 deferred by decision (Harari, SMS, indexing) and 8 missing.

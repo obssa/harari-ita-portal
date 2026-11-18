@@ -328,7 +328,35 @@
     }
   ],
   "offices": [],
-  "leaders": [],
+  "leaders": [
+    {
+      "key": "leader.agency-head",
+      "body": "management",
+      "rank": 1,
+      "source_url": "https://www.ena.et/web/amh/w/amh_9899183",
+      "source_date": "2026-11-09",
+      "translations": {
+        "en": {
+          "name": "Ato Jemal Ibrahim",
+          "slug": "jemal-ibrahim",
+          "position": "Head, Harari Regional State Innovation and Technology Agency",
+          "summary": "Heads the Harari Regional State Innovation and Technology Agency. In November 2026 he told the Ethiopian News Agency that more than 55,000 people in the region had completed the 5 Million Ethiopian Coders training, more than 41,000 of them with internationally recognised certificates, and that work had begun to train about 20,000 more young people this budget year."
+        },
+        "am": {
+          "name": "አቶ ጀማል ኢብራሂም",
+          "slug": "jemal-ibrahim",
+          "position": "የሐረሪ ክልል ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲ ኃላፊ",
+          "summary": "የሐረሪ ክልል ኢኖቬሽንና ቴክኖሎጂ ኤጀንሲን ይመራሉ። በጥቅምት 2019 ዓ.ም. ለኢትዮጵያ ዜና አገልግሎት (ኢዜአ) እንደገለጹት፣ በክልሉ ከ55 ሺህ በላይ ዜጎች የ5 ሚሊዮን ኢትዮጵያውያን ኮደርስ ሥልጠናን ያጠናቀቁ ሲሆን፣ ከእነዚህም ከ41 ሺህ በላይ የሚሆኑት ዓለም አቀፍ ተቀባይነት ያለው የምስክር ወረቀት አግኝተዋል፤ በበጀት ዓመቱም ወደ 20 ሺህ የሚሆኑ አዳዲስ ወጣቶችን ለማሠልጠን ሥራ ተጀምሯል።"
+        },
+        "om": {
+          "name": "Obbo Jamaal Ibraahim",
+          "slug": "jemal-ibrahim",
+          "position": "Itti Gaafatamaa Ejansii Kalaqaa fi Teeknooloojii Mootummaa Naannoo Hararii",
+          "summary": "Ejansii Kalaqaa fi Teeknooloojii Mootummaa Naannoo Hararii ni geggeessu. Sadaasa 2026 Tajaajila Oduu Itoophiyaatti (ENA) akka himanitti, naannicha keessatti lammiileen 55,000 ol leenjii Koodaroota Itoophiyaa Miliyoona 5 xumuraniiru; isaan keessaa 41,000 ol ragaa sadarkaa addunyaatti fudhatama qabu argataniiru. Bara baajataa kana dargaggoota haaraa gara 20,000 leenjisuuf hojiin jalqabameera."
+        }
+      }
+    }
+  ],
   "pages": [
     {
       "key": "page.about",

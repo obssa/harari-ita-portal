@@ -41,7 +41,7 @@ it('ships the Agency\'s first content in three languages, loaded once, with no s
     staff(SystemRole::SuperAdmin, mfa: false);
 
     $counts = app(LoadContentPack::class)->handle(database_path('content/pack.json'));
-    expect($counts)->toMatchArray(['pillars' => 5, 'pages' => 3, 'posts' => 4, 'advisories' => 3, 'courses' => 6, 'programmes' => 2, 'projects' => 3, 'homepage' => 1])
+    expect($counts)->toMatchArray(['pillars' => 5, 'pages' => 3, 'posts' => 4, 'advisories' => 3, 'courses' => 6, 'programmes' => 2, 'projects' => 3, 'leaders' => 1, 'homepage' => 1])
         ->and(app(LoadContentPack::class)->handle(database_path('content/pack.json')))->toBe([])
         ->and(Pillar::query()->count())->toBe(5)
         ->and(Post::query()->where('type', 'advisory')->count())->toBe(3);
@@ -59,6 +59,16 @@ it('ships the Agency\'s first content in three languages, loaded once, with no s
     $this->get('/en/harar')->assertOk()->assertSee('whc.unesco.org/en/list/1189', escape: false);
     $this->get('/en/news')->assertOk()->assertSee('Mesob');
     $this->get('/en/advisories')->assertOk()->assertSee('two-step sign-in');
+
+    // ADR-0049: the head of the Agency, as state media published the post, with the source and its date.
+    $head = Leader::query()->sole();
+    expect($head->body)->toBe(LeaderBody::Management)->and($head->source_url)->toStartWith('https://www.ena.et/')
+        ->and($head->source_date?->toDateString())->toBe('2026-11-09')->and($head->portrait_id)->toBeNull();
+    foreach (['en', 'am', 'om'] as $locale) {
+        expect($head->translation($locale, fallback: false)?->status)->toBe(ContentStatus::Published);
+    }
+    $this->get('/en/about/leadership')->assertOk()->assertSee(__('leaders.featured', [], 'en'));
+    $this->get('/om/about/leadership/'.$head->translation('om', fallback: false)?->slug)->assertOk()->assertSee('ena.et/web/amh/w/amh_9899183');
     expect(json_encode(json_decode((string) file_get_contents(database_path('content/pack.json')), true)))->not->toContain('Sample');
 });
 

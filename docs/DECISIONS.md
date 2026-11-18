@@ -912,3 +912,24 @@ surface, line and text tokens their dark-mode values inside the band, so chips, 
 placed there read as they do in dark mode. axe passes on every page whose header changed.
 
 **Why.** The owner found the light and dark headers inconsistent between pages.
+
+## ADR-0049 — The head of the Agency from state media (2026-11-18)
+
+**Decision.** The leadership page opens with the head of the Agency, Ato Jemal Ibrahim. The Ethiopian News Agency
+(ENA) gives his post as "head of the Harari Region Innovation and Technology Agency" in its Amharic report of
+9 November 2026 (Tikimt 30, 2019 E.C.), <https://www.ena.et/web/amh/w/amh_9899183>. Fana Media's report of
+7 August 2025 (<https://www.fanamc.com/archives/298487>) gives the same post. The profile links its source and date
+(ADR-0063), as every leader's does.
+- **Profile:** his name, his position and what the report says he said; no quotes and no photo.
+- **Figures:** the training figures are given as his, from ENA, with its date.
+- **Name forms:** the honorifics are Ato (en), አቶ (am) and Obbo (om), and the slug is `jemal-ibrahim`.
+- **Other names:** the October 2026 regional cabinet list (BirrMetrics, 2 October 2026) does not include the Agency.
+  Searches in English and Amharic (news, the Agency's Facebook page) found no other named official of the Agency, so
+  no deputies or directors are listed. An "Awole Mohammed Umer, head of the Innovation and Technology Bureau" in the
+  results belongs to Addis Ababa's cabinet (EBS, 30 September 2026), not Harari's.
+
+**Why.** The owner asked for the leadership to be researched online with the latest data. A post published by
+state media is public, and the source link lets readers and the Agency check it.
+- **Photos:** a portrait needs the person's consent and a credited photo (INPUTS.md), so the profile shows initials
+  until the Agency supplies one.
+- **Others:** the Agency confirms the record and supplies its deputies and directors.

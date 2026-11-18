@@ -18,6 +18,8 @@ All notable changes to the Agency's portal. Newest first.
   a new closing heritage band: five gates, five pillars (ADR-0046).
 - Every page header on the same night band (ADR-0048); header menus close on an outside click or Escape and their
   panels wrap text (ADR-0047); pillar pages lead to their own work.
+- The leadership page opens with the head of the Agency, from ENA's report of 9 November 2026, with its source
+  (ADR-0049).
 
 ## Unreleased — phase 7: the dashboard, reports and roles
 
