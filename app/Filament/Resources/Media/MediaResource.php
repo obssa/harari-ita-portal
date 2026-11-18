@@ -7,6 +7,7 @@ use App\Filament\Resources\Media\Pages\EditMedia;
 use App\Filament\Resources\Media\Pages\ListMedia;
 use App\Filament\Resources\Media\Schemas\MediaForm;
 use App\Filament\Resources\Media\Tables\MediaTable;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -17,6 +18,8 @@ use UnitEnum;
 
 class MediaResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Media::class;
 
     protected static ?string $slug = 'media';
@@ -25,7 +28,7 @@ class MediaResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 100;
 
     public static function getModelLabel(): string
     {

@@ -18,6 +18,7 @@ use App\Filament\Resources\Tickets\Pages\TicketBoard;
 use App\Filament\Resources\Tickets\Pages\ViewTicket;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Models\User;
 use BackedEnum;
 use Filament\Actions\ViewAction;
@@ -45,6 +46,8 @@ use UnitEnum;
  */
 class TicketResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Ticket::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedLifebuoy;

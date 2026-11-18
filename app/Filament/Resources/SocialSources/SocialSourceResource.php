@@ -12,6 +12,7 @@ use App\Domain\Social\Models\SocialSource;
 use App\Domain\Social\Support\Fetchers;
 use App\Filament\Resources\SocialSources\Pages\ManageSocialSources;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Services\Calendar\EthiopianCalendar;
 use BackedEnum;
 use Closure;
@@ -39,11 +40,13 @@ use UnitEnum;
  */
 class SocialSourceResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = SocialSource::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSignal;
 
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 50;
 
     public static function getModelLabel(): string
     {
@@ -57,7 +60,7 @@ class SocialSourceResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('social.admin.nav');
+        return __('admin.nav.communication');
     }
 
     public static function form(Schema $schema): Schema

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\MediaFolders;
 use App\Domain\Media\Models\MediaFolder;
 use App\Domain\Sites\Models\Site;
 use App\Filament\Resources\MediaFolders\Pages\ManageMediaFolders;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Closure;
 use Filament\Actions\DeleteAction;
@@ -21,6 +22,8 @@ use UnitEnum;
 
 class MediaFolderResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = MediaFolder::class;
 
     protected static ?string $slug = 'media-folders';
@@ -29,7 +32,7 @@ class MediaFolderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 110;
 
     public static function getModelLabel(): string
     {

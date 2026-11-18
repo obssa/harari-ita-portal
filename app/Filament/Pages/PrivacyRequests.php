@@ -49,7 +49,7 @@ class PrivacyRequests extends Page implements HasTable
 
     protected static ?string $slug = 'privacy';
 
-    protected static ?int $navigationSort = 96;
+    protected static ?int $navigationSort = 70;
 
     /** @var array<string, mixed>|null */
     public ?array $data = [];

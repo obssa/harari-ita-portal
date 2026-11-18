@@ -15,6 +15,7 @@ use App\Filament\Resources\Datasets\RelationManagers\DistributionsRelationManage
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\DirectoryFields;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -48,11 +49,13 @@ use UnitEnum;
  */
 class DatasetResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Dataset::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCircleStack;
 
-    protected static ?int $navigationSort = 41;
+    protected static ?int $navigationSort = 30;
 
     public static function getModelLabel(): string
     {

@@ -7,6 +7,7 @@ use App\Domain\Api\Enums\ApiScope;
 use App\Domain\Api\Models\ApiKey;
 use App\Filament\Resources\ApiKeys\Pages\ManageApiKeys;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
@@ -30,11 +31,13 @@ use UnitEnum;
  */
 class ApiKeyResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = ApiKey::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedKey;
 
-    protected static ?int $navigationSort = 61;
+    protected static ?int $navigationSort = 60;
 
     public static function getModelLabel(): string
     {

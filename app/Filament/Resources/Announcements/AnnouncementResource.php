@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Announcements;
 use App\Domain\Dashboard\Models\Announcement;
 use App\Filament\Resources\Announcements\Pages\ManageAnnouncements;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Services\Calendar\EthiopianCalendar;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
@@ -26,11 +27,13 @@ use UnitEnum;
  */
 class AnnouncementResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Announcement::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMegaphone;
 
-    protected static ?int $navigationSort = 45;
+    protected static ?int $navigationSort = 90;
 
     public static function getModelLabel(): string
     {
@@ -44,7 +47,7 @@ class AnnouncementResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.administration');
+        return __('admin.nav.communication');
     }
 
     public static function form(Schema $schema): Schema

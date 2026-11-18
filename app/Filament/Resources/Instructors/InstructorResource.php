@@ -7,6 +7,7 @@ use App\Domain\Academy\Models\Instructor;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\Instructors\Pages\ManageInstructors;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Models\User;
 use BackedEnum;
 use Filament\Actions\CreateAction;
@@ -31,11 +32,13 @@ use UnitEnum;
  */
 class InstructorResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Instructor::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    protected static ?int $navigationSort = 52;
+    protected static ?int $navigationSort = 30;
 
     public static function getModelLabel(): string
     {

@@ -53,7 +53,7 @@ class ManageTranslations extends Page implements HasTable
 
     protected static ?string $slug = 'translations';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 10;
 
     #[Url]
     public string $language = '';

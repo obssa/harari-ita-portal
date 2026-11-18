@@ -6,6 +6,7 @@ use App\Domain\Webhooks\Models\Webhook;
 use App\Domain\Webhooks\Support\WebhookUrl;
 use App\Filament\Resources\Webhooks\Pages\ManageWebhooks;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Closure;
 use Filament\Actions\Action;
@@ -29,11 +30,13 @@ use UnitEnum;
  */
 class WebhookResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Webhook::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBolt;
 
-    protected static ?int $navigationSort = 60;
+    protected static ?int $navigationSort = 50;
 
     public static function getModelLabel(): string
     {

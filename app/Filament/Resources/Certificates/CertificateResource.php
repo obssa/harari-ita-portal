@@ -8,6 +8,7 @@ use App\Domain\Academy\Support\CohortScope;
 use App\Filament\Resources\Certificates\Pages\ListCertificates;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;
@@ -26,11 +27,13 @@ use UnitEnum;
  */
 class CertificateResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Certificate::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
 
-    protected static ?int $navigationSort = 53;
+    protected static ?int $navigationSort = 40;
 
     public static function getModelLabel(): string
     {

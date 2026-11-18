@@ -5,6 +5,7 @@ namespace App\Filament\Resources\GlossaryTerms;
 use App\Domain\Translation\Models\GlossaryTerm;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\GlossaryTerms\Pages\ManageGlossaryTerms;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -22,11 +23,13 @@ use UnitEnum;
  */
 class GlossaryTermResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = GlossaryTerm::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookOpen;
 
-    protected static ?int $navigationSort = 52;
+    protected static ?int $navigationSort = 30;
 
     public static function getModelLabel(): string
     {

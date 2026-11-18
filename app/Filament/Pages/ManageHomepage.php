@@ -46,7 +46,7 @@ class ManageHomepage extends Page
 
     protected static ?string $slug = 'homepage';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 10;
 
     /** @var array<string, mixed>|null */
     public ?array $data = [];

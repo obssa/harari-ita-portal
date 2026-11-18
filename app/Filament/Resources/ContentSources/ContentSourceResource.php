@@ -8,6 +8,7 @@ use App\Domain\Import\Models\ContentSource;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\ContentSources\Pages\ManageContentSources;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
@@ -30,11 +31,13 @@ use UnitEnum;
  */
 class ContentSourceResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = ContentSource::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowDownTray;
 
-    protected static ?int $navigationSort = 44;
+    protected static ?int $navigationSort = 60;
 
     public static function getModelLabel(): string
     {
@@ -48,7 +51,7 @@ class ContentSourceResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.administration');
+        return __('admin.nav.site');
     }
 
     public static function form(Schema $schema): Schema

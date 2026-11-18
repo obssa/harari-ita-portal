@@ -10,6 +10,7 @@ use App\Filament\Resources\Pillars\Pages\EditPillar;
 use App\Filament\Resources\Pillars\Pages\ListPillars;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -33,11 +34,13 @@ use UnitEnum;
 
 class PillarResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Pillar::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFlag;
 
-    protected static ?int $navigationSort = 12;
+    protected static ?int $navigationSort = 10;
 
     public static function getModelLabel(): string
     {

@@ -29,7 +29,7 @@ class ManageSecurity extends SettingsPage
 
     protected static ?string $slug = 'settings/security';
 
-    protected static ?int $navigationSort = 42;
+    protected static ?int $navigationSort = 30;
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {

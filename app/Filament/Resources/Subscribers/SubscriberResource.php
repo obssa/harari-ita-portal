@@ -8,6 +8,7 @@ use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\Subscribers\Pages\ListSubscribers;
 use App\Filament\Resources\Subscribers\Pages\ViewSubscriber;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Support\PhoneNumber;
 use BackedEnum;
 use Filament\Actions\ViewAction;
@@ -29,11 +30,13 @@ use UnitEnum;
  */
 class SubscriberResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Subscriber::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelopeOpen;
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 40;
 
     public static function getModelLabel(): string
     {

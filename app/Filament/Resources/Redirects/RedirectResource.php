@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Redirects;
 use App\Domain\Content\Models\Redirect;
 use App\Filament\Resources\Redirects\Pages\ManageRedirects;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Closure;
 use Filament\Actions\DeleteAction;
@@ -25,11 +26,13 @@ use UnitEnum;
  */
 class RedirectResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Redirect::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowUturnRight;
 
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 50;
 
     public static function getModelLabel(): string
     {
@@ -43,7 +46,7 @@ class RedirectResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.content');
+        return __('admin.nav.site');
     }
 
     public static function form(Schema $schema): Schema

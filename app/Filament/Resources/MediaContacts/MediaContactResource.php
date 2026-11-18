@@ -7,6 +7,7 @@ use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\MediaContacts\Pages\CreateMediaContact;
 use App\Filament\Resources\MediaContacts\Pages\EditMediaContact;
 use App\Filament\Resources\MediaContacts\Pages\ListMediaContacts;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
@@ -29,11 +30,13 @@ use UnitEnum;
  */
 class MediaContactResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = MediaContact::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
 
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 70;
 
     protected static ?string $slug = 'media-contacts';
 

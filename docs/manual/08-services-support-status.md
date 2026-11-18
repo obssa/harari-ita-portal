@@ -15,7 +15,7 @@ Who: service owners (only for their own directorate if their role is limited to 
 3. Use **More details** for anything longer, and **Questions and answers** for up to twelve common questions.
 4. On the right, tick **How it can be used**: online, in person, by phone. An online service needs its
    **Online service link** (https only); "Start online" on the public page opens it in a new tab.
-5. Choose who it is **For**, the **Category** (categories are managed under **Content → Categories**, type
+5. Choose who it is **For**, the **Category** (categories are managed under **Site setup → Categories**, type
    "Service categories"), and the **Responsible office**.
 6. Switch on **Top service** to show it on the homepage; **Order** sets its place. Set **Last reviewed** each time
    someone checks that the page is still right.

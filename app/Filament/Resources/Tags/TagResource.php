@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Tags;
 
 use App\Domain\Content\Models\Tag;
 use App\Filament\Resources\Tags\Pages\ManageTags;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
@@ -22,11 +23,13 @@ use UnitEnum;
 
 class TagResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Tag::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHashtag;
 
-    protected static ?int $navigationSort = 31;
+    protected static ?int $navigationSort = 40;
 
     public static function getModelLabel(): string
     {
@@ -40,7 +43,7 @@ class TagResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.content');
+        return __('admin.nav.site');
     }
 
     public static function form(Schema $schema): Schema

@@ -28,7 +28,7 @@ class ManageIntegrations extends SettingsPage
 
     protected static ?string $slug = 'settings/integrations';
 
-    protected static ?int $navigationSort = 41;
+    protected static ?int $navigationSort = 40;
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {

@@ -6,6 +6,7 @@ use App\Filament\Resources\Activities\Pages\ListActivities;
 use App\Filament\Resources\Activities\Pages\ViewActivity;
 use App\Filament\Resources\Activities\Schemas\ActivityInfolist;
 use App\Filament\Resources\Activities\Tables\ActivitiesTable;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -21,13 +22,15 @@ use UnitEnum;
  */
 class ActivityResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Activity::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
     protected static ?string $slug = 'audit-log';
 
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 80;
 
     public static function getModelLabel(): string
     {

@@ -9,6 +9,7 @@ use App\Filament\Resources\Applications\Pages\ApplicationBoard;
 use App\Filament\Resources\Applications\Pages\ListApplications;
 use App\Filament\Resources\Applications\Pages\ViewApplication;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\TextEntry;
@@ -29,6 +30,8 @@ use UnitEnum;
  */
 class ApplicationResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Application::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;

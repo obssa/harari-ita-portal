@@ -7,6 +7,7 @@ use App\Domain\Content\Models\Page;
 use App\Domain\Content\Models\Post;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\Menus\Pages\ManageMenus;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Repeater;
@@ -27,11 +28,13 @@ use UnitEnum;
  */
 class MenuResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Menu::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBars3;
 
-    protected static ?int $navigationSort = 35;
+    protected static ?int $navigationSort = 20;
 
     public static function getModelLabel(): string
     {
@@ -45,7 +48,7 @@ class MenuResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.content');
+        return __('admin.nav.site');
     }
 
     public static function form(Schema $schema): Schema

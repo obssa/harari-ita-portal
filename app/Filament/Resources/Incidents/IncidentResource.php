@@ -12,6 +12,7 @@ use App\Filament\Resources\Incidents\Pages\CreateIncident;
 use App\Filament\Resources\Incidents\Pages\EditIncident;
 use App\Filament\Resources\Incidents\Pages\ListIncidents;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
@@ -35,11 +36,13 @@ use UnitEnum;
  */
 class IncidentResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Incident::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedExclamationTriangle;
 
-    protected static ?int $navigationSort = 60;
+    protected static ?int $navigationSort = 50;
 
     public static function getModelLabel(): string
     {

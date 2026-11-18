@@ -6,6 +6,7 @@ use App\Domain\Innovation\Models\JudgeAssignment;
 use App\Filament\Resources\JudgeAssignments\Pages\ListJudgeAssignments;
 use App\Filament\Resources\JudgeAssignments\Pages\ViewJudgeAssignment;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\TextEntry;
@@ -26,11 +27,13 @@ use UnitEnum;
  */
 class JudgeAssignmentResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = JudgeAssignment::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedScale;
 
-    protected static ?int $navigationSort = 42;
+    protected static ?int $navigationSort = 60;
 
     protected static ?string $slug = 'my-judging';
 

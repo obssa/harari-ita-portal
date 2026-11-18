@@ -14,6 +14,7 @@ use App\Filament\Resources\Documents\RelationManagers\VersionsRelationManager;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use App\Services\Calendar\EthiopianCalendar;
@@ -42,11 +43,13 @@ use UnitEnum;
 
 class DocumentResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Document::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static ?int $navigationSort = 22;
+    protected static ?int $navigationSort = 70;
 
     public static function getModelLabel(): string
     {

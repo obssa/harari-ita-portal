@@ -6,7 +6,7 @@ version: [04-translations-social.am.md](04-translations-social.am.md).
 ## 1. The words of the site
 
 Every button, heading and message of the site exists in English, Amharic, Afaan Oromo and Harari.
-Translators correct them in **Administration → Languages → Interface translations**.
+Translators correct them in **Languages → Interface translations**.
 
 Who: everyone with translation rights sees the list; a translator changes only the languages given to
 them (for example Harari only).
@@ -35,12 +35,12 @@ Every change is kept with who made it and the English it was made from.
 4. Choose **Save these changes**.
 
 Empty cells leave a text as it is, unless you tick **Empty cells remove the translation**.
-**Administration → Languages → Translation imports** lists every import; **Roll back** undoes one
+**Languages → Translation imports** lists every import; **Roll back** undoes one
 completely. CSV files must be saved as "CSV UTF-8" so Ethiopic letters survive; Excel files always work.
 
 ## 3. The glossary
 
-**Administration → Languages → Glossary** holds the approved words for the Agency's names, units and ideas
+**Languages → Glossary** holds the approved words for the Agency's names, units and ideas
 in every language, with notes. The translation editor shows the terms in each English text and whether
 your translation uses them. The glossary warns; it never stops you saving.
 

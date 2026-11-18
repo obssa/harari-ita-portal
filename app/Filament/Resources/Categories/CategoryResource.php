@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Categories;
 
 use App\Domain\Content\Models\Category;
 use App\Filament\Resources\Categories\Pages\ManageCategories;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
@@ -26,6 +27,8 @@ use UnitEnum;
 
 class CategoryResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Category::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
@@ -44,7 +47,7 @@ class CategoryResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.content');
+        return __('admin.nav.site');
     }
 
     public static function form(Schema $schema): Schema

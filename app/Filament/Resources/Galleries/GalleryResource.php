@@ -13,6 +13,7 @@ use App\Filament\Resources\Galleries\Pages\ListGalleries;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -40,11 +41,13 @@ use UnitEnum;
 
 class GalleryResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Gallery::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
 
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 80;
 
     public static function getModelLabel(): string
     {

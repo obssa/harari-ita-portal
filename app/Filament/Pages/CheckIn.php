@@ -41,7 +41,7 @@ class CheckIn extends Page
 
     protected static ?string $slug = 'check-in';
 
-    protected static ?int $navigationSort = 21;
+    protected static ?int $navigationSort = 60;
 
     #[Url]
     public string $code = '';

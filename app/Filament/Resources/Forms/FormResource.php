@@ -11,6 +11,7 @@ use App\Filament\Resources\Forms\Pages\CreateForm;
 use App\Filament\Resources\Forms\Pages\EditForm;
 use App\Filament\Resources\Forms\Pages\ListForms;
 use App\Filament\Support\DirectoryFields;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -41,11 +42,13 @@ use UnitEnum;
 
 class FormResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Form::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
-    protected static ?int $navigationSort = 31;
+    protected static ?int $navigationSort = 20;
 
     public static function getModelLabel(): string
     {
@@ -59,7 +62,7 @@ class FormResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('forms.admin.nav');
+        return __('admin.nav.communication');
     }
 
     public static function form(Schema $schema): Schema

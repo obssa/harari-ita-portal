@@ -35,14 +35,14 @@ class ManageSiteSettings extends SettingsPage
 
     protected static ?string $slug = 'settings/site';
 
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 10;
 
     /** Social networks offered in the form, in footer order. */
     public const SOCIAL = ['facebook', 'telegram', 'youtube', 'x', 'tiktok', 'instagram'];
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.administration');
+        return __('admin.nav.site');
     }
 
     public static function getNavigationLabel(): string

@@ -11,6 +11,7 @@ use App\Filament\Resources\Offices\Pages\EditOffice;
 use App\Filament\Resources\Offices\Pages\ListOffices;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -35,11 +36,13 @@ use UnitEnum;
 
 class OfficeResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Office::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 20;
 
     public static function getModelLabel(): string
     {

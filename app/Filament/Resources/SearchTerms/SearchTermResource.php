@@ -6,6 +6,7 @@ use App\Domain\Search\Models\SearchTerm;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\SearchTerms\Pages\ListSearchTerms;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
@@ -22,11 +23,13 @@ use UnitEnum;
  */
 class SearchTermResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = SearchTerm::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMagnifyingGlass;
 
-    protected static ?int $navigationSort = 60;
+    protected static ?int $navigationSort = 30;
 
     public static function getModelLabel(): string
     {
@@ -40,7 +43,7 @@ class SearchTermResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.content');
+        return __('admin.nav.insights');
     }
 
     public static function table(Table $table): Table

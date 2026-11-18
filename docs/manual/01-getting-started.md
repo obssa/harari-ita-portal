@@ -99,7 +99,7 @@ Filters on the list help with the work left: **Missing alt text**, **Not used an
 
 ## 6. Site settings
 
-**Administration → Site settings** (Admins can read; only a Super Admin changes them): default
+**Site setup → Site settings** (Admins can read; only a Super Admin changes them): default
 language, which calendar comes first, contact email, phone and hotline, address and office hours in
 each language, and the links to the Agency's social media pages. The public footer shows these.
 

@@ -11,6 +11,7 @@ use App\Filament\Resources\Services\Pages\CreateServiceItem;
 use App\Filament\Resources\Services\Pages\EditServiceItem;
 use App\Filament\Resources\Services\Pages\ListServiceItems;
 use App\Filament\Support\DirectoryFields;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -43,6 +44,8 @@ use UnitEnum;
  */
 class ServiceItemResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = ServiceItem::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSquares2x2;

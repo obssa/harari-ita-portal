@@ -12,6 +12,7 @@ use App\Filament\Resources\Pages\Pages\ListPages;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -37,11 +38,13 @@ use UnitEnum;
 
 class PageResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Page::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 40;
 
     public static function getModelLabel(): string
     {

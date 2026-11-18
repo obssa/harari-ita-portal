@@ -13,6 +13,7 @@ use App\Filament\Resources\Videos\Pages\ListVideos;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use App\Services\Calendar\EthiopianCalendar;
@@ -42,11 +43,13 @@ use UnitEnum;
 
 class VideoResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Video::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedVideoCamera;
 
-    protected static ?int $navigationSort = 41;
+    protected static ?int $navigationSort = 90;
 
     public static function getModelLabel(): string
     {

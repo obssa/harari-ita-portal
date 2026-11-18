@@ -14,6 +14,7 @@ use App\Filament\Resources\Startups\Pages\ListStartups;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -39,6 +40,8 @@ use UnitEnum;
  */
 class StartupResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Startup::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRocketLaunch;

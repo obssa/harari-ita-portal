@@ -17,6 +17,7 @@ use App\Filament\Resources\Volunteers\RelationManagers\AssignmentsRelationManage
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\OfficeOptions;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Support\Mask;
 use BackedEnum;
 use Filament\Actions\ViewAction;
@@ -42,11 +43,13 @@ use UnitEnum;
  */
 class VolunteerResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Volunteer::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHandRaised;
 
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 70;
 
     public static function getModelLabel(): string
     {
@@ -60,7 +63,7 @@ class VolunteerResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.people');
+        return __('admin.nav.innovation');
     }
 
     public static function getNavigationBadge(): ?string

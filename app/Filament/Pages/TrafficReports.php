@@ -42,7 +42,7 @@ class TrafficReports extends Page implements HasTable
 
     protected static ?string $slug = 'analytics';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 10;
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {

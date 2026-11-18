@@ -8,6 +8,7 @@ use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\TranslationImports\Pages\ListTranslationImports;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -24,11 +25,13 @@ use UnitEnum;
  */
 class TranslationImportResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = TranslationImport::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowUpTray;
 
-    protected static ?int $navigationSort = 51;
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $slug = 'translation-imports';
 

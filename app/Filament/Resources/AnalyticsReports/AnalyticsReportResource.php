@@ -8,6 +8,7 @@ use App\Domain\Analytics\Support\TrafficReport;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\AnalyticsReports\Pages\ManageAnalyticsReports;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -28,11 +29,13 @@ use UnitEnum;
  */
 class AnalyticsReportResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = AnalyticsReport::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelopeOpen;
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 20;
 
     public static function getModelLabel(): string
     {

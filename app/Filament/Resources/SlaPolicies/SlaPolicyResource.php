@@ -7,6 +7,7 @@ use App\Domain\Support\Enums\TicketCategory;
 use App\Domain\Support\Enums\TicketPriority;
 use App\Domain\Support\Models\SlaPolicy;
 use App\Filament\Resources\SlaPolicies\Pages\ManageSlaPolicies;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -27,11 +28,13 @@ use UnitEnum;
  */
 class SlaPolicyResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = SlaPolicy::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
 
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $slug = 'sla-policies';
 

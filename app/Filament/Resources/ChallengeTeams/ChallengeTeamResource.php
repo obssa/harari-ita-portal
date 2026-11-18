@@ -8,6 +8,7 @@ use App\Domain\Innovation\Models\JudgeAssignment;
 use App\Filament\Resources\ChallengeTeams\Pages\ListChallengeTeams;
 use App\Filament\Resources\ChallengeTeams\Pages\ViewChallengeTeam;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\IconEntry;
@@ -29,11 +30,13 @@ use UnitEnum;
  */
 class ChallengeTeamResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = ChallengeTeam::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    protected static ?int $navigationSort = 41;
+    protected static ?int $navigationSort = 50;
 
     protected static ?string $recordTitleAttribute = 'name';
 

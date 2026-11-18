@@ -16,6 +16,7 @@ use App\Filament\Resources\Courses\RelationManagers\CohortsRelationManager;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -46,11 +47,13 @@ use UnitEnum;
  */
 class CourseResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Course::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 10;
 
     public static function getModelLabel(): string
     {

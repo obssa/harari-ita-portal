@@ -12,6 +12,7 @@ use App\Filament\Resources\Posts\RelationManagers\RevisionsRelationManager;
 use App\Filament\Resources\Posts\RelationManagers\SocialSharesRelationManager;
 use App\Filament\Resources\Posts\Schemas\PostForm;
 use App\Filament\Resources\Posts\Tables\PostsTable;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -23,11 +24,13 @@ use UnitEnum;
 
 class PostResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Post::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 30;
 
     public static function getModelLabel(): string
     {

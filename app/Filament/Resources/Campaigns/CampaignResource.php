@@ -19,6 +19,7 @@ use App\Filament\Resources\Campaigns\Pages\ViewCampaign;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\OfficeOptions;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\CheckboxList;
@@ -50,11 +51,13 @@ use UnitEnum;
  */
 class CampaignResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Campaign::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMegaphone;
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 30;
 
     public static function getModelLabel(): string
     {

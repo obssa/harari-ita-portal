@@ -982,3 +982,36 @@ fast, and for creative touches on the other pages.
 - **Without script:** the page shows the final numbers and still cards.
 - **Reduced motion:** the pulses are not drawn and nothing counts or follows the pointer. Text never fades
   (ADR-0066).
+
+## ADR-0052 — The admin menu follows the Agency's work (2026-11-18)
+
+**Decision.** The admin menu keeps every page it had (64 entries plus the dashboard and notifications) and
+regroups them in a fixed order:
+1. **Content:** homepage, carousel, posts, pages, events and check-in, documents, photo albums, videos and the media
+   library.
+2. **Organisation:** pillars, offices and leaders.
+3. **The Agency's modules:** services & support, innovation (mentors and volunteers now sit here, beside the programmes
+   they serve), projects & data, the Academy and opportunities, in PLAN.md §6 order.
+4. **Communication:** the inbox and forms, campaigns, subscribers, social media accounts and posts, media contacts,
+   the press kit and staff announcements.
+5. **Insights:** traffic, scheduled reports and site searches.
+6. **Languages.**
+7. **Site setup (new):** site settings, menus, categories, tags, redirects and content sources, the plumbing that was
+   spread over Content and Administration.
+8. **Administration:** users, roles, security, integrations, webhooks, API keys, privacy, the audit log and system
+   health.
+
+The groups are registered in `AdminPanelProvider::MENU_GROUPS` with labels resolved per request, so the order holds
+in every admin language. Labels are in sentence case everywhere ("Incidents and maintenance"), through the
+`SentenceCaseLabels` trait on every resource, and "Accounts" reads "Social media accounts" now that it sits in
+Communication.
+- **What did not change:** permissions, roles, pages and their addresses. The groups "Inbox and forms", "Social
+  media" and "Mentors and volunteers" are folded into larger ones.
+- **Manuals:** the menu paths in the English and Amharic manuals are updated, including two that were already wrong
+  ("Administration → Languages", "Content → Projects").
+- **Guard:** `AdminMenuTest` pins every entry a Super Admin sees and the group order in Amharic and Afaan Oromo, so a
+  later change cannot drop a page unnoticed.
+
+**Why.** The owner found the menu cluttered. It was all HinTA's own functionality (no party-era item was left), but
+the groups appeared in the order the code was discovered, Content held 17 entries mixing editorial work with site
+plumbing, three groups held one or two entries, and the labels mixed Title Case and sentence case.

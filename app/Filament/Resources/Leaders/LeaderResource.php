@@ -12,6 +12,7 @@ use App\Filament\Resources\Leaders\Pages\EditLeader;
 use App\Filament\Resources\Leaders\Pages\ListLeaders;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -37,11 +38,13 @@ use UnitEnum;
 
 class LeaderResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Leader::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 30;
 
     public static function getModelLabel(): string
     {

@@ -8,6 +8,7 @@ use App\Domain\Social\Models\SocialSource;
 use App\Filament\Resources\SocialPosts\Pages\ListSocialPosts;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Resources\Resource;
@@ -27,11 +28,13 @@ use UnitEnum;
  */
 class SocialPostResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = SocialPost::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleOvalLeftEllipsis;
 
-    protected static ?int $navigationSort = 41;
+    protected static ?int $navigationSort = 60;
 
     public static function getModelLabel(): string
     {
@@ -45,7 +48,7 @@ class SocialPostResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('social.admin.nav');
+        return __('admin.nav.communication');
     }
 
     public static function table(Table $table): Table

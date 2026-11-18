@@ -14,6 +14,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -30,6 +31,22 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    /** The admin menu's groups, in order (ADR-0052). */
+    public const MENU_GROUPS = [
+        'admin.nav.content',
+        'admin.nav.organisation',
+        'admin.nav.services',
+        'admin.nav.innovation',
+        'admin.nav.projects_data',
+        'admin.nav.academy',
+        'admin.nav.opportunities',
+        'admin.nav.communication',
+        'admin.nav.insights',
+        'translations.admin.nav',
+        'admin.nav.site',
+        'admin.nav.administration',
+    ];
+
     /**
      * A public file with its modification time, so browsers fetch it again after a deploy.
      */
@@ -50,6 +67,13 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->passwordReset()
             ->profile(isSimple: false)
+            // ADR-0052: the menu follows the Agency's work: what editors publish, the Agency, its four modules, then
+            // communication, insight, languages, the site's setup and administration. Labels resolve per request, so
+            // the groups match in every admin language.
+            ->navigationGroups(array_map(
+                fn (string $key): NavigationGroup => NavigationGroup::make()->label(fn (): string => __($key)),
+                self::MENU_GROUPS,
+            ))
             ->colors([
                 // HinTA teal 700 (resources/css/tokens.css, ADR-0007/0015).
                 'primary' => Color::hex('#105D6F'),

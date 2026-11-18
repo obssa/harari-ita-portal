@@ -17,6 +17,7 @@ use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use App\Services\Calendar\EthiopianCalendar;
@@ -47,11 +48,13 @@ use UnitEnum;
 
 class EventResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Event::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 50;
 
     public static function getModelLabel(): string
     {

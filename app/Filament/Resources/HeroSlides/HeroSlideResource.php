@@ -16,6 +16,7 @@ use App\Filament\Resources\HeroSlides\Pages\EditHeroSlide;
 use App\Filament\Resources\HeroSlides\Pages\ListHeroSlides;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Settings\CarouselSettings;
 use App\Support\HararPhotos;
 use BackedEnum;
@@ -62,13 +63,15 @@ use UnitEnum;
  */
 class HeroSlideResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = HeroSlide::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $slug = 'homepage-carousel';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 20;
 
     public static function getModelLabel(): string
     {

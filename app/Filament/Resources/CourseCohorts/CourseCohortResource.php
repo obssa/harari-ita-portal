@@ -18,6 +18,7 @@ use App\Filament\Resources\CourseCohorts\RelationManagers\EnrolmentsRelationMana
 use App\Filament\Resources\CourseCohorts\RelationManagers\SessionsRelationManager;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Services\Calendar\EthiopianCalendar;
 use BackedEnum;
 use Filament\Actions\EditAction;
@@ -47,11 +48,13 @@ use UnitEnum;
  */
 class CourseCohortResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = CourseCohort::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static ?int $navigationSort = 51;
+    protected static ?int $navigationSort = 20;
 
     public static function getModelLabel(): string
     {

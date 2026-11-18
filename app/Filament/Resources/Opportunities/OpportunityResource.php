@@ -16,6 +16,7 @@ use App\Filament\Resources\Opportunities\RelationManagers\AddendaRelationManager
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\DirectoryFields;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use App\Services\Calendar\EthiopianCalendar;
@@ -49,11 +50,13 @@ use UnitEnum;
  */
 class OpportunityResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Opportunity::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
 
-    protected static ?int $navigationSort = 60;
+    protected static ?int $navigationSort = 10;
 
     public static function getModelLabel(): string
     {

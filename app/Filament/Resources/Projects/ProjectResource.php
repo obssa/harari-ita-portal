@@ -21,6 +21,7 @@ use App\Filament\Resources\Projects\RelationManagers\RisksRelationManager;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use BackedEnum;
@@ -51,11 +52,13 @@ use UnitEnum;
 
 class ProjectResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Project::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
-    protected static ?int $navigationSort = 23;
+    protected static ?int $navigationSort = 10;
 
     public static function getModelLabel(): string
     {

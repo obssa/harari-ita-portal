@@ -11,6 +11,7 @@ use App\Filament\Resources\Programmes\Pages\EditProgramme;
 use App\Filament\Resources\Programmes\Pages\ListProgrammes;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use App\Services\Calendar\EthiopianCalendar;
@@ -43,6 +44,8 @@ use UnitEnum;
  */
 class ProgrammeResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Programme::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;

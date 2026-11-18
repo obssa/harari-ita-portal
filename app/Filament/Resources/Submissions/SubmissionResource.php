@@ -13,6 +13,7 @@ use App\Filament\Resources\Submissions\Pages\ViewSubmission;
 use App\Filament\Resources\Submissions\RelationManagers\NotesRelationManager;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Models\User;
 use App\Services\Calendar\EthiopianCalendar;
 use BackedEnum;
@@ -38,11 +39,13 @@ use UnitEnum;
  */
 class SubmissionResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = FormSubmission::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedInboxArrowDown;
 
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $slug = 'submissions';
 
@@ -63,7 +66,7 @@ class SubmissionResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('forms.admin.nav');
+        return __('admin.nav.communication');
     }
 
     public static function getNavigationBadge(): ?string

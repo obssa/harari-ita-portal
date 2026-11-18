@@ -64,9 +64,9 @@ The library is at `/{language}/documents` with filters by type, year and office;
 
 ## 3. Projects and statistics
 
-Who: editors and publishers (**Content → Projects** and **Content → Statistics**).
+Who: editors and publishers (**Projects & data → Projects** and **Projects & data → Statistics**).
 
-- First create the **sectors** as categories "used for project sectors" (**Content → Categories**).
+- First create the **sectors** as categories "used for project sectors" (**Site setup → Categories**).
 - A project has a sector, a directorate or office, a status (planned, ongoing, completed, paused), progress
   in per cent, start and end dates, a map pin, a cover photo and a photo album. The **Budget** is shown
   only when **Show the budget on the website** is on.
@@ -79,8 +79,8 @@ Projects are at `/{language}/projects`; achievements by sector at `/{language}/a
 
 ## 4. Forms and the inbox
 
-Who builds forms: publishers and communications officers (**Inbox and forms → Forms**). Who answers:
-support agents and publishers, each for the offices their role covers (**Inbox and forms → Inbox**).
+Who builds forms: publishers and communications officers (**Communication → Forms**). Who answers:
+support agents and publishers, each for the offices their role covers (**Communication → Inbox**).
 
 ### Build a form
 
@@ -105,7 +105,7 @@ and can follow the status at `/{language}/tickets`. That page never shows what t
 
 ## 5. Press kit and photos
 
-- **Content → Press kit**: the official short description in each language, the media contact, the logo
+- **Communication → Press kit**: the official short description in each language, the media contact, the logo
   files and the press enquiry form. Portraits come from the executive committee in the leadership
   directory. The page is `/{language}/press`.
 - **Content → Photo albums** and **Content → Videos**: albums of library photos with captions per

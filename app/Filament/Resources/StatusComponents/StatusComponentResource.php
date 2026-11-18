@@ -6,6 +6,7 @@ use App\Domain\Services\Models\ServiceItem;
 use App\Domain\Status\Models\StatusComponent;
 use App\Domain\Translation\Support\Locales;
 use App\Filament\Resources\StatusComponents\Pages\ManageStatusComponents;
+use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -26,11 +27,13 @@ use UnitEnum;
  */
 class StatusComponentResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = StatusComponent::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedServerStack;
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 40;
 
     protected static ?string $slug = 'status-components';
 

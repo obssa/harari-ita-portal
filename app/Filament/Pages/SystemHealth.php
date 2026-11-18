@@ -57,7 +57,7 @@ class SystemHealth extends Page implements HasTable
 
     protected static ?string $slug = 'health';
 
-    protected static ?int $navigationSort = 95;
+    protected static ?int $navigationSort = 90;
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {

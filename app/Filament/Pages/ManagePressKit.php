@@ -32,11 +32,11 @@ class ManagePressKit extends SettingsPage
 
     protected static ?string $slug = 'press-kit';
 
-    protected static ?int $navigationSort = 25;
+    protected static ?int $navigationSort = 80;
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        return __('admin.nav.content');
+        return __('admin.nav.communication');
     }
 
     public static function getNavigationLabel(): string

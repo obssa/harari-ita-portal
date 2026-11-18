@@ -11,6 +11,7 @@ use App\Filament\Resources\Challenges\Pages\ListChallenges;
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\DirectoryFields;
 use App\Filament\Support\MediaPicker;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use App\Filament\Support\ViewOnSite;
 use App\Services\Calendar\EthiopianCalendar;
@@ -41,6 +42,8 @@ use UnitEnum;
  */
 class ChallengeResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Challenge::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;

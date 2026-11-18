@@ -10,6 +10,7 @@ use App\Filament\Resources\Statistics\Pages\CreateStatistic;
 use App\Filament\Resources\Statistics\Pages\EditStatistic;
 use App\Filament\Resources\Statistics\Pages\ListStatistics;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\SentenceCaseLabels;
 use App\Filament\Support\Translatable;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
@@ -32,11 +33,13 @@ use UnitEnum;
 
 class StatisticResource extends Resource
 {
+    use SentenceCaseLabels;
+
     protected static ?string $model = Statistic::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartBar;
 
-    protected static ?int $navigationSort = 24;
+    protected static ?int $navigationSort = 20;
 
     public static function getModelLabel(): string
     {
