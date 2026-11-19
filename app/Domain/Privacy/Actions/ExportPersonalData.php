@@ -107,6 +107,7 @@ final class ExportPersonalData
                 'team' => $a->team_name,
                 'answers' => $a->answers,
                 'decision_note' => $a->decision_note,
+                'history' => self::history($a->notes),
             ])->values()->all(),
             'academy_enrolments' => $enrolments->map(fn (Enrolment $e): array => [
                 'course' => $e->cohort->course->title(),
@@ -135,6 +136,7 @@ final class ExportPersonalData
                 'submission_links' => $t->submission_links,
                 'submitted_at' => $t->submitted_at?->toIso8601String(),
                 'rank' => $t->rank,
+                'history' => self::history($t->notes),
             ])->values()->all(),
             'startup_listings' => $startups->map(fn (Startup $s): array => [
                 'reference' => $s->reference,

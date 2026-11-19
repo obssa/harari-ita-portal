@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Applications\Pages;
 use App\Domain\Innovation\Actions\ReviewApplication;
 use App\Domain\Innovation\Enums\ApplicationStage;
 use App\Domain\Innovation\Models\Application;
+use App\Domain\People\Actions\MessagePerson;
 use App\Filament\Resources\Applications\ApplicationResource;
 use App\Filament\Support\CurrentUser;
 use Filament\Actions\Action;
@@ -68,6 +69,17 @@ class ViewApplication extends ViewRecord
                     app(ReviewApplication::class)->move($application, ApplicationStage::from((string) $data['stage']), $data['note'] ?? null, CurrentUser::get());
                     Notification::make()->success()->title(__('innovation.admin.moved'))->send();
                     $this->refreshFormData(['stage', 'decision_note']);
+                }),
+            Action::make('message')
+                ->label(__('people.admin.message_applicant'))
+                ->icon(Heroicon::OutlinedEnvelope)
+                ->color('gray')
+                ->visible(fn (): bool => $actor->can('review', $application) && $application->erased_at === null && MessagePerson::reachable($application->applicant_email, $application->applicant_phone))
+                ->modalDescription(__('people.admin.message_help', ['max' => MessagePerson::MAX_SMS]))
+                ->schema([Textarea::make('body')->label(__('people.admin.message_text'))->required()->rows(6)->maxLength(MessagePerson::MAX)])
+                ->action(function (array $data) use ($application): void {
+                    app(MessagePerson::class)->application($application, (string) $data['body'], CurrentUser::get());
+                    Notification::make()->success()->title(__('people.admin.message_sent'))->send();
                 }),
         ];
     }

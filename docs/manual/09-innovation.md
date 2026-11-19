@@ -39,6 +39,9 @@ with the decision right can accept, waitlist or decline.
    - **Score** rates five criteria from 1 to 5.
    - **Move** sets the stage: screening, interview, then the decision.
    - A decision needs a note. The applicant reads it by email and on their application page.
+   - The applicant also gets an email when the application moves to screening or to interview.
+   - **Message the applicant** writes to them by email in their language (or by text message when there is only
+     a phone number). The message is kept in the application's **History**.
 
 ## 3. Running a challenge or hackathon
 
@@ -72,6 +75,8 @@ Who may do it: innovation officers and administrators.
   submission as often as it likes until submissions close.
 - **Teams** in the admin lists every team with its submission, its judges and its score. Open **Teams** from a
   challenge to see only that challenge's teams.
+- Staff who manage challenges get a notice when a team registers and when it first sends its work.
+- **Message the team** on a team's page writes to its contact; the message is kept in the team's **History**.
 
 ### Judging
 
@@ -92,6 +97,8 @@ Who may do it: innovation officers and administrators.
 2. The teams with a score are ranked, highest first. If two teams have the same score, the one that submitted
    first comes first. From then on, judges can no longer change their scores.
 3. The challenge page shows the ranking. A team that did not agree to be named is shown by its place only.
+   The first time the results are published, every team's contact gets an email with the team's place and a link
+   to the results.
 4. To add an award line, such as "Winner" or "Best use of open data", open the team under **Teams** and choose
    **Award**.
 

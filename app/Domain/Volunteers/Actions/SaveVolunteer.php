@@ -7,14 +7,17 @@ use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Notifications\Support\Recipients;
 use App\Domain\Organisation\Enums\OfficeType;
 use App\Domain\Organisation\Models\Office;
+use App\Domain\People\Mail\PersonMail;
 use App\Domain\People\Models\PersonNote;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
 use App\Domain\Volunteers\Notifications\NewVolunteerNotice;
 use App\Domain\Volunteers\Support\VolunteerOptions;
 use App\Models\User;
+use App\Services\Sms\SendSms;
 use App\Support\PhoneNumber;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
@@ -45,8 +48,25 @@ final class SaveVolunteer
         } catch (Throwable $e) {
             report($e);
         }
+        $this->thank($volunteer);
 
         return $volunteer;
+    }
+
+    /** ADR-0053: the person hears that the offer arrived. */
+    private function thank(Volunteer $volunteer): void
+    {
+        $locale = $volunteer->locale;
+        if (filled($volunteer->email)) {
+            Mail::to($volunteer->email)->locale($locale)->queue(new PersonMail(
+                __('volunteers.mail.received.subject', [], $locale),
+                __('volunteers.mail.received.subject', [], $locale),
+                $volunteer->name,
+                __('volunteers.mail.received.body', [], $locale),
+            ));
+        } elseif (filled($volunteer->phone)) {
+            SendSms::dispatch($volunteer->phone, __('volunteers.sms.received', [], $locale));
+        }
     }
 
     /**

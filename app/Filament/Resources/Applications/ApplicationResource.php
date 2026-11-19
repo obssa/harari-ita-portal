@@ -9,6 +9,7 @@ use App\Filament\Resources\Applications\Pages\ApplicationBoard;
 use App\Filament\Resources\Applications\Pages\ListApplications;
 use App\Filament\Resources\Applications\Pages\ViewApplication;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\PersonHistory;
 use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\ViewAction;
@@ -94,6 +95,7 @@ class ApplicationResource extends Resource
         return $schema->columns(3)->components([
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 2])->schema([
                 Section::make(__('innovation.admin.answers'))->schema(fn (?Application $record): array => $record === null ? [] : self::answerEntries($record)),
+                Section::make(__('people.admin.history'))->collapsible()->schema(fn (?Application $record): array => $record === null ? [] : PersonHistory::entries($record)),
             ]),
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 1])->schema([
                 Section::make(__('innovation.admin.handling'))->schema([

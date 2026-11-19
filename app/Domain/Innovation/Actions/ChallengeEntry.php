@@ -6,6 +6,8 @@ use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Innovation\Mail\TeamRegisteredMail;
 use App\Domain\Innovation\Models\Challenge;
 use App\Domain\Innovation\Models\ChallengeTeam;
+use App\Domain\Innovation\Notifications\TeamNotice;
+use App\Domain\Notifications\Support\Recipients;
 use App\Support\PhoneNumber;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Mail;
@@ -77,6 +79,7 @@ final class ChallengeEntry
         $team->save();
 
         Mail::to($email)->locale($locale)->queue(new TeamRegisteredMail($team));
+        Recipients::notify(Recipients::withPermission('challenges.manage'), TeamNotice::for($team, TeamNotice::REGISTERED));
 
         return $team;
     }
@@ -110,12 +113,16 @@ final class ChallengeEntry
             throw ValidationException::withMessages($errors);
         }
 
+        $first = $team->submitted_at === null;
         $team->forceFill([
             'submission_title' => $title,
             'submission_description' => $description,
             'submission_links' => $links,
             'submitted_at' => CarbonImmutable::now(),
         ])->save();
+        if ($first) {
+            Recipients::notify(Recipients::withPermission('challenges.manage'), TeamNotice::for($team, TeamNotice::SUBMITTED));
+        }
 
         return $team;
     }

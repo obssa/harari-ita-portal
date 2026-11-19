@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\ChallengeTeams\Pages;
 
 use App\Domain\Innovation\Models\ChallengeTeam;
+use App\Domain\People\Actions\MessagePerson;
 use App\Filament\Resources\ChallengeTeams\ChallengeTeamResource;
 use App\Filament\Support\CurrentUser;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
@@ -40,6 +42,17 @@ class ViewChallengeTeam extends ViewRecord
                     $team->challenge->touch();
                     Notification::make()->success()->title(__('innovation.admin.saved'))->send();
                     $this->refreshFormData(['award']);
+                }),
+            Action::make('message')
+                ->label(__('people.admin.message_team'))
+                ->icon(Heroicon::OutlinedEnvelope)
+                ->color('gray')
+                ->visible(fn (): bool => CurrentUser::get()->can('message', $team) && MessagePerson::reachable($team->contact_email, $team->contact_phone))
+                ->modalDescription(__('people.admin.message_help', ['max' => MessagePerson::MAX_SMS]))
+                ->schema([Textarea::make('body')->label(__('people.admin.message_text'))->required()->rows(6)->maxLength(MessagePerson::MAX)])
+                ->action(function (array $data) use ($team): void {
+                    app(MessagePerson::class)->team($team, (string) $data['body'], CurrentUser::get());
+                    Notification::make()->success()->title(__('people.admin.message_sent'))->send();
                 }),
         ];
     }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Volunteers\Pages;
 
 use App\Domain\Access\Support\OfficeScope;
+use App\Domain\People\Actions\MessagePerson;
 use App\Domain\Volunteers\Actions\ManageVolunteer;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
@@ -49,6 +50,17 @@ class ViewVolunteer extends ViewRecord
                 ->action(function (array $data): void {
                     app(ManageVolunteer::class)->note($this->volunteer(), (string) $data['body'], CurrentUser::get());
                     Notification::make()->success()->title(__('people.admin.noted'))->send();
+                }),
+            Action::make('message')
+                ->label(__('people.admin.message_volunteer'))
+                ->icon(Heroicon::OutlinedEnvelope)
+                ->color('gray')
+                ->visible(fn (): bool => $canManage() && $this->volunteer()->erased_at === null && MessagePerson::reachable($this->volunteer()->email, $this->volunteer()->phone))
+                ->modalDescription(__('people.admin.message_help', ['max' => MessagePerson::MAX_SMS]))
+                ->schema([Textarea::make('body')->label(__('people.admin.message_text'))->required()->rows(6)->maxLength(MessagePerson::MAX)])
+                ->action(function (array $data): void {
+                    app(MessagePerson::class)->volunteer($this->volunteer(), (string) $data['body'], CurrentUser::get());
+                    Notification::make()->success()->title(__('people.admin.message_sent'))->send();
                 }),
         ];
     }

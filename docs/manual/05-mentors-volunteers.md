@@ -15,6 +15,8 @@ after; the list shows a number for **New** sign-ups.
 2. After the task, **Update** it to **Done** with the hours given. The hours are added up on the list.
 3. **Change status** to **Inactive** when someone stops. Tasks are cancelled, never deleted.
 4. **Add a note** for anything colleagues should know; notes are seen only by staff who can see the person.
+5. **Message the volunteer** writes to them by email, or by text message when there is only a phone number (up
+   to 320 characters). The message is kept in their **History**. Each new sign-up also gets a short thank-you.
 
 Sign-ups nobody followed up are deleted after a year. A person can ask for a copy of their data or for it to be
 deleted (**Privacy requests**, chapter 01).

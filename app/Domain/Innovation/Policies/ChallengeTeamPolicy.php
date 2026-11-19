@@ -26,6 +26,12 @@ final class ChallengeTeamPolicy
         return $actor->can('challenges.manage');
     }
 
+    /** ADR-0053: the people who run the challenge write to its teams. */
+    public function message(User $actor, ChallengeTeam $team): bool
+    {
+        return $actor->can('challenges.manage') && $team->erased_at === null;
+    }
+
     public function create(User $actor): bool
     {
         return false;

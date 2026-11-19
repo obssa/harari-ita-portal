@@ -8,6 +8,7 @@ use App\Domain\Innovation\Models\JudgeAssignment;
 use App\Filament\Resources\ChallengeTeams\Pages\ListChallengeTeams;
 use App\Filament\Resources\ChallengeTeams\Pages\ViewChallengeTeam;
 use App\Filament\Support\CalendarDate;
+use App\Filament\Support\PersonHistory;
 use App\Filament\Support\SentenceCaseLabels;
 use BackedEnum;
 use Filament\Actions\ViewAction;
@@ -90,6 +91,7 @@ class ChallengeTeamResource extends Resource
                     TextEntry::make('submitted_at')->label(__('innovation.field.submitted_at'))->formatStateUsing(CalendarDate::format(withTime: true))->placeholder('—'),
                 ]),
                 Section::make(__('innovation.admin.judging'))->schema(fn (?ChallengeTeam $record): array => $record === null ? [] : self::judgeEntries($record)),
+                Section::make(__('people.admin.history'))->collapsible()->schema(fn (?ChallengeTeam $record): array => $record === null ? [] : PersonHistory::entries($record)),
             ]),
             Grid::make(1)->columnSpan(['default' => 3, 'lg' => 1])->schema([
                 Section::make(__('innovation.admin.result'))->schema([

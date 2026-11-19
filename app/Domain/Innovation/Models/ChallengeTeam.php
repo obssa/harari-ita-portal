@@ -3,12 +3,14 @@
 namespace App\Domain\Innovation\Models;
 
 use App\Domain\Content\Concerns\BelongsToSite;
+use App\Domain\People\Models\PersonNote;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -93,6 +95,16 @@ class ChallengeTeam extends Model
     public function challenge(): BelongsTo
     {
         return $this->belongsTo(Challenge::class)->withTrashed();
+    }
+
+    /**
+     * ADR-0053: notes and the messages staff sent, encrypted, newest first.
+     *
+     * @return MorphMany<PersonNote, $this>
+     */
+    public function notes(): MorphMany
+    {
+        return $this->morphMany(PersonNote::class, 'notable')->latest('id');
     }
 
     /**

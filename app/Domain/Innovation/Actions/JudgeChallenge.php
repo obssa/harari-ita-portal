@@ -4,10 +4,14 @@ namespace App\Domain\Innovation\Actions;
 
 use App\Domain\Innovation\Models\Challenge;
 use App\Domain\Innovation\Models\ChallengeTeam;
+use App\Domain\Innovation\Models\ChallengeTranslation;
 use App\Domain\Innovation\Models\JudgeAssignment;
+use App\Domain\Organisation\Queries\PublicDirectory;
+use App\Domain\People\Mail\PersonMail;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -109,13 +113,44 @@ final class JudgeChallenge
             throw ValidationException::withMessages(['results' => __('innovation.validation.nothing_scored')]);
         }
 
+        $first = $challenge->results_published_at === null;
         DB::transaction(function () use ($challenge, $teams): void {
             $challenge->teams()->update(['rank' => null]);
             $teams->values()->each(fn (ChallengeTeam $team, int $i) => $team->forceFill(['rank' => $i + 1])->save());
             $challenge->forceFill(['results_published_at' => CarbonImmutable::now()])->save();
         });
 
+        if ($first) {
+            $challenge->teams()->whereNull('erased_at')->each(fn (ChallengeTeam $team) => $this->tellResults($challenge, $team));
+        }
+
         return $teams->count();
+    }
+
+    /** ADR-0053: the team's place, if ranked, and the way to the published results, in the team's language. */
+    private function tellResults(Challenge $challenge, ChallengeTeam $team): void
+    {
+        if (blank($team->contact_email)) {
+            return;
+        }
+        $locale = $team->locale;
+        $title = $challenge->title($locale);
+        $translation = PublicDirectory::shown($challenge, $locale);
+        $url = $translation instanceof ChallengeTranslation
+            ? route('challenges.show', ['locale' => $locale, 'slug' => $translation->slug])
+            : route('challenges.index', ['locale' => $locale]);
+        $body = trim(($team->rank !== null ? __('innovation.mail.results.ranked', ['team' => $team->name, 'rank' => $team->rank], $locale).' ' : '')
+            .__('innovation.mail.results.thanks', [], $locale));
+
+        Mail::to($team->contact_email)->locale($locale)->queue(new PersonMail(
+            __('innovation.mail.results.subject', ['challenge' => $title], $locale),
+            __('innovation.mail.results.subject', ['challenge' => $title], $locale),
+            $team->contact_name,
+            $body,
+            $team->reference,
+            $url,
+            __('innovation.mail.results.button', [], $locale),
+        ));
     }
 
     private function recompute(ChallengeTeam $team): void

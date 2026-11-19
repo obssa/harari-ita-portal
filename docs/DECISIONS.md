@@ -1033,5 +1033,16 @@ information only (`accepts_requests`, on by default, also for proposed services)
 - **Opportunities (next step):** calls, vacancies and internships may take an application form; tenders do not,
   since bids go in sealed with a bid opening; they keep their documents and a question link.
 
+- **Every detail page has a next step:** a programme between cohorts offers the newsletter and a question; a
+  challenge in its building phase leads to the team page; programmes and challenges invite mentors; a startup
+  profile offers a listing and a change request; a full event says so or offers its waiting list.
+- **Staff answer people from the admin:** applications, teams and volunteers get **Message …**, by email in the
+  person's language, or by SMS (at most 320 characters) when there is only a phone. The words are kept encrypted
+  in the existing `people_notes` history (kind `message`), never in the activity log; privacy export includes
+  them, erasure blanks them and the retention purge deletes them with the record.
+- **People hear what happened:** applicants when the stage moves to screening or interview; every reachable team
+  once, when results are first published; a new volunteer gets a thank-you. Staff who manage challenges get a
+  notice when a team registers and when it first submits.
+
 **Why.** The owner found service pages that listed steps but led nowhere. The desk already stored a ticket's
 service and answered by email and SMS, so the request reuses it instead of building a second inbox.

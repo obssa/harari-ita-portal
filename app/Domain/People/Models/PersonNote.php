@@ -42,6 +42,9 @@ class PersonNote extends Model
 
     public const REVEAL = 'reveal';
 
+    /** ADR-0053: a message staff sent to the person; the body is the staff member's words. */
+    public const MESSAGE = 'message';
+
     protected $fillable = ['user_id', 'kind', 'body'];
 
     protected function casts(): array

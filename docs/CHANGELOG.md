@@ -26,6 +26,10 @@ All notable changes to the Agency's portal. Newest first.
   lane; a "Live on the portal" panel counts published services, courses, programmes and projects; published figures
   with their sources follow the pillars (the first three from ENA on the Ethio-Coders training); projects show a
   roadmap; cards catch the pointer's light; stories without photos get their own circuit tiles.
+- Staff can message applicants, challenge teams and volunteers from the admin, by email or SMS; messages are kept
+  encrypted in the person's history (ADR-0053). Applicants hear when they move to screening or interview, teams
+  hear when results are first published, new volunteers get a thank-you, and challenge staff get a notice for
+  each new team and first submission.
 - Every detail page offers a next step (ADR-0053): "Subscribe to updates" and "Ask the team" on a programme with no
   open cohort, "Send your team's submission" while a challenge is building, a mentor sign-up on programmes and
   challenges, "Get your startup listed" and "Ask for a change" on startup profiles, and an honest "full" or "Join the

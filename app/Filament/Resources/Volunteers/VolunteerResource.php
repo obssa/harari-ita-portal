@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Volunteers;
 
 use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Organisation\Enums\OfficeType;
-use App\Domain\People\Models\PersonNote;
 use App\Domain\Volunteers\Enums\AssignmentStatus;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
@@ -17,6 +16,7 @@ use App\Filament\Resources\Volunteers\RelationManagers\AssignmentsRelationManage
 use App\Filament\Support\CalendarDate;
 use App\Filament\Support\CurrentUser;
 use App\Filament\Support\OfficeOptions;
+use App\Filament\Support\PersonHistory;
 use App\Filament\Support\SentenceCaseLabels;
 use App\Support\Mask;
 use BackedEnum;
@@ -176,15 +176,7 @@ class VolunteerResource extends Resource
      */
     private static function historyEntries(Volunteer $record): array
     {
-        $notes = $record->notes()->with('user')->get();
-        if ($notes->isEmpty()) {
-            return [TextEntry::make('no_history')->hiddenLabel()->state(__('people.admin.no_history'))];
-        }
-
-        return $notes->values()->map(fn (PersonNote $note, int $i): TextEntry => TextEntry::make("note_{$i}")
-            ->label((string) CalendarDate::format(withTime: true)($note->created_at).' · '.($note->user->name ?? __('people.admin.system')).' · '.__("people.note.kind.{$note->kind}"))
-            ->state($note->body ?? '—')
-            ->extraAttributes(['class' => 'whitespace-pre-line']))->all();
+        return PersonHistory::entries($record);
     }
 
     public static function getRelations(): array

@@ -20,7 +20,7 @@ final class ApplicationMail extends Mailable implements ShouldBeEncrypted, Shoul
     use SerializesModels;
 
     /**
-     * @param  'received'|'decided'|string  $kind
+     * @param  'received'|'stage'|'decided'|string  $kind
      */
     public function __construct(public Application $application, public string $kind) {}
 
@@ -47,6 +47,6 @@ final class ApplicationMail extends Mailable implements ShouldBeEncrypted, Shoul
 
     private function kind(): string
     {
-        return $this->kind === 'decided' ? 'decided' : 'received';
+        return in_array($this->kind, ['stage', 'decided'], true) ? $this->kind : 'received';
     }
 }

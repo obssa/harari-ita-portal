@@ -68,6 +68,11 @@ final class ErasePersonalData
                 $this->ticket($ticket);
             }
             // ADR-0021: the applicant's details and answers go; the stage and score stay for the programme's records.
+            // ADR-0053: the messages staff sent are the person's data too.
+            $applications->each(fn (Application $application) => $application->notes()->whereNotNull('body')
+                ->each(fn (PersonNote $note) => $note->forceFill(['body' => self::ERASED])->saveQuietly()));
+            $teams->each(fn (ChallengeTeam $team) => $team->notes()->whereNotNull('body')
+                ->each(fn (PersonNote $note) => $note->forceFill(['body' => self::ERASED])->saveQuietly()));
             $applications->each(fn (Application $application) => $application->forceFill([
                 'applicant_name' => null, 'applicant_email' => null, 'applicant_phone' => null, 'email_hash' => null,
                 'phone_hash' => null, 'answers' => null, 'decision_note' => null, 'erased_at' => now(),

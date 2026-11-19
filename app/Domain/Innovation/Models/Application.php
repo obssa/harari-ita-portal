@@ -4,11 +4,13 @@ namespace App\Domain\Innovation\Models;
 
 use App\Domain\Content\Concerns\BelongsToSite;
 use App\Domain\Innovation\Enums\ApplicationStage;
+use App\Domain\People\Models\PersonNote;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -96,6 +98,16 @@ class Application extends Model
     public function programme(): BelongsTo
     {
         return $this->belongsTo(Programme::class)->withTrashed();
+    }
+
+    /**
+     * ADR-0053: notes and the messages staff sent, encrypted, newest first.
+     *
+     * @return MorphMany<PersonNote, $this>
+     */
+    public function notes(): MorphMany
+    {
+        return $this->morphMany(PersonNote::class, 'notable')->latest('id');
     }
 
     /**

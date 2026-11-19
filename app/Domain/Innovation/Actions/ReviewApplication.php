@@ -42,6 +42,8 @@ final class ReviewApplication
 
         if ($stage->isDecision() && $application->applicant_email !== null) {
             Mail::to($application->applicant_email)->locale($application->locale)->queue(new ApplicationMail($application, 'decided'));
+        } else {
+            $this->tellStage($application);
         }
 
         return $application;
@@ -64,12 +66,24 @@ final class ReviewApplication
         $application->scores = $clean;
         $application->score = number_format(array_sum($clean) / count($clean), 2, '.', '');
         $application->scored_by = $actor->id;
-        if ($application->stage === ApplicationStage::Received) {
+        $moved = $application->stage === ApplicationStage::Received;
+        if ($moved) {
             $application->stage = ApplicationStage::Screening;
         }
         $application->save();
+        if ($moved) {
+            $this->tellStage($application);
+        }
 
         return $application;
+    }
+
+    /** ADR-0053: screening and interview are worth an email; the decision has its own. */
+    private function tellStage(Application $application): void
+    {
+        if (in_array($application->stage, [ApplicationStage::Screening, ApplicationStage::Interview], true) && $application->applicant_email !== null) {
+            Mail::to($application->applicant_email)->locale($application->locale)->queue(new ApplicationMail($application, 'stage'));
+        }
     }
 
     public function withdraw(Application $application): Application
