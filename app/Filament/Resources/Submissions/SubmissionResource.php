@@ -8,7 +8,9 @@ use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Support\AnswerText;
 use App\Domain\Forms\Support\InboxScope;
 use App\Domain\Forms\Support\SubmissionAbout;
+use App\Domain\Services\Models\ServiceItem;
 use App\Domain\Translation\Support\Locales;
+use App\Filament\Resources\Opportunities\OpportunityResource;
 use App\Filament\Resources\Services\ServiceItemResource;
 use App\Filament\Resources\Submissions\Pages\ListSubmissions;
 use App\Filament\Resources\Submissions\Pages\ViewSubmission;
@@ -148,7 +150,7 @@ class SubmissionResource extends Resource
                 TextEntry::make('form_title')->label(__('forms.form'))->state(fn (FormSubmission $record): string => $record->form->title()),
                 TextEntry::make('about')->label(__('forms.about.label'))
                     ->state(fn (FormSubmission $record): ?string => ($about = SubmissionAbout::describe($record)) !== null ? $about['kind'].' · '.$about['title'] : null)
-                    ->url(fn (FormSubmission $record): ?string => ($about = SubmissionAbout::describe($record)) !== null && ! $about['record']->trashed() ? ServiceItemResource::getUrl('edit', ['record' => $about['record']]) : null)
+                    ->url(fn (FormSubmission $record): ?string => self::aboutUrl($record))
                     ->visible(fn (FormSubmission $record): bool => $record->about_type !== null),
                 TextEntry::make('status')->label(__('forms.status_label'))->badge()
                     ->formatStateUsing(fn (SubmissionStatus $state): string => $state->label())->color(fn (SubmissionStatus $state): string => $state->color()),
@@ -161,6 +163,18 @@ class SubmissionResource extends Resource
                 TextEntry::make('resolved_at')->label(__('forms.inbox.resolved_at'))->formatStateUsing(CalendarDate::format(withTime: true))->placeholder('—'),
             ]),
         ]);
+    }
+
+    /** The admin page of what a submission is about (ADR-0053). */
+    private static function aboutUrl(FormSubmission $submission): ?string
+    {
+        $record = SubmissionAbout::describe($submission)['record'] ?? null;
+
+        return match (true) {
+            $record === null, $record->trashed() => null,
+            $record instanceof ServiceItem => ServiceItemResource::getUrl('edit', ['record' => $record]),
+            default => OpportunityResource::getUrl('edit', ['record' => $record]),
+        };
     }
 
     /**

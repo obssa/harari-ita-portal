@@ -4,6 +4,7 @@ namespace App\Domain\Opportunities\Actions;
 
 use App\Domain\Content\Actions\WriteTranslations;
 use App\Domain\Documents\Models\Document;
+use App\Domain\Forms\Models\Form;
 use App\Domain\Opportunities\Enums\EmploymentType;
 use App\Domain\Opportunities\Enums\OpportunityType;
 use App\Domain\Opportunities\Models\Opportunity;
@@ -74,6 +75,12 @@ final class SaveOpportunity
             $errors['data.apply_email'] = __('opportunities.validation.apply_email');
         }
 
+        // ADR-0053: tenders take sealed bids, never a web form.
+        $formId = $type !== OpportunityType::Tender && filled($data['apply_form_id'] ?? null) ? (string) $data['apply_form_id'] : null;
+        if ($formId !== null && Form::query()->whereKey($formId)->where('active', true)->doesntExist()) {
+            $errors['data.apply_form_id'] = __('opportunities.validation.apply_form');
+        }
+
         $documents = array_values(array_unique(array_map('strval', array_filter((array) ($data['documents'] ?? [])))));
         if (count($documents) > self::MAX_DOCUMENTS) {
             $errors['data.documents'] = __('opportunities.validation.documents', ['max' => self::MAX_DOCUMENTS]);
@@ -87,7 +94,7 @@ final class SaveOpportunity
         $known = Document::query()->whereKey($documents)->pluck('id')->map(fn (mixed $id): string => (string) $id)->all();
         $documents = array_values(array_filter($documents, fn (string $id): bool => in_array($id, $known, true)));
 
-        return DB::transaction(function () use ($opportunity, $data, $translations, $actor, $type, $opens, $closes, $bids, $url, $email, $office, $pillar, $documents): Opportunity {
+        return DB::transaction(function () use ($opportunity, $data, $translations, $actor, $type, $opens, $closes, $bids, $url, $email, $formId, $office, $pillar, $documents): Opportunity {
             /** @var CarbonImmutable $closes */
             $opportunity->fill([
                 'type' => $type,
@@ -101,6 +108,7 @@ final class SaveOpportunity
                 'employment_type' => $type === OpportunityType::Vacancy ? EmploymentType::tryFrom((string) ($data['employment_type'] ?? '')) : null,
                 'apply_url' => $url !== '' ? $url : null,
                 'apply_email' => $email !== '' ? strtolower($email) : null,
+                'apply_form_id' => $formId,
                 'featured' => (bool) ($data['featured'] ?? false),
             ]);
             // A deadline moved back into the future (before anything was logged) takes it out of the archive.

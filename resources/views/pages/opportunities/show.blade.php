@@ -7,6 +7,10 @@
     $open = $opportunity->isOpen();
     $cancellation = $addenda->first(fn ($a) => $a->kind === AddendumKind::Cancellation);
     $dt = 'font-mono text-[11px] tracking-wider text-night-muted uppercase';
+    // ADR-0053: apply on the portal's form first, then the external link, then by email. Tenders, and anything
+    // without a way to apply, offer a question to the Agency while they are live.
+    $applyHref = ! $open ? null : ($applyFormUrl ?? $opportunity->apply_url ?? ($opportunity->apply_email ? 'mailto:'.$opportunity->apply_email : null));
+    $ask = ! $opportunity->isPast() && ($opportunity->type === \App\Domain\Opportunities\Enums\OpportunityType::Tender || $applyHref === null);
 @endphp
 <x-layouts.public :title="$translation->title" :description="$translation->summary" :alternates="$alternates" :json-ld="$jsonLd">
     {{-- ADR-0032, ADR-0033: an opportunity: its facts and deadline beside the text, the documents, and the dated log of
@@ -22,12 +26,17 @@
                 <li><a href="#opportunity-log" class="font-mono text-xs text-cyan-300 underline-offset-4 hover:underline">{{ trans_choice('opportunities.addendum.count', $addenda->count(), ['count' => $addenda->count()]) }}</a></li>
             @endif
         </ul>
-        @if ($open && ($opportunity->apply_url || $opportunity->apply_email))
+        @if ($applyHref || $ask)
             <x-slot:actions>
-                @if ($opportunity->apply_url)
+                @if ($applyFormUrl && $open)
+                    <x-ui.button :href="$applyFormUrl" variant="action" size="lg">{{ __('opportunities.apply') }}</x-ui.button>
+                @elseif ($open && $opportunity->apply_url)
                     <x-ui.button :href="$opportunity->apply_url" variant="action" size="lg" rel="noopener">{{ __('opportunities.apply_online') }}</x-ui.button>
-                @else
+                @elseif ($open && $opportunity->apply_email)
                     <x-ui.button :href="'mailto:'.$opportunity->apply_email" variant="action" size="lg">{{ __('opportunities.apply_email', ['email' => $opportunity->apply_email]) }}</x-ui.button>
+                @endif
+                @if ($ask)
+                    <x-ui.button :href="route('contact')" :variant="$applyHref ? 'light' : 'action'" size="lg">{{ __('opportunities.ask') }}</x-ui.button>
                 @endif
             </x-slot:actions>
         @endif

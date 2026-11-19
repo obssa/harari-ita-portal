@@ -38,7 +38,8 @@ final class FormController extends Controller
         $token = $request->query('about');
 
         return view('pages.forms.show', [
-            'about' => SubmissionAbout::accept(is_string($token) ? $token : null, $form, app()->getLocale()),
+            'about' => $about = SubmissionAbout::accept(is_string($token) ? $token : null, $form, app()->getLocale()),
+            'closed' => $about === null && SubmissionAbout::requiresOpportunity($form),
             'form' => $form,
             'translation' => $translation,
             'turnstileKey' => $turnstile->siteKey(),

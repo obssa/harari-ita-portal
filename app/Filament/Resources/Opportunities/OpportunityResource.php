@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Opportunities;
 
 use App\Domain\Access\Support\OfficeScope;
 use App\Domain\Documents\Models\Document;
+use App\Domain\Forms\Models\Form;
 use App\Domain\Opportunities\Enums\EmploymentType;
 use App\Domain\Opportunities\Enums\OpportunityType;
 use App\Domain\Opportunities\Models\Opportunity;
@@ -126,6 +127,9 @@ class OpportunityResource extends Resource
                     TextInput::make('positions')->label(__('opportunities.field.positions'))->numeric()->minValue(1)->maxValue(1000)->visible($isJob),
                     Select::make('employment_type')->label(__('opportunities.field.employment_type'))->options(EmploymentType::options())
                         ->visible(fn (Get $get): bool => $get('type') === OpportunityType::Vacancy->value),
+                    Select::make('apply_form_id')->label(__('opportunities.field.apply_form'))->helperText(__('opportunities.admin.help.apply_form'))->searchable()
+                        ->options(fn (): array => Form::query()->with('translations')->where('active', true)->get()->mapWithKeys(fn (Form $form): array => [$form->id => $form->title()])->all())
+                        ->visible(fn (Get $get): bool => $get('type') !== OpportunityType::Tender->value),
                     TextInput::make('apply_url')->label(__('opportunities.field.apply_url'))->url()->maxLength(500)->helperText(__('opportunities.admin.help.apply_url')),
                     TextInput::make('apply_email')->label(__('opportunities.field.apply_email'))->email()->maxLength(190)->helperText(__('opportunities.admin.help.apply_email')),
                 ]),

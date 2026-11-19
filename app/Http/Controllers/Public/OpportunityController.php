@@ -59,7 +59,7 @@ final class OpportunityController extends Controller
         [$opportunity, $translation] = $this->find($slug);
         $locale = app()->getLocale();
         $opportunity->load([
-            'office.translations', 'pillar.translations',
+            'office.translations', 'pillar.translations', 'applyForm.translations',
             'documents' => fn ($q) => $q->publicAccess()->with('translations.file'),
             'addenda.document.translations',
         ]);
@@ -69,6 +69,7 @@ final class OpportunityController extends Controller
 
         return view('pages.opportunities.show', [
             'opportunity' => $opportunity,
+            'applyFormUrl' => $opportunity->applyFormUrl($locale),
             'translation' => $translation,
             'body' => BodyRenderer::toHtml($translation->body),
             'documents' => $documents,

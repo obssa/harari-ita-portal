@@ -7,6 +7,8 @@ use App\Domain\Content\Concerns\HasTranslations;
 use App\Domain\Content\Concerns\TracksEditors;
 use App\Domain\Content\Contracts\TranslatableModel;
 use App\Domain\Documents\Models\Document;
+use App\Domain\Forms\Models\Form;
+use App\Domain\Forms\Support\SubmissionAbout;
 use App\Domain\Opportunities\Enums\EmploymentType;
 use App\Domain\Opportunities\Enums\OpportunityType;
 use App\Domain\Organisation\Models\Office;
@@ -41,6 +43,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?EmploymentType $employment_type
  * @property ?string $apply_url
  * @property ?string $apply_email
+ * @property ?string $apply_form_id the form applicants fill in on the portal (ADR-0053); never for a tender
  * @property bool $featured
  * @property ?CarbonImmutable $cancelled_at
  * @property ?CarbonImmutable $archived_at
@@ -78,7 +81,7 @@ class Opportunity extends Model implements TranslatableModel
 
     protected $fillable = [
         'type', 'reference', 'office_id', 'pillar_id', 'opens_at', 'closes_at', 'bid_opening_at', 'positions',
-        'employment_type', 'apply_url', 'apply_email', 'featured',
+        'employment_type', 'apply_url', 'apply_email', 'apply_form_id', 'featured',
     ];
 
     protected $attributes = ['type' => 'tender', 'featured' => false];
@@ -109,7 +112,7 @@ class Opportunity extends Model implements TranslatableModel
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName('opportunities')
-            ->logOnly(['type', 'reference', 'office_id', 'pillar_id', 'opens_at', 'closes_at', 'bid_opening_at', 'positions', 'employment_type', 'apply_url', 'apply_email', 'featured', 'cancelled_at', 'archived_at'])
+            ->logOnly(['type', 'reference', 'office_id', 'pillar_id', 'opens_at', 'closes_at', 'bid_opening_at', 'positions', 'employment_type', 'apply_url', 'apply_email', 'apply_form_id', 'featured', 'cancelled_at', 'archived_at'])
             ->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
@@ -165,6 +168,31 @@ class Opportunity extends Model implements TranslatableModel
             $this->closes_at <= $now->addDays(self::CLOSING_DAYS) => self::STATE_CLOSING,
             default => self::STATE_OPEN,
         };
+    }
+
+    /**
+     * @return BelongsTo<Form, $this>
+     */
+    public function applyForm(): BelongsTo
+    {
+        return $this->belongsTo(Form::class, 'apply_form_id');
+    }
+
+    /**
+     * The portal form to apply with (ADR-0053), while this takes applications and the form is live in the language.
+     */
+    public function applyFormUrl(string $locale): ?string
+    {
+        if ($this->type === OpportunityType::Tender || $this->apply_form_id === null || ! $this->isOpen()) {
+            return null;
+        }
+        $form = $this->applyForm;
+        $translation = $form !== null && $form->active ? $form->translation($locale, fallback: false) : null;
+        if ($translation === null || ! $translation->isLive()) {
+            return null;
+        }
+
+        return route('forms.show', ['locale' => $locale, 'slug' => $translation->getAttribute('slug'), 'about' => SubmissionAbout::token(SubmissionAbout::OPPORTUNITY, $this->id)]);
     }
 
     public function isOpen(?CarbonImmutable $now = null): bool

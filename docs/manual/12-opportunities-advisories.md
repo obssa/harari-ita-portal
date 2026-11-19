@@ -20,6 +20,11 @@ Who may do it: procurement officers and administrators.
    **Deadline** is required. A tender may also have the date the **bids are opened**.
 5. Under **Applying**: for a vacancy, the number of **positions** and the kind of **employment**; then, if
    applications are made online, the **https** address, or the Agency's official **email** (never a personal one).
+   For a call, vacancy or internship you can instead choose an **Application form** built under **Communication →
+   Forms**: the **Apply** button opens it on this site while the opportunity is open, and each application arrives
+   in the **Inbox**, marked with the opportunity, where you reply to the applicant. After the deadline the form
+   takes nothing more. Tenders never take a form: bids are made as the documents say, and the page offers **Ask a
+   question** (the contact page) instead.
 6. Under **Documents**, choose the library files in the order people should read them. Only public documents are
    shown on the site.
 7. Save. The page that opens has the **log** underneath.

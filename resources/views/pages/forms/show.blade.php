@@ -13,7 +13,15 @@
                         <p class="mt-1 text-sm"><a href="{{ $about['url'] }}" class="text-link underline underline-offset-4">{{ __('support.public.request_back') }}</a></p>
                     </div>
                 @endif
-                <x-forms.public-form :form="$form" :translation="$translation" :turnstile-key="$turnstileKey" :about="$about" class="mt-8" />
+                @if ($closed)
+                    {{-- ADR-0053: an opportunity's form only takes applications from its page while it is open. --}}
+                    <x-ui.empty-state :title="__('forms.applications_closed_title')" class="mt-8 max-w-xl">
+                        {{ __('forms.applications_closed_text') }}
+                        <x-slot:action><x-ui.button :href="route('opportunities.index')" variant="secondary">{{ __('opportunities.title') }}</x-ui.button></x-slot:action>
+                    </x-ui.empty-state>
+                @else
+                    <x-forms.public-form :form="$form" :translation="$translation" :turnstile-key="$turnstileKey" :about="$about" class="mt-8" />
+                @endif
             </div>
             <aside class="space-y-3 text-sm text-ink-muted" aria-label="{{ __('forms.after_title') }}">
                 <h2 class="heading-3 text-ink">{{ __('forms.after_title') }}</h2>

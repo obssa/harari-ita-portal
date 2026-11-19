@@ -106,6 +106,9 @@ final class SubmitForm
 
         // ADR-0053: kept only when the item is public and really uses this form.
         $about = SubmissionAbout::accept(isset($input['about']) ? (string) $input['about'] : null, $form, $locale);
+        if ($about === null && SubmissionAbout::requiresOpportunity($form)) {
+            throw ValidationException::withMessages(['form' => __('forms.validation.applications_closed')]);
+        }
 
         $submission = new FormSubmission([
             'form_id' => $form->id,

@@ -26,6 +26,8 @@ All notable changes to the Agency's portal. Newest first.
   lane; a "Live on the portal" panel counts published services, courses, programmes and projects; published figures
   with their sources follow the pillars (the first three from ENA on the Ethio-Coders training); projects show a
   roadmap; cards catch the pointer's light; stories without photos get their own circuit tiles.
+- Calls, vacancies and internships can take applications through a portal form that arrives in the Inbox; it
+  takes nothing after the deadline. Tenders never take a form and offer "Ask a question" (ADR-0053).
 - Every service page offers "Request this service" (ADR-0053): the request opens the desk form with the service
   chosen, or the service's own form; tickets and the Inbox show which service a request is about; admins can
   switch requests off per service.
