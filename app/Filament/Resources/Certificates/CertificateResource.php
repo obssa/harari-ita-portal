@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Certificates;
 
+use App\Domain\Academy\Actions\RenderCertificatePdf;
 use App\Domain\Academy\Actions\RevokeCertificate;
 use App\Domain\Academy\Models\Certificate;
 use App\Domain\Academy\Support\CohortScope;
@@ -19,6 +20,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use UnitEnum;
 
 /**
@@ -71,6 +73,16 @@ class CertificateResource extends Resource
             ->recordActions([
                 Action::make('verify')->label(__('academy.admin.open_verification'))->icon(Heroicon::OutlinedArrowTopRightOnSquare)->color('gray')
                     ->url(fn (Certificate $record): string => $record->verifyUrl(), shouldOpenInNewTab: true),
+                // ADR-0030 addendum: the same PDF the learner downloads, in the learner's language.
+                Action::make('download')->label(__('academy.certificate.download'))->icon(Heroicon::OutlinedArrowDownTray)->color('gray')
+                    ->visible(fn (Certificate $record): bool => $record->revoked_at === null && CurrentUser::get()->can('view', $record))
+                    ->action(function (Certificate $record): StreamedResponse {
+                        abort_unless($record->revoked_at === null && CurrentUser::get()->can('view', $record), 403);
+
+                        return response()->streamDownload(function () use ($record): void {
+                            echo app(RenderCertificatePdf::class)->handle($record);
+                        }, RenderCertificatePdf::filename($record), ['Content-Type' => 'application/pdf']);
+                    }),
                 Action::make('revoke')->label(__('academy.admin.revoke'))->icon(Heroicon::OutlinedNoSymbol)->color('danger')
                     ->visible(fn (Certificate $record): bool => CurrentUser::get()->can('revoke', $record))
                     ->schema([Textarea::make('reason')->label(__('academy.field.revoke_reason'))->required()->maxLength(300)])

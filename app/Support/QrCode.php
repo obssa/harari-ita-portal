@@ -24,4 +24,16 @@ final class QrCode
             'drawLightModules' => false,
         ])))->render($text);
     }
+
+    /** The same code as a sharp PNG data address, for PDFs (ADR-0030): the PDF renderer draws images, not markup. */
+    public static function pngDataUri(string $text): string
+    {
+        return (new Generator(new QROptions([
+            'outputType' => QROutputInterface::GDIMAGE_PNG,
+            'outputBase64' => true,
+            'eccLevel' => EccLevel::M,
+            'addQuietzone' => false,
+            'scale' => 12,
+        ])))->render($text);
+    }
 }

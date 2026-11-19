@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Domain\Academy\Actions\CancelEnrolment;
 use App\Domain\Academy\Actions\EnrolInCohort;
+use App\Domain\Academy\Actions\RenderCertificatePdf;
 use App\Domain\Academy\Enums\EnrolmentStatus;
 use App\Domain\Academy\Models\CourseTranslation;
 use App\Domain\Academy\Models\Enrolment;
@@ -108,6 +109,20 @@ final class EnrolmentController extends Controller
             'certificate' => $certificate,
             'token' => $token,
         ])->header('Cache-Control', 'private, no-store')->header('X-Robots-Tag', 'noindex, nofollow');
+    }
+
+    /** The same certificate as a PDF file to keep (ADR-0030 addendum). */
+    public function certificatePdf(string $token, RenderCertificatePdf $pdf): Response
+    {
+        $certificate = $this->enrolment($token)->certificate;
+        abort_if($certificate === null, 404);
+
+        return response($pdf->handle($certificate), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="'.RenderCertificatePdf::filename($certificate).'"',
+            'Cache-Control' => 'private, no-store',
+            'X-Robots-Tag' => 'noindex, nofollow',
+        ]);
     }
 
     private function enrolment(string $token): Enrolment

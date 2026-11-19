@@ -80,7 +80,8 @@ it('adds and removes the labelled samples', function () {
 
     $this->artisan('portal:sample-academy')->assertSuccessful();
     expect(Course::query()->count())->toBe(1)
-        ->and(Certificate::query()->sole()->isValid())->toBeTrue();
+        ->and(Certificate::query()->sole()->isValid())->toBeTrue()
+        ->and(Course::query()->sole()->signatory_name)->toBe('[Sample] Signatory');
     $this->get('/en/academy')->assertOk()->assertSee('[Sample] Digital skills for office staff');
     $this->get('/am/academy')->assertOk()->assertSee('ለቢሮ ሠራተኞች የዲጂታል ክህሎት');
 

@@ -15,6 +15,7 @@
         "ext-calendar": "*",
         "andegna/calender": "^2.4",
         "chillerlan/php-qrcode": "^5.0",
+        "dompdf/dompdf": "^3.1",
         "filament/filament": "^5.0",
         "filament/spatie-laravel-settings-plugin": "^5.10",
         "firebase/php-jwt": "^7.0",

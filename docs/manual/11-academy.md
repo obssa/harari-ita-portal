@@ -74,11 +74,14 @@ from the day of the session.
 Who may do it: academy coordinators and administrators.
 
 - **Issue certificates** (on the cohort page, from the cohort's last day) gives a certificate to every enrolled
-  learner who met the attendance rule and has none yet. Each learner is told and can print theirs from their page.
+  learner who met the attendance rule and has none yet. Each learner is told, and from their page can
+  **Download PDF** (an A4 landscape file in their language, named after the certificate's code) or print it.
 - **Issue certificate** next to a learner issues one on its own; the dialog warns when the learner is below the
   attendance rule.
 - **Print certificates** opens all of the cohort's certificates on one page, one A4 sheet each. In the print
   dialog choose A4, landscape, no margins and background graphics on.
+
+- **Download PDF** next to a certificate under **Certificates** gives staff the same file the learner downloads.
 
 A certificate cannot be changed. If it is wrong, open **Certificates**, choose **Revoke**, give a reason (kept for
 staff only), and issue a new one from the cohort.

@@ -26,6 +26,8 @@ All notable changes to the Agency's portal. Newest first.
   lane; a "Live on the portal" panel counts published services, courses, programmes and projects; published figures
   with their sources follow the pillars (the first three from ENA on the Ethio-Coders training); projects show a
   roadmap; cards catch the pointer's light; stories without photos get their own circuit tiles.
+- Certificates download as a PDF in the learner's language (A4 landscape, with the QR code), from the learner's
+  page and from Certificates in the admin; the sample course has a sample signatory (ADR-0030 addendum).
 - Staff can message applicants, challenge teams and volunteers from the admin, by email or SMS; messages are kept
   encrypted in the person's history (ADR-0053). Applicants hear when they move to screening or interview, teams
   hear when results are first published, new volunteers get a thank-you, and challenge staff get a notice for

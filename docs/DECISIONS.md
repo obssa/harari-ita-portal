@@ -580,6 +580,21 @@ registration pattern already works for an SMS-first audience.
 **Why.** PLAN.md §4, §13 (enrol, attend, issue, verify by QR); FORK.md §3 (the card verification pattern); CLAUDE.md
 (no stack change without asking).
 
+**Addendum (2026-11-19): a PDF to download.** The owner asked for a real file, since a browser's "save as PDF" is
+clumsy on a phone, and agreed to the one new library.
+
+- `dompdf/dompdf` (LGPL, pure PHP) draws the certificate (`RenderCertificatePdf`, `resources/views/pdf/certificate`)
+  in the learner's language with the same design as the printable sheet, on one A4 landscape page. It runs on the
+  shared host; a headless browser would need Chrome, which the host does not have.
+- The fonts are bundled static TTFs under the SIL Open Font License (`resources/fonts/pdf`, licences beside them):
+  Inter, Space Grotesk, JetBrains Mono and Noto Sans Ethiopic. dompdf does not fall back between fonts letter by
+  letter, so every run of Ethiopic text is set in Noto Sans Ethiopic, whatever the language. Fonts are subset
+  (files of about 100 KB); the metrics cache lives in `storage/fonts`.
+- dompdf reads only the font folder and the logo (`chroot`); remote loading, PHP and JavaScript are off.
+- The learner downloads from their private page (`/academy/enrolment/{token}/certificate.pdf`, never cached or
+  indexed, rate limited); staff download from **Certificates**. A revoked certificate has no PDF.
+- Issuing stays a staff action after the cohort's last day: a person confirms the attendance first.
+
 ## ADR-0031 — The Academy on the public site (2026-11-17)
 
 **Decision.**

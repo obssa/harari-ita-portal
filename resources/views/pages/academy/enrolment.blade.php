@@ -36,7 +36,10 @@
                     <h2 id="learner-certificate" class="font-display text-lg font-semibold">{{ __('academy.learner.certificate_ready') }}</h2>
                     <p class="mt-1 text-sm">{{ __('academy.certificate.code') }}: <span class="font-mono font-semibold">{{ $certificate->code }}</span> · <x-date :date="$certificate->issued_at" /></p>
                 </div>
-                <x-ui.button :href="route('enrolments.certificate', ['token' => $token])">{{ __('academy.learner.open_certificate') }}</x-ui.button>
+                <div class="flex flex-wrap gap-3">
+                    <x-ui.button :href="route('enrolments.certificate.pdf', ['token' => $token])" download>{{ __('academy.certificate.download') }}</x-ui.button>
+                    <x-ui.button variant="secondary" :href="route('enrolments.certificate', ['token' => $token])">{{ __('academy.learner.open_certificate') }}</x-ui.button>
+                </div>
             </section>
         @endif
 

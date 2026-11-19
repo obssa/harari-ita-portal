@@ -1,4 +1,4 @@
-<x-layouts.print :title="__('academy.certificate.title')">
+<x-layouts.print :title="__('academy.certificate.title')" :download="route('enrolments.certificate.pdf', ['token' => $token])">
     <x-slot:actions>
         <a href="{{ route('enrolments.show', ['token' => $token]) }}" class="text-sm text-link underline underline-offset-4">{{ __('academy.learner.back') }}</a>
     </x-slot:actions>

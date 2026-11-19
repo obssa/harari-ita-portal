@@ -73,6 +73,9 @@ final class SampleAcademyCommand extends Command
             'duration_hours' => 18,
             'languages' => ['am', 'om', 'en'],
             'partner' => self::MARK.' Partner institution',
+            // A sample signatory, so the test certificate shows the whole layout.
+            'signatory_name' => self::MARK.' Signatory',
+            'signatory_titles' => ['en' => 'Sample title (not a real person)', 'am' => 'ናሙና ማዕረግ (እውነተኛ ሰው አይደለም)', 'om' => 'Gahee fakkeenyaa (nama dhugaa miti)'],
             'featured' => true,
             'translations' => [
                 'en' => [

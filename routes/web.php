@@ -230,6 +230,7 @@ Route::prefix('{locale}')
         Route::get('academy/enrolment/{token}', [EnrolmentController::class, 'show'])->where('token', '[A-Za-z0-9]{40}')->middleware(NoStore::class)->name('enrolments.show');
         Route::post('academy/enrolment/{token}/cancel', [EnrolmentController::class, 'cancel'])->where('token', '[A-Za-z0-9]{40}')->middleware('throttle:forms')->name('enrolments.cancel');
         Route::get('academy/enrolment/{token}/certificate', [EnrolmentController::class, 'certificate'])->where('token', '[A-Za-z0-9]{40}')->middleware(NoStore::class)->name('enrolments.certificate');
+        Route::get('academy/enrolment/{token}/certificate.pdf', [EnrolmentController::class, 'certificatePdf'])->where('token', '[A-Za-z0-9]{40}')->middleware(['throttle:search', NoStore::class])->name('enrolments.certificate.pdf');
         Route::get('academy/certificates/verify', [CertificateController::class, 'form'])->middleware(['throttle:search', NoStore::class])->name('certificates.verify');
         Route::get('academy/certificates/verify/{code}', [CertificateController::class, 'show'])->where('code', Certificate::PATTERN)->middleware(['throttle:search', NoStore::class])->name('certificates.verify.show');
     });
