@@ -72,6 +72,14 @@
                     </dl>
                 </section>
                 <p class="text-sm text-ink-muted">{{ __('innovation.startups.label_note') }}</p>
+                {{-- ADR-0053: a profile leads founders on: list a startup, or ask for a change to this one. --}}
+                <section class="rounded-card border border-line bg-surface p-5 text-sm">
+                    <h2 class="font-semibold">{{ __('innovation.startups.list_title') }}</h2>
+                    <p class="mt-3 flex flex-wrap gap-2">
+                        <x-ui.button :href="route('startups.apply')" variant="primary" size="sm">{{ __('innovation.startups.apply') }}</x-ui.button>
+                        <x-ui.button :href="route('contact')" variant="secondary" size="sm">{{ __('innovation.startups.claim') }}</x-ui.button>
+                    </p>
+                </section>
             </aside>
         </div>
     </div>

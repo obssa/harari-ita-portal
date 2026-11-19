@@ -126,8 +126,15 @@
                     @if ($event->registration_enabled && ! $event->isPast())
                         <div class="rounded-card border border-line bg-surface p-4">
                             <h2 class="font-semibold">{{ __('events.registration.heading') }}</h2>
+                            @php $registration = $event->registrationState(); @endphp
                             @if ($event->registrationClosesAt()->isPast())
                                 <p class="mt-1 text-sm text-ink-muted">{{ __('events.registration.closed') }}</p>
+                            @elseif ($registration === \App\Domain\Events\Models\Event::REGISTRATION_FULL)
+                                {{-- ADR-0053: a full event without a waiting list says so instead of offering a dead end. --}}
+                                <p class="mt-1 text-sm text-ink-muted">{{ __('events.registration.full') }}</p>
+                            @elseif ($registration === \App\Domain\Events\Models\Event::REGISTRATION_WAITLIST)
+                                <p class="mt-1 text-sm text-ink-muted">{{ __('events.registration.waitlist_note') }}</p>
+                                <a href="{{ route('events.register', ['slug' => $translation->slug]) }}" class="mt-3 inline-flex rounded-control bg-primary-700 px-4 py-2 font-semibold text-white hover:bg-primary-800">{{ __('events.registration.join_waitlist') }}</a>
                             @else
                                 <p class="mt-1 text-sm text-ink-muted">{{ $event->capacity !== null ? __('events.registration.limited') : __('events.registration.free') }}
                                     {{ __('events.registration.closes', ['date' => app(\App\Services\Calendar\EthiopianCalendar::class)->format($event->registrationClosesAt(), withTime: true)]) }}</p>

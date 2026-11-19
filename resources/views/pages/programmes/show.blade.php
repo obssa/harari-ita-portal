@@ -2,11 +2,15 @@
     {{-- ADR-0021: a programme: who it is for, what it gives, its timeline, and the open cohort with the way to apply. --}}
     <x-page-hero :title="$translation->title" :lead="$translation->summary" :kicker="$programme->kind->label()" tone="night"
                  :crumbs="[[__('innovation.programmes.title'), route('programmes.index')]]" :heading-lang="$translation->locale">
-        @if ($open)
-            <x-slot:actions>
+        <x-slot:actions>
+            @if ($open)
                 <x-ui.button :href="route('applications.create', ['slug' => $translation->slug])" variant="action" size="lg">{{ __('innovation.programmes.apply') }}</x-ui.button>
-            </x-slot:actions>
-        @endif
+            @else
+                {{-- ADR-0053: between cohorts the page still offers a next step. --}}
+                <x-ui.button :href="route('newsletter.create')" variant="action" size="lg">{{ __('innovation.next_step.subscribe') }}</x-ui.button>
+                <x-ui.button :href="route('contact')" variant="light" size="lg">{{ __('innovation.next_step.ask') }}</x-ui.button>
+            @endif
+        </x-slot:actions>
     </x-page-hero>
 
     <div class="mx-auto max-w-page px-4 pt-10 pb-16 sm:px-6">
@@ -83,11 +87,22 @@
                     @else
                         <p class="mt-2 text-night-muted">{{ __('innovation.programmes.none_open') }}</p>
                     @endif
+                    @unless ($open)
+                        <p class="mt-6 grid gap-2">
+                            <x-ui.button :href="route('newsletter.create')" variant="action" class="w-full">{{ __('innovation.next_step.subscribe') }}</x-ui.button>
+                            <x-ui.button :href="route('contact')" variant="light" class="w-full">{{ __('innovation.next_step.ask') }}</x-ui.button>
+                        </p>
+                    @endunless
                 </section>
                 @if ($programme->partner)
                     <p class="font-mono text-xs text-ink-muted">{{ __('innovation.field.partner') }}: {{ $programme->partner }}</p>
                 @endif
                 <p class="text-sm"><a href="{{ route('applications.lookup') }}" class="text-link underline underline-offset-4">{{ __('innovation.track.application_title') }}</a></p>
+                <section class="rounded-card border border-line bg-surface p-5 text-sm">
+                    <h2 class="font-semibold">{{ __('involved.volunteer.title') }}</h2>
+                    <p class="mt-1 text-ink-muted">{{ __('innovation.mentor_text') }}</p>
+                    <p class="mt-3"><x-ui.button :href="route('volunteer.create')" variant="secondary" size="sm">{{ __('volunteers.form.link') }}</x-ui.button></p>
+                </section>
             </aside>
         </div>
     </div>

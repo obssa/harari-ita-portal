@@ -25,6 +25,11 @@
             <x-slot:actions>
                 <x-ui.button :href="route('teams.create', ['slug' => $translation->slug])" variant="action" size="lg">{{ __('innovation.challenges.register') }}</x-ui.button>
             </x-slot:actions>
+        @elseif ($phase === Challenge::PHASE_BUILDING)
+            {{-- ADR-0053: while teams build, the page leads them to send their work. --}}
+            <x-slot:actions>
+                <x-ui.button :href="route('teams.lookup')" variant="action" size="lg">{{ __('innovation.challenges.send_submission') }}</x-ui.button>
+            </x-slot:actions>
         @endif
     </x-page-hero>
 
@@ -139,9 +144,16 @@
                     </dl>
                     @if ($phase === Challenge::PHASE_REGISTRATION)
                         <p class="mt-6"><x-ui.button :href="route('teams.create', ['slug' => $translation->slug])" variant="action" class="w-full">{{ __('innovation.challenges.register') }}</x-ui.button></p>
+                    @elseif ($phase === Challenge::PHASE_BUILDING)
+                        <p class="mt-6"><x-ui.button :href="route('teams.lookup')" variant="action" class="w-full">{{ __('innovation.challenges.send_submission') }}</x-ui.button></p>
                     @endif
                 </section>
                 <p class="text-sm"><a href="{{ route('teams.lookup') }}" class="text-link underline underline-offset-4">{{ __('innovation.track.team_title') }}</a></p>
+                <section class="rounded-card border border-line bg-surface p-5 text-sm">
+                    <h2 class="font-semibold">{{ __('involved.volunteer.title') }}</h2>
+                    <p class="mt-1 text-ink-muted">{{ __('innovation.mentor_text') }}</p>
+                    <p class="mt-3"><x-ui.button :href="route('volunteer.create')" variant="secondary" size="sm">{{ __('volunteers.form.link') }}</x-ui.button></p>
+                </section>
             </aside>
         </div>
     </div>

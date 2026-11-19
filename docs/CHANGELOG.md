@@ -26,6 +26,10 @@ All notable changes to the Agency's portal. Newest first.
   lane; a "Live on the portal" panel counts published services, courses, programmes and projects; published figures
   with their sources follow the pillars (the first three from ENA on the Ethio-Coders training); projects show a
   roadmap; cards catch the pointer's light; stories without photos get their own circuit tiles.
+- Every detail page offers a next step (ADR-0053): "Subscribe to updates" and "Ask the team" on a programme with no
+  open cohort, "Send your team's submission" while a challenge is building, a mentor sign-up on programmes and
+  challenges, "Get your startup listed" and "Ask for a change" on startup profiles, and an honest "full" or "Join the
+  waiting list" on events.
 - Calls, vacancies and internships can take applications through a portal form that arrives in the Inbox; it
   takes nothing after the deadline. Tenders never take a form and offer "Ask a question" (ADR-0053).
 - Every service page offers "Request this service" (ADR-0053): the request opens the desk form with the service

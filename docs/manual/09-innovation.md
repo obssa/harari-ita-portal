@@ -33,6 +33,8 @@ with the decision right can accept, waitlist or decline.
 2. Under **Questions**, add up to ten questions for applicants, in each language, and mark which are required.
 3. Under **Cohorts**, give each intake its name, when applications open and close (Addis Ababa time), its start
    and end dates, and the number of places. The public page shows **Apply** only while a cohort is open.
+   Between cohorts it offers **Subscribe to updates** (the newsletter) and **Ask the team** (the contact page)
+   instead, so visitors always have a next step.
 4. Applications arrive under **Applications**, each with an `APP-…` reference.
    - **Score** rates five criteria from 1 to 5.
    - **Move** sets the stage: screening, interview, then the decision.
@@ -92,6 +94,13 @@ Who may do it: innovation officers and administrators.
 3. The challenge page shows the ranking. A team that did not agree to be named is shown by its place only.
 4. To add an award line, such as "Winner" or "Best use of open data", open the team under **Teams** and choose
    **Award**.
+
+### The next step on every page
+
+Each page always offers a next step: while teams build, the challenge page shows **Send your team's submission**
+(the team lookup); programme and challenge pages invite mentors and volunteers to sign up; a startup profile
+offers **Get your startup listed** and **Is this yours? Ask for a change**. An event that is full says so, or offers
+**Join the waiting list** when it has one.
 
 ## 4. The homepage
 
