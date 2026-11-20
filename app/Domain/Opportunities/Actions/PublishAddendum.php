@@ -86,7 +86,7 @@ final class PublishAddendum
             $addendum->published_at = $now;
             $addendum->created_by = $actor->id;
 
-            if ($kind === AddendumKind::Extension && $newCloses !== null) {
+            if ($kind === AddendumKind::Extension) {
                 $addendum->previous_closes_at = $locked->closes_at;
                 $addendum->new_closes_at = $newCloses;
                 $locked->original_closes_at ??= $locked->closes_at;
