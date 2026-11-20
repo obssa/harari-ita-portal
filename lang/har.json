@@ -4122,5 +4122,6 @@
     "volunteers.validation.outside_scope": "",
     "volunteers.validation.skills": "",
     "volunteers.validation.status": "",
+    "volunteers.validation.status_move": "",
     "volunteers.validation.task": ""
 }

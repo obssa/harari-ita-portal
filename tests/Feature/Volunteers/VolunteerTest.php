@@ -16,6 +16,7 @@ use App\Domain\Volunteers\Actions\SaveVolunteer;
 use App\Domain\Volunteers\Enums\AssignmentStatus;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
+use App\Domain\Volunteers\Models\VolunteerAssignment;
 use App\Domain\Volunteers\Notifications\NewVolunteerNotice;
 use App\Filament\Resources\Volunteers\Pages\EditVolunteer;
 use App\Filament\Resources\Volunteers\Pages\ListVolunteers;
@@ -197,4 +198,26 @@ it('finds, copies and erases volunteer sign-ups in privacy requests, and deletes
     $this->artisan('portal:purge-sign-ups')->assertSuccessful();
     expect(Volunteer::query()->whereKey($old->id)->exists())->toBeFalse()
         ->and(Volunteer::query()->whereKey($followed->id)->exists())->toBeTrue();
+});
+
+it('moves an assignment only along the allowed statuses, on the locked row (ADR-0054)', function () {
+    $woreda = volunteerWoreda('Sample Woreda East');
+    $volunteer = sampleVolunteer($woreda);
+    $coordinator = coordinatorFor($woreda);
+    $manage = app(ManageVolunteer::class);
+    expect(AssignmentStatus::Cancelled->canMoveTo(AssignmentStatus::Done))->toBeFalse()
+        ->and(AssignmentStatus::Done->canMoveTo(AssignmentStatus::Planned))->toBeTrue();
+
+    $task = $manage->saveAssignment($volunteer, null, ['task' => 'Sample stall', 'status' => 'planned'], $coordinator);
+    $stale = VolunteerAssignment::query()->findOrFail($task->id);
+    $manage->saveAssignment($volunteer, $task, ['task' => 'Sample stall', 'status' => 'cancelled', 'hours' => '5'], $coordinator);
+
+    // A screen loaded before the cancellation cannot mark it done, so its hours never count.
+    expect(fn () => $manage->saveAssignment($volunteer, $stale, ['task' => 'Sample stall', 'status' => 'done', 'hours' => '5'], $coordinator))->toThrow(ValidationException::class)
+        ->and(ManageVolunteer::hours($volunteer))->toBe(0.0);
+
+    // Back to planned first, then done.
+    $manage->saveAssignment($volunteer, $task, ['task' => 'Sample stall', 'status' => 'planned'], $coordinator);
+    $manage->saveAssignment($volunteer, $task, ['task' => 'Sample stall', 'status' => 'done', 'hours' => '5'], $coordinator);
+    expect($task->refresh()->status)->toBe(AssignmentStatus::Done)->and(ManageVolunteer::hours($volunteer))->toBe(5.0);
 });

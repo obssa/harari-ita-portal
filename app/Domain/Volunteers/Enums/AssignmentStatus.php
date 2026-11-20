@@ -26,6 +26,26 @@ enum AssignmentStatus: string
     }
 
     /**
+     * The statuses an existing assignment may take from this one (ADR-0054): a planned task is done or cancelled, and
+     * a done or cancelled one can go back to planned to undo a mistake, never straight from cancelled to done (whose
+     * hours count) or back. A new assignment may be recorded with any status.
+     *
+     * @return list<self>
+     */
+    public function nextStatuses(): array
+    {
+        return match ($this) {
+            self::Planned => [self::Done, self::Cancelled],
+            self::Done, self::Cancelled => [self::Planned],
+        };
+    }
+
+    public function canMoveTo(self $to): bool
+    {
+        return in_array($to, $this->nextStatuses(), true);
+    }
+
+    /**
      * @return array<string, string>
      */
     public static function options(): array

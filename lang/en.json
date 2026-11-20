@@ -4122,5 +4122,6 @@
     "volunteers.validation.outside_scope": "Choose one of the directorates or offices you look after.",
     "volunteers.validation.skills": "Choose at least one thing you can offer.",
     "volunteers.validation.status": "Choose a status.",
+    "volunteers.validation.status_move": "This assignment is :status and cannot move to that status. Set it back to Planned first.",
     "volunteers.validation.task": "Describe the task (at most 120 characters), or choose an event."
 }

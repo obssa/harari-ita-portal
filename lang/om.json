@@ -4122,5 +4122,6 @@
     "volunteers.validation.outside_scope": "Daayireektoreetota ykn waajjiraalee isin hordoftan keessaa tokko filadhaa.",
     "volunteers.validation.skills": "Waan gumaachuu dandeessan yoo xiqqaate tokko filadhaa.",
     "volunteers.validation.status": "Haala filadhaa.",
+    "volunteers.validation.status_move": "Ramaddiin kun :status; gara haala sanaatti ce'uu hin danda'u. Dura gara «Kan karoorfame»tti deebisaa.",
     "volunteers.validation.task": "Hojii ibsaa (yoo baay'ate qubee 120) ykn sagantaa filadhaa."
 }

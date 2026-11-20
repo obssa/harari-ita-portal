@@ -85,7 +85,7 @@ class AssignmentsRelationManager extends RelationManager
                         'event_id' => $record->event_id, 'task' => $record->task, 'on_date' => $record->on_date?->toDateString(),
                         'status' => $record->status->value, 'hours' => $record->hours,
                     ])
-                    ->schema($this->fields())
+                    ->schema(fn (VolunteerAssignment $record): array => $this->fields($record))
                     ->action(function (VolunteerAssignment $record, array $data): void {
                         app(ManageVolunteer::class)->saveAssignment($this->volunteer(), $record, $data, CurrentUser::get());
                         Notification::make()->success()->title(__('volunteers.assignment.saved'))->send();
@@ -97,7 +97,7 @@ class AssignmentsRelationManager extends RelationManager
     /**
      * @return list<Component>
      */
-    private function fields(): array
+    private function fields(?VolunteerAssignment $record = null): array
     {
         return [
             Select::make('event_id')->label(__('volunteers.assignment.event'))->searchable()
@@ -107,7 +107,10 @@ class AssignmentsRelationManager extends RelationManager
                     ->mapWithKeys(fn (Event $event): array => [$event->id => $event->starts_at->toDateString().' · '.$event->title()])->all()),
             TextInput::make('task')->label(__('volunteers.assignment.task'))->maxLength(120)->helperText(__('volunteers.assignment.task_help')),
             DatePicker::make('on_date')->label(__('volunteers.assignment.on_date')),
-            Select::make('status')->label(__('people.admin.status'))->options(AssignmentStatus::options())->default(AssignmentStatus::Planned->value)->required(),
+            // ADR-0054: an existing assignment offers only its current status and the moves it allows.
+            Select::make('status')->label(__('people.admin.status'))->default(AssignmentStatus::Planned->value)->required()
+                ->options($record === null ? AssignmentStatus::options() : collect([$record->status, ...$record->status->nextStatuses()])
+                    ->mapWithKeys(fn (AssignmentStatus $status): array => [$status->value => $status->label()])->all()),
             TextInput::make('hours')->label(__('volunteers.assignment.hours'))->numeric()->minValue(0)->maxValue(999)->step(0.25),
         ];
     }

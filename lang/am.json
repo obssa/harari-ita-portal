@@ -4122,5 +4122,6 @@
     "volunteers.validation.outside_scope": "ከሚከታተሏቸው ዳይሬክቶሬቶች ወይም ጽሕፈት ቤቶች አንዱን ይምረጡ።",
     "volunteers.validation.skills": "ማበርከት የሚችሉትን ቢያንስ አንድ ይምረጡ።",
     "volunteers.validation.status": "ሁኔታ ይምረጡ።",
+    "volunteers.validation.status_move": "ይህ ምደባ :status ነው፤ ወደዚያ ሁኔታ ሊሸጋገር አይችልም። መጀመሪያ ወደ «የታቀደ» ይመልሱት።",
     "volunteers.validation.task": "ተግባሩን ይግለጹ (ቢበዛ 120 ፊደላት) ወይም ሁነት ይምረጡ።"
 }

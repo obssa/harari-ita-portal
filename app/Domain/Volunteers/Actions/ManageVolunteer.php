@@ -11,6 +11,7 @@ use App\Domain\Volunteers\Models\Volunteer;
 use App\Domain\Volunteers\Models\VolunteerAssignment;
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
@@ -84,15 +85,27 @@ final class ManageVolunteer
             throw ValidationException::withMessages($errors);
         }
 
-        $assignment ??= new VolunteerAssignment(['user_id' => $actor->id]);
-        $assignment->fill(['event_id' => $event?->id, 'task' => $task, 'on_date' => $onDate, 'status' => $status, 'hours' => $hours]);
-        $volunteer->assignments()->save($assignment);
+        /** @var AssignmentStatus $status */
+        return DB::transaction(function () use ($volunteer, $assignment, $actor, $event, $task, $onDate, $status, $hours): VolunteerAssignment {
+            if ($assignment?->exists) {
+                // ADR-0054: an edit moves the status only as nextStatuses() allows, decided on the locked assignment.
+                $locked = VolunteerAssignment::query()->whereKey($assignment->getKey())->lockForUpdate()->firstOrFail();
+                $assignment->setRawAttributes($locked->getAttributes(), true);
+                if ($status !== $assignment->status && ! $assignment->status->canMoveTo($status)) {
+                    throw ValidationException::withMessages(['status' => __('volunteers.validation.status_move', ['status' => $assignment->status->label()])]);
+                }
+            }
 
-        if ($volunteer->status === VolunteerStatus::New && $status !== AssignmentStatus::Cancelled) {
-            $volunteer->forceFill(['status' => VolunteerStatus::Active])->save();
-        }
+            $assignment ??= new VolunteerAssignment(['user_id' => $actor->id]);
+            $assignment->fill(['event_id' => $event?->id, 'task' => $task, 'on_date' => $onDate, 'status' => $status, 'hours' => $hours]);
+            $volunteer->assignments()->save($assignment);
 
-        return $assignment;
+            if ($volunteer->status === VolunteerStatus::New && $status !== AssignmentStatus::Cancelled) {
+                $volunteer->forceFill(['status' => VolunteerStatus::Active])->save();
+            }
+
+            return $assignment;
+        });
     }
 
     /** Hours given in assignments marked done. */
