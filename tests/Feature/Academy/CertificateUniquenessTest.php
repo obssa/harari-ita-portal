@@ -38,7 +38,7 @@ it('lets the database refuse a second valid certificate, and allows a new one af
     $coordinator = staff(SystemRole::AcademyCoordinator);
     $first = app(IssueCertificate::class)->handle($learner, $coordinator, notify: false);
 
-    $copy = $first->replicate(['valid_for']);
+    $copy = $first->replicate(['valid']);
     $copy->code = Certificate::newCode();
     expect(fn () => $copy->save())->toThrow(QueryException::class);
 

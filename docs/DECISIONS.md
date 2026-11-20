@@ -1083,7 +1083,8 @@ Applied so far:
 - **Erasure and waiting lists.** An erased person leaves every waiting list and gives back a place at an event or
   cohort that has not started, which goes to the next person; places at ones that began stay as anonymous history.
   Waiting-list promotion skips erased rows.
-- **Certificates.** Issuing locks the enrolment, and a unique index on a generated `valid_for` column (the
-  enrolment while the certificate is valid) lets the database refuse a second valid certificate.
+- **Certificates.** Issuing locks the enrolment, and a unique index on the enrolment and a generated `valid`
+  flag (1 while the certificate is not revoked, null after) lets the database refuse a second valid certificate. The
+  flag reads only `revoked_at`, because MariaDB refuses a stored generated column that returns a CHAR column.
 
 **Why.** The owner asked for every implicit state machine to be found and its gaps fixed in order of harm.
