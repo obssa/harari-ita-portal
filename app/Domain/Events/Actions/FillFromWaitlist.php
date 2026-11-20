@@ -35,7 +35,7 @@ final class FillFromWaitlist
 
             $moved = [];
             /** @var EventRegistration $next */
-            foreach ($locked->registrations()->where('status', RegistrationStatus::Waitlisted->value)
+            foreach ($locked->registrations()->where('status', RegistrationStatus::Waitlisted->value)->whereNull('erased_at')
                 ->orderBy('created_at')->orderBy('id')->limit(min($free, 500))->get() as $next) {
                 $next->status = RegistrationStatus::Registered;
                 $next->promoted_at = CarbonImmutable::now();

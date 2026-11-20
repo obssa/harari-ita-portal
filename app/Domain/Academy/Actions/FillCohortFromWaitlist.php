@@ -34,7 +34,7 @@ final class FillCohortFromWaitlist
 
             $moved = [];
             /** @var Enrolment $next */
-            foreach ($locked->enrolments()->where('status', EnrolmentStatus::Waitlisted->value)
+            foreach ($locked->enrolments()->where('status', EnrolmentStatus::Waitlisted->value)->whereNull('erased_at')
                 ->orderBy('created_at')->orderBy('id')->limit(min($free, 500))->get() as $next) {
                 $next->status = EnrolmentStatus::Enrolled;
                 $next->promoted_at = CarbonImmutable::now();

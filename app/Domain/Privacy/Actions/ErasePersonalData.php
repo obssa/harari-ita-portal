@@ -2,9 +2,15 @@
 
 namespace App\Domain\Privacy\Actions;
 
+use App\Domain\Academy\Actions\FillCohortFromWaitlist;
+use App\Domain\Academy\Enums\EnrolmentStatus;
 use App\Domain\Academy\Models\Certificate;
+use App\Domain\Academy\Models\CourseCohort;
 use App\Domain\Academy\Models\Enrolment;
 use App\Domain\Engagement\Models\Subscriber;
+use App\Domain\Events\Actions\FillFromWaitlist;
+use App\Domain\Events\Enums\RegistrationStatus;
+use App\Domain\Events\Models\Event;
 use App\Domain\Events\Models\EventRegistration;
 use App\Domain\Forms\Actions\SubmitForm;
 use App\Domain\Forms\Models\FormSubmission;
@@ -21,6 +27,7 @@ use App\Domain\Support\Models\TicketMessage;
 use App\Domain\Volunteers\Enums\VolunteerStatus;
 use App\Domain\Volunteers\Models\Volunteer;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -34,6 +41,9 @@ use Illuminate\Support\Str;
  * (inactive) and the hours of their tasks. Newsletter subscriptions and
  * media contacts are deleted. Failed sign-ins forget the email tried.
  * Staff accounts are not touched here. Backups age out within their retention.
+ *
+ * An erased person also leaves every waiting list, and gives back a place at an event or a cohort that has not
+ * started, so the next person moves up; places at ones that already began stay as anonymous history.
  */
 final class ErasePersonalData
 {
@@ -57,9 +67,15 @@ final class ErasePersonalData
         $subscribers = $search->subscribers();
         $mediaContacts = $search->mediaContacts();
 
-        DB::transaction(function () use ($registrations, $submissions, $tickets, $applications, $enrolments, $startups, $teams, $failed, $volunteers, $subscribers, $mediaContacts): void {
+        /** @var array<int, Event> $freedEvents */
+        $freedEvents = [];
+        /** @var array<int, CourseCohort> $freedCohorts */
+        $freedCohorts = [];
+        DB::transaction(function () use ($registrations, $submissions, $tickets, $applications, $enrolments, $startups, $teams, $failed, $volunteers, $subscribers, $mediaContacts, &$freedEvents, &$freedCohorts): void {
             foreach ($registrations as $registration) {
-                $this->registration($registration);
+                if ($this->registration($registration)) {
+                    $freedEvents[$registration->event->id] = $registration->event;
+                }
             }
             foreach ($submissions as $submission) {
                 $this->submission($submission);
@@ -80,7 +96,9 @@ final class ErasePersonalData
             // ADR-0029: the learner's details and link go; attendance stays as anonymous counts. Their certificates are
             // revoked and lose the name and initials, so verification no longer answers for them.
             foreach ($enrolments as $enrolment) {
-                $this->enrolment($enrolment);
+                if ($this->enrolment($enrolment)) {
+                    $freedCohorts[$enrolment->cohort->id] = $enrolment->cohort;
+                }
             }
             // ADR-0022: the contact and members go and the team is no longer named in the results; the submission and
             // the judges' scores stay so the published ranking keeps its places.
@@ -105,6 +123,14 @@ final class ErasePersonalData
             }
         });
 
+        // The places given back go to the next people waiting.
+        foreach ($freedEvents as $event) {
+            app(FillFromWaitlist::class)->handle($event);
+        }
+        foreach ($freedCohorts as $cohort) {
+            app(FillCohortFromWaitlist::class)->handle($cohort);
+        }
+
         PrivacyRequest::query()->create([
             'kind' => PrivacyRequest::ERASE,
             'subject_hash' => $search->subjectHash(),
@@ -116,8 +142,14 @@ final class ErasePersonalData
         return $counts;
     }
 
-    private function registration(EventRegistration $registration): void
+    /** @return bool whether a confirmed place was given back */
+    private function registration(EventRegistration $registration): bool
     {
+        $freed = $registration->status === RegistrationStatus::Registered && $registration->event->starts_at->isFuture();
+        if ($freed || $registration->status === RegistrationStatus::Waitlisted) {
+            $registration->status = RegistrationStatus::Cancelled;
+            $registration->cancelled_at = CarbonImmutable::now();
+        }
         $token = Str::random(40);
         $registration->forceFill([
             'name' => self::ERASED,
@@ -129,10 +161,18 @@ final class ErasePersonalData
             'token_hash' => EventRegistration::hash($token),
             'erased_at' => now(),
         ])->saveQuietly();
+
+        return $freed;
     }
 
-    private function enrolment(Enrolment $enrolment): void
+    /** @return bool whether a confirmed place was given back */
+    private function enrolment(Enrolment $enrolment): bool
     {
+        $freed = $enrolment->status === EnrolmentStatus::Enrolled && $enrolment->cohort->starts_on->isFuture();
+        if ($freed || $enrolment->status === EnrolmentStatus::Waitlisted) {
+            $enrolment->status = EnrolmentStatus::Cancelled;
+            $enrolment->cancelled_at = CarbonImmutable::now();
+        }
         $enrolment->certificates->each(fn (Certificate $certificate) => $certificate->forceFill([
             'holder_name' => null, 'holder_initials' => null, 'revoked_at' => $certificate->revoked_at ?? now(),
             'revoke_reason' => $certificate->revoke_reason ?? 'erased',
@@ -141,6 +181,8 @@ final class ErasePersonalData
             'name' => null, 'phone' => null, 'email' => null, 'phone_hash' => null, 'email_hash' => null, 'token' => null,
             'token_hash' => Enrolment::hash(Str::random(40)), 'erased_at' => now(),
         ])->saveQuietly();
+
+        return $freed;
     }
 
     private function volunteer(Volunteer $volunteer): void
