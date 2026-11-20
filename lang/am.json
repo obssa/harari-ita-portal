@@ -2704,6 +2704,7 @@
     "newsletter.state.confirmed": "የተረጋገጠ",
     "newsletter.state.pending": "ማረጋገጫ በመጠባበቅ ላይ",
     "newsletter.state.unsubscribed": "ምዝገባ የሰረዘ",
+    "newsletter.still_unsubscribed": "ይህ መንገድ ከተላከ በኋላ ምዝገባዎን ስላቋረጡ አሁንም ከእኛ ዜና አይደርስዎትም። ዜና እንደገና ለማግኘት ከታች መንገድ ይምረጡ።",
     "newsletter.submit": "ይመዝገቡ",
     "newsletter.title": "ዜና በኢሜይል ወይም በአጭር የጽሑፍ መልእክት",
     "newsletter.topic.advisories": "የደህንነት ምክሮች",

@@ -112,10 +112,15 @@ final class Subscribe
      * The link in the email: confirms the address (and asks for news again
      * after an unsubscribe). A link sent to a new address carries it,
      * encrypted, and switches the subscriber to it unless another
-     * subscription already uses it (ADR-0077).
+     * subscription already uses it (ADR-0077). After an unsubscribe, only a
+     * link sent later (a new sign-up) subscribes again: an old email, or a mail
+     * scanner opening its links, changes nothing (ADR-0054).
      */
-    public function confirmEmail(Subscriber $subscriber, ?string $change = null): void
+    public function confirmEmail(Subscriber $subscriber, ?string $change = null, ?string $sent = null): void
     {
+        if ($subscriber->unsubscribed_at !== null && ! $this->sentAfter($sent, $subscriber->unsubscribed_at)) {
+            return;
+        }
         $new = $change !== null ? $this->changedEmail($change) : null;
         if ($new !== null && ! Subscriber::query()->whereNull('erased_at')->where('email_hash', Subscriber::hash($new))->whereKeyNot($subscriber->id)->exists()) {
             $subscriber->forceFill(['email' => $new, 'email_hash' => Subscriber::hash($new), 'email_confirmed_at' => CarbonImmutable::now()]);
@@ -226,9 +231,23 @@ final class Subscribe
             : null;
         try {
             Mail::to($newEmail ?? (string) $subscriber->email)->locale($subscriber->locale)
-                ->queue(new ConfirmSubscriptionMail($subscriber->token, $subscriber->locale, $newEmail === null && $subscriber->email_confirmed_at !== null, $change));
+                ->queue(new ConfirmSubscriptionMail($subscriber->token, $subscriber->locale, $newEmail === null && $subscriber->email_confirmed_at !== null, $change,
+                    Crypt::encryptString((string) CarbonImmutable::now()->getTimestamp())));
         } catch (Throwable $e) {
             report($e);
+        }
+    }
+
+    /** Whether the link's encrypted sending time is at or after the given moment. */
+    private function sentAfter(?string $sent, CarbonImmutable $moment): bool
+    {
+        if ($sent === null) {
+            return false;
+        }
+        try {
+            return (int) Crypt::decryptString($sent) >= $moment->getTimestamp();
+        } catch (Throwable) {
+            return false;
         }
     }
 

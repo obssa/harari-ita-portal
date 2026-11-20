@@ -2704,6 +2704,7 @@
     "newsletter.state.confirmed": "Kan mirkanaa'e",
     "newsletter.state.pending": "Mirkaneessa eegaa jira",
     "newsletter.state.unsubscribed": "Kan galmee haqe",
+    "newsletter.still_unsubscribed": "Erga liinkiin kun ergamee booda galmee keessan dhaabdaniittu, kanaaf ammallee oduun nu irraa isin hin ga'u. Oduu irra deebi'anii argachuuf armaan gaditti karaa filadhaa.",
     "newsletter.submit": "Galmaa'i",
     "newsletter.title": "Oduu karaa imeelii ykn SMS",
     "newsletter.topic.advisories": "Gorsa nageenyaa",

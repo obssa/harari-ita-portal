@@ -2704,6 +2704,7 @@
     "newsletter.state.confirmed": "",
     "newsletter.state.pending": "",
     "newsletter.state.unsubscribed": "",
+    "newsletter.still_unsubscribed": "",
     "newsletter.submit": "",
     "newsletter.title": "",
     "newsletter.topic.advisories": "",

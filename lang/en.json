@@ -2704,6 +2704,7 @@
     "newsletter.state.confirmed": "Confirmed",
     "newsletter.state.pending": "Waiting for confirmation",
     "newsletter.state.unsubscribed": "Unsubscribed",
+    "newsletter.still_unsubscribed": "You unsubscribed after this link was sent, so you still receive no news from us. To get news again, choose a channel below.",
     "newsletter.submit": "Subscribe",
     "newsletter.title": "News by email or SMS",
     "newsletter.topic.advisories": "Safety advisories",

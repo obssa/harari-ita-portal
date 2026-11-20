@@ -24,6 +24,8 @@ final class ConfirmSubscriptionMail extends Mailable implements ShouldBeEncrypte
         public readonly bool $alreadyConfirmed,
         /** ADR-0077: the encrypted new address this link confirms, when the subscriber typed another one. */
         public readonly ?string $change = null,
+        /** ADR-0054: when the link was sent, encrypted, so a link older than an unsubscribe does not subscribe again. */
+        public readonly ?string $sent = null,
     ) {}
 
     public function envelope(): Envelope
@@ -35,7 +37,7 @@ final class ConfirmSubscriptionMail extends Mailable implements ShouldBeEncrypte
     {
         return new Content(markdown: 'mail.newsletter.confirm', with: [
             'alreadyConfirmed' => $this->alreadyConfirmed,
-            'url' => route('newsletter.confirm', array_filter(['locale' => $this->language, 'token' => $this->token, 'change' => $this->change])),
+            'url' => route('newsletter.confirm', array_filter(['locale' => $this->language, 'token' => $this->token, 'change' => $this->change, 'sent' => $this->sent])),
         ]);
     }
 }

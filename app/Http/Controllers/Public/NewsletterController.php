@@ -80,9 +80,11 @@ final class NewsletterController extends Controller
         $subscriber = Subscriber::byToken($token);
         abort_if($subscriber === null, 404);
         $change = $request->query('change');
-        $subscribe->confirmEmail($subscriber, is_string($change) ? $change : null);
+        $sent = $request->query('sent');
+        $subscribe->confirmEmail($subscriber, is_string($change) ? $change : null, is_string($sent) ? $sent : null);
 
-        return redirect()->route('newsletter.preferences', ['token' => $token])->with('status', __('newsletter.confirmed'));
+        return redirect()->route('newsletter.preferences', ['token' => $token])
+            ->with('status', $subscriber->unsubscribed_at !== null ? __('newsletter.still_unsubscribed') : __('newsletter.confirmed'));
     }
 
     public function preferences(string $token): Response

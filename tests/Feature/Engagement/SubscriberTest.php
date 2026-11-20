@@ -233,3 +233,37 @@ it('finds, copies and deletes subscriptions in privacy requests, and drops uncon
     $this->artisan('portal:purge-sign-ups')->assertSuccessful();
     expect(Subscriber::query()->count())->toBe(1);
 });
+
+it('does not subscribe again from a confirmation link older than the unsubscribe (ADR-0054)', function () {
+    $this->post('/en/newsletter', subscription());
+    $subscriber = Subscriber::query()->sole();
+    $old = null;
+    Mail::assertQueued(ConfirmSubscriptionMail::class, function (ConfirmSubscriptionMail $mail) use (&$old): bool {
+        $old = $mail->content()->with['url'];
+
+        return true;
+    });
+    $this->get($old)->assertRedirect();
+    expect($subscriber->refresh()->reachableBy('email'))->toBeTrue();
+
+    $this->travel(1)->minutes();
+    $this->post("/en/newsletter/preferences/{$subscriber->token}", ['unsubscribe' => '1']);
+    $this->travel(1)->minutes();
+
+    // The old email's link (or a scanner opening it) leaves the person unsubscribed, and says so.
+    $this->get($old)->assertSessionHas('status', __('newsletter.still_unsubscribed'));
+    $this->get("/en/newsletter/confirm/{$subscriber->token}")->assertRedirect();
+    expect($subscriber->refresh()->unsubscribed_at)->not->toBeNull()->and($subscriber->reachableBy('email'))->toBeFalse();
+
+    // Signing up again sends a new link, which does subscribe again.
+    Mail::fake();
+    $this->post('/en/newsletter', subscription());
+    $fresh = null;
+    Mail::assertQueued(ConfirmSubscriptionMail::class, function (ConfirmSubscriptionMail $mail) use (&$fresh): bool {
+        $fresh = $mail->content()->with['url'];
+
+        return true;
+    });
+    $this->get($fresh)->assertSessionHas('status', __('newsletter.confirmed'));
+    expect($subscriber->refresh()->unsubscribed_at)->toBeNull()->and($subscriber->reachableBy('email'))->toBeTrue();
+});
