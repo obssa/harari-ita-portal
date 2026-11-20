@@ -3706,6 +3706,7 @@
     "status.validation.body": "Waan ummataaf himamu yoo xiqqaate afaan tokkoon barreessaa.",
     "status.validation.components": "Sirnoota miidhaman filadhaa.",
     "status.validation.impact": "Dhiibbaa filadhaa.",
+    "status.validation.stage_move": "Taateen kun sadarkaa «:stage» irra jira; gara sadarkaa sanaatti ce'uu hin danda'u. «Karoorfameera» suphaa ammallee hin jalqabamne qofaafi.",
     "status.validation.title": "Yoo xiqqaate afaan tokkoon mata-duree galchaa.",
     "structure.description": "Daayireektoreetonni, gareewwanii fi waajjiraaleen Ejansichaa akkamitti akka walitti hidhaman, tokkoon tokkoon isaanii eenyu akka geggeessu.",
     "structure.headed_by": "Itti gaafatamaa: :name",

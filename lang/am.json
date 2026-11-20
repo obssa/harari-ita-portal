@@ -3706,6 +3706,7 @@
     "status.validation.body": "ለሕዝቡ የሚነገረውን ቢያንስ በአንድ ቋንቋ ይጻፉ።",
     "status.validation.components": "የተጎዱትን ሲስተሞች ይምረጡ።",
     "status.validation.impact": "ተጽእኖውን ይምረጡ።",
+    "status.validation.stage_move": "ይህ ክስተት «:stage» ደረጃ ላይ ነው፤ ወደዚያ ደረጃ ሊሸጋገር አይችልም። «ታቅዷል» ገና ላልጀመረ የጥገና ሥራ ብቻ ነው።",
     "status.validation.title": "ቢያንስ በአንድ ቋንቋ ርዕስ ያስገቡ።",
     "structure.description": "የኤጀንሲው ዳይሬክቶሬቶች፣ ቡድኖች እና ጽሕፈት ቤቶች እንዴት እንደሚገናኙ እና እያንዳንዱን ማን እንደሚመራ።",
     "structure.headed_by": "ኃላፊ፦ :name",

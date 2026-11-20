@@ -19,6 +19,32 @@ enum IncidentStage: string
     }
 
     /**
+     * The stages an update may move the incident to from this one (ADR-0054). Scheduled is only where planned
+     * maintenance starts and is never chosen again; the working stages move among themselves and to resolved; a
+     * resolved incident can be reopened at a working stage. An update at the same stage is always allowed.
+     *
+     * @return list<self>
+     */
+    public function nextStages(): array
+    {
+        $working = [self::Investigating, self::Identified, self::Monitoring];
+
+        return match ($this) {
+            self::Scheduled => [...$working, self::Resolved],
+            self::Investigating, self::Identified, self::Monitoring => array_values(array_filter(
+                [...$working, self::Resolved],
+                fn (self $stage): bool => $stage !== $this,
+            )),
+            self::Resolved => $working,
+        };
+    }
+
+    public function canMoveTo(self $to): bool
+    {
+        return $to === $this || in_array($to, $this->nextStages(), true);
+    }
+
+    /**
      * @return array<string, string>
      */
     public static function options(): array

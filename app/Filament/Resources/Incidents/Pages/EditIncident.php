@@ -33,7 +33,10 @@ class EditIncident extends EditRecord
                 ->visible(fn (): bool => CurrentUser::get()->can('update', $this->incident()))
                 ->fillForm(fn (): array => ['stage' => $this->incident()->stage->value])
                 ->schema([
-                    Select::make('stage')->label(__('status.admin.stage'))->options(IncidentStage::options())->required(),
+                    // ADR-0054: the current stage (a further update) and the stages it can move to.
+                    Select::make('stage')->label(__('status.admin.stage'))->required()
+                        ->options(fn (): array => collect([$this->incident()->stage, ...$this->incident()->stage->nextStages()])
+                            ->mapWithKeys(fn (IncidentStage $stage): array => [$stage->value => $stage->label()])->all()),
                     ...array_map(
                         fn (string $locale): Textarea => Textarea::make("bodies.{$locale}")
                             ->label(Locales::nativeName($locale))

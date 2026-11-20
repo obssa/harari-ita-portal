@@ -114,3 +114,30 @@ it('opens and updates incidents from the admin, for staff with the permission on
 
     expect($incident->refresh()->stage)->toBe(IncidentStage::Identified)->and($incident->updates()->count())->toBe(2);
 });
+
+it('moves an incident only along the allowed stages, on the locked incident (ADR-0054)', function () {
+    $owner = staff(SystemRole::ServiceOwner);
+    expect(IncidentStage::Investigating->canMoveTo(IncidentStage::Scheduled))->toBeFalse()
+        ->and(IncidentStage::Resolved->canMoveTo(IncidentStage::Scheduled))->toBeFalse()
+        ->and(IncidentStage::Resolved->canMoveTo(IncidentStage::Investigating))->toBeTrue()
+        ->and(IncidentStage::Scheduled->canMoveTo(IncidentStage::Scheduled))->toBeTrue();
+
+    $incident = statusIncident(['components' => [statusSystem('Sample website')->id]]);
+    expect($incident->stage)->toBe(IncidentStage::Investigating);
+    $post = app(PostIncidentUpdate::class);
+    expect(fn () => $post->handle($incident, IncidentStage::Scheduled, ['en' => 'Sample'], $owner))->toThrow(ValidationException::class);
+
+    $post->handle($incident, IncidentStage::Resolved, ['en' => 'Sample: fixed.'], $owner);
+    $resolvedAt = $incident->resolved_at;
+    $this->travel(5)->minutes();
+    // A note added after the fix keeps the time it was fixed; a stale screen cannot set it back to scheduled.
+    $stale = Incident::query()->findOrFail($incident->id);
+    $stale->stage = IncidentStage::Scheduled;
+    $post->handle($incident, IncidentStage::Resolved, ['en' => 'Sample: a short report follows.'], $owner);
+    expect($incident->refresh()->resolved_at->equalTo($resolvedAt))->toBeTrue()
+        ->and(fn () => $post->handle($stale, IncidentStage::Scheduled, ['en' => 'Sample'], $owner))->toThrow(ValidationException::class);
+
+    // Reopening goes to a working stage.
+    $post->handle($incident, IncidentStage::Investigating, ['en' => 'Sample: it is back.'], $owner);
+    expect($incident->refresh()->stage)->toBe(IncidentStage::Investigating)->and($incident->resolved_at)->toBeNull();
+});

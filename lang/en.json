@@ -3706,6 +3706,7 @@
     "status.validation.body": "Write what to tell the public, in at least one language.",
     "status.validation.components": "Choose the systems affected.",
     "status.validation.impact": "Choose the impact.",
+    "status.validation.stage_move": "This incident is at “:stage” and cannot move to that stage. Scheduled is only for maintenance that has not started.",
     "status.validation.title": "Give a title in at least one language.",
     "structure.description": "How the Agency's directorates, teams and offices fit together, and who heads each one.",
     "structure.headed_by": "Head: :name",
