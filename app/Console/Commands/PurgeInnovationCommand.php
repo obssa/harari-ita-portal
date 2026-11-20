@@ -9,13 +9,16 @@ use App\Domain\Innovation\Models\ChallengeTeam;
 use App\Domain\Innovation\Models\Startup;
 use App\Domain\People\Models\PersonNote;
 use Carbon\CarbonImmutable;
+use Closure;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * The innovation retention period (ADR-0021, ADR-0020), for every site: applications are deleted once they were
  * decided or withdrawn longer ago than the period; listing requests that were declined are deleted, and archived
  * listings lose the founders' contact; teams lose their contact once the challenge is that old (ADR-0022). Open
- * applications and listed startups are never touched.
+ * applications and listed startups are never touched. The period counts from the decision (`decided_at`), so editing
+ * a record later does not keep it longer (ADR-0054); a record without that date falls back to its last edit.
  */
 final class PurgeInnovationCommand extends Command
 {
@@ -29,7 +32,7 @@ final class PurgeInnovationCommand extends Command
 
         $expired = Application::query()->withoutGlobalScopes()
             ->whereIn('stage', [ApplicationStage::Accepted->value, ApplicationStage::Waitlisted->value, ApplicationStage::Declined->value, ApplicationStage::Withdrawn->value])
-            ->where('updated_at', '<', $before);
+            ->where(self::decidedBefore($before));
         // ADR-0053: the history (and the messages in it) goes with the application.
         $expired->clone()->pluck('id')->chunk(500)->each(fn ($ids) => PersonNote::query()
             ->where('notable_type', (new Application)->getMorphClass())->whereIn('notable_id', $ids->all())->delete());
@@ -48,7 +51,7 @@ final class PurgeInnovationCommand extends Command
         $declined = 0;
         Startup::query()->withoutGlobalScopes()->withTrashed()
             ->where('listing_status', ListingStatus::Declined->value)
-            ->where('updated_at', '<', $before)
+            ->where(self::decidedBefore($before))
             ->each(function (Startup $startup) use (&$declined): void {
                 $startup->forceDelete();
                 $declined++;
@@ -56,12 +59,23 @@ final class PurgeInnovationCommand extends Command
 
         $archived = Startup::query()->withoutGlobalScopes()->withTrashed()
             ->where('listing_status', ListingStatus::Archived->value)
-            ->where('updated_at', '<', $before)
+            ->where(self::decidedBefore($before))
             ->whereNotNull('email_hash')
             ->update(['founder_name' => null, 'founder_email' => null, 'founder_phone' => null, 'email_hash' => null, 'phone_hash' => null]);
 
         $this->components->info("Applications deleted: {$applications}; teams cleared: {$teams}; declined listings deleted: {$declined}; archived listings cleared: {$archived}");
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @return Closure(Builder<*>): void
+     */
+    private static function decidedBefore(CarbonImmutable $before): Closure
+    {
+        return function (Builder $query) use ($before): void {
+            $query->where('decided_at', '<', $before)
+                ->orWhere(fn (Builder $undated) => $undated->whereNull('decided_at')->where('updated_at', '<', $before));
+        };
     }
 }

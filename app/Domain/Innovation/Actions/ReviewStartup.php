@@ -42,6 +42,10 @@ final class ReviewStartup
             }
 
             $startup->listing_status = $status;
+            if ($changed) {
+                // The retention period of a declined or archived listing counts from here (ADR-0054).
+                $startup->decided_at = CarbonImmutable::now();
+            }
             $startup->review_note = $note !== '' ? mb_substr($note, 0, 2000) : null;
             if ($status === ListingStatus::Listed) {
                 $startup->listed_at = $changed ? CarbonImmutable::now() : ($startup->listed_at ?? CarbonImmutable::now());

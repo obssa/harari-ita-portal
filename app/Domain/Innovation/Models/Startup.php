@@ -46,6 +46,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property ?string $phone_hash
  * @property ?CarbonImmutable $consented_at
  * @property ?CarbonImmutable $listed_at
+ * @property ?CarbonImmutable $decided_at
  * @property CarbonImmutable $created_at
  * @property-read ?Category $sector
  * @property-read ?Media $logo
@@ -92,6 +93,7 @@ class Startup extends Model implements TranslatableModel
             'label_verified_at' => 'immutable_datetime',
             'consented_at' => 'immutable_datetime',
             'listed_at' => 'immutable_datetime',
+            'decided_at' => 'immutable_datetime',
             'created_at' => 'immutable_datetime',
         ];
     }

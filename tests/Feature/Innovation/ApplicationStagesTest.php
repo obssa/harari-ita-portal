@@ -38,7 +38,7 @@ it('never lets a stale screen undo an applicant\'s withdrawal', function () {
     expect(fn () => app(ReviewApplication::class)->score($stale, array_fill_keys(Application::CRITERIA, 4), staff(SystemRole::InnovationOfficer)))
         ->toThrow(ValidationException::class);
     expect($application->refresh()->stage)->toBe(ApplicationStage::Withdrawn)
-        ->and($application->decided_at)->toBeNull()
+        ->and($application->decision_note)->toBeNull()
         ->and($application->score)->toBeNull();
 });
 

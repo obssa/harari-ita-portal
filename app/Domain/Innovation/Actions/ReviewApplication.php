@@ -118,6 +118,8 @@ final class ReviewApplication
                 throw ValidationException::withMessages(['form' => __('innovation.validation.not_open')]);
             }
             $locked->stage = ApplicationStage::Withdrawn;
+            // The retention period counts from the withdrawal (ADR-0054).
+            $locked->decided_at = CarbonImmutable::now();
             $locked->save();
         });
 
