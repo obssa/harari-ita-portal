@@ -12,12 +12,15 @@ use App\Domain\Support\Models\Ticket;
 use App\Domain\Support\Sla\WorkingHours;
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 /**
  * Staff change how a ticket is handled (ADR-0017): its status, priority, category, directorate and who works on it.
  * A new priority or category moves the targets (counted again from when the ticket came in); resolving stops the
- * clock and asks the requester to rate the help; reopening starts it again.
+ * clock and asks the requester to rate the help; reopening starts it again. The status moves only as
+ * TicketStatus::nextStatuses() allows, decided on the locked ticket (ADR-0054), so a stale screen cannot reopen a
+ * ticket the requester has closed.
  */
 final class UpdateTicket
 {
@@ -26,6 +29,23 @@ final class UpdateTicket
      */
     public function handle(Ticket $ticket, array $data, User $staff): Ticket
     {
+        $wasOpen = DB::transaction(fn (): bool => $this->apply($ticket, $data, $staff));
+
+        if ($wasOpen && $ticket->status === TicketStatus::Resolved) {
+            ReplyToTicket::tellRequester($ticket, 'resolved');
+        }
+
+        return $ticket;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private function apply(Ticket $ticket, array $data, User $staff): bool
+    {
+        $locked = Ticket::query()->whereKey($ticket->getKey())->lockForUpdate()->firstOrFail();
+        $ticket->setRawAttributes($locked->getAttributes(), true);
+
         $errors = [];
 
         $status = array_key_exists('status', $data) ? TicketStatus::tryFrom((string) $data['status']) : $ticket->status;
@@ -33,6 +53,8 @@ final class UpdateTicket
         $category = array_key_exists('category', $data) ? TicketCategory::tryFrom((string) $data['category']) : $ticket->category;
         if ($status === null) {
             $errors['data.status'] = __('support.validation.status');
+        } elseif ($status !== $ticket->status && ! $ticket->status->canMoveTo($status)) {
+            $errors['data.status'] = __('support.validation.status_move', ['status' => $ticket->status->label()]);
         }
         if ($priority === null) {
             $errors['data.priority'] = __('support.validation.priority');
@@ -93,10 +115,6 @@ final class UpdateTicket
         }
         $ticket->save();
 
-        if ($wasOpen && $ticket->status === TicketStatus::Resolved) {
-            ReplyToTicket::tellRequester($ticket, 'resolved');
-        }
-
-        return $ticket;
+        return $wasOpen;
     }
 }

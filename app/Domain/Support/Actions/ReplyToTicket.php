@@ -46,6 +46,12 @@ final class ReplyToTicket
         }
 
         $message = DB::transaction(function () use ($ticket, $staff, $body, $internal, $waitForRequester, $uploads): TicketMessage {
+            // Checked again on the locked ticket (ADR-0054): an answer never reopens one the requester closed meanwhile.
+            $locked = Ticket::query()->whereKey($ticket->getKey())->lockForUpdate()->firstOrFail();
+            $ticket->setRawAttributes($locked->getAttributes(), true);
+            if (! $ticket->status->isOpen() && ! $internal) {
+                throw ValidationException::withMessages(['body' => __('support.validation.closed')]);
+            }
             $message = $ticket->messages()->create([
                 'author_id' => $staff->id,
                 'internal' => $internal,

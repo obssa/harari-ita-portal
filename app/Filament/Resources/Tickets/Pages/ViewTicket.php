@@ -95,7 +95,10 @@ class ViewTicket extends ViewRecord
                     'assignee_id' => $ticket->assignee_id,
                 ])
                 ->schema([
-                    Select::make('status')->label(__('support.field.status'))->options(TicketStatus::options())->required(),
+                    // ADR-0054: only the moves the current status allows (and the current one, which changes nothing).
+                    Select::make('status')->label(__('support.field.status'))->required()
+                        ->options(fn (): array => collect([$ticket->status, ...$ticket->status->nextStatuses()])
+                            ->mapWithKeys(fn (TicketStatus $status): array => [$status->value => $status->label()])->all()),
                     Select::make('priority')->label(__('support.field.priority'))->options(TicketPriority::options())->required(),
                     Select::make('category')->label(__('support.field.category'))->options(TicketCategory::options())->required(),
                     Select::make('office_id')->label(__('support.field.office'))->searchable()->options(fn (): array => TicketResource::officeOptions())

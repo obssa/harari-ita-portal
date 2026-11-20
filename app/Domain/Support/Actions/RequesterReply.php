@@ -48,6 +48,12 @@ final class RequesterReply
         }
 
         $message = DB::transaction(function () use ($ticket, $body, $uploads): TicketMessage {
+            // Checked again on the locked ticket (ADR-0054): one closed meanwhile takes no reply.
+            $locked = Ticket::query()->whereKey($ticket->getKey())->lockForUpdate()->firstOrFail();
+            $ticket->setRawAttributes($locked->getAttributes(), true);
+            if ($ticket->status === TicketStatus::Closed) {
+                throw ValidationException::withMessages(['body' => __('support.validation.closed')]);
+            }
             $message = $ticket->messages()->create([
                 'from_requester' => true,
                 'body' => $body,
@@ -72,19 +78,24 @@ final class RequesterReply
 
     public function rate(Ticket $ticket, int $score, ?string $note): Ticket
     {
-        if ($ticket->status !== TicketStatus::Resolved) {
-            throw ValidationException::withMessages(['satisfaction' => __('support.validation.rate_resolved')]);
-        }
         if ($score < 1 || $score > 5) {
             throw ValidationException::withMessages(['satisfaction' => __('support.validation.rating')]);
         }
 
         $note = trim((string) $note);
-        $ticket->satisfaction = $score;
-        $ticket->satisfaction_note = $note !== '' ? mb_substr($note, 0, 1000) : null;
-        $ticket->status = TicketStatus::Closed;
-        $ticket->closed_at = CarbonImmutable::now();
-        $ticket->save();
+        DB::transaction(function () use ($ticket, $score, $note): void {
+            // Decided on the locked ticket (ADR-0054): one reopened by staff meanwhile is not closed by the rating.
+            $locked = Ticket::query()->whereKey($ticket->getKey())->lockForUpdate()->firstOrFail();
+            $ticket->setRawAttributes($locked->getAttributes(), true);
+            if ($ticket->status !== TicketStatus::Resolved) {
+                throw ValidationException::withMessages(['satisfaction' => __('support.validation.rate_resolved')]);
+            }
+            $ticket->satisfaction = $score;
+            $ticket->satisfaction_note = $note !== '' ? mb_substr($note, 0, 1000) : null;
+            $ticket->status = TicketStatus::Closed;
+            $ticket->closed_at = CarbonImmutable::now();
+            $ticket->save();
+        });
 
         return $ticket;
     }

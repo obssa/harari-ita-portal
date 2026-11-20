@@ -24,6 +24,29 @@ enum TicketStatus: string
         return in_array($this, [self::New, self::InProgress, self::Waiting], true);
     }
 
+    /**
+     * The statuses staff may set from this one (ADR-0054). Open statuses move among themselves and to resolved or
+     * closed; a resolved ticket can be reopened or closed; closed is final (the requester then opens a new request).
+     *
+     * @return list<self>
+     */
+    public function nextStatuses(): array
+    {
+        return match ($this) {
+            self::New, self::InProgress, self::Waiting => array_values(array_filter(
+                [self::InProgress, self::Waiting, self::Resolved, self::Closed],
+                fn (self $status): bool => $status !== $this,
+            )),
+            self::Resolved => [self::InProgress, self::Closed],
+            self::Closed => [],
+        };
+    }
+
+    public function canMoveTo(self $to): bool
+    {
+        return in_array($to, $this->nextStatuses(), true);
+    }
+
     public function color(): string
     {
         return match ($this) {

@@ -185,3 +185,33 @@ it('lists, records and answers tickets in the admin, and keeps them from other s
     $recorded = Ticket::query()->where('channel', 'phone')->firstOrFail();
     expect($recorded->priority)->toBe(TicketPriority::High)->and($recorded->locale)->toBe('am');
 });
+
+it('moves a ticket only along the allowed statuses, decided on the locked ticket (ADR-0054)', function () {
+    Mail::fake();
+    $agent = staff(SystemRole::ServiceDeskAgent);
+    $ticket = sampleTicket();
+    expect(TicketStatus::Closed->nextStatuses())->toBe([])
+        ->and(TicketStatus::Resolved->canMoveTo(TicketStatus::InProgress))->toBeTrue()
+        ->and(TicketStatus::Resolved->canMoveTo(TicketStatus::Waiting))->toBeFalse()
+        ->and(TicketStatus::New->canMoveTo(TicketStatus::Closed))->toBeTrue();
+
+    app(UpdateTicket::class)->handle($ticket, ['status' => 'resolved'], $agent);
+
+    // A screen loaded before the requester's rating can neither reopen nor answer the closed ticket.
+    $stale = Ticket::query()->findOrFail($ticket->id);
+    app(RequesterReply::class)->rate($ticket, 4, null);
+    expect(fn () => app(UpdateTicket::class)->handle($stale, ['status' => 'resolved'], $agent))->toThrow(ValidationException::class)
+        ->and(fn () => app(UpdateTicket::class)->handle(Ticket::query()->findOrFail($ticket->id), ['status' => 'in_progress'], $agent))->toThrow(ValidationException::class);
+    $stale = Ticket::query()->findOrFail($ticket->id);
+    $stale->status = TicketStatus::InProgress;
+    expect(fn () => app(ReplyToTicket::class)->handle($stale, $agent, 'Sample late answer'))->toThrow(ValidationException::class);
+    $ticket->refresh();
+    expect($ticket->status)->toBe(TicketStatus::Closed)->and($ticket->closed_at)->not->toBeNull();
+
+    // In the admin, the status field offers only the current status of a closed ticket.
+    $this->actingAs($agent);
+    livewire(ViewTicket::class, ['record' => $ticket->getRouteKey()])
+        ->callAction('handle', data: ['status' => 'in_progress'])
+        ->assertHasActionErrors(['status']);
+    expect($ticket->refresh()->status)->toBe(TicketStatus::Closed);
+});
