@@ -1061,3 +1061,29 @@ information only (`accepts_requests`, on by default, also for proposed services)
 
 **Why.** The owner found service pages that listed steps but led nowhere. The desk already stored a ticket's
 service and answered by email and SMS, so the request reuses it instead of building a second inbox.
+
+## ADR-0054 — Lifecycles move only along allowed paths (2026-11-20)
+
+An audit found about thirty lifecycles (a status column, or dates that act as one) and only one, the post
+workflow, with a table of allowed moves. The others relied on screens hiding the wrong choices, and several
+checked the current state before taking the row lock, so two people (or a person and a scheduled job) could both
+pass. The rule from now on:
+
+- **A status enum that changes over time says which moves it allows** (`canMoveTo()`), as the post workflow's
+  `Transition` already does. Final states allow none.
+- **The move is decided on the locked row** inside the transaction (`lockForUpdate`), never on the copy a screen
+  loaded, so a stale page, a double click or a scheduled job cannot repeat or undo it.
+- **Where the database can hold the rule, it does**, as a backstop.
+
+Applied so far:
+
+- **Campaigns.** Schedule, start and cancel lock the campaign; Sent and Cancelled are final. Each delivery is
+  claimed (`queued → sending` in one statement) before it is sent, so a cancel or a second delivery job never sends
+  it too, and a campaign is marked Sent only while it is still Sending.
+- **Erasure and waiting lists.** An erased person leaves every waiting list and gives back a place at an event or
+  cohort that has not started, which goes to the next person; places at ones that began stay as anonymous history.
+  Waiting-list promotion skips erased rows.
+- **Certificates.** Issuing locks the enrolment, and a unique index on a generated `valid_for` column (the
+  enrolment while the certificate is valid) lets the database refuse a second valid certificate.
+
+**Why.** The owner asked for every implicit state machine to be found and its gaps fixed in order of harm.

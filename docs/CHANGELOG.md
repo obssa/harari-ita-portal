@@ -26,6 +26,9 @@ All notable changes to the Agency's portal. Newest first.
   lane; a "Live on the portal" panel counts published services, courses, programmes and projects; published figures
   with their sources follow the pillars (the first three from ENA on the Ethio-Coders training); projects show a
   roadmap; cards catch the pointer's light; stories without photos get their own circuit tiles.
+- Lifecycles move only along allowed paths, decided on the locked row (ADR-0054): a cancelled campaign stays
+  cancelled and no message is sent twice; an erased person leaves waiting lists and gives back unused places; an
+  enrolment can hold only one valid certificate.
 - Certificates download as a PDF in the learner's language (A4 landscape, with the QR code), from the learner's
   page and from Certificates in the admin; the sample course has a sample signatory (ADR-0030 addendum).
 - Staff can message applicants, challenge teams and volunteers from the admin, by email or SMS; messages are kept

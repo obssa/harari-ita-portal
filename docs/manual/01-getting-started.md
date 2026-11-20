@@ -139,7 +139,8 @@ Privacy** and search by the email address or phone number they used. You see how
 and messages or tickets were found. **Download a copy (JSON)** gives you a file to send to the person;
 **Erase this person's data** removes their name, contact details, answers, attachments and notes and cannot
 be undone. Check who is asking before you send or erase anything. The page also lists how long each kind of
-record is kept.
+record is kept. An erased person also leaves every waiting list, and their place at an event or course that has
+not started yet goes to the next person waiting.
 
 ## 8. Good practice
 
