@@ -54,15 +54,14 @@ class ViewApplication extends ViewRecord
                 ->label(__('innovation.admin.move'))
                 ->icon(Heroicon::OutlinedArrowRightCircle)
                 ->color('gray')
-                ->visible(fn (): bool => $actor->can('review', $application) && $application->stage !== ApplicationStage::Withdrawn)
+                ->visible(fn (): bool => $actor->can('review', $application) && $application->stage->nextStages() !== [])
                 ->fillForm(fn (): array => ['stage' => $application->stage->value, 'note' => $application->decision_note])
                 ->schema([
                     Select::make('stage')->label(__('innovation.field.stage'))->required()
-                        ->options(fn (): array => collect(ApplicationStage::options())
-                            ->except(array_merge(
-                                [ApplicationStage::Withdrawn->value],
-                                $actor->can('decide', $application) ? [] : [ApplicationStage::Accepted->value, ApplicationStage::Waitlisted->value, ApplicationStage::Declined->value],
-                            ))->all()),
+                        // ADR-0054: only the moves this stage allows (and the current stage, which changes nothing).
+                        ->options(fn (): array => collect([$application->stage, ...$application->stage->nextStages()])
+                            ->reject(fn (ApplicationStage $stage): bool => $stage->isDecision() && $stage !== $application->stage && ! $actor->can('decide', $application))
+                            ->mapWithKeys(fn (ApplicationStage $stage): array => [$stage->value => $stage->label()])->all()),
                     Textarea::make('note')->label(__('innovation.admin.decision_note'))->helperText(__('innovation.admin.decision_note_help'))->rows(4)->maxLength(2000),
                 ])
                 ->action(function (array $data) use ($application): void {

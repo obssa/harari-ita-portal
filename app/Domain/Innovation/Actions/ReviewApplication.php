@@ -7,6 +7,7 @@ use App\Domain\Innovation\Mail\ApplicationMail;
 use App\Domain\Innovation\Models\Application;
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
@@ -29,16 +30,29 @@ final class ReviewApplication
         if ($stage->isDecision() && $note === '') {
             throw ValidationException::withMessages(['note' => __('innovation.validation.decision_note')]);
         }
-        if ($stage === $application->stage) {
+        // Decided on the locked row (ADR-0054): a stale screen cannot overwrite an applicant's withdrawal or reopen a
+        // decision.
+        $moved = DB::transaction(function () use ($application, $stage, $note): bool {
+            $locked = Application::query()->whereKey($application->getKey())->lockForUpdate()->firstOrFail();
+            if ($locked->stage === $stage) {
+                return false;
+            }
+            if (! $locked->stage->canMoveTo($stage)) {
+                throw ValidationException::withMessages(['stage' => __('innovation.validation.stage_move')]);
+            }
+            $locked->stage = $stage;
+            if ($stage->isDecision()) {
+                $locked->decision_note = mb_substr($note, 0, 2000);
+                $locked->decided_at = CarbonImmutable::now();
+            }
+            $locked->save();
+
+            return true;
+        });
+        $application->refresh();
+        if (! $moved) {
             return $application;
         }
-
-        $application->stage = $stage;
-        if ($stage->isDecision()) {
-            $application->decision_note = mb_substr($note, 0, 2000);
-            $application->decided_at = CarbonImmutable::now();
-        }
-        $application->save();
 
         if ($stage->isDecision() && $application->applicant_email !== null) {
             Mail::to($application->applicant_email)->locale($application->locale)->queue(new ApplicationMail($application, 'decided'));
@@ -63,14 +77,24 @@ final class ReviewApplication
             $clean[$criterion] = $value;
         }
 
-        $application->scores = $clean;
-        $application->score = number_format(array_sum($clean) / count($clean), 2, '.', '');
-        $application->scored_by = $actor->id;
-        $moved = $application->stage === ApplicationStage::Received;
-        if ($moved) {
-            $application->stage = ApplicationStage::Screening;
-        }
-        $application->save();
+        // Only an open application is scored; a decided or withdrawn one keeps the scores it was decided on.
+        $moved = DB::transaction(function () use ($application, $clean, $actor): bool {
+            $locked = Application::query()->whereKey($application->getKey())->lockForUpdate()->firstOrFail();
+            if (! $locked->stage->isOpen()) {
+                throw ValidationException::withMessages(['scores' => __('innovation.validation.not_open')]);
+            }
+            $locked->scores = $clean;
+            $locked->score = number_format(array_sum($clean) / count($clean), 2, '.', '');
+            $locked->scored_by = $actor->id;
+            $moved = $locked->stage === ApplicationStage::Received;
+            if ($moved) {
+                $locked->stage = ApplicationStage::Screening;
+            }
+            $locked->save();
+
+            return $moved;
+        });
+        $application->refresh();
         if ($moved) {
             $this->tellStage($application);
         }
@@ -88,12 +112,15 @@ final class ReviewApplication
 
     public function withdraw(Application $application): Application
     {
-        if (! $application->stage->isOpen()) {
-            throw ValidationException::withMessages(['form' => __('innovation.validation.not_open')]);
-        }
-        $application->stage = ApplicationStage::Withdrawn;
-        $application->save();
+        DB::transaction(function () use ($application): void {
+            $locked = Application::query()->whereKey($application->getKey())->lockForUpdate()->firstOrFail();
+            if (! $locked->stage->isOpen()) {
+                throw ValidationException::withMessages(['form' => __('innovation.validation.not_open')]);
+            }
+            $locked->stage = ApplicationStage::Withdrawn;
+            $locked->save();
+        });
 
-        return $application;
+        return $application->refresh();
     }
 }

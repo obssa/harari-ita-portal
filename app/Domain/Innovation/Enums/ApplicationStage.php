@@ -31,6 +31,30 @@ enum ApplicationStage: string
         return in_array($this, [self::Received, self::Screening, self::Interview], true);
     }
 
+    /**
+     * The stages staff may move an application to from this one (ADR-0054). Open stages move freely among themselves
+     * and to a decision; a waitlisted application can still be accepted or declined; Accepted, Declined and Withdrawn
+     * are final. Only the applicant withdraws (ReviewApplication::withdraw).
+     *
+     * @return list<self>
+     */
+    public function nextStages(): array
+    {
+        return match ($this) {
+            self::Received, self::Screening, self::Interview => array_values(array_filter(
+                [self::Received, self::Screening, self::Interview, self::Accepted, self::Waitlisted, self::Declined],
+                fn (self $stage): bool => $stage !== $this,
+            )),
+            self::Waitlisted => [self::Accepted, self::Declined],
+            self::Accepted, self::Declined, self::Withdrawn => [],
+        };
+    }
+
+    public function canMoveTo(self $to): bool
+    {
+        return in_array($to, $this->nextStages(), true);
+    }
+
     public function color(): string
     {
         return match ($this) {
