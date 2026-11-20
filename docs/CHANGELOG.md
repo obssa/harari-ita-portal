@@ -30,7 +30,10 @@ All notable changes to the Agency's portal. Newest first.
   cancelled and no message is sent twice; an erased person leaves waiting lists and gives back unused places; an
   enrolment can hold only one valid certificate; a withdrawn or decided application stays so, and the admin offers
   only the allowed stages; challenge results are published once, after submissions close; the scheduled publish no
-  longer undoes an unpublish made at the same moment.
+  longer undoes an unpublish made at the same moment; a closed support ticket stays closed and the status field
+  offers only the allowed moves; suspending an account from the user form signs it out too; a cancelled
+  opportunity takes no extension from a stale page and the archive skips one just extended; a registration
+  checked in at the door can no longer be cancelled.
 - Certificates download as a PDF in the learner's language (A4 landscape, with the QR code), from the learner's
   page and from Certificates in the admin; the sample course has a sample signatory (ADR-0030 addendum).
 - Staff can message applicants, challenge teams and volunteers from the admin, by email or SMS; messages are kept

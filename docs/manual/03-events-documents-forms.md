@@ -42,7 +42,8 @@ Registrations are deleted automatically 180 days after the event.
 
 Open **Content → Event check-in** on a phone or tablet. Scanning a ticket's QR code with the camera
 opens this page with the ticket filled in: check the name and choose **Check in**. A ticket can be
-used once; a second scan shows when it was used. A scanner that types codes works too.
+used once; a second scan shows when it was used. A scanner that types codes works too. Once a person is
+checked in, the place is used: neither they nor staff can cancel it.
 
 ## 2. Documents, vacancies and tenders
 

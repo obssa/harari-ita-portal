@@ -67,7 +67,8 @@ date next to it.
   let the portal email a sign-in link.
 - **Roles** decide what a person may do (Editor, Author, Translator, Media Manager, Publisher and
   others). Some roles can be limited to one directorate or office, pillar or language with **scopes**.
-- **Suspend** signs the person out everywhere and blocks sign-in until **Reactivate**.
+- **Suspend** signs the person out everywhere and blocks sign-in until **Reactivate**. Setting the status to
+  Suspended in the user form does the same.
 - **Send sign-in link** lets someone choose a new password.
 - Changing someone's roles signs them out, so the new rights apply at once.
 - Super Admin accounts can only be changed by another Super Admin; nobody can delete their own account.

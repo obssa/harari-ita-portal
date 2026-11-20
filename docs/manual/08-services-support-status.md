@@ -49,6 +49,8 @@ ticket** when someone calls, emails or comes to the desk. Each has a reference s
   works on it.
 - **Resolve** asks the requester to rate the help. If they write back, the ticket opens again; once they rate it,
   it closes.
+- A closed ticket is final. **Status and handling** offers only the statuses the ticket can move to from where it
+  is; if the problem comes back, the requester opens a new request.
 
 Closed tickets are deleted two years after they close, with their messages and attachments. A privacy request
 (**Administration → Privacy requests**) finds, exports and erases a person's tickets.

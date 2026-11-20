@@ -1093,5 +1093,16 @@ Applied so far:
   Published results also close the challenge to submissions, whatever its dates say.
 - **Post workflow.** The scheduled publish checks each language again on the locked row, so an unpublish or a new
   date set meanwhile is kept; a move from a page loaded before someone else's move is refused.
+- **Support tickets.** New, In progress and Waiting move among themselves and to Resolved or Closed; a resolved
+  ticket can be reopened or closed; Closed is final (a returning problem is a new request). The status field
+  offers only these moves, and staff changes, staff replies, requester replies and ratings are decided on the
+  locked ticket, so a stale screen cannot reopen or answer a ticket the requester has closed.
+- **Accounts.** Whenever an account's status becomes Suspended, by the Suspend action, the status field of the
+  user form or anything else, the User model signs it out everywhere (sessions deleted, remember token rotated).
+- **Opportunity log and archive.** The cancelled check and the extension rule (later than the current deadline)
+  are checked again on the locked opportunity. The scheduled archive checks each opportunity on the locked row,
+  so one extended while the list was read stays open.
+- **Event registrations.** A person checked in at the door has used the place: neither they nor staff can cancel
+  it. Cancel and check-in are decided on the locked registration.
 
 **Why.** The owner asked for every implicit state machine to be found and its gaps fixed in order of harm.
