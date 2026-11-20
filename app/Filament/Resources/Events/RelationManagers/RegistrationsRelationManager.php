@@ -108,11 +108,15 @@ class RegistrationsRelationManager extends RelationManager
                     ->color('danger')
                     ->requiresConfirmation()
                     ->modalDescription(__('events.registration.admin.cancel_help'))
-                    ->visible(fn (EventRegistration $record): bool => $record->status !== RegistrationStatus::Cancelled)
+                    ->visible(fn (EventRegistration $record): bool => $record->status !== RegistrationStatus::Cancelled && $record->checked_in_at === null)
                     ->action(function (EventRegistration $record): void {
                         $this->authorizeRegistrations();
-                        app(CancelRegistration::class)->handle($record);
-                        Notification::make()->success()->title(__('events.registration.admin.cancelled'))->send();
+                        try {
+                            app(CancelRegistration::class)->handle($record);
+                            Notification::make()->success()->title(__('events.registration.admin.cancelled'))->send();
+                        } catch (ValidationException $e) {
+                            Notification::make()->danger()->title(collect($e->errors())->flatten()->first())->send();
+                        }
                     }),
             ]);
     }

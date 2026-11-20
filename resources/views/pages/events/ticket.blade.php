@@ -41,7 +41,7 @@
             @endif
         </div>
 
-        @if ($status !== RegistrationStatus::Cancelled && ! $event->isPast())
+        @if ($status !== RegistrationStatus::Cancelled && $registration->checked_in_at === null && ! $event->isPast())
             <details class="mt-8 rounded-card border border-line p-4">
                 <summary class="cursor-pointer font-medium">{{ __('events.ticket.cancel_title') }}</summary>
                 <p class="mt-3 text-sm text-ink-muted">{{ __('events.ticket.cancel_help') }}</p>

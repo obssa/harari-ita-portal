@@ -7,6 +7,7 @@ use App\Domain\Events\Models\EventRegistration;
 use App\Models\User;
 use App\Services\Calendar\EthiopianCalendar;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -16,6 +17,16 @@ use Illuminate\Validation\ValidationException;
 final class CheckInRegistration
 {
     public function handle(EventRegistration $registration, User $actor): void
+    {
+        DB::transaction(function () use ($registration, $actor): void {
+            // Decided on the locked row (ADR-0054): a cancellation made a moment before is not checked in.
+            $locked = EventRegistration::query()->whereKey($registration->getKey())->lockForUpdate()->firstOrFail();
+            $registration->setRawAttributes($locked->getAttributes(), true);
+            $this->checkIn($registration, $actor);
+        });
+    }
+
+    private function checkIn(EventRegistration $registration, User $actor): void
     {
         if ($registration->status !== RegistrationStatus::Registered) {
             throw ValidationException::withMessages(['code' => __('events.check_in.not_registered', ['status' => $registration->status->label()])]);

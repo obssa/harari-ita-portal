@@ -323,6 +323,15 @@ it('lets registration staff check people in by QR code, and keeps others away fr
         ->callAction(TestAction::make('cancel')->table($other));
     expect($other->refresh()->status)->toBe(RegistrationStatus::Cancelled)
         ->and($registration->refresh()->status)->toBe(RegistrationStatus::Registered);
+
+    // A person checked in at the door has used the place: staff and the ticket page can no longer cancel it (ADR-0054).
+    livewire(RegistrationsRelationManager::class, ['ownerRecord' => $event, 'pageClass' => EditEvent::class])
+        ->assertActionHidden(TestAction::make('cancel')->table($registration));
+    expect(fn () => app(CancelRegistration::class)->handle($registration))->toThrow(ValidationException::class);
+    $this->post(route('events.ticket.cancel', ['locale' => 'en', 'token' => $registration->token]))->assertSessionHasErrors('registration');
+    $this->get(route('events.ticket', ['locale' => 'en', 'token' => $registration->token]))
+        ->assertDontSee(__('events.ticket.cancel', [], 'en'));
+    expect($registration->refresh()->status)->toBe(RegistrationStatus::Registered);
 });
 
 it('downloads the list as CSV with Ethiopic names intact and formulas disarmed', function () {
