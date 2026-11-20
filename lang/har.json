@@ -1853,6 +1853,7 @@
     "forms.inbox.unassigned": "",
     "forms.inbox.validation.assignee": "",
     "forms.inbox.validation.reply": "",
+    "forms.inbox.validation.status_assignee": "",
     "forms.lookup_button": "",
     "forms.lookup_contact": "",
     "forms.lookup_contact_help": "",

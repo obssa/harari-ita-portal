@@ -1853,6 +1853,7 @@
     "forms.inbox.unassigned": "Nobody",
     "forms.inbox.validation.assignee": "This person does not look after this office's tickets.",
     "forms.inbox.validation.reply": "Write a text of up to 5000 characters.",
+    "forms.inbox.validation.status_assignee": "This status does not match the assignment: a ticket nobody has yet stays Received, and an assigned one cannot go back to Received. Assign the ticket, or choose another status.",
     "forms.lookup_button": "Look up",
     "forms.lookup_contact": "Email address or phone number",
     "forms.lookup_contact_help": "The one you gave with the form.",

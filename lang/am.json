@@ -1853,6 +1853,7 @@
     "forms.inbox.unassigned": "ለማንም",
     "forms.inbox.validation.assignee": "ይህ ሰው የዚህን ጽሕፈት ቤት ጥያቄዎች አይከታተልም።",
     "forms.inbox.validation.reply": "እስከ 5000 ፊደላት ያለው ጽሑፍ ይጻፉ።",
+    "forms.inbox.validation.status_assignee": "ይህ ሁኔታ ከምደባው ጋር አይስማማም፤ ገና ለማንም ያልተሰጠ ትኬት «ደርሷል» ሆኖ ይቆያል፤ ለባለሙያ የተሰጠ ትኬት ወደ «ደርሷል» መመለስ አይችልም። ትኬቱን ይመድቡ ወይም ሌላ ሁኔታ ይምረጡ።",
     "forms.lookup_button": "ፈልግ",
     "forms.lookup_contact": "የኢሜይል አድራሻ ወይም የስልክ ቁጥር",
     "forms.lookup_contact_help": "ከቅጹ ጋር የሰጡት።",

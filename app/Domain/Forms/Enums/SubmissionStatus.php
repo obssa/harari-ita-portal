@@ -34,6 +34,19 @@ enum SubmissionStatus: string
     }
 
     /**
+     * Whether this status agrees with the ticket having someone assigned or not (ADR-0054): New means nobody has it
+     * yet and Assigned means someone does; In progress and Resolved fit either.
+     */
+    public function fitsAssignment(bool $assigned): bool
+    {
+        return match ($this) {
+            self::New => ! $assigned,
+            self::Assigned => $assigned,
+            self::InProgress, self::Resolved => true,
+        };
+    }
+
+    /**
      * @return array<string, string>
      */
     public static function options(): array

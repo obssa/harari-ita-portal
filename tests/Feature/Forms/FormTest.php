@@ -295,3 +295,28 @@ it('lets those who manage forms build them, and answers tickets from the inbox p
     expect($submission->refresh()->status)->toBe(SubmissionStatus::Resolved);
     Mail::assertQueued(SubmissionReplyMail::class);
 });
+
+it('keeps the status in step with the assignment, on the locked ticket (ADR-0054)', function () {
+    $submission = submitSample(makeForm());
+    $agent = staff(SystemRole::ServiceDeskAgent);
+    $handle = app(HandleSubmission::class);
+
+    // Nobody has it yet, so it cannot be marked Assigned.
+    expect(fn () => $handle->status($submission, SubmissionStatus::Assigned, $agent))->toThrow(ValidationException::class);
+
+    $handle->assign($submission, $agent, $agent);
+    expect($submission->refresh()->status)->toBe(SubmissionStatus::Assigned)
+        ->and(fn () => $handle->status($submission, SubmissionStatus::New, $agent))->toThrow(ValidationException::class);
+
+    // Taking it back makes it New again; a stale screen sees the ticket as it is now.
+    $stale = FormSubmission::query()->findOrFail($submission->id);
+    $handle->assign($submission, null, $agent);
+    expect($submission->refresh()->status)->toBe(SubmissionStatus::New)->and($submission->assignee_id)->toBeNull()
+        ->and(fn () => $handle->status($stale, SubmissionStatus::Assigned, $agent))->toThrow(ValidationException::class);
+
+    // Once someone is working on it, taking it back keeps In progress.
+    $handle->assign($submission, $agent, $agent);
+    $handle->reply($submission, 'Sample answer', $agent);
+    $handle->assign($submission, null, $agent);
+    expect($submission->refresh()->status)->toBe(SubmissionStatus::InProgress);
+});

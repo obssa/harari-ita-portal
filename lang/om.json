@@ -1853,6 +1853,7 @@
     "forms.inbox.unassigned": "Nama tokkoof iyyuu",
     "forms.inbox.validation.assignee": "Namni kun gaaffilee waajjira kanaa hin hordofu.",
     "forms.inbox.validation.reply": "Barreeffama hanga qubee 5000 barreessaa.",
+    "forms.inbox.validation.status_assignee": "Haalli kun ramaddii waliin hin walsimu: tikeetiin ammallee namaaf hin kennamne «Ga'eera» ta'ee hafa, kan ogeessaaf kenname immoo gara «Ga'eera»tti deebi'uu hin danda'u. Tikeeticha ramadaa, ykn haala biraa filadhaa.",
     "forms.lookup_button": "Barbaadi",
     "forms.lookup_contact": "Teessoo imeelii ykn lakkoofsa bilbilaa",
     "forms.lookup_contact_help": "Isa unka waliin kennitan.",

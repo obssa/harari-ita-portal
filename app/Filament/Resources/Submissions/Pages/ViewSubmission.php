@@ -86,7 +86,11 @@ class ViewSubmission extends ViewRecord
                 ->color('gray')
                 ->visible(fn (): bool => InboxScope::covers($actor, $submission, 'inbox.reply'))
                 ->fillForm(['status' => $submission->status->value])
-                ->schema([Select::make('status')->label(__('forms.status_label'))->options(SubmissionStatus::options())->required()])
+                // ADR-0054: only the statuses that agree with the assignment (New without anyone, Assigned with someone).
+                ->schema([Select::make('status')->label(__('forms.status_label'))->required()
+                    ->options(fn (): array => collect(SubmissionStatus::cases())
+                        ->filter(fn (SubmissionStatus $status): bool => $status === $submission->status || $status->fitsAssignment($submission->assignee_id !== null))
+                        ->mapWithKeys(fn (SubmissionStatus $status): array => [$status->value => $status->label()])->all())])
                 ->action(function (array $data) use ($submission): void {
                     app(HandleSubmission::class)->status($submission, SubmissionStatus::from((string) $data['status']), CurrentUser::get());
                     Notification::make()->success()->title(__('forms.inbox.status_changed'))->send();
