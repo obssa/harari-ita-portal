@@ -1086,5 +1086,12 @@ Applied so far:
 - **Certificates.** Issuing locks the enrolment, and a unique index on the enrolment and a generated `valid`
   flag (1 while the certificate is not revoked, null after) lets the database refuse a second valid certificate. The
   flag reads only `revoked_at`, because MariaDB refuses a stored generated column that returns a CHAR column.
+- **Programme applications.** Received, Screening and Interview move freely among themselves and to a decision; a
+  waitlisted application can still be accepted or declined; Accepted, Declined and Withdrawn are final. Only the
+  applicant withdraws, and only an open application is scored. The admin offers only the allowed stages.
+- **Challenge results.** Published once, in the judging phase (after submissions close), on the locked challenge.
+  Published results also close the challenge to submissions, whatever its dates say.
+- **Post workflow.** The scheduled publish checks each language again on the locked row, so an unpublish or a new
+  date set meanwhile is kept; a move from a page loaded before someone else's move is refused.
 
 **Why.** The owner asked for every implicit state machine to be found and its gaps fixed in order of harm.

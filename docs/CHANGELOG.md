@@ -28,7 +28,9 @@ All notable changes to the Agency's portal. Newest first.
   roadmap; cards catch the pointer's light; stories without photos get their own circuit tiles.
 - Lifecycles move only along allowed paths, decided on the locked row (ADR-0054): a cancelled campaign stays
   cancelled and no message is sent twice; an erased person leaves waiting lists and gives back unused places; an
-  enrolment can hold only one valid certificate.
+  enrolment can hold only one valid certificate; a withdrawn or decided application stays so, and the admin offers
+  only the allowed stages; challenge results are published once, after submissions close; the scheduled publish no
+  longer undoes an unpublish made at the same moment.
 - Certificates download as a PDF in the learner's language (A4 landscape, with the QR code), from the learner's
   page and from Certificates in the admin; the sample course has a sample signatory (ADR-0030 addendum).
 - Staff can message applicants, challenge teams and volunteers from the admin, by email or SMS; messages are kept
