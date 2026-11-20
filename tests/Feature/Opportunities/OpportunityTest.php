@@ -20,6 +20,7 @@ use App\Filament\Resources\Opportunities\Pages\ListOpportunities;
 use App\Filament\Resources\Opportunities\RelationManagers\AddendaRelationManager;
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -102,6 +103,40 @@ it('keeps a numbered log: addenda, clarifications, an extension that keeps the f
     expect($tender->refresh()->state())->toBe(Opportunity::STATE_CANCELLED)->and($tender->archived_at)->not->toBeNull();
     expect(fn () => $log->handle($tender, ['kind' => 'addendum', 'titles' => ['en' => 'Sample late']], $officer))->toThrow(ValidationException::class);
     expect(OpportunityAddendum::query()->where('opportunity_id', $tender->id)->count())->toBe(4);
+});
+
+it('decides log entries and the archive on the locked row, so a stale page or list changes nothing (ADR-0054)', function () {
+    $officer = staff(SystemRole::ProcurementOfficer);
+    $log = app(PublishAddendum::class);
+
+    // An extension sent from a page loaded before the cancellation is refused and leaves it cancelled.
+    $tender = sampleOpportunity(actor: $officer);
+    $stale = Opportunity::query()->findOrFail($tender->id);
+    $log->handle($tender, ['kind' => 'cancellation', 'titles' => ['en' => 'Sample cancellation'], 'bodies' => ['en' => 'Sample reason.']], $officer);
+    expect(fn () => $log->handle($stale, ['kind' => 'extension', 'titles' => ['en' => 'Sample extension'], 'new_closes_at' => now()->addMonth()->toDateTimeString()], $officer))
+        ->toThrow(ValidationException::class);
+    expect($tender->refresh()->state())->toBe(Opportunity::STATE_CANCELLED)->and($tender->archived_at)->not->toBeNull();
+
+    // A second extension from a stale page cannot bring the deadline back before the first one.
+    $call = sampleOpportunity('Sample stale call', ['type' => 'call'], $officer);
+    $stale = Opportunity::query()->findOrFail($call->id);
+    $log->handle($call, ['kind' => 'extension', 'titles' => ['en' => 'Sample long extension'], 'new_closes_at' => now()->addDays(40)->toDateTimeString()], $officer);
+    expect(fn () => $log->handle($stale, ['kind' => 'extension', 'titles' => ['en' => 'Sample short extension'], 'new_closes_at' => now()->addDays(20)->toDateTimeString()], $officer))
+        ->toThrow(ValidationException::class);
+    expect($call->refresh()->closes_at->greaterThan(now()->addDays(39)))->toBeTrue();
+
+    // The archive skips an opportunity extended after it read its list.
+    $closing = sampleOpportunity('Sample closing call', ['type' => 'call', 'closes_at' => now()->addMinutes(30)->toDateTimeString()], $officer);
+    $this->travel(31)->minutes();
+    $raced = false;
+    Opportunity::retrieved(function (Opportunity $opportunity) use (&$raced, $closing): void {
+        if (! $raced && $opportunity->id === $closing->id) {
+            $raced = true;
+            DB::table('opportunities')->where('id', $closing->id)->update(['closes_at' => now()->addWeek()]);
+        }
+    });
+    $this->artisan('opportunities:archive')->assertSuccessful();
+    expect($closing->refresh()->archived_at)->toBeNull();
 });
 
 it('works out the state from the dates and archives closed opportunities automatically', function () {

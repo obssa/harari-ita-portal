@@ -71,6 +71,14 @@ final class PublishAddendum
             /** @var AddendumKind $kind */
             $locked = Opportunity::query()->whereKey($opportunity->getKey())->lockForUpdate()->firstOrFail();
             $now = CarbonImmutable::now();
+            // ADR-0054: checked again on the locked row, so an entry made from a page loaded before a cancellation
+            // or another extension is refused instead of reopening the opportunity or shortening its deadline.
+            if ($locked->isCancelled()) {
+                throw ValidationException::withMessages(['kind' => __('opportunities.validation.cancelled')]);
+            }
+            if ($kind === AddendumKind::Extension && ($newCloses === null || $newCloses <= $locked->closes_at)) {
+                throw ValidationException::withMessages(['new_closes_at' => __('opportunities.validation.extension')]);
+            }
 
             $addendum = new OpportunityAddendum(['kind' => $kind, 'titles' => $titles, 'bodies' => $bodies === [] ? null : $bodies, 'document_id' => $document]);
             $addendum->opportunity_id = $locked->id;
