@@ -34,7 +34,11 @@ final class DispatchCampaignsCommand extends Command
                 $send->start($campaign, $sender);
                 $started++;
             } catch (ValidationException|HttpException) {
-                $campaign->forceFill(['status' => CampaignStatus::Draft, 'scheduled_at' => null])->save();
+                // Back to draft only if it is still waiting: one started or cancelled meanwhile keeps its state.
+                $campaign->refresh();
+                if ($campaign->status === CampaignStatus::Scheduled) {
+                    $campaign->forceFill(['status' => CampaignStatus::Draft, 'scheduled_at' => null])->save();
+                }
             }
         }
         $this->components->info("Campaigns started: {$started}");

@@ -32,6 +32,9 @@ class CampaignDelivery extends Model
 {
     public const QUEUED = 'queued';
 
+    /** Claimed by one delivery job and being sent now; nothing else may send or skip it. */
+    public const SENDING = 'sending';
+
     public const SENT = 'sent';
 
     public const FAILED = 'failed';

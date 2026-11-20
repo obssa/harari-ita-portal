@@ -47,6 +47,6 @@ final class DeliverCampaign implements ShouldQueue
 
             return;
         }
-        $campaign->forceFill(['status' => CampaignStatus::Sent, 'finished_at' => CarbonImmutable::now()])->save();
+        $send->finish($campaign->id);
     }
 }

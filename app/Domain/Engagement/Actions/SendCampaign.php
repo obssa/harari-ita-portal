@@ -52,7 +52,11 @@ final class SendCampaign
         if ($at->isPast()) {
             throw ValidationException::withMessages(['scheduled_at' => __('campaigns.validation.past')]);
         }
-        $campaign->forceFill(['status' => CampaignStatus::Scheduled, 'scheduled_at' => $at, 'sent_by' => $actor->id])->save();
+        DB::transaction(function () use ($campaign, $at, $actor): void {
+            $this->claim($campaign, CampaignStatus::Scheduled)
+                ->forceFill(['status' => CampaignStatus::Scheduled, 'scheduled_at' => $at, 'sent_by' => $actor->id])->save();
+        });
+        $campaign->refresh();
     }
 
     /** Builds the list of recipients and hands the sending to the queue. */
@@ -61,7 +65,9 @@ final class SendCampaign
         $this->assertReady($campaign, $actor);
 
         $count = DB::transaction(function () use ($campaign, $actor): int {
-            $campaign->forceFill(['status' => CampaignStatus::Sending, 'started_at' => CarbonImmutable::now(), 'sent_by' => $actor->id])->save();
+            // Two starts at once (a click and the dispatcher) cannot both pass: the second waits here and is refused.
+            $this->claim($campaign, CampaignStatus::Sending)
+                ->forceFill(['status' => CampaignStatus::Sending, 'started_at' => CarbonImmutable::now(), 'sent_by' => $actor->id])->save();
             $rows = [];
             $count = 0;
             $now = CarbonImmutable::now();
@@ -80,6 +86,7 @@ final class SendCampaign
             return $count + ($rows === [] ? 0 : DB::table('campaign_deliveries')->insertOrIgnore($rows));
         });
 
+        $campaign->refresh();
         activity('campaigns')->performedOn($campaign)->causedBy($actor)->event('sent')->withProperties(['recipients' => $count])->log('Campaign sent');
         DeliverCampaign::dispatch($campaign->id);
 
@@ -90,18 +97,55 @@ final class SendCampaign
     public function cancel(Campaign $campaign, User $actor): void
     {
         abort_unless($actor->can('campaigns.send'), 403);
-        if ($campaign->status === CampaignStatus::Scheduled) {
-            $campaign->forceFill(['status' => CampaignStatus::Draft, 'scheduled_at' => null])->save();
-        } elseif ($campaign->status === CampaignStatus::Sending) {
-            $campaign->deliveries()->where('status', CampaignDelivery::QUEUED)->update(['status' => CampaignDelivery::SKIPPED, 'error' => 'cancelled']);
-            $campaign->forceFill(['status' => CampaignStatus::Cancelled, 'finished_at' => CarbonImmutable::now()])->save();
+        // Decided on the locked row, so a cancel never races the start or the last batch.
+        $changed = DB::transaction(function () use ($campaign): bool {
+            $locked = Campaign::query()->withoutGlobalScopes()->whereKey($campaign->getKey())->lockForUpdate()->firstOrFail();
+            if ($locked->status === CampaignStatus::Scheduled) {
+                $locked->forceFill(['status' => CampaignStatus::Draft, 'scheduled_at' => null])->save();
+
+                return true;
+            }
+            if ($locked->status === CampaignStatus::Sending) {
+                $locked->deliveries()->where('status', CampaignDelivery::QUEUED)->update(['status' => CampaignDelivery::SKIPPED, 'error' => 'cancelled']);
+                $locked->forceFill(['status' => CampaignStatus::Cancelled, 'finished_at' => CarbonImmutable::now()])->save();
+
+                return true;
+            }
+
+            return false;
+        });
+        $campaign->refresh();
+        if ($changed) {
+            activity('campaigns')->performedOn($campaign)->causedBy($actor)->event('cancelled')->log('Campaign cancelled');
         }
-        activity('campaigns')->performedOn($campaign)->causedBy($actor)->event('cancelled')->log('Campaign cancelled');
     }
 
-    /** One message to one recipient, from the queue. */
+    /**
+     * Ends a campaign that has nothing left to send, unless it was cancelled meanwhile (a cancel stays a cancel).
+     */
+    public function finish(int $campaignId): void
+    {
+        DB::transaction(function () use ($campaignId): void {
+            $locked = Campaign::query()->withoutGlobalScopes()->whereKey($campaignId)->lockForUpdate()->first();
+            if ($locked instanceof Campaign && $locked->status === CampaignStatus::Sending
+                && ! $locked->deliveries()->where('status', CampaignDelivery::QUEUED)->exists()) {
+                $locked->forceFill(['status' => CampaignStatus::Sent, 'finished_at' => CarbonImmutable::now()])->save();
+            }
+        });
+    }
+
+    /**
+     * One message to one recipient, from the queue. The delivery is claimed first (queued → sending in one statement),
+     * so a cancel or a second delivery job can never send it as well.
+     */
     public function deliver(CampaignDelivery $delivery): void
     {
+        $claimed = CampaignDelivery::query()->whereKey($delivery->getKey())->where('status', CampaignDelivery::QUEUED)
+            ->update(['status' => CampaignDelivery::SENDING, 'updated_at' => CarbonImmutable::now()]);
+        if ($claimed === 0) {
+            return;
+        }
+
         $campaign = $delivery->campaign;
         $person = $delivery->recipient();
         $address = $person === null ? null : ($campaign->channel === Campaign::EMAIL ? $person->email : $person->phone);
@@ -143,6 +187,17 @@ final class SendCampaign
         }
 
         return $person->erased_at === null && $person->campaigns_opt_out_at === null;
+    }
+
+    /** The campaign's row, locked, if it may still move to the given status; refused otherwise. */
+    private function claim(Campaign $campaign, CampaignStatus $to): Campaign
+    {
+        $locked = Campaign::query()->withoutGlobalScopes()->whereKey($campaign->getKey())->lockForUpdate()->firstOrFail();
+        if (! $locked->status->canMoveTo($to)) {
+            throw ValidationException::withMessages(['status' => __('campaigns.validation.not_draft')]);
+        }
+
+        return $locked;
     }
 
     private function assertReady(Campaign $campaign, User $actor): void

@@ -14,6 +14,19 @@ enum CampaignStatus: string
     case Sent = 'sent';
     case Cancelled = 'cancelled';
 
+    /**
+     * The moves a campaign may make. Sent and Cancelled are final; a scheduled campaign may be moved to another time.
+     */
+    public function canMoveTo(self $to): bool
+    {
+        return in_array($to, match ($this) {
+            self::Draft => [self::Scheduled, self::Sending],
+            self::Scheduled => [self::Draft, self::Scheduled, self::Sending],
+            self::Sending => [self::Sent, self::Cancelled],
+            self::Sent, self::Cancelled => [],
+        }, true);
+    }
+
     public function label(): string
     {
         return __("campaigns.status.{$this->value}");
