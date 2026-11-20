@@ -79,7 +79,13 @@ final class ContentWorkflow
 
         $from = $translation->status;
 
-        DB::transaction(function () use ($post, $translation, $transition, $actor, $comment, $when): void {
+        DB::transaction(function () use ($post, $translation, $transition, $actor, $comment, $when, $from): void {
+            // ADR-0054: decided on the locked row. If someone (or the scheduled publish) moved this language since the
+            // editor's page loaded, the move is refused instead of overwriting theirs.
+            $current = PostTranslation::query()->whereKey($translation->getKey())->lockForUpdate()->value('status');
+            if ($current !== $from) {
+                throw ValidationException::withMessages(['transition' => __('content.workflow.changed_meanwhile')]);
+            }
             $translation->status = $transition->to();
 
             match ($transition) {
@@ -142,9 +148,24 @@ final class ContentWorkflow
                 continue;
             }
 
-            $translation->status = ContentStatus::Published;
-            $translation->save();
-            $this->revisions->handle($post, $translation, Transition::Publish->label());
+            // ADR-0054: checked again on the locked row, so an unpublish or a new date set since the list was read
+            // is kept, never overwritten.
+            $done = DB::transaction(function () use ($post, $translation): bool {
+                $locked = PostTranslation::query()->whereKey($translation->getKey())->lockForUpdate()->first();
+                if (! $locked instanceof PostTranslation || $locked->status !== ContentStatus::Scheduled
+                    || $locked->published_at === null || $locked->published_at->isFuture()) {
+                    return false;
+                }
+                $translation->setRawAttributes($locked->getAttributes(), true);
+                $translation->status = ContentStatus::Published;
+                $translation->save();
+                $this->revisions->handle($post, $translation, Transition::Publish->label());
+
+                return true;
+            });
+            if (! $done) {
+                continue;
+            }
 
             activity('workflow')
                 ->performedOn($post)

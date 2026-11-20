@@ -6,6 +6,7 @@ use App\Domain\Content\Enums\ContentStatus;
 use App\Domain\Content\Events\ContentTransitioned;
 use App\Domain\Content\Models\Comment;
 use App\Domain\Content\Models\Post;
+use App\Domain\Content\Models\PostTranslation;
 use App\Domain\Content\Notifications\WorkflowNotification;
 use App\Domain\Content\Workflow\ContentWorkflow;
 use App\Domain\Content\Workflow\Transition;
@@ -13,6 +14,7 @@ use App\Domain\Webhooks\Jobs\DeliverWebhook;
 use App\Domain\Webhooks\Models\Webhook;
 use App\Domain\Webhooks\Support\WebhookUrl;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
@@ -183,3 +185,28 @@ it('refuses webhook addresses that are not public HTTPS', function (string $url,
     ['https://169.254.169.254/latest/meta-data', false],
     ['ftp://93.184.215.14/x', false],
 ]);
+
+it('keeps an unpublish made while the scheduled publish runs, and refuses moves from a stale page (ADR-0054)', function () {
+    $publisher = staff(SystemRole::CommunicationsEditor);
+    $post = draftBy($publisher);
+    move($post, Transition::Schedule, $publisher, null, now()->addMinute());
+    $this->travel(2)->minutes();
+
+    // The editor unpublishes just after the scheduled publish has read its list.
+    $raced = false;
+    PostTranslation::retrieved(function (PostTranslation $translation) use (&$raced): void {
+        if (! $raced) {
+            $raced = true;
+            DB::table('post_translations')->where('id', $translation->id)->update(['status' => ContentStatus::Draft->value]);
+        }
+    });
+    expect(app(ContentWorkflow::class)->publishDue())->toBe(0)
+        ->and(PostTranslation::query()->where('post_id', $post->id)->value('status'))->toBe(ContentStatus::Draft);
+
+    // A page loaded before someone else's move cannot make its own move on top of it.
+    $stale = Post::query()->with('translations')->findOrFail($post->id);
+    $fresh = Post::query()->with('translations')->findOrFail($post->id);
+    move($fresh, Transition::Publish, $publisher);
+    expect(fn () => move($stale, Transition::Submit, $publisher))->toThrow(ValidationException::class)
+        ->and(PostTranslation::query()->where('post_id', $post->id)->value('status'))->toBe(ContentStatus::Published);
+});
