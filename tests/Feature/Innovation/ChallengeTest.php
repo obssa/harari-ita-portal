@@ -299,3 +299,25 @@ it('adds labelled innovation samples once and removes exactly them', function ()
     $this->artisan('portal:sample-innovation --remove')->assertSuccessful();
     expect(Challenge::withTrashed()->count())->toBe(0)->and(Programme::withTrashed()->count())->toBe(0)->and(Startup::withTrashed()->count())->toBe(0);
 });
+
+it('publishes results once, after submissions close, and takes no submission after that (ADR-0054)', function () {
+    Mail::fake();
+    $challenge = sampleChallenge();
+    $team = submitted($challenge, 'Sample Team Early', 'early@example.org');
+    $team->forceFill(['score' => '7.00'])->save();
+    $judging = app(JudgeChallenge::class);
+
+    // Still building: publishing early would leave submissions open, so it is refused.
+    expect(fn () => $judging->publish($challenge))->toThrow(ValidationException::class)
+        ->and($challenge->refresh()->results_published_at)->toBeNull();
+
+    $this->travelTo(CarbonImmutable::now()->addDays(4));
+    expect($judging->publish($challenge))->toBe(1);
+    expect(fn () => $judging->publish($challenge->refresh()))->toThrow(ValidationException::class);
+
+    // Even with dates moved back, published results close the challenge to new work.
+    $challenge->forceFill(['submission_closes_at' => CarbonImmutable::now()->addDays(5)])->save();
+    expect($challenge->refresh()->takesSubmissions())->toBeFalse()
+        ->and(fn () => app(ChallengeEntry::class)->submit($team->refresh(), ['submission_title' => 'Sample late', 'submission_description' => 'Sample: sent after the results were out.']))
+        ->toThrow(ValidationException::class);
+});

@@ -105,26 +105,33 @@ final class JudgeChallenge
         return $assignment;
     }
 
-    /** Ranks the scored teams and publishes the results; teams without a score are not ranked. */
+    /**
+     * Ranks the scored teams and publishes the results, once, after submissions have closed (ADR-0054); teams without
+     * a score are not ranked. Decided on the locked challenge, so two clicks cannot publish (or email) twice.
+     */
     public function publish(Challenge $challenge): int
     {
-        $teams = $challenge->teams()->whereNotNull('score')->orderByDesc('score')->orderBy('submitted_at')->get();
-        if ($teams->isEmpty()) {
-            throw ValidationException::withMessages(['results' => __('innovation.validation.nothing_scored')]);
-        }
+        $ranked = DB::transaction(function () use ($challenge): int {
+            $locked = Challenge::query()->whereKey($challenge->getKey())->lockForUpdate()->firstOrFail();
+            if ($locked->phase() !== Challenge::PHASE_JUDGING) {
+                throw ValidationException::withMessages(['results' => __('innovation.validation.not_judging')]);
+            }
+            $teams = $locked->teams()->whereNotNull('score')->orderByDesc('score')->orderBy('submitted_at')->get();
+            if ($teams->isEmpty()) {
+                throw ValidationException::withMessages(['results' => __('innovation.validation.nothing_scored')]);
+            }
 
-        $first = $challenge->results_published_at === null;
-        DB::transaction(function () use ($challenge, $teams): void {
-            $challenge->teams()->update(['rank' => null]);
+            $locked->teams()->update(['rank' => null]);
             $teams->values()->each(fn (ChallengeTeam $team, int $i) => $team->forceFill(['rank' => $i + 1])->save());
-            $challenge->forceFill(['results_published_at' => CarbonImmutable::now()])->save();
+            $locked->forceFill(['results_published_at' => CarbonImmutable::now()])->save();
+
+            return $teams->count();
         });
+        $challenge->refresh();
 
-        if ($first) {
-            $challenge->teams()->whereNull('erased_at')->each(fn (ChallengeTeam $team) => $this->tellResults($challenge, $team));
-        }
+        $challenge->teams()->whereNull('erased_at')->each(fn (ChallengeTeam $team) => $this->tellResults($challenge, $team));
 
-        return $teams->count();
+        return $ranked;
     }
 
     /** ADR-0053: the team's place, if ranked, and the way to the published results, in the team's language. */

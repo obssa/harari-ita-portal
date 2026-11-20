@@ -119,12 +119,12 @@ class Challenge extends Model implements TranslatableModel
         };
     }
 
-    /** Teams may change their submission until submissions close. */
+    /** Teams may change their submission until submissions close, and never once the results are out. */
     public function takesSubmissions(?CarbonImmutable $now = null): bool
     {
         $now ??= CarbonImmutable::now();
 
-        return $now >= $this->registration_opens_at && $now < $this->submission_closes_at;
+        return $this->results_published_at === null && $now >= $this->registration_opens_at && $now < $this->submission_closes_at;
     }
 
     /**

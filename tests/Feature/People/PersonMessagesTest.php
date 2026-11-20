@@ -155,8 +155,11 @@ it('emails every team once when the results are first published', function () {
     $first->forceFill(['score' => '4.50'])->save();
     Mail::fake();
 
+    // Results come after submissions close, and only once (ADR-0054).
+    expect(fn () => app(JudgeChallenge::class)->publish($challenge))->toThrow(ValidationException::class);
+    $this->travelTo(CarbonImmutable::now()->addDays(4));
     app(JudgeChallenge::class)->publish($challenge);
-    app(JudgeChallenge::class)->publish($challenge->refresh());
+    expect(fn () => app(JudgeChallenge::class)->publish($challenge->refresh()))->toThrow(ValidationException::class);
 
     Mail::assertQueuedCount(2);
     Mail::assertQueued(PersonMail::class, fn (PersonMail $mail): bool => $mail->hasTo('sampleteamone@example.org')
