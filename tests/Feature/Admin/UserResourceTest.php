@@ -8,6 +8,7 @@ use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Models\User;
 use Filament\Actions\Testing\TestAction;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Activitylog\Models\Activity;
@@ -126,6 +127,28 @@ it('suspends and reactivates an account', function () {
     livewire(ListUsers::class)
         ->callAction(TestAction::make('reactivate')->table($user));
     expect($user->fresh()->status)->toBe(UserStatus::Active);
+});
+
+it('signs the account out when it is suspended, by the action or by the status field', function () {
+    config(['session.driver' => 'database']);
+    $byAction = staff(SystemRole::Editor);
+    $byForm = staff(SystemRole::Editor);
+    foreach ([$byAction, $byForm] as $i => $user) {
+        $user->forceFill(['remember_token' => 'sample-token'])->saveQuietly();
+        DB::table('sessions')->insert(['id' => "sample-session-{$i}", 'user_id' => $user->id, 'payload' => '', 'last_activity' => time()]);
+    }
+
+    livewire(ListUsers::class)->callAction(TestAction::make('suspend')->table($byAction));
+    livewire(EditUser::class, ['record' => $byForm->getRouteKey()])
+        ->fillForm(['status' => UserStatus::Suspended->value])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    foreach ([$byAction, $byForm] as $user) {
+        expect($user->fresh()->status)->toBe(UserStatus::Suspended)
+            ->and($user->fresh()->remember_token)->not->toBe('sample-token')
+            ->and(DB::table('sessions')->where('user_id', $user->id)->count())->toBe(0);
+    }
 });
 
 it('does not let anyone suspend themselves', function () {

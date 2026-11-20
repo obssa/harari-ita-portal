@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Domain\Access\Actions\InvalidateUserSessions;
 use App\Domain\Access\Concerns\HasScopedRoles;
 use App\Domain\Access\Enums\UserStatus;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -95,6 +96,17 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
             'telegram_linked_at' => 'datetime',
             'telegram_link_expires_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        // ADR-0054: a suspension signs the account out everywhere, whichever screen or command made it (the Suspend
+        // action, the status field of the user form, an import).
+        static::updated(function (User $user): void {
+            if ($user->wasChanged('status') && $user->status === UserStatus::Suspended) {
+                app(InvalidateUserSessions::class)($user);
+            }
+        });
     }
 
     public function canAccessPanel(Panel $panel): bool

@@ -34,10 +34,10 @@ final class ManageAccount
         activity('users')->performedOn($user)->event('sign_in_link_sent')->log('sign_in_link_sent');
     }
 
+    /** The account is signed out everywhere by the User model when its status becomes suspended. */
     public function suspend(User $user): void
     {
         $user->update(['status' => UserStatus::Suspended]);
-        ($this->invalidate)($user);
     }
 
     public function reactivate(User $user): void
