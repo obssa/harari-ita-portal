@@ -26,10 +26,10 @@ enum Transition: string
     public function sources(): array
     {
         return match ($this) {
-            self::Submit => [ContentStatus::Draft, ContentStatus::Translating],
+            self::Submit => [ContentStatus::Draft],
             self::SendBack, self::MarkReviewed => [ContentStatus::InReview],
-            self::Publish => [ContentStatus::Draft, ContentStatus::InReview, ContentStatus::Translating, ContentStatus::Scheduled],
-            self::Schedule => [ContentStatus::Draft, ContentStatus::InReview, ContentStatus::Translating],
+            self::Publish => [ContentStatus::Draft, ContentStatus::InReview, ContentStatus::Scheduled],
+            self::Schedule => [ContentStatus::Draft, ContentStatus::InReview],
             self::Unpublish => [ContentStatus::Published, ContentStatus::Scheduled],
             self::Archive => [ContentStatus::Published],
             self::Reopen => [ContentStatus::Archived],

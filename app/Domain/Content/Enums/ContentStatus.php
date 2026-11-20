@@ -5,13 +5,14 @@ namespace App\Domain\Content\Enums;
 /**
  * Status of one language of a record (PLAN.md §6: each translation has its
  * own status and publish date, so Amharic can go live before Harari).
- * Transitions and scheduling are formalised in step 2.3 (ADR-0013).
+ * Transitions and scheduling are formalised in step 2.3 (ADR-0013). A language waiting for its translation is
+ * a draft; machine translation is marked on the translation itself (ADR-0035), so there is no "translating"
+ * status (ADR-0054: nothing could set it).
  */
 enum ContentStatus: string
 {
     case Draft = 'draft';
     case InReview = 'in_review';
-    case Translating = 'translating';
     case Scheduled = 'scheduled';
     case Published = 'published';
     case Archived = 'archived';
@@ -25,7 +26,7 @@ enum ContentStatus: string
     {
         return match ($this) {
             self::Draft => 'gray',
-            self::InReview, self::Translating => 'warning',
+            self::InReview => 'warning',
             self::Scheduled => 'info',
             self::Published => 'success',
             self::Archived => 'danger',

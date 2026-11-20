@@ -1293,7 +1293,6 @@
     "content.status.in_review": "In review",
     "content.status.published": "Published",
     "content.status.scheduled": "Scheduled",
-    "content.status.translating": "Translating",
     "content.transition.archive": "Archive",
     "content.transition.mark_reviewed": "Mark as reviewed",
     "content.transition.publish": "Publish",
