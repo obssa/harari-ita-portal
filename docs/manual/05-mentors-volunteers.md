@@ -12,7 +12,9 @@ after; the list shows a number for **New** sign-ups.
 
 1. Call the person, then open their page. **Add a task** at an event (the task takes the event's name and
    date) or on its own, for example mentoring a startup team. The first task makes a new sign-up **Active**.
-2. After the task, **Update** it to **Done** with the hours given. The hours are added up on the list.
+2. After the task, **Update** it to **Done** with the hours given. The hours are added up on the list. A done or
+   cancelled task can go back to **Planned** to correct a mistake; a cancelled task goes back to **Planned** before
+   it can be marked **Done**.
 3. **Change status** to **Inactive** when someone stops. Tasks are cancelled, never deleted.
 4. **Add a note** for anything colleagues should know; notes are seen only by staff who can see the person.
 5. **Message the volunteer** writes to them by email, or by text message when there is only a phone number (up

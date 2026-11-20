@@ -70,7 +70,8 @@ Who: service owners and administrators.
    limited, partly down, down, or maintenance), the **Systems** affected, and the **First public update**: what is
    affected and what people can do meanwhile.
 3. Use **Post an update** on the incident as things move on (cause found, monitoring). Choose **Resolved** when it
-   is over; the systems turn back to working by themselves.
+   is over; the systems turn back to working by themselves. If the problem comes back, post an update at a working
+   stage to reopen it. **Scheduled** is only for maintenance that has not started and cannot be chosen again.
 4. For planned maintenance, choose the kind **Planned maintenance** and a start time in the future: it shows as
    planned until then, and the systems show "Maintenance" while it lasts.
 

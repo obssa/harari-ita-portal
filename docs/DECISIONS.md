@@ -1105,4 +1105,29 @@ Applied so far:
 - **Event registrations.** A person checked in at the door has used the place: neither they nor staff can cancel
   it. Cancel and check-in are decided on the locked registration.
 
+**Second pass (2026-11-21).** The smaller findings of the same audit:
+
+- **Startup listings.** Submitted can be listed, sent back for changes or declined; one sent back returns to
+  review, is listed or declined; a listed startup can be sent back or archived; an archived one can be listed
+  again; Declined is final. Decided on the locked startup. `listed_at` dates the latest listing and is cleared when
+  the startup leaves the directory.
+- **Inbox tickets (forms).** The status agrees with the assignment: Received (`new`) means nobody has it, Assigned
+  means someone does. Taking an assigned ticket back makes it Received again. Assign, status and reply are decided
+  on the locked ticket.
+- **Volunteer assignments.** Planned becomes Done or Cancelled; Done or Cancelled can go back to Planned to undo a
+  mistake, never straight from Cancelled to Done (whose hours count). A new assignment may be recorded with any
+  status.
+- **Status-page incidents.** Scheduled is only where planned maintenance starts and is never chosen again; the
+  working stages move among themselves and to Resolved; a resolved incident reopens at a working stage. A further
+  note on a resolved incident keeps the time it was resolved.
+- **Innovation retention.** The period counts from the decision (`decided_at`), not the last edit, for
+  applications (a withdrawal now sets it), declined listing requests and archived listings. Records decided before
+  the change are dated from their last edit.
+- **Newsletter confirmation.** Each link carries when it was sent, encrypted. After an unsubscribe, only a link
+  sent later subscribes again, so an old email or a mail scanner opening it changes nothing.
+- **Content status.** "Translating" is removed: nothing could set it. A language waiting for translation is a
+  draft; machine translation is marked on the translation (ADR-0035).
+- **Not changed:** the Academy retention purge keeps certificates valid on purpose (ADR-0029); only an erasure
+  request revokes them.
+
 **Why.** The owner asked for every implicit state machine to be found and its gaps fixed in order of harm.

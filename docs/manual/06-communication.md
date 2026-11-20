@@ -23,6 +23,7 @@ or stop everything.
   subscribers: people sign up themselves.
 - **Download CSV** is for staff allowed to export subscribers; every download is in the audit log.
 - Sign-ups never confirmed are deleted after a week.
+- After someone unsubscribes, an old confirmation email no longer signs them up again: only a new sign-up does.
 
 ## 2. Campaigns
 

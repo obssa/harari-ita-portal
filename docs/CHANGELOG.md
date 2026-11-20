@@ -34,6 +34,11 @@ All notable changes to the Agency's portal. Newest first.
   offers only the allowed moves; suspending an account from the user form signs it out too; a cancelled
   opportunity takes no extension from a stale page and the archive skips one just extended; a registration
   checked in at the door can no longer be cancelled.
+- Lifecycles, second pass (ADR-0054): startup listings and status-page incidents offer only the allowed decisions
+  and stages, and Declined is final; an inbox ticket's status follows its assignment; a cancelled volunteer task
+  cannot be marked done without going back to planned; innovation records are deleted a retention period after
+  the decision, whatever was edited later; an old newsletter confirmation link no longer subscribes again after an
+  unsubscribe; the unused "Translating" content status is removed.
 - Certificates download as a PDF in the learner's language (A4 landscape, with the QR code), from the learner's
   page and from Certificates in the admin; the sample course has a sample signatory (ADR-0030 addendum).
 - Staff can message applicants, challenge teams and volunteers from the admin, by email or SMS; messages are kept

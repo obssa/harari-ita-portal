@@ -101,7 +101,9 @@ and can follow the status at `/{language}/tickets`. That page never shows what t
 1. Open the ticket from the **Inbox**. The red **Response** column shows overdue tickets.
 2. **Assign** it to a colleague, or **Reply**: the answer is emailed in the sender's language and the
    response clock stops. Tick **This answers the request** to close it at the same time.
-3. Use **Internal note** for anything only colleagues should read. **Change status** moves the ticket on.
+3. Use **Internal note** for anything only colleagues should read. **Change status** moves the ticket on. The
+   status follows the assignment: a ticket nobody has is **Received**, and one given to someone is **Assigned**;
+   taking it back from them makes it **Received** again.
 4. Attached files are under **Attachments**. Every step is listed under **History**.
 
 ## 5. Press kit and photos

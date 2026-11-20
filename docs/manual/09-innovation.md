@@ -17,7 +17,9 @@ Founders ask to be listed with **Get listed** on the website, and each request h
 2. Read the profile, then choose **Review**:
    - **List** publishes it in every language it has.
    - **Ask for changes** and **Decline** need a note, which the founder reads by email and on the request's page.
-   - **Archive** takes a listed startup off the site.
+   - **Archive** takes a listed startup off the site. An archived startup can be listed again later.
+   - **Review** offers only the decisions open from where the request stands. **Declined** is final: the founders
+     send a new request.
 3. A founder may say their startup holds the Ministry's startup label. That claim shows as **self-declared**
    until you have checked the label certificate. Then use **Verify label**, and the profile shows **verified by
    the Agency**.
@@ -130,7 +132,7 @@ Applicants', founders' and team contacts' details are encrypted. The **Privacy r
 or phone, and can export or erase them.
 
 The portal deletes or clears these details on its own once the retention period has passed (two years by
-default):
+default). The period counts from the decision or the withdrawal, so a later edit does not keep the details longer:
 
 - decided applications are deleted;
 - declined listing requests are deleted;
