@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Support\Initials;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -27,28 +28,36 @@ final class IssueCertificate
         if (! $actor->can('certificates.issue') || ! CohortScope::covers($actor, $cohort)) {
             throw new AuthorizationException;
         }
-        if ($enrolment->status !== EnrolmentStatus::Enrolled || $enrolment->erased_at !== null || $enrolment->name === null) {
-            throw ValidationException::withMessages(['enrolment' => __('academy.validation.not_enrolled')]);
-        }
         if ($cohort->starts_on > CarbonImmutable::today()) {
             throw ValidationException::withMessages(['enrolment' => __('academy.validation.not_started')]);
         }
-        if ($enrolment->certificate()->exists()) {
-            throw ValidationException::withMessages(['enrolment' => __('academy.validation.already_certified')]);
-        }
 
-        $certificate = new Certificate([
-            'enrolment_id' => $enrolment->id,
-            'course_id' => $cohort->course_id,
-            'course_cohort_id' => $cohort->id,
-            'code' => Certificate::newCode(),
-            'holder_name' => $enrolment->name,
-            'holder_initials' => self::initials($enrolment->name),
-            'issued_at' => CarbonImmutable::now()->startOfSecond(),
-            'issued_by' => $actor->id,
-        ]);
-        $certificate->signature = $certificate->computeSignature();
-        $certificate->save();
+        // Checked on the locked enrolment, so a double click or a cohort-wide issue at the same time cannot give the
+        // learner two valid certificates (the database refuses a second one as well).
+        $certificate = DB::transaction(function () use ($enrolment, $cohort, $actor): Certificate {
+            $locked = Enrolment::query()->whereKey($enrolment->getKey())->lockForUpdate()->firstOrFail();
+            if ($locked->status !== EnrolmentStatus::Enrolled || $locked->erased_at !== null || $locked->name === null) {
+                throw ValidationException::withMessages(['enrolment' => __('academy.validation.not_enrolled')]);
+            }
+            if ($locked->certificate()->exists()) {
+                throw ValidationException::withMessages(['enrolment' => __('academy.validation.already_certified')]);
+            }
+
+            $certificate = new Certificate([
+                'enrolment_id' => $locked->id,
+                'course_id' => $cohort->course_id,
+                'course_cohort_id' => $cohort->id,
+                'code' => Certificate::newCode(),
+                'holder_name' => $locked->name,
+                'holder_initials' => self::initials($locked->name),
+                'issued_at' => CarbonImmutable::now()->startOfSecond(),
+                'issued_by' => $actor->id,
+            ]);
+            $certificate->signature = $certificate->computeSignature();
+            $certificate->save();
+
+            return $certificate;
+        });
 
         if ($notify) {
             $this->messages->handle($enrolment, SendEnrolmentMessage::CERTIFICATE);
