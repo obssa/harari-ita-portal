@@ -2485,6 +2485,7 @@
     "innovation.validation.decide": "በማመልከቻዎች ላይ መወሰን አይችሉም።",
     "innovation.validation.decision_note": "ውሳኔውን የሚያብራራ ማስታወሻ ለአመልካቹ ይጻፉ።",
     "innovation.validation.judge_score": "ከ1 እስከ 10 ነጥብ ይስጡ።",
+    "innovation.validation.listing_move": "ይህ ዝርዝር :status ነው፤ ወደዚያ ውሳኔ ሊሸጋገር አይችልም። ያለበትን ሁኔታ ለማየት ገጹን እንደገና ይጫኑ።",
     "innovation.validation.name": "የጀማሪ ኩባንያውን ስም ያስገቡ (ከ2 እስከ 200 ፊደላት)።",
     "innovation.validation.no_judges": "የዳኛ ሚና ያለውን ቢያንስ አንድ ተጠቃሚ ይምረጡ።",
     "innovation.validation.no_language": "ዝርዝሩ ቢያንስ በአንድ ቋንቋ ስም ያስፈልገዋል።",

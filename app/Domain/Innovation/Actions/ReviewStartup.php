@@ -17,7 +17,9 @@ use Illuminate\Validation\ValidationException;
 /**
  * The Agency's review of a listing (ADR-0020): list it (its languages go live), ask the founders for changes,
  * decline or archive it with a note, and verify the startup-label claim after seeing the Ministry's certificate.
- * The founders are told by email when the decision changes.
+ * The founders are told by email when the decision changes. A decision moves only as
+ * ListingStatus::nextStatuses() allows, decided on the locked startup (ADR-0054); keeping the same status updates
+ * the note. listed_at is when the startup was last listed, and is cleared when it leaves the directory.
  */
 final class ReviewStartup
 {
@@ -31,13 +33,20 @@ final class ReviewStartup
             throw ValidationException::withMessages(['note' => __('innovation.validation.no_language')]);
         }
 
-        $changed = $status !== $startup->listing_status;
+        $changed = DB::transaction(function () use ($startup, $status, $note, $actor): bool {
+            $locked = Startup::query()->whereKey($startup->getKey())->lockForUpdate()->firstOrFail();
+            $startup->setRawAttributes($locked->getAttributes(), true);
+            $changed = $status !== $startup->listing_status;
+            if ($changed && ! $startup->listing_status->canMoveTo($status)) {
+                throw ValidationException::withMessages(['status' => __('innovation.validation.listing_move', ['status' => $startup->listing_status->label()])]);
+            }
 
-        DB::transaction(function () use ($startup, $status, $note, $actor): void {
             $startup->listing_status = $status;
             $startup->review_note = $note !== '' ? mb_substr($note, 0, 2000) : null;
             if ($status === ListingStatus::Listed) {
-                $startup->listed_at ??= CarbonImmutable::now();
+                $startup->listed_at = $changed ? CarbonImmutable::now() : ($startup->listed_at ?? CarbonImmutable::now());
+            } else {
+                $startup->listed_at = null;
             }
             $startup->updated_by = $actor->id;
             $startup->save();
@@ -47,6 +56,8 @@ final class ReviewStartup
                 $translation->status = $status === ListingStatus::Listed ? ContentStatus::Published : ContentStatus::Draft;
                 $translation->save();
             });
+
+            return $changed;
         });
 
         if ($changed && $startup->founder_email !== null && $status !== ListingStatus::Submitted) {

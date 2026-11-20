@@ -135,3 +135,40 @@ it('lets innovation officers review in the admin and keeps the founders\' contac
     expect($startup->refresh()->label_status)->toBe(LabelStatus::SelfDeclared)
         ->and($startup->translation('en')->isLive())->toBeFalse();
 });
+
+it('moves a listing only along the allowed decisions, on the locked startup, and dates its last listing (ADR-0054)', function () {
+    Mail::fake();
+    $this->post('/en/innovation/startups/apply', listingForm());
+    $startup = Startup::query()->firstOrFail();
+    $officer = staff(SystemRole::InnovationOfficer);
+    expect(ListingStatus::Declined->nextStatuses())->toBe([])
+        ->and(ListingStatus::Archived->canMoveTo(ListingStatus::Listed))->toBeTrue()
+        ->and(ListingStatus::Listed->canMoveTo(ListingStatus::Declined))->toBeFalse();
+
+    $this->travelTo(now()->subDays(10));
+    app(ReviewStartup::class)->decide($startup, ListingStatus::Listed, null, $officer);
+    $this->travelBack();
+    $first = $startup->listed_at;
+    expect($first)->not->toBeNull();
+
+    // A screen loaded before the archive cannot decline the startup; archiving clears the listing date.
+    $stale = Startup::query()->findOrFail($startup->id);
+    app(ReviewStartup::class)->decide($startup, ListingStatus::Archived, null, $officer);
+    expect($startup->listed_at)->toBeNull()
+        ->and(fn () => app(ReviewStartup::class)->decide($stale, ListingStatus::Declined, 'Sample note', $officer))->toThrow(ValidationException::class);
+
+    // Listed again, it is dated from today, so the directory shows it with the newest.
+    app(ReviewStartup::class)->decide($startup, ListingStatus::Listed, null, $officer);
+    expect($startup->listing_status)->toBe(ListingStatus::Listed)
+        ->and($startup->listed_at->greaterThan($first))->toBeTrue();
+
+    // Declined is final, and the admin offers only the allowed decisions.
+    app(ReviewStartup::class)->decide($startup, ListingStatus::ChangesRequested, 'Sample: please add your team size.', $officer);
+    app(ReviewStartup::class)->decide($startup, ListingStatus::Declined, 'Sample: not a startup.', $officer);
+    expect(fn () => app(ReviewStartup::class)->decide($startup, ListingStatus::Listed, null, $officer))->toThrow(ValidationException::class);
+    $this->actingAs($officer);
+    livewire(EditStartup::class, ['record' => $startup->getRouteKey()])
+        ->callAction('review', data: ['status' => 'listed', 'note' => null])
+        ->assertHasActionErrors(['status']);
+    expect($startup->refresh()->listing_status)->toBe(ListingStatus::Declined);
+});

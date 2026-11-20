@@ -2485,6 +2485,7 @@
     "innovation.validation.decide": "You cannot decide on applications.",
     "innovation.validation.decision_note": "Write a note to the applicant explaining the decision.",
     "innovation.validation.judge_score": "Give a score from 1 to 10.",
+    "innovation.validation.listing_move": "This listing is :status and cannot move to that decision. Reload the page to see where it stands.",
     "innovation.validation.name": "Give the startup's name (2 to 200 characters).",
     "innovation.validation.no_judges": "Choose at least one user with the judge role.",
     "innovation.validation.no_language": "The listing needs its name in at least one language.",

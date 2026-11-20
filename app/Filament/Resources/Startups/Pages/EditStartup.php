@@ -37,7 +37,10 @@ class EditStartup extends EditRecord
                 ->visible(fn (): bool => CurrentUser::get()->can('update', $this->startup()))
                 ->fillForm(fn (): array => ['status' => $this->startup()->listing_status->value, 'note' => $this->startup()->review_note])
                 ->schema([
-                    Select::make('status')->label(__('innovation.field.listing'))->options(ListingStatus::options())->required(),
+                    // ADR-0054: only the decisions this status allows (and the current one, which updates the note).
+                    Select::make('status')->label(__('innovation.field.listing'))->required()
+                        ->options(fn (): array => collect([$this->startup()->listing_status, ...$this->startup()->listing_status->nextStatuses()])
+                            ->mapWithKeys(fn (ListingStatus $status): array => [$status->value => $status->label()])->all()),
                     Textarea::make('note')->label(__('innovation.admin.review_note'))->helperText(__('innovation.admin.review_note_help'))->rows(4)->maxLength(2000),
                 ])
                 ->action(function (array $data): void {
